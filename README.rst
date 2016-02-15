@@ -16,3 +16,4 @@ In order to build (or compile) the reports, you need the following software:
 - Jinja2 for Python 3
 - LaTeX (pdflatex) and a bunch of packages
 - Make
+- pdfcrop
