@@ -7,13 +7,15 @@ Lino.
 
 We were assigned the following experiments:
 
-==== ==========================
-A245 Optical frequency doubling
-A248 Magneto-optical trap
-E213 Z0 decay
-K221 Mößbauer effect
-K225 Beta-plus decay
-==== ==========================
+==== == ==========================
+ID   LU Title
+==== == ==========================
+A245  2 Optical frequency doubling
+A248  2 Magneto-optical trap
+E213  3 Z0 decay
+K221  1 Mößbauer effect
+K225  1 Beta-plus decay
+==== == ==========================
 
 Building
 ========
