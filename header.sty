@@ -1,0 +1,360 @@
+% Copyright © 2012-2016 Martin Ueding <dev@martin-ueding.de>
+
+% This is my general purpose LaTeX header file for writing German documents.
+% Ideally, you include this using a simple ``\input{header.tex}`` in your main
+% document and start with ``\title`` and ``\begin{document}`` afterwards.
+
+% If you need to add additional packages, I recommend not doing this in this
+% file, but in your main document. That way, you can just drop in a new
+% ``header.tex`` and get all the new commands without having to merge manually.
+
+% Since this file encorporates a CC-BY-SA fragment, this whole files is
+% licensed under the CC-BY-SA license.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                              Begin of package                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{header}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                              Option processing                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclareOption{sfcaption}{
+    \setkomafont{caption}{\sffamily}
+    \setkomafont{captionlabel}{\usekomafont{caption}}
+}
+
+% Declare a switch for bibliography at the end of the document.
+\newif\if@bibatend\@bibatendfalse
+\DeclareOption{bibatend}{
+  \@bibatendtrue
+}
+
+% Declare a switch for a colored document.
+\newif\if@color\@colorfalse
+\DeclareOption{color}{
+  \@colortrue
+}
+
+\newif\if@beamer\@beamerfalse
+\DeclareOption{beamer}{
+  \@beamertrue
+}
+
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                Miscellaneous                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{ifluatex}
+
+\RequirePackage{graphicx}
+
+\RequirePackage{booktabs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                Locale, date                                 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{babel}
+\RequirePackage{iflang}
+\RequirePackage[iso]{isodate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                          Margins and other spacing                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[parfill]{parskip}
+\RequirePackage{setspace}
+
+\ifluatex
+\else
+    \RequirePackage[activate]{microtype}
+\fi
+
+\setlength{\columnsep}{3em}
+
+% Set a margin around captions to make them stand out more in contrast to the
+% surrounding text.
+\setcapmargin{\mathindent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                    Color                                    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if@beamer
+\else
+    \RequirePackage[usenames, dvipsnames]{xcolor}
+\fi
+
+\colorlet{darkred}{red!70!black}
+\colorlet{darkblue}{blue!70!black}
+\colorlet{darkgreen}{green!40!black}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                         Font and font like settings                         %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% This replaces all fonts with Bitstream Charter, Bitstream Vera Sans and
+% Bitstream Vera Mono. Math will be rendered in Charter.
+\RequirePackage[charter, greekuppercase=italicized]{mathdesign}
+\RequirePackage{beramono}
+\RequirePackage{berasans}
+
+% Bold vectors.
+\RequirePackage{isomath}
+\renewcommand{\vec}{\vectorsym}
+\newcommand{\tens}{\tensorsym}
+\newcommand{\mat}{\matrixsym}
+\newcommand{\four}{\tens}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                               Input encoding                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifluatex
+\else
+    \RequirePackage[T1]{fontenc}
+    \RequirePackage[utf8]{inputenc}
+\fi
+
+\RequirePackage{csquotes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                         Hyperrefs and PDF metadata                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{hyperref}
+
+% This sets the author in the properties of the PDF as well. If you want to
+% change it, just override it with another ``\hypersetup`` call.
+\hypersetup{
+    breaklinks=false,
+    colorlinks=true,
+    pdfauthor={Martin Ueding},
+}
+
+\if@color
+    \hypersetup{
+        citecolor=darkgreen,
+        linkcolor=darkblue,
+        menucolor=black,
+        urlcolor=darkblue,
+    }
+\else
+    \hypersetup{
+        citecolor=black,
+        linkcolor=black,
+        menucolor=black,
+        urlcolor=black,
+    }
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                               Math Operators                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% AMS environments like ``align`` and theorems like ``proof``.
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+
+% Common math constructs like partial derivatives.
+\newcommand\abs[1]{\left| #1 \right|}
+\newcommand\cbr[1]{\left\{ #1 \right\}}
+\newcommand\del[1]{\left( #1 \right)}
+\newcommand\od[2]{\frac{\dif {#1}}{\dif {#2}}}
+\newcommand\odx[3]{\frac{\dif^{#1} {#2}}{\dif {#3}^{#1}}}
+\newcommand\pd[2]{\frac{\partial {#1}}{\partial {#2}}}
+\newcommand\pdx[3]{\frac{\partial^{#1} {#2}}{\partial {#3}^{#1}}}
+\newcommand\sbr[1]{\left[ #1 \right]}
+\newcommand\eval[1]{\left. #1 \right|}
+\newcommand\dif{\mathop{}\!\mathrm d}
+\newcommand\Dif{\mathop{}\!\mathrm D}
+
+% Physical units.
+\IfLanguageName{ngerman}
+{\RequirePackage[output-decimal-marker={,}]{siunitx}}
+{\RequirePackage{siunitx}}
+
+% Since I use mathdesign with italic uppercase greek characters, the Ohm unit
+% will be displayed with an italic Ω by default. Units have to be roman, so
+% this forces it the right way.
+\DeclareSIUnit{\ohm}{$\Omegaup$}
+\DeclareSIUnit{\division}{DIV}
+\DeclareSIUnit{\voltss}{$\mathrm{V_{SS}}$}
+\DeclareSIUnit{\gauss}{G}
+
+% Word like operators.
+\DeclareMathOperator{\acosh}{arcosh}
+\DeclareMathOperator{\arcosh}{arcosh}
+\DeclareMathOperator{\arcsinh}{arsinh}
+\DeclareMathOperator{\arsinh}{arsinh}
+\DeclareMathOperator{\asinh}{arsinh}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator*{\tr}{tr}
+\newcommand{\trcolor}{\tr_\text{color}}
+\newcommand{\trgluon}{\tr_\text{gluon}}
+\newcommand{\trdirac}{\tr_\text{Dirac}}
+\newcommand{\trlorentz}{\tr_\text{Lorentz}}
+\renewcommand{\Im}{\mathop{{}\mathrm{Im}}\nolimits}
+\renewcommand{\Re}{\mathop{{}\mathrm{Re}}\nolimits}
+
+% Groups
+\newcommand\SO{\mathrm{SO}}
+\newcommand\SU{\mathrm{SU}}
+\newcommand\so{\mathfrak{so}}
+\newcommand\su{\mathfrak{su}}
+
+% Fourier transform.
+\DeclareMathOperator{\fourier}{\ensuremath{\mathcal{F}}}
+
+% Roman versions of “e” and “i” to serve as Euler's number and the imaginary
+% constant.
+\newcommand{\eup}{\mathrm e}
+\newcommand{\iup}{\mathrm i}
+
+% Symbols for the various mathematical fields (natural numbers, integers,
+% rational numbers, real numbers, complex numbers).
+\newcommand\setname[1]{\text{\bfseries\sffamily{#1}}}
+
+\newcommand\C{\setname C}
+\newcommand\N{\setname N}
+\newcommand\Q{\setname Q}
+\newcommand\R{\setname R}
+\newcommand\Z{\setname Z}
+
+% Shape like operators.
+\DeclareMathOperator{\dalambert}{\Box}
+\DeclareMathOperator{\laplace}{\bigtriangleup}
+\DeclareMathOperator{\grad}{\mathbf{grad}}
+\DeclareMathOperator{\curl}{\mathbf{curl}}
+\DeclareMathOperator{\divergence}{div}
+\newcommand{\vnabla}{\vec \nabla}
+
+\newcommand{\half}{\frac 12}
+
+% Unit vector (German „Einheitsvektor“).
+\newcommand{\ev}{\vec e}
+
+% Mathematician's notation for the inner (scalar, dot) product.
+\newcommand{\bracket}[1]{\langle #1 \rangle}
+\newcommand{\Bracket}[1]{\left\langle #1 \right\rangle}
+\newcommand{\inner}[2]{\bracket{#1, #2}}
+\newcommand{\Inner}[2]{\Bracket{#1, #2}}
+
+% Separator for equations on a single line.
+\newcommand{\eqnsep}{\,,\qquad}
+
+% Quantum Mechanics.
+\RequirePackage{braket}
+
+% Thermodynamic partial derivative.
+\newcommand\tdpd[3]{\del{\dpd{#1}{#2}}_{#3}}
+
+\newcommand\hodge{\star}
+
+\newcommand\inv{^{-1}}
+
+\ifcsname cc\endcsname
+\else
+\newcommand\cc{\mathrm{c.c.}}
+\fi
+
+\newcommand\hc{\mathrm{h.c.}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                  Headings                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% This will set fancy headings to the top of the page. The page number will be
+% accompanied by the total number of pages. That way, you will know if any page
+% is missing.
+%
+% If you do not want this for your document, you can just use
+% ``\pagestyle{plain}``.
+
+\if@beamer
+\else
+    \RequirePackage{scrpage2}
+
+    \pagestyle{scrheadings}
+    \automark{section}
+    \chead{}
+    \ihead{}
+    \ohead{\rightmark}
+    \setheadsepline{.4pt}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                            Bibliography (BibTeX)                            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if@bibatend
+    \newcommand\bibliographyfile{../../../../zentrale_BibTeX/Central.bib}
+
+    \RequirePackage[
+        backend=biber,
+        style=authoryear-icomp,
+        %isbn=false,
+        %pagetracker=false,
+        %maxbibnames=50,
+        %maxcitenames=2,
+        %autocite=inline,
+        %block=space,
+        %backref=false,
+        %backrefstyle=three+,
+        %date=short,
+        hyperref=true
+    ]{biblatex}
+
+    \setlength{\bibitemsep}{.7em}
+    \setlength{\bibhang}{4ex}
+
+    \IfFileExists{\bibliographyfile}{
+        \bibliography{\bibliographyfile}
+        \AtEndDocument{\printbibliography}
+    }{
+        \PackageError{header}{Bibliography file not found!}
+        {Try to fix the path of the bibliographyfile that is currently set to \bibliographyfile.}
+    }
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                  Licences                                   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{ccicons}
+
+\newcommand{\ccbysadetext}{%
+    \begin{small}
+        Dieses Werk bzw. Inhalt steht unter einer
+        \href{http://creativecommons.org/licenses/by-sa/3.0/deed.de}{%
+            Creative Commons Namensnennung - Weitergabe unter gleichen
+        Bedingungen 3.0 Unported Lizenz}.
+    \end{small}
+}
+
+\newcommand{\ccbysadetitle}{%
+    Lizenz: \href{http://creativecommons.org/licenses/by-sa/3.0/deed.de}
+    {CC-BY-SA 3.0 \ccbysa}
+}
+
+\newcommand\erklaerungFehlerNotation{%
+    In dieser Notation bedeutet \num{1.234 +- 0.005}, dass der Wert
+    $\num{1.234} \pm \num{0.005}$ ist. Die Ziffern in Klammern sind die
+    Fehlerangabe. Um den Fehler zu erhalten, wird diese von rechts über die
+    Zahl gelegt, alle anderen Stellen werden auf 0 gesetzt.
+}
+
+% Force floats to the top or bottom.
+\def\fps@figure{tb}
+\def\fps@table{tb}
+
+\endinput
