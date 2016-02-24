@@ -75,7 +75,7 @@ groundstate is the one from $3/2^-$ to $1/2^-$ with an energy gap of $\hbar
     \centering
     \includegraphics{ec}
     \caption{%
-        Electron capture, leading order contribution.
+        Electron capture, leading order contribution. Time goes upwards.
     }
     \label{fig:ec}
 \end{figure}
@@ -150,13 +150,25 @@ photon.
 
 The angular momentum $l$ and the spin $s$ of the nucleus couple to a combined
 spin $j$. The component along the quantization axis, $m_j$, takes values
-between $-j$ and $j$. The various states organize them into the irreducible
-representations of $\SU(2)$, the multiplets with spin $j$ and $(2j+1)$ states
-each. The different multiplets have different energies, the energies within the
-same multiplet are degenerate, see left part of Figure~\ref{fig:M1}. Breaking
-the $\SU(2)$ symmetry of the spins give the nuclear analogue of the Zeeman
-effect. The degeneracy is broken and each multiplet is split up into
-equidistant levels, see the right part of said figure.
+between $-j$ and $j$. The various states organize themselves into the
+irreducible representations of $\SU(2)$, the multiplets with spin $j$ and
+$(2j+1)$ states each. The different multiplets have different energies, the
+energies within the same multiplet are degenerate, see left part of
+Figure~\ref{fig:M1}. Breaking the $\SU(2)$ symmetry of the spins give the
+nuclear analogue of the Zeeman effect. This is done with an external magnetic
+field by the interaction term $- \vec\mu \cdot \vec B$. The degeneracy is
+broken and each multiplet is split up into equidistant levels, see the right
+part of said figure.
+
+The magnetic moment $\vec \mu$ is coupled to the spin via the nuclear magneton
+$\mu_\text N$ or the gyromagnetic ratio $\gamma$,
+\[
+    \mu = \underbrace{g \frac{\mu_\text N}{\hbar}}_{\gamma} \hbar j \,.
+\]
+Choosing the quantization axis along the external magnetic field $\vec B$ will
+simplify the interaction $- \vec \mu \cdot \vec B$ to $- g \mu_\text N m_j$.
+The $m_j$ are (half-)integers and therefore equidistant. This makes the energy
+levels equidistant within a multiplet.
 
 \begin{figure}
     \centering
@@ -169,6 +181,39 @@ equidistant levels, see the right part of said figure.
     }
     \label{fig:M1}
 \end{figure}
+
+Both source and target are embedded into a solid, therefore there is
+little thermal fluctuation and also very little recoil. This means that the
+lines are rather sharp. Only the target is embedded into a magnetic field. The
+source iron nuclei do not have the Zeeman splitting and therefore always emit a
+pretty exact \SI{14.4}{\kilo\electronvolt} line. In order for the target in the
+magnetic field to absorb this line, the energy needs to be adjusted.
+
+By moving the source with a motor, one can leverage the Doppler shift to alter
+the energy of the photon. As this velocity is controlled, one can effectively
+measure the energy shifts and therefore the hyperfine structure in the iron
+target. We are interested in the deviation from $\hbar \omega_0 =
+\SI{14.4}{\kilo\electronvolt}$ and want to extract the magnetic moment of the
+groundstate and the exited state.
+
+The needed relation between Doppler velocity $v$ and the magnetic moments
+$\mu$, $\mu'$ is
+\[
+    v = - \frac{c}{\hbar \omega_0}
+    \sbr{\frac{\mu'}{j'} m_j' - \frac{\mu}{j} m_j}
+    \,,
+\]
+where the primed quantities are the exited state
+\parencite[(4.42)]{Schatz/Nukleare_Festkoerperphysik}. Expressing the magnetic
+moments in terms of the nuclear magneton, we see the relation between the Landé
+factors more clearly:
+\[
+    v = - \frac{c \mu_\text N}{\hbar \omega_0} \sbr{g' m_j' - g m_j}
+    \,.
+\]
+
+The selection rule for magnetic dipole radiation (M1) is $m_j - m_j' \in \{ -1,
+0, 1 \}$. Therefore we expect to see six velocities with high absorption.
 
 \end{document}
 
