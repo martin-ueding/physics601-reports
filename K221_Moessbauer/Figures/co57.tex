@@ -1,13 +1,13 @@
 \begin{tikzpicture}
-    \draw (0, 0) node[left] {$\frac{7}{2}^+$} -- ++(3, 0);
-    \draw (5, -2) node[left] {$\frac{5}{2}^+$} -- ++(3, 0) node[right] {\SI{137}{\kilo\electronvolt}};
-    \draw (5, -4) node[left] {$\frac{3}{2}^+$} -- ++(3, 0) node[right] {\SI{14.4}{\kilo\electronvolt}};
-    \draw (5, -5) node[left] {$\frac{1}{2}^+$} -- ++(3, 0) node[right] {\SI{0}{\kilo\electronvolt}};
+    \draw[thick] (0, 0) node[left] {$\frac{7}{2}^+$} -- ++(3, 0);
+    \draw[thick] (5, -2) node[left] {$\frac{5}{2}^+$} -- ++(3, 0) node[right] {\SI{137}{\kilo\electronvolt}};
+    \draw[thick] (5, -3) node[left] {$\frac{3}{2}^+$} -- ++(3, 0) node[right] {\SI{14.4}{\kilo\electronvolt}, };
+    \draw[thick] (5, -5) node[left] {$\frac{1}{2}^+$} -- ++(3, 0) node[right] {\SI{0}{\kilo\electronvolt}};
 
-    \draw[->] (1.5, 0) -- (6.5, -2) node[midway, above right] {EC};
-    \draw[->] (6.5, -2) -- (6.5, -4) node[midway, above right] {};
-    \draw[->] (6.5, -4) -- (6.5, -5) node[midway, above right] {$t_{1/2} = \SI{96}{\nano\second}$};
+    \draw[->] (1.5, 0) -- (6.5, -2) node[midway, above right] {$t_{1/2} = \SI{270}{\day}$};
+    \draw[->] (6.5, -2) -- (6.5, -3) node[midway, above right] {};
+    \draw[->, very thick] (6.5, -3) -- (6.5, -5) node[midway, right] {$t_{1/2} = \SI{96}{\nano\second}$};
 
-    \node at (1.5, 1) {$^{57}\mathrm{Co}$};
-    \node at (6.5, 1) {$^{57}\mathrm{Fe}$};
+    \node[draw, rectangle] at (1.5, 1) {$^{57}\mathrm{Co}$};
+    \node[draw, rectangle] at (6.5, 1) {$^{57}\mathrm{Fe}$};
 \end{tikzpicture}
