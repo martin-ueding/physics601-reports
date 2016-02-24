@@ -26,7 +26,7 @@ $(tex): Template.tex $(build)/template.js
 	../insert.py $^ $@
 
 $(build)/template.js: crunch | $(build)
-	./$<
+	env PYTHONPATH=$PYTHONPATH:.. ./$<
 
 $(build)/page/%.tex: Figures/%.tex | $(build)
 	../tikzpicture_wrap.py $< $@
