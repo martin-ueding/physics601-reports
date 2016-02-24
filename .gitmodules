@@ -1,0 +1,3 @@
+[submodule "central-bibtex"]
+	path = central-bibtex
+	url = https://github.com/martin-ueding/central-bibtex.git
