@@ -16,6 +16,23 @@ import scipy.stats
 
 from unitprint2 import siunitx
 
+mu_n = 5.5e-27 # A m^2
+B_val = 33.3 # T
+B_err = 1 # T
+speed_of_light = 3e8 # m / s
+electron_charge = 1.609e-19 # C
+hbar_omega0_ev = 14.4e3 # eV
+hbar_omega0_joule = 14.4e3 * electron_charge # J
+
+def job_theory(T):
+    prefactor_val = speed_of_light * B_val * mu_n / hbar_omega0_joule
+    prefactor_err = speed_of_light * B_err * mu_n / hbar_omega0_joule
+
+    T['v_prefactor'] = siunitx(prefactor_val, prefactor_err)
+    T['B'] = siunitx(B_val, B_err)
+    T['hbar_omega0_joule'] = siunitx(hbar_omega0_joule)
+    T['hbar_omega0_ev'] = siunitx(hbar_omega0_ev)
+
 
 def test_keys(T):
     '''
@@ -41,6 +58,8 @@ def test_keys(T):
 
 def main():
     T = {}
+
+    job_theory(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
