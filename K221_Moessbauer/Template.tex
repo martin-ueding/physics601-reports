@@ -226,6 +226,83 @@ $v_\text{max} = \SI{0.006}{\meter\per\second}$ will be sensible.
 The selection rule for magnetic dipole radiation (M1) is $m_j - m_j' \in \{ -1,
 0, 1 \}$. Therefore we expect to see six velocities with high absorption.
 
+\section{Isomeric shift and quadrupole moment}
+
+The iron nuclei in the source and target are embedded into a solid. This means
+that each nucleus is surrounded by a lot of other charged particles which
+create a non-constant electric field. The nucleus is not a point charge,
+therefore it does interact with the electric potential beyond a monopole
+interaction.
+
+We assume that the electric potential that is created outside of the nucleus
+does not vary too much across the volume of the nucleus. Then we can expand the
+electric potential around the nucleus like
+\[
+    \Phi(\vec r) = \Phi_0 + \pd{\Phi}{x^i} x^i
+    + \frac12 \frac{\partial^2 \Phi}{\partial x^i \partial x^j} x^i x^j +
+    \mathrm O(x^3) \,,
+\]
+where we have used Einstein's summation convention
+\parencite[(3.19)]{Schatz/Nukleare_Festkoerperphysik}. We can identify three
+terms:
+
+\begin{description}
+    \item[Constant]
+        The constant term is the monopole interaction, it just gives rise to a
+        shift in the groundstate energy and is not relevant for our experiment.
+
+    \item[Linear]
+        The gradient is a dipole interaction. Quantum mechanics enforces the
+        nuclear states to be parity eigenstates, therefore the expectation
+        value of the dipole moment is zero. The linear term does not create any
+        shift in the energy.
+
+    \item[Quadratic]
+        The Hessian gives rise to an electric quadrupole interaction and the
+        isomeric shift. We will need to further analyze the Hessian.
+\end{description}
+
+The shift in energy by each of those terms is given by an appropriate
+integration against the charge density of the nucleus. For the quadratic term
+we have
+\[
+    E^{(2)} = \frac 12 \frac{\partial^2 \Phi}{\partial x^i \partial x^j}
+    \int \dif^3 r \, \rho(\vec r) \, x^i x^j \,.
+\]
+Since the Hessian is a real symmetric matrix, it can be diagonalized by an
+orthogonal transformation. Let the eigenvalues of the Hessian be $\lambda_i$,
+then we can split up the electric energy like follows:
+\begin{align*}
+    E^{(2)}
+    &= \frac12 \sum_i \lambda_i \int \dif^3 r \, \rho(\vec r) \, x_i^2 \\
+    &= \frac16 \sum_i \lambda_i \int \dif^3 r \, \rho(\vec r) \, r^2
+    + \frac12 \sum_i \lambda_i \int \dif^3 r \, \rho(\vec r) \sbr{x_i^2 -
+    \frac{r^2}3} \,.
+\end{align*}
+The electric potential also obeys the Poisson equation, therefore we also have
+\[
+    \laplace \Phi = \sum_i \lambda_i = \frac{e}{\varepsilon_0} |\psi(0)|^2 \,,
+\]
+i.e.\ the charge density at the origin by the electron wavefunctions is the
+trace of the Hessian. The first summand in the above splitting is the isomeric
+term and we can rewrite it as
+\[
+    E_\text I := \frac16 \frac{e}{\varepsilon_0} |\psi(0)|^2
+    \int \dif^3 r \, \rho(\vec r) \, r^2 \,.
+\]
+The integral over the charge density with $r^2$ is the second moment of the
+charge distribution and therefore proportional to $\bracket{r^2}$, the
+expectation value of the squared radius. The proper normalization includes
+$1/Ze$.
+
+We see that the isomeric term depends on the shape of the nucleus but does not
+lead to any splitting depending on $j_m$ like we saw with an external magnetic
+field. If the iron nuclei in source and target are embedded into different
+crystals, their different surroundings will give them a different shape. In our
+experiment we will see this as a common shift independent of $j_m$.
+
+\parencite[33, 34]{Schatz/Nukleare_Festkoerperphysik}
+
 \end{document}
 
 % vim: spell spelllang=en tw=79
