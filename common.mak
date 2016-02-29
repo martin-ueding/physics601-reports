@@ -5,6 +5,8 @@
 
 SHELL = /bin/bash
 
+tail = tail -n 15
+
 build = _build
 
 on := $(shell tput smso)
@@ -25,7 +27,9 @@ $(build):
 
 $(out): $(tex) $(figures_pdf)
 	@echo "$(on)Compiling main document$(off)"
-	cd $$(dirname $@) && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<)
+	cd $$(dirname $@) \
+	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
+	    2>&1 | $(tail)
 
 $(tex): Template.tex $(build)/template.js
 	@echo "$(on)Inserting values into template$(off)"
@@ -45,7 +49,9 @@ $(build)/%.pdf: $(build)/page/%.pdf | $(build)
 
 %.pdf: %.tex
 	@echo "$(on)Typesetting figure $< $(off)"
-	cd $$(dirname $@) && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<)
+	cd $$(dirname $@) \
+	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
+	     2>&1 |$(tail)
 
 .PHONY: clean
 clean:
