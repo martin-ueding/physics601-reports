@@ -14,7 +14,7 @@ template_text = r'''
 
 \usepackage{tikz}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.10}
+\pgfplotsset{compat=1.9}
 
 \pagestyle{empty}
 
