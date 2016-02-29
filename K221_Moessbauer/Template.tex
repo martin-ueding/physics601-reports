@@ -152,6 +152,25 @@ absorb the excess momentum and due to its practically infinite mass (\num{e23}
 larger), there will be no recoil velocity and therefore no energy shift in the
 photon.
 
+\section{Debye-Waller Factor}
+
+Although there is no energy shift caused by recoil the energy is still shifted
+due to thermal motion of the atoms. Even at $T = \SI{0}{\kelvin}$ there will be
+a shift because of zero-point energy. To get a measure of how temperature,
+$\gamma$-energy and mass of the lattice influence the emission one can find
+the Debye-Waller Factor, which is the ratio of the unshifted spectrum to the
+real one. For temperatures below the material specific Debye temperature
+$\Theta$ the factor is given by
+\[
+    f_\text{F} (T, E_\gamma, M) = \exp
+    \!\del{-\frac{3E_\gamma^2}{4Mc^2k_\text{B}\Theta} \del{1 +
+    \frac{2\piup^2}3 \del{\frac T\Theta}^2}}.
+\]
+\parencite[42]{Schatz/Nukleare_Festkoerperphysik}
+
+For iron the Debye temperature is $\Theta = \SI{470}{\kelvin}$.
+\parencite[Tabelle 6.1]{Hunklinger/Festkoerperphysik}
+
 \section{Magnetic hyperfine structure}
 
 The angular momentum $l$ and the spin $s$ of the nucleus couple to a combined
