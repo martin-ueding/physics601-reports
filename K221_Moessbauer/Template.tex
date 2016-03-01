@@ -274,7 +274,9 @@ terms:
 \begin{description}
     \item[Constant]
         The constant term is the monopole interaction, it just gives rise to a
-        shift in the groundstate energy and is not relevant for our experiment.
+        common shift in the energies and is not relevant for our experiment as
+        we can only observe the difference in energy levels, i.e.\ the photon
+        energy.
 
     \item[Linear]
         The gradient is a dipole interaction. Quantum mechanics enforces the
@@ -321,10 +323,20 @@ expectation value of the squared radius. The proper normalization includes
 $1/Ze$.
 
 We see that the isomeric term depends on the shape of the nucleus but does not
-lead to any splitting depending on $j_m$ like we saw with an external magnetic
-field. If the iron nuclei in source and target are embedded into different
-crystals, their different surroundings will give them a different shape. In our
-experiment we will see this as a common shift independent of $j_m$.
+lead to any splitting depending on $m_j$ like we saw with an external magnetic
+field.
+The energy difference can be expressed as a Doppler velocity
+\[
+    v = \frac{Z e^2 c}{6 \varepsilon_0 \hbar \omega_0}
+    \del{|\psi_\text T(0)|^2 - |\psi_\text S(0)|^2}
+    \del{\bracket{r^2_\text{e}} - \bracket{r^2_\text{g}}} \,,
+\]
+as given by \textcite[(4.31)]{Schatz/Nukleare_Festkoerperphysik}. If the iron
+nuclei in source (S) and target (T) are embedded into different crystals, then
+$|\psi(0)|^2$ will be different there. We also need the mean squared radius of
+the excited (e) and ground (g) state to differ in order for this effect to be
+picked up. In our experiment we will see this as a common shift independent of
+$m_j$.
 
 \parencite[33, 34]{Schatz/Nukleare_Festkoerperphysik}
 
