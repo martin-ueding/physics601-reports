@@ -31,6 +31,13 @@
 \maketitle
 
 \begin{abstract}
+    In this experiment we examine the $\gammaup$-spectrum of
+    $^{57}\mathrm{Fe}$. The aim is to find the Landé factors $g$ for the ground
+    state and the first excited state, by measuring the hyperfine structure and
+    Mößbauer spectrum respectively of the $\SI{14.4}{\kilo\electronvolt}$
+    transition. Also line widths and the isometric shift are to be ascertained.
+    By this a deeper understanding of recoilless emission and absorption and
+    basic terms in nuclear physics should be achieved.
 \end{abstract}
 
 \tableofcontents
@@ -46,21 +53,7 @@ you?
 
 Yes $\Box$ \hspace{2cm} No $\Box$
 
-\chapter{Introduction}
-
-In this experiment we examine the $\gamma$-spectrum of $^{57}\mathrm{Fe}$. The
-aim is to find the $g$-factors for the ground state and the first excited
-state, by measuring the hyperfine structure and Mößbauer spectrum respectively
-of the $\SI{14.4}{\kilo\electronvolt}$ transition. Also line widths and the
-isometric shift are to be ascertained. By this a deeper understanding of
-recoilless emission and absorption and basic terms in nuclear physics should be
-achieved.
-
 \chapter{Theory}
-
-% TODO Write about electric quadrupole interaction.
-
-% TODO Write about isomeric shift.
 
 \section{Absorption and resonances}
 
@@ -162,21 +155,23 @@ photon.
 
 \section{Debye-Waller Factor}
 
-Although there is no energy shift caused by recoil the energy is still shifted
-due to thermal motion of the atoms. Even at $T = \SI{0}{\kelvin}$ there will be
-a shift because of zero-point energy. To get a measure of how temperature,
-$\gamma$-energy and mass of the lattice influence the emission one can find
-the Debye-Waller Factor, which is the ratio of the unshifted spectrum to the
-real one. For temperatures below the material specific Debye temperature
-$\Theta$ the factor is given by
+Although there is no energy shift caused by recoil, the energy is still shifted
+due to thermal motion of the atoms. Even at $T = \SI{0}{\kelvin}$, there will
+be a shift because of zero-point energy. To get a measure of how temperature,
+$\gammaup$-energy and mass of the lattice influence the emission, one can find
+the Debye-Waller factor, which is the ratio of the unshifted spectrum to the
+real one. For temperatures below the material specific Debye
+temperature~$\Theta$ the factor is given by
 \[
-    f_\text{D} (T, E_\gamma, M) = \exp
-    \!\del{-\frac{3E_\gamma^2}{4Mc^2k_\text{B}\Theta} \del{1 +
-    \frac{2\piup^2}3 \del{\frac T\Theta}^2}}.
+    f_\text{D} (T, E_\gammaup, M)
+    = \exp \del{
+        - \frac{3E_\gammaup^2}{4Mc^2k_\text{B}\Theta}
+        \sbr{1 + \frac{2\piup^2}3 \del{\frac T\Theta}^2}
+    } \,.
 \]
 \parencite[42]{Schatz/Nukleare_Festkoerperphysik}
 
-For iron the Debye temperature is $\Theta = \SI{470}{\kelvin}$.
+For iron, the Debye temperature is $\Theta = \SI{470}{\kelvin}$.
 \parencite[Tabelle 6.1]{Hunklinger/Festkoerperphysik}
 
 \section{Magnetic hyperfine structure}
@@ -250,8 +245,8 @@ the prefactor has the value \SI{<< v_prefactor >>}{\meter\per\second}. As $g$
 and $m_j$ are of the order of magnitude one, the experimental setup with
 $v_\text{max} = \SI{0.006}{\meter\per\second}$ will be sensible.
 
-The selection rule for magnetic dipole radiation (M1) is $m_j - m_j' \in \{ -1,
-0, 1 \}$. Therefore we expect to see six velocities with high absorption.
+The selection rule for magnetic dipole radiation (M1) is $(m_j - m_j') \in \{
+-1, 0, 1 \}$. Therefore we expect to see six velocities with high absorption.
 
 \section{Isomeric shift and quadrupole moment}
 
