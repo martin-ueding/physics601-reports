@@ -16,17 +16,34 @@ import scipy.stats
 
 from unitprint2 import siunitx
 
-mu_n = 5.5e-27 # A m^2
-B_val = 33.3 # T
+atomic_unit = 1.6605e-27 # kg
 B_err = 1 # T
-speed_of_light = 3e8 # m / s
+B_val = 33.3 # T
+debye_temp = 470 # K
 electron_charge = 1.609e-19 # C
 hbar_omega0_ev = 14.4e3 # eV
 hbar_omega0_joule = 14.4e3 * electron_charge # J
+iron_mass = 56.9353940 * atomic_unit
+k_boltzmann = 1.38e-23 # J / K
+mu_n = 5.5e-27 # A m^2
+room_temp = 292 # K
+speed_of_light = 3e8 # m / s
 
 def job_theory(T):
     prefactor_val = speed_of_light * B_val * mu_n / hbar_omega0_joule
     prefactor_err = speed_of_light * B_err * mu_n / hbar_omega0_joule
+
+    debye_1 = 3 * hbar_omega0_joule**2 / (4 * iron_mass * speed_of_light**2 * k_boltzmann * debye_temp)
+    debye_2 = 1 + 2 * np.pi**2/3 * (room_temp / debye_temp)**2
+    debye_3 = np.exp(- debye_1 * debye_2)
+
+    print(debye_1, debye_2, debye_3)
+
+    T['debye_1'] = siunitx(debye_1)
+    T['debye_2'] = siunitx(debye_2)
+    T['debye_3'] = siunitx(debye_3)
+    T['iron_mass'] = siunitx(iron_mass)
+    T['room_temp'] = siunitx(room_temp)
 
     T['v_prefactor'] = siunitx(prefactor_val, prefactor_err)
     T['B'] = siunitx(B_val, B_err)
