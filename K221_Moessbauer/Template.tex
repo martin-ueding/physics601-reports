@@ -17,6 +17,8 @@
 \newcommand\nLR{n_\text{LR}}
 \newcommand\vRL{v_\text{RL}}
 \newcommand\vLR{v_\text{LR}}
+\newcommand\rateRL{\dot n_\text{RL}}
+\newcommand\rateLR{\dot n_\text{LR}}
 
 \subject{Lab report}
 \title{Mößbauer effect}
@@ -414,14 +416,30 @@ as we use the velocity and not the motor setting for the analysis.
     \label{fig:motor}
 \end{figure}
 
+For each measurement, we compute the count rate simply with $\rateLR = \nLR /
+\tLR$ (and similar to right--left). The count rates are shown versus the
+velocity in Figure~\ref{fig:count_rate}. There we can see the transmission
+spectrum. The background of around \SI{60}{\per\second} is the transmission of
+the lines to the detectors. We see six distinct dips in the transmission, those
+are the resonance frequencies. Keeping in mind that the photon energy is $\hbar
+\omega_0 (1 + v/c)$, the lines are remarkably sharp.
+
 \begin{figure}
     \centering
     \includegraphics{count_rate}
     \caption{%
-        %
+        Count rate versus velocity. Also included is a fitted sum of six
+        Lorentzian curves and a constant offset.
     }
     \label{fig:count_rate}
 \end{figure}
+
+We fit a sum of six Lorentzian curves and a constant offset to the data. In
+order to make this $6 \times 3 + 1 = 19$ parameter system stable, we carefully
+tune the initial parameters of the least-squares-algorithm. Table~\ref{tab:fit}
+holds our fit parameters for the Lorentzian curves, the constant offset is
+\SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots of the
+diagonal of the covariance matrix.
 
 \begin{table}
     \centering
@@ -436,7 +454,7 @@ as we use the velocity and not the motor setting for the analysis.
         %< endfor >%
         \bottomrule
     \end{tabular}
-    \caption{Fit parameters for Lorentz dips}
+    \caption{Fit parameters and errors for the Lorentz dips}
     \label{tab:fit}
 \end{table}
 

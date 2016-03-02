@@ -128,11 +128,12 @@ def job_spectrum(T):
     pl.plot(x, y)
 
     formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
+    offset = siunitx(fit_val[-1], fit_err[-1])
 
     print(formatted)
 
     T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))
-    T['fit_offset'] = formatted[-1]
+    T['fit_offset'] = offset
 
     np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
         x / 1e-3, y
