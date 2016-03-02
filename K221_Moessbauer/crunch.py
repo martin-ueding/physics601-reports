@@ -68,21 +68,29 @@ def job_spectrum(T):
     time_lr = T_LR * 10e-3
     time_rl = T_RL * 10e-3
 
-    velocity_lr = length_val * runs / time_lr
+    velocity_lr = - length_val * runs / time_lr
     velocity_rl = length_val * runs / time_rl
 
-    rate_lr = N_LR / time_lr
-    rate_rl = N_RL / time_rl
+    rate_lr_val = N_LR / time_lr
+    rate_rl_val = N_RL / time_rl
+    rate_lr_err = np.sqrt(N_LR) / time_lr
+    rate_rl_err = np.sqrt(N_RL) / time_rl
 
-    pl.plot(velocity_lr, rate_lr, marker='o')
-    pl.plot(velocity_rl, rate_rl, marker='o')
+    pl.errorbar(velocity_lr, rate_lr_val, rate_lr_err, marker='o', linestyle='none')
+    pl.errorbar(velocity_rl, rate_rl_val, rate_lr_err, marker='o', linestyle='none')
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
     pl.savefig('_build/mpl-rate.pdf')
+    pl.clf()
 
-    pass
-
-
-def job_motor(T):
-    pass
+    pl.plot(motor, -velocity_lr, marker='o')
+    pl.plot(motor,  velocity_rl, marker='o')
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
+    pl.savefig('_build/mpl-motor.pdf')
+    pl.clf()
 
 
 
@@ -112,7 +120,6 @@ def main():
     T = {}
 
     job_spectrum(T)
-    job_motor(T)
     job_theory(T)
 
     test_keys(T)
