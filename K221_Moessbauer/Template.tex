@@ -11,6 +11,15 @@
     pdftitle=
 }
 
+\newcommand\tRL{t_\text{RL}}
+\newcommand\tLR{t_\text{LR}}
+\newcommand\nRL{n_\text{RL}}
+\newcommand\nLR{n_\text{LR}}
+\newcommand\vRL{v_\text{RL}}
+\newcommand\vLR{v_\text{LR}}
+\newcommand\rateRL{\dot n_\text{RL}}
+\newcommand\rateLR{\dot n_\text{LR}}
+
 \subject{Lab report}
 \title{Mößbauer effect}
 \subtitle{Experiment K221 -- Universität Bonn}
@@ -342,6 +351,8 @@ $m_j$.
 
 \chapter{Experimental setup and measurement}
 
+\section{Setup}
+
 %TODO better chapter title
 
 The $^{57}\mathrm{Co}$ source is located in a shielding led box. The
@@ -375,6 +386,98 @@ we reset all counters and start the measurement by pressing the start button on
 the motor steering. The counting begins at the left turning point and will also
 stop at this point to make sure there are as many \textsc{lr} runs as
 \textsc{rl}. 
+
+\section{Measurement}
+
+We start the first measurement by resetting all the counters and starting the
+motor controller. On the next full left swing of the absorber, the gates are
+opened and we see the counters work.
+
+After a couple minutes, the number of events on both sides ($\nLR$ and $\nRL$)
+are over \num{7000}. We instruct the motor controller to stop. Then at at the
+next full left swing, the measurement is stopped. The number of runs $N$, the
+motor setting, the times $\tLR$ and $\tRL$ as well as the number of events
+$\nLR$ and $\nRL$ are read off by us.
+
+Then we change the motor setting by four ticks on the scale and let it run
+again.
+
+\section{Analysis}
+
+\subsection{Velocity of target}
+
+First we have to compute the actual velocity of the target. In each measurement
+we have $N$ runs back and forth. The displacement for one direction (half a
+run) is $s = \SI{<< length_mm >>}{\milli\meter}$. The total time spend going
+from left to right is $\tLR$, so we can compute the velocity with
+\[
+    \vLR = \frac{s N}{\tLR}
+    \qquad\text{and}
+    \vRL = \frac{s N}{\tRL}
+    \,.
+\]
+
+We were warned that the relation between the motor setting and the actual speed
+might not be linear. Therefore we have checked this, see Figure~\ref{fig:motor}
+for a graphical representation of the data. It is linear but the velocities in
+left--right and right--left direction are not the same. This is not a problem
+as we use the velocity and not the motor setting for the analysis.
+
+\begin{figure}
+    \centering
+    \includegraphics{motor}
+    \caption{%
+        Relation of motor setting (units on the control potentiometer) and the
+        actual speed.
+    }
+    \label{fig:motor}
+\end{figure}
+
+For each measurement, we compute the count rate simply with $\rateLR = \nLR /
+\tLR$ (and similar to right--left). The count rates are shown versus the
+velocity in Figure~\ref{fig:count_rate}. There we can see the transmission
+spectrum. The background of around \SI{60}{\per\second} is the transmission of
+the lines to the detectors. We see six distinct dips in the transmission, those
+are the resonance frequencies. Keeping in mind that the photon energy is $\hbar
+\omega_0 (1 + v/c)$ and $v \ll c$ in our experiment, the lines are remarkably
+sharp.
+
+\begin{figure}
+    \centering
+    \includegraphics{count_rate}
+    \caption{%
+        Count rate versus velocity. Also included is a fitted sum of six
+        Lorentzian curves and a constant offset.
+    }
+    \label{fig:count_rate}
+\end{figure}
+
+We fit a sum of six Lorentzian curves and a constant offset to the data. In
+order to make this $6 \times 3 + 1 = 19$ parameter system stable, we carefully
+tune the initial parameters of the least-squares-algorithm. Table~\ref{tab:fit}
+holds our fit parameters for the Lorentzian curves, the constant offset is
+\SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots of the
+diagonal of the covariance matrix.
+
+\begin{table}
+    \centering
+    \begin{tabular}{SSS}
+        \toprule
+        {$\mu / \si{\milli\meter\per\second}$}
+        & {$\Gamma / \si{\milli\meter\per\second}$}
+        & {$I / \si{\milli\meter\per\second\squared}$} \\
+        \midrule
+        %< for row in fit_param >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Fit parameters and errors for the Lorentz dips. We have the mean $\mu$,
+        the width $\Gamma$ and the integral $I$.
+    }
+    \label{tab:fit}
+\end{table}
 
 \end{document}
 

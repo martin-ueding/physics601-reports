@@ -15,6 +15,7 @@ import scipy.optimize as op
 import scipy.stats
 
 from unitprint2 import siunitx
+import bootstrap
 
 atomic_unit = 1.6605e-27 # kg
 B_err = 1 # T
@@ -32,6 +33,43 @@ speed_of_light = 3e8 # m / s
 length_val = 25.1e-3
 length_err = 0.2e-3
 
+def lorentz(x, mean, width, integral):
+    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+
+def lorentz6(x,
+             mean1, width1, integral1,
+             mean2, width2, integral2,
+             mean3, width3, integral3,
+             mean4, width4, integral4,
+             #mean5, width5, integral5,
+             #mean6, width6, integral6,
+             offset):
+    return lorentz(x, mean1, width1, integral1) \
+            + lorentz(x, mean2, width2, integral2) \
+            + lorentz(x, mean3, width3, integral3) \
+            + lorentz(x, mean4, width4, integral4) \
+            + offset
+            #+ lorentz(x, mean5, width5, integral5) \
+            #+ lorentz(x, mean6, width6, integral6) \
+
+def fit_dip(v, rate_val, rate_err):
+    p0_width = 1e-3
+    p0_integral = -1e-2
+    p0_offset = 58
+
+    popt, pconv = op.curve_fit(lorentz6, v, rate_val, sigma=rate_err,
+                               p0=[
+                                   -5.3e-3, p0_width, p0_integral,
+                                   -3.1e-3, p0_width, p0_integral,
+                                   #-0.8e-3, p0_width, p0_integral,
+                                   #0.6e-3, p0_width, p0_integral,
+                                   2.9e-3, p0_width, p0_integral,
+                                   5.2e-3, p0_width, p0_integral,
+                                   p0_offset,
+                               ])
+
+    return popt, np.sqrt(pconv.diagonal())
+
 
 def job_theory(T):
     prefactor_val = speed_of_light * B_val * mu_n / hbar_omega0_joule
@@ -41,13 +79,13 @@ def job_theory(T):
     debye_2 = 1 + 2 * np.pi**2/3 * (room_temp / debye_temp)**2
     debye_3 = np.exp(- debye_1 * debye_2)
 
-    print(debye_1, debye_2, debye_3)
-
     T['debye_1'] = siunitx(debye_1)
     T['debye_2'] = siunitx(debye_2)
     T['debye_3'] = siunitx(debye_3)
     T['iron_mass'] = siunitx(iron_mass)
     T['room_temp'] = siunitx(room_temp)
+
+    T['length_mm'] = siunitx(length_val / 1e-3, length_err / 1e-3)
 
     T['v_prefactor'] = siunitx(prefactor_val, prefactor_err)
     T['B'] = siunitx(B_val, B_err)
@@ -78,6 +116,31 @@ def job_spectrum(T):
     rate_lr_err = np.sqrt(N_LR) / time_lr
     rate_rl_err = np.sqrt(N_RL) / time_rl
 
+    rate_val = np.concatenate((rate_lr_val, rate_rl_val))
+    rate_err = np.concatenate((rate_lr_err, rate_rl_err))
+    velocity_val = np.concatenate((velocity_lr_val, velocity_rl_val))
+    velocity_err = np.concatenate((velocity_lr_err, velocity_rl_err))
+
+    fit_val, fit_err = fit_dip(velocity_val, rate_val, rate_err)
+    x = np.linspace(np.min(velocity_val), np.max(velocity_val), 1000)
+    y = lorentz6(x, *fit_val)
+    pl.plot(x, y)
+
+    widths_val = fit_val[1::3]
+    widths_err = fit_err[1::3]
+
+    formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
+    offset = siunitx(fit_val[-1], fit_err[-1])
+
+    print(widths_val)
+
+    T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))
+    T['fit_offset'] = offset
+
+    np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
+        x / 1e-3, y
+    ]))
+
     np.savetxt('_build/xy/rate_lr.csv', np.column_stack([
         velocity_lr_val / 1e-3, rate_lr_val, rate_lr_err,
     ]))
@@ -100,13 +163,13 @@ def job_spectrum(T):
     pl.savefig('_build/mpl-rate.pdf')
     pl.clf()
 
-    pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
-    pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
-    pl.grid(True)
-    pl.margins(0.05)
-    pl.tight_layout()
-    pl.savefig('_build/mpl-motor.pdf')
-    pl.clf()
+    #pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
+    #pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
+    #pl.grid(True)
+    #pl.margins(0.05)
+    #pl.tight_layout()
+    #pl.savefig('_build/mpl-motor.pdf')
+    #pl.clf()
 
 
 
