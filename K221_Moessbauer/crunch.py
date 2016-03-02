@@ -195,30 +195,55 @@ def lande_factors(T, centers_val, centers_err):
     factor_val = speed_of_light * B_val * magneton / hbar_omega0_joule
     factor_err = speed_of_light * B_err * magneton / hbar_omega0_joule
 
-    T['isomeric'] = siunitx(isomeric_val / 1e-3, isomeric_err / 1e-3)
+    T['isomeric_mm_s'] = siunitx(isomeric_val / 1e-3, isomeric_err / 1e-3)
+    T['isomeric_nev'] = siunitx(hbar_omega0_ev * isomeric_val / speed_of_light / 1e-9, hbar_omega0_ev * isomeric_err / speed_of_light / 1e-9)
 
-    v_shift_e_val = - np.mean([
-        centers_val[5] - centers_val[3],
-        centers_val[3] - centers_val[1],
-        centers_val[4] - centers_val[2],
-        centers_val[2] - centers_val[0],
-    ])
-    v_shift_e_err = np.std([
-        centers_val[5] - centers_val[3],
-        centers_val[3] - centers_val[1],
-        centers_val[4] - centers_val[2],
-        centers_val[2] - centers_val[0],
-    ])
-    #v_shift_e_err = np.sqrt(np.mean(centers_err**2))
+    if True:
+        v_shift_e_val = - np.mean([
+            centers_val[2] - centers_val[0],
+            centers_val[3] - centers_val[1],
+            centers_val[4] - centers_val[2],
+            centers_val[5] - centers_val[3],
+        ])
+        v_shift_e_err = np.std([
+            centers_val[2] - centers_val[0],
+            centers_val[3] - centers_val[1],
+            centers_val[4] - centers_val[2],
+            centers_val[5] - centers_val[3],
+        ])
+        #v_shift_e_err = np.sqrt(np.mean(centers_err**2))
 
-    v_shift_g_val = np.mean([
-        centers_val[4] - centers_val[3],
-        centers_val[2] - centers_val[1],
-    ])
-    v_shift_g_err = np.std([
-        centers_val[4] - centers_val[3],
-        centers_val[2] - centers_val[1],
-    ])
+        v_shift_g_val = np.mean([
+            centers_val[2] - centers_val[1],
+            centers_val[4] - centers_val[3],
+        ])
+        v_shift_g_err = np.std([
+            centers_val[2] - centers_val[1],
+            centers_val[4] - centers_val[3],
+        ])
+    else:
+        v_shift_e_val = - np.mean([
+            centers_val[1] - centers_val[0],
+            centers_val[2] - centers_val[1],
+            centers_val[4] - centers_val[3],
+            centers_val[5] - centers_val[4],
+        ])
+        v_shift_e_err = np.std([
+            centers_val[1] - centers_val[0],
+            centers_val[2] - centers_val[1],
+            centers_val[4] - centers_val[3],
+            centers_val[5] - centers_val[4],
+        ])
+        #v_shift_e_err = np.sqrt(np.mean(centers_err**2))
+
+        v_shift_g_val = np.mean([
+            centers_val[4] - centers_val[0],
+            centers_val[5] - centers_val[1],
+        ])
+        v_shift_g_err = np.std([
+            centers_val[4] - centers_val[0],
+            centers_val[5] - centers_val[1],
+        ])
 
     lande_e_val = v_shift_e_val / factor_val
     lande_g_val = v_shift_g_val / factor_val

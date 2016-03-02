@@ -244,8 +244,8 @@ groundstate and the exited state.
 The needed relation between Doppler velocity $v$ and the magnetic moments
 $\mu$, $\mu'$ is
 \[
-    v = - \frac{c B}{\hbar \omega_0}
-    \sbr{\frac{\mu'}{j'} m_j' - \frac{\mu}{j} m_j}
+    v = \frac{c B}{\hbar \omega_0}
+    \sbr{\frac{\mu}{j} m_j - \frac{\mu'}{j'} m_j'}
     \,,
 \]
 where the primed quantities are the exited state
@@ -254,7 +254,7 @@ moments in terms of the nuclear magneton, we see the relation between the Landé
 factors more clearly:
 \begin{equation}
     \label{eq:velocity}
-    v = - \frac{c B \mu_\text N}{\hbar \omega_0} \sbr{g' m_j' - g m_j} \,.
+    v = \frac{c B \mu_\text N}{\hbar \omega_0} \sbr{g m_j - g' m_j'} \,.
 \end{equation}
 Inside the solid, the magnetic flux density is \SI{<< B >>}{\tesla}. All other
 quantities are known,
@@ -262,7 +262,7 @@ the prefactor has the value \SI{<< v_prefactor >>}{\meter\per\second}. As $g$
 and $m_j$ are of the order of magnitude one, the experimental setup with
 $v_\text{max} = \SI{0.006}{\meter\per\second}$ will be sensible.
 
-The selection rule for magnetic dipole radiation (M1) is $(m_j - m_j') \in \{
+The selection rule for magnetic dipole (M1) radiation is $(m_j - m_j') \in \{
 -1, 0, 1 \}$. Therefore we expect to see six velocities with high absorption.
 
 \section{Isomeric shift and quadrupole moment}
@@ -538,8 +538,9 @@ shift, the whole spectrum will be shifted to some $v_0$ and the spectrum is
 symmetric around that.
 
 Taking a simple average of the velocities of all the dips, we will obtain
-$v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric
->>}{\milli\meter\per\second}$.
+$v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric_mm_s
+>>}{\milli\meter\per\second}$. This corresponds do an energy shift of \SI{<<
+isomeric_nev >>}{\nano\electronvolt}.
 
 \subsection{Landé factors}
 
@@ -572,32 +573,63 @@ there are only two possibilities:
 Option~\ref{option-1} seems to be the obvious choice from
 Figure~\ref{fig:count_rate}. We have tried this, but we do not get reasonable
 results for $g$ and $g'$ this way. Looking at the literature values for Landé
-factors, it seems we must expect $g' > g$. Therefore option~\ref{option-2} is
-the actual phenomenon. Looking at the intensities of the absorption lines,
+factors, it seems we must expect $|g'| > |g|$. Therefore option~\ref{option-2}
+is the actual phenomenon. Looking at the intensities of the absorption lines,
 option~\ref{option-2} seems to be more likely as adjacent pairs have roughly
 the same intensity.
 
+We therefore average over the following velocity differences to obtain the
+ground state energy splitting: $(v_2-v_1)$ and $(v_4-v_3)$. For the excited
+state, we take $(v_2-v_0)$, $(v_3-v_1)$, $(v_4-v_2)$ and $(v_5-v_3)$. From this
+we obtain the averaged velocities
 \[
-    \Delta v(m_j \text{ fixed}) = \SI{<< v_shift_g >>}{\milli\meter\per\second}
+    \Delta v = \SI{<< v_shift_g >>}{\milli\meter\per\second}
     \eqnsep
-    \Delta v(m_j' \text{ fixed}) = \SI{<< v_shift_e >>}{\milli\meter\per\second}
+    \Delta v' = \SI{<< v_shift_e >>}{\milli\meter\per\second} \,.
 \]
-
-Converting with the fixed factor, we obtain the Landé factors
+The negative sign in $\Delta v'$ comes from the negative sign in
+Equation~\eqref{eq:velocity}. Dividing by $c B \mu_\text N / \hbar\omega_0$, we
+obtain the Landé factors
 \[
     g = \num{<< lande_g >>}
     \eqnsep
     g' = \num{<< lande_e >>} \,.
 \]
 The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
-this was given by $B = \SI{<< B >>}{\tesla}$. Our values should be compared with
+this was given by $B = \SI{<< B >>}{\tesla}$.
+
+
+\chapter{Conclusion}
+
+In the measured spectrum, we resolved the fine structure of $^{57}\text{Fe}$
+due to its own ferromagnetic field inside the metal. The widths of the
+resonances are only a factor of four larger than natural line width; an
+astonishing feat for a tabletop experiment at room temperature!
+
+We were able to extract the Landé factors for the $j^P = 1/2^-$ and $j^P =
+-1/2^-$ levels in $^{57}\text{Fe}$ to
+\[
+    g = \num{<< lande_g >>}
+    \eqnsep
+    g' = \num{<< lande_e >>} \,.
+\]
+Our values should be compared with
 the literature values
 \[
     g_\text{lit} = \num{0.090604(9)} \,
     \eqnsep
     g'_\text{lit} = \num{-0.15531(4)} \,,
 \]
-taken from \textcite[Fig.~4.8]{Schatz/Nukleare_Festkoerperphysik}.
+taken from \textcite[Fig.~4.8]{Schatz/Nukleare_Festkoerperphysik}. The
+literature value is too many standard errors away from our measurements.
+Therefore we must have underestimated our errors. Otherwise the ratio of $g/g'$
+is roughly correct.
+
+The isomeric shift from iron in cobalt to iron in iron is $v_0 = \SI{<<
+isomeric_nev >>}{\nano\electronvolt}$. We did not find a literature value for
+this, so we cannot compare this. Qualitatively, this effect comes from the
+different environment the $^{57}\text{Fe}$ nuclei are exposed to in source and
+target material.
 
 \end{document}
 
