@@ -462,12 +462,27 @@ diagonal of the covariance matrix.
     \label{tab:fit}
 \end{table}
 
+From the width $\Gamma$ in \si{\milli\meter\per\second}, which is the \emph{full width at half maximum} (FWHM)
+of the Lorentzian curve, we can compute the width in energy $\Deltaup E$ using
+the Doppler effect. We had that the velocity dependent energy of the photon is
+given by
+\[
+    E(v) = \hbar \omega_0 \del{1 + \frac vc} \,.
+\]
+Our $\Gamma$ describes the width on $v$, so we can write
+\[
+    \Deltaup E = \hbar \omega_0 \frac{\Gamma}{c} \,.
+\]
+The relative width $\delta$ is $\Deltaup E / E$ and using above relations we
+have $\delta = \Gamma / c$. The converted widths are shown in
+Table~\ref{tab:widths}.
+
 \begin{table}
     \centering
     \begin{tabular}{SSS}
         \toprule
         {$\Gamma / \si{\micro\meter\per\second}$}
-        & {$\Gamma / \si{\nano\electronvolt}$}
+        & {$\Deltaup E / \si{\nano\electronvolt}$}
         & {$\delta$ / \num{e-12}} \\
         \midrule
         %< for row in widths_table >%
@@ -476,9 +491,15 @@ diagonal of the covariance matrix.
         \bottomrule
     \end{tabular}
     \caption{%
+        Velocity width $\Gamma$ of the absorption lines, corresponding energy
+        width and also relative line width.
     }
     \label{tab:widths}
 \end{table}
+
+The relative line widths are in the order of \num{e-12}. Compared to the
+natural line width of \num{3.3e-13} this is only a factor of three to four
+larger!
 
 \end{document}
 
