@@ -20,6 +20,9 @@
 \newcommand\rateRL{\dot n_\text{RL}}
 \newcommand\rateLR{\dot n_\text{LR}}
 
+\def\table{\def\figurename{Table}\figure}
+\let\endtable\endfigure
+
 \subject{Lab report}
 \title{Mößbauer effect}
 \subtitle{Experiment K221 -- Universität Bonn}
@@ -381,6 +384,8 @@ respectively, also depending on the moving direction.
 
 \section{Measurement}
 
+Amplitude SCA: 66 to 100
+
 Before starting we have to find the measurement's energy window with an
 oscilloscope to only count $\SI{14.4}{\kilo\electronvolt}$ incidents and to
 reduce noise. After that we start the first measurement by resetting all the
@@ -415,7 +420,10 @@ We were warned that the relation between the motor setting and the actual speed
 might not be linear. Therefore we have checked this, see Figure~\ref{fig:motor}
 for a graphical representation of the data. It is linear but the velocities in
 left--right and right--left direction are not the same. This is not a problem
-as we use the velocity and not the motor setting for the analysis.
+as we use the velocity and not the motor setting for the analysis. We
+lack a few data points as we could not reach small negative velocities due
+to this shifting. Setting the motor control below 10 would just reverse the
+velocity, not making it slower.
 
 \begin{figure}
     \centering
@@ -426,6 +434,8 @@ as we use the velocity and not the motor setting for the analysis.
     }
     \label{fig:motor}
 \end{figure}
+
+\subsection{Count rates}
 
 For each measurement, we compute the count rate simply with $\rateLR = \nLR /
 \tLR$ (and similar to right--left). The count rates are shown versus the
@@ -446,12 +456,18 @@ sharp.
     \label{fig:count_rate}
 \end{figure}
 
+The dips are modeled with a Lorentzian curve, we choose the following
+parametrization:
+\[
+    L(x, \mu, \Gamma, I) = \frac I \piup \frac{\frac12 \Gamma}{(x - \mu)^2 +
+    \del{\frac 12 \Gamma}^2} \,.
+\]
 We fit a sum of six Lorentzian curves and a constant offset to the data. In
 order to make this $6 \times 3 + 1 = 19$ parameter system stable, we carefully
 tune the initial parameters of the least-squares-algorithm. Table~\ref{tab:fit}
-holds our fit parameters for the Lorentzian curves, the constant offset is
-\SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots of the
-diagonal of the covariance matrix.
+holds our final fit parameters for the Lorentzian curves, the constant offset
+is \SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots
+of the diagonal of the covariance matrix.
 
 \begin{table}
     \centering
@@ -472,6 +488,8 @@ diagonal of the covariance matrix.
     }
     \label{tab:fit}
 \end{table}
+
+\subsection{Line widths}
 
 From the width $\Gamma$ in \si{\milli\meter\per\second}, which is the \emph{full width at half maximum} (FWHM)
 of the Lorentzian curve, we can compute the width in energy $\Deltaup E$ using
@@ -511,6 +529,41 @@ Table~\ref{tab:widths}.
 The relative line widths are in the order of \num{e-12}. Compared to the
 natural line width of \num{3.3e-13} this is only a factor of three to four
 larger!
+
+\subsection{Isomeric shift}
+
+Assuming that we do not have any quadrupole splitting in our energies, the
+spectrum must be symmetric around $v = 0$. However, if we have an isomeric
+shift, the whole spectrum will be shifted to some $v_0$ and the spectrum is
+symmetric around that.
+
+Taking a simple average of the velocities of all the dips, we will obtain
+$v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric
+>>}{\milli\meter\per\second}$.
+
+\subsection{Landé factors}
+
+\[
+    \Delta v(m_j \text{ fixed}) = \SI{<< v_shift_g >>}{\milli\meter\per\second}
+    \eqnsep
+    \Delta v(m_j' \text{ fixed}) = \SI{<< v_shift_e >>}{\milli\meter\per\second}
+\]
+
+Converting with the fixed factor, we obtain the Landé factors
+\[
+    g = \num{<< lande_g >>}
+    \eqnsep
+    g' = \num{<< lande_e >>} \,.
+\]
+The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
+this was given by $B = \SI{<< B >>}{\tesla}$. Our values should be compared with
+the literature values
+\[
+    g_\text{lit} = \num{0.090604(9)} \,
+    \eqnsep
+    g'_\text{lit} = \num{-0.15531(4)} \,,
+\]
+taken from \textcite[Fig.~4.8]{Schatz/Nukleare_Festkoerperphysik}.
 
 \end{document}
 

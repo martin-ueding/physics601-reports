@@ -18,14 +18,15 @@ from unitprint2 import siunitx
 import bootstrap
 
 atomic_unit = 1.6605e-27 # kg
-B_err = 1 # T
 B_val = 33.3 # T
+B_err = 1 # T
 debye_temp = 470 # K
 electron_charge = 1.609e-19 # C
 hbar_omega0_ev = 14.4e3 # eV
 hbar_omega0_joule = 14.4e3 * electron_charge # J
 iron_mass = 56.9353940 * atomic_unit
 k_boltzmann = 1.38e-23 # J / K
+magneton = 5.05078e-27 # J / T
 mu_n = 5.5e-27 # A m^2
 room_temp = 292 # K
 speed_of_light = 3e8 # m / s
@@ -144,8 +145,6 @@ def job_spectrum(T):
     formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
     offset = siunitx(fit_val[-1], fit_err[-1])
 
-    print(widths_val)
-
     T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))
     T['fit_offset'] = offset
 
@@ -183,6 +182,55 @@ def job_spectrum(T):
     #pl.savefig('_build/mpl-motor.pdf')
     #pl.clf()
 
+    means_val = fit_val[:-1][0::3]
+    means_err = fit_err[:-1][0::3]
+
+    lande_factors(T, means_val, means_err)
+
+
+def lande_factors(T, centers_val, centers_err):
+    isomeric_val = np.mean(centers_val)
+    isomeric_err = np.sqrt(np.mean(centers_err**2))
+
+    factor_val = speed_of_light * B_val * magneton / hbar_omega0_joule
+    factor_err = speed_of_light * B_err * magneton / hbar_omega0_joule
+
+    T['isomeric'] = siunitx(isomeric_val / 1e-3, isomeric_err / 1e-3)
+
+    v_shift_e_val = - np.mean([
+        centers_val[5] - centers_val[3],
+        centers_val[3] - centers_val[1],
+        centers_val[4] - centers_val[2],
+        centers_val[2] - centers_val[0],
+    ])
+    v_shift_e_err = np.std([
+        centers_val[5] - centers_val[3],
+        centers_val[3] - centers_val[1],
+        centers_val[4] - centers_val[2],
+        centers_val[2] - centers_val[0],
+    ])
+    #v_shift_e_err = np.sqrt(np.mean(centers_err**2))
+
+    v_shift_g_val = np.mean([
+        centers_val[5] - centers_val[4],
+        centers_val[3] - centers_val[2],
+        centers_val[1] - centers_val[0],
+    ])
+    v_shift_g_err = np.std([
+        centers_val[5] - centers_val[4],
+        centers_val[3] - centers_val[2],
+        centers_val[1] - centers_val[0],
+    ])
+
+    lande_e_val = v_shift_e_val / factor_val
+    lande_g_val = v_shift_g_val / factor_val
+    lande_e_err = np.sqrt((v_shift_e_err / factor_val)**2 + (v_shift_e_val / factor_val**2 * factor_err)**2)
+    lande_g_err = np.sqrt((v_shift_g_err / factor_val)**2 + (v_shift_g_val / factor_val**2 * factor_err)**2)
+
+    T['v_shift_g'] = siunitx(v_shift_g_val / 1e-3, v_shift_g_err / 1e-3)
+    T['v_shift_e'] = siunitx(v_shift_e_val / 1e-3, v_shift_e_err / 1e-3)
+    T['lande_g'] = siunitx(lande_g_val, lande_g_err)
+    T['lande_e'] = siunitx(lande_e_val, lande_e_err)
 
 
 def test_keys(T):
