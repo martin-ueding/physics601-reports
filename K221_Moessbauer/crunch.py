@@ -120,7 +120,7 @@ def job_spectrum(T):
     pl.plot(x, y)
 
     np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
-        x, y
+        x / 1e-3, y
     ]))
 
     np.savetxt('_build/xy/rate_lr.csv', np.column_stack([

@@ -6,6 +6,7 @@
             ylabel={Count rate / \si{\per\second}},
             grid=major,
         ]
+
         \addplot[
             black,
             mark=*,
@@ -13,6 +14,7 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/rate_lr.csv};
+
         \addplot[
             black,
             mark=*,
@@ -20,5 +22,10 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/rate_rl.csv};
+
+        \addplot[
+            red,
+        ] table {../xy/rate_fit.csv};
+
     \end{axis}
 \end{tikzpicture}
