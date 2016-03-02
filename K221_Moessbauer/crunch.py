@@ -85,6 +85,8 @@ def job_theory(T):
     T['iron_mass'] = siunitx(iron_mass)
     T['room_temp'] = siunitx(room_temp)
 
+    T['length_mm'] = siunitx(length_val / 1e-3, length_err / 1e-3)
+
     T['v_prefactor'] = siunitx(prefactor_val, prefactor_err)
     T['B'] = siunitx(B_val, B_err)
     T['hbar_omega0_joule'] = siunitx(hbar_omega0_joule)

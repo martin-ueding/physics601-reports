@@ -363,16 +363,33 @@ count $\SI{14.4}{\kilo\electronvolt}$ incidents and to reduce noise.
 
 \section{Measurement}
 
+We start the first measurement by resetting all the counters and starting the
+motor controller. On the next full left swing of the absorber, the gates are
+opened and we see the counters work.
+
+\section{Analysis}
+
+\subsection{Velocity of target}
+
+First we have to compute the actual velocity of the target. In each measurement
+we have $N$ runs back and forth. The displacement for one direction (half a
+run) is $s = \SI{<< length_mm >>}{\milli\meter}$. The time 
+
+We were warned that the relation between the motor setting and the actual speed
+might not be linear. Therefore we have checked this, see Figure~\ref{fig:motor}
+for a graphical representation of the data. It is linear but the velocities in
+left--right and right--left direction are not the same. This is not a problem
+as we use the velocity and not the motor setting for the analysis.
+
 \begin{figure}
     \centering
     \includegraphics{motor}
     \caption{%
-        %
+        Relation of motor setting (units on the control potentiometer) and the
+        actual speed.
     }
     \label{fig:motor}
 \end{figure}
-
-\section{Analysis}
 
 \begin{figure}
     \centering
