@@ -351,9 +351,21 @@ with tunable but constant velocity over a distance of \SI{25.1 +-
 0.2}{\milli\meter} unto the source and away from it. Behind the absorber there
 is a proportional detector. Its signal is fed into an amplifier and then into a
 single channel analyser (\textsc{sca}) compare to Figure~\ref{fig:electronics}.
-After that the signals are counted in two counters (\textsc{n(lr)} and
-\textsc{n(rl)}) depending on the moving direction of the absorber.
+After that the signals are counted in two counters ($n_\text{RL}$ and
+$n_\text{LR}$) depending on the moving direction of the absorber. The direction
+is given by the motor steering, as well as the total run number. The timer
+gives a signal every \SI{10}{\milli\second} to another \textsc{sca}, which
+leads the signal to the two counters $t_\text{RL}$ and $t_\text{LR}$
+respectively, also depending on the moving direction.
 
+
+%\begin{figure}
+%    \centering
+%    \includegraphics{electronics}
+%    \caption{%
+%    }
+%    \label{fig:electronics}
+%\end{figure}
 
 
 First we have to find the measurement's window with an oscilloscope to only
