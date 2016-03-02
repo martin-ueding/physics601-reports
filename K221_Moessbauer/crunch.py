@@ -119,6 +119,15 @@ def job_spectrum(T):
     print(popt)
     pl.plot(x, y)
 
+    popt4 = popt[:-1]
+    popt_r = popt4.reshape((-1,3))
+
+    popt_r /= 1e-3
+
+    T['fit_param'] = list(map(siunitx, popt_r))
+
+    print(popt_r)
+
     np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
         x / 1e-3, y
     ]))

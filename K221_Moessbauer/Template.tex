@@ -377,6 +377,23 @@ count $\SI{14.4}{\kilo\electronvolt}$ incidents and to reduce noise.
     \label{fig:count_rate}
 \end{figure}
 
+\begin{table}
+    \centering
+    \begin{tabular}{SSS}
+        \toprule
+        {$\mu / \si{\milli\meter\per\second}$}
+        & {$\Gamma / \si{\milli\meter\per\second}$}
+        & {$I / \si{\milli\meter\per\second\squared}$} \\
+        \midrule
+        %< for row in fit_param >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{Fit parameters for Lorentz dips}
+    \label{tab:fit}
+\end{table}
+
 \end{document}
 
 % vim: spell spelllang=en tw=79
