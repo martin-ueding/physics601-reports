@@ -41,16 +41,16 @@ def lorentz6(x,
              mean2, width2, integral2,
              mean3, width3, integral3,
              mean4, width4, integral4,
+             #mean5, width5, integral5,
+             #mean6, width6, integral6,
              offset):
     return lorentz(x, mean1, width1, integral1) \
             + lorentz(x, mean2, width2, integral2) \
             + lorentz(x, mean3, width3, integral3) \
             + lorentz(x, mean4, width4, integral4) \
             + offset
-
-def boot_fit_dip(sample):
-    v, rate_val, rate_err = zip(*sample)
-    return fit_dip(v, rate_val, rate_err)
+            #+ lorentz(x, mean5, width5, integral5) \
+            #+ lorentz(x, mean6, width6, integral6) \
 
 def fit_dip(v, rate_val, rate_err):
     p0_width = 1e-3
@@ -59,14 +59,16 @@ def fit_dip(v, rate_val, rate_err):
 
     popt, pconv = op.curve_fit(lorentz6, v, rate_val, sigma=rate_err,
                                p0=[
-                                   -5.5e-3, p0_width, p0_integral,
+                                   -5.3e-3, p0_width, p0_integral,
                                    -3.1e-3, p0_width, p0_integral,
+                                   #-0.8e-3, p0_width, p0_integral,
+                                   #0.6e-3, p0_width, p0_integral,
                                    2.9e-3, p0_width, p0_integral,
                                    5.2e-3, p0_width, p0_integral,
                                    p0_offset,
                                ])
 
-    return popt
+    return popt, np.sqrt(pconv.diagonal())
 
 
 def job_theory(T):
@@ -117,25 +119,18 @@ def job_spectrum(T):
     velocity_val = np.concatenate((velocity_lr_val, velocity_rl_val))
     velocity_err = np.concatenate((velocity_lr_err, velocity_rl_err))
 
-    popt = fit_dip(velocity_val, rate_val, rate_err)
+    fit_val, fit_err = fit_dip(velocity_val, rate_val, rate_err)
     x = np.linspace(np.min(velocity_val), np.max(velocity_val), 1000)
-    y = lorentz6(x, *popt)
-    print(popt)
+    y = lorentz6(x, *fit_val)
+    print(fit_val)
     pl.plot(x, y)
-
-
-    sets = list(zip(velocity_val, rate_val, rate_err))
-    fit = boot_fit_dip(sets)
-    fit_val, fit_err = bootstrap.bootstrap_and_transform(boot_fit_dip, sets)
-
-    print('Bootstrapped:')
-    print(fit_val, fit_err)
 
     formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
 
     print(formatted)
 
     T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))
+    T['fit_offset'] = formatted[-1]
 
     np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
         x / 1e-3, y
