@@ -68,8 +68,10 @@ def job_spectrum(T):
     time_lr = T_LR * 10e-3
     time_rl = T_RL * 10e-3
 
-    velocity_lr = - length_val * runs / time_lr
-    velocity_rl = length_val * runs / time_rl
+    velocity_lr_val = - length_val * runs / time_lr
+    velocity_rl_val = length_val * runs / time_rl
+    velocity_lr_err = - length_err * runs / time_lr
+    velocity_rl_err = length_err * runs / time_rl
 
     rate_lr_val = N_LR / time_lr
     rate_rl_val = N_RL / time_rl
@@ -77,23 +79,29 @@ def job_spectrum(T):
     rate_rl_err = np.sqrt(N_RL) / time_rl
 
     np.savetxt('_build/xy/rate_lr.csv', np.column_stack([
-        velocity_lr / 1e-3, rate_lr_val, rate_lr_err,
+        velocity_lr_val / 1e-3, rate_lr_val, rate_lr_err,
     ]))
-
     np.savetxt('_build/xy/rate_rl.csv', np.column_stack([
-        velocity_rl / 1e-3, rate_rl_val, rate_rl_err,
+        velocity_rl_val / 1e-3, rate_rl_val, rate_rl_err,
     ]))
 
-    pl.errorbar(velocity_lr, rate_lr_val, rate_lr_err, marker='o', linestyle='none')
-    pl.errorbar(velocity_rl, rate_rl_val, rate_lr_err, marker='o', linestyle='none')
+    np.savetxt('_build/xy/motor_lr.csv', np.column_stack([
+        motor, velocity_lr_val / 1e-3, velocity_lr_err / 1e-3,
+    ]))
+    np.savetxt('_build/xy/motor_rl.csv', np.column_stack([
+        motor, velocity_rl_val / 1e-3, velocity_rl_err / 1e-3,
+    ]))
+
+    pl.errorbar(velocity_lr_val, rate_lr_val, rate_lr_err, xerr=velocity_lr_err, marker='o', linestyle='none')
+    pl.errorbar(velocity_rl_val, rate_rl_val, rate_lr_err,  xerr=velocity_rl_err, marker='o', linestyle='none')
     pl.grid(True)
     pl.margins(0.05)
     pl.tight_layout()
     pl.savefig('_build/mpl-rate.pdf')
     pl.clf()
 
-    pl.plot(motor, -velocity_lr, marker='o')
-    pl.plot(motor,  velocity_rl, marker='o')
+    pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
+    pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
     pl.grid(True)
     pl.margins(0.05)
     pl.tight_layout()
