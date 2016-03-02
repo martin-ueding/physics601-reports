@@ -35,13 +35,36 @@ length_err = 0.2e-3
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
-def lorentz4(x,
+def lorentz6(x,
              mean1, width1, integral1,
              mean2, width2, integral2,
+             mean3, width3, integral3,
+             mean4, width4, integral4,
              offset):
     return lorentz(x, mean1, width1, integral1) \
             + lorentz(x, mean2, width2, integral2) \
+            + lorentz(x, mean3, width3, integral3) \
+            + lorentz(x, mean4, width4, integral4) \
             + offset
+
+def fit_dip(v, rate_val, rate_err):
+    p0_width = 1e-3
+    p0_integral = -1e-2
+    p0_offset = 58
+
+    popt, pconv = op.curve_fit(lorentz6, v, rate_val, sigma=rate_err,
+                               p0=[
+                                   -5.5e-3, p0_width, p0_integral,
+                                   -3.1e-3, p0_width, p0_integral,
+                                   2.9e-3, p0_width, p0_integral,
+                                   5.2e-3, p0_width, p0_integral,
+                                   p0_offset,
+                               ])
+
+    x = np.linspace(np.min(v), np.max(v), 1000)
+    y = lorentz6( x, *popt)
+
+    return popt, x, y
 
 
 def job_theory(T):
@@ -62,21 +85,6 @@ def job_theory(T):
     T['B'] = siunitx(B_val, B_err)
     T['hbar_omega0_joule'] = siunitx(hbar_omega0_joule)
     T['hbar_omega0_ev'] = siunitx(hbar_omega0_ev)
-
-
-def fit_dip(v, rate_val, rate_err):
-    selection = (min < v) & (v < max)
-    v = v[selection]
-    rate_val = rate_val[selection]
-    rate_err = rate_err[selection]
-
-    popt, pconv = op.curve_fit(lorentz, v, rate_val, sigma=rate_err,
-                               p0=[(min+max)/2, 1e-3, -1e-2, 60])
-
-    x = np.linspace(np.min(v), np.max(v), 1000)
-    y = lorentz( x, *popt)
-
-    return popt, x, y
 
 
 def job_spectrum(T):
@@ -107,7 +115,7 @@ def job_spectrum(T):
     velocity_val = np.concatenate((velocity_lr_val, velocity_rl_val))
     velocity_err = np.concatenate((velocity_lr_err, velocity_rl_err))
 
-    popt, x, y = fit_dip(velocity_val, rate_val, rate_err, 4e-3, 6.5e-3)
+    popt, x, y = fit_dip(velocity_val, rate_val, rate_err)
     print(popt)
     pl.plot(x, y)
 
