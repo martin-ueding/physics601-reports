@@ -1,5 +1,24 @@
 \begin{tikzpicture}
-    \begin{axis}
-        \addplot table {../xy/rate_rl.csv};
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={$v / \si{\milli\meter\per\second}$},
+            ylabel={Count rate / \si{\per\second}},
+            grid=major,
+        ]
+        \addplot[
+            black,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/rate_lr.csv};
+        \addplot[
+            black,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/rate_rl.csv};
     \end{axis}
 \end{tikzpicture}

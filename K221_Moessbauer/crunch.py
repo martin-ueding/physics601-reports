@@ -77,15 +77,15 @@ def job_spectrum(T):
     rate_rl_err = np.sqrt(N_RL) / time_rl
 
     np.savetxt('_build/xy/rate_lr.csv', np.column_stack([
-        velocity_lr, rate_lr_val, rate_lr_err,
+        velocity_lr / 1e-3, rate_lr_val, rate_lr_err,
     ]))
 
     np.savetxt('_build/xy/rate_rl.csv', np.column_stack([
-        velocity_rl, rate_rl_val,# rate_rl_err,
+        velocity_rl / 1e-3, rate_rl_val, rate_rl_err,
     ]))
 
-    pl.errorbar(velocity_lr / 1e-3, rate_lr_val, rate_lr_err, marker='o', linestyle='none')
-    pl.errorbar(velocity_rl / 1e-3, rate_rl_val, rate_lr_err, marker='o', linestyle='none')
+    pl.errorbar(velocity_lr, rate_lr_val, rate_lr_err, marker='o', linestyle='none')
+    pl.errorbar(velocity_rl, rate_rl_val, rate_lr_err, marker='o', linestyle='none')
     pl.grid(True)
     pl.margins(0.05)
     pl.tight_layout()
