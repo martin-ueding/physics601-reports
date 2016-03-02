@@ -119,6 +119,10 @@ def job_spectrum(T):
     print(popt)
     pl.plot(x, y)
 
+    np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
+        x, y
+    ]))
+
     np.savetxt('_build/xy/rate_lr.csv', np.column_stack([
         velocity_lr_val / 1e-3, rate_lr_val, rate_lr_err,
     ]))
