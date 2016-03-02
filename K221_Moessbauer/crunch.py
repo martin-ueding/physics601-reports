@@ -32,6 +32,17 @@ speed_of_light = 3e8 # m / s
 length_val = 25.1e-3
 length_err = 0.2e-3
 
+def lorentz(x, mean, width, integral):
+    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+
+def lorentz4(x,
+             mean1, width1, integral1,
+             mean2, width2, integral2,
+             offset):
+    return lorentz(x, mean1, width1, integral1) \
+            + lorentz(x, mean2, width2, integral2) \
+            + offset
+
 
 def job_theory(T):
     prefactor_val = speed_of_light * B_val * mu_n / hbar_omega0_joule
@@ -40,8 +51,6 @@ def job_theory(T):
     debye_1 = 3 * hbar_omega0_joule**2 / (4 * iron_mass * speed_of_light**2 * k_boltzmann * debye_temp)
     debye_2 = 1 + 2 * np.pi**2/3 * (room_temp / debye_temp)**2
     debye_3 = np.exp(- debye_1 * debye_2)
-
-    print(debye_1, debye_2, debye_3)
 
     T['debye_1'] = siunitx(debye_1)
     T['debye_2'] = siunitx(debye_2)
@@ -53,6 +62,21 @@ def job_theory(T):
     T['B'] = siunitx(B_val, B_err)
     T['hbar_omega0_joule'] = siunitx(hbar_omega0_joule)
     T['hbar_omega0_ev'] = siunitx(hbar_omega0_ev)
+
+
+def fit_dip(v, rate_val, rate_err):
+    selection = (min < v) & (v < max)
+    v = v[selection]
+    rate_val = rate_val[selection]
+    rate_err = rate_err[selection]
+
+    popt, pconv = op.curve_fit(lorentz, v, rate_val, sigma=rate_err,
+                               p0=[(min+max)/2, 1e-3, -1e-2, 60])
+
+    x = np.linspace(np.min(v), np.max(v), 1000)
+    y = lorentz( x, *popt)
+
+    return popt, x, y
 
 
 def job_spectrum(T):
@@ -78,6 +102,15 @@ def job_spectrum(T):
     rate_lr_err = np.sqrt(N_LR) / time_lr
     rate_rl_err = np.sqrt(N_RL) / time_rl
 
+    rate_val = np.concatenate((rate_lr_val, rate_rl_val))
+    rate_err = np.concatenate((rate_lr_err, rate_rl_err))
+    velocity_val = np.concatenate((velocity_lr_val, velocity_rl_val))
+    velocity_err = np.concatenate((velocity_lr_err, velocity_rl_err))
+
+    popt, x, y = fit_dip(velocity_val, rate_val, rate_err, 4e-3, 6.5e-3)
+    print(popt)
+    pl.plot(x, y)
+
     np.savetxt('_build/xy/rate_lr.csv', np.column_stack([
         velocity_lr_val / 1e-3, rate_lr_val, rate_lr_err,
     ]))
@@ -92,13 +125,13 @@ def job_spectrum(T):
         motor, velocity_rl_val / 1e-3, velocity_rl_err / 1e-3,
     ]))
 
-    #pl.errorbar(velocity_lr_val, rate_lr_val, rate_lr_err, xerr=velocity_lr_err, marker='o', linestyle='none')
-    #pl.errorbar(velocity_rl_val, rate_rl_val, rate_lr_err,  xerr=velocity_rl_err, marker='o', linestyle='none')
-    #pl.grid(True)
-    #pl.margins(0.05)
-    #pl.tight_layout()
-    #pl.savefig('_build/mpl-rate.pdf')
-    #pl.clf()
+    pl.errorbar(velocity_lr_val, rate_lr_val, rate_lr_err, xerr=velocity_lr_err, marker='o', linestyle='none')
+    pl.errorbar(velocity_rl_val, rate_rl_val, rate_lr_err,  xerr=velocity_rl_err, marker='o', linestyle='none')
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
+    pl.savefig('_build/mpl-rate.pdf')
+    pl.clf()
 
     #pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
     #pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
