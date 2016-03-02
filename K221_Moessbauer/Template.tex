@@ -384,11 +384,17 @@ respectively, also depending on the moving direction.
 
 \section{Measurement}
 
-Amplitude SCA: 66 to 100
-
 Before starting we have to find the measurement's energy window with an
 oscilloscope to only count $\SI{14.4}{\kilo\electronvolt}$ incidents and to
-reduce noise. After that we start the first measurement by resetting all the
+reduce noise. For that the window is opened completely. The oscilloscope is
+triggered with the SCA signal and shows the analog signal from the amplifier.
+On the screen we can see the typical asymmetric peak shape of a proportional
+photon detector. With the fluorescence of screen we can see a couple lumps of
+peaks, the lump in the middle is the one of the line that we are interested in.
+The SCA window is restricted on the range of \numrange{66}{100} and we can see
+that only the interesting lump of peaks is left.
+
+After that we start the first measurement by resetting all the
 counters and starting the motor controller. On the next full left swing of the
 absorber, the gates are opened and we see the counters work.
 
@@ -630,6 +636,9 @@ isomeric_nev >>}{\nano\electronvolt}$. We did not find a literature value for
 this, so we cannot compare this. Qualitatively, this effect comes from the
 different environment the $^{57}\text{Fe}$ nuclei are exposed to in source and
 target material.
+
+
+% TODO Long table with all the raw data.
 
 \end{document}
 
