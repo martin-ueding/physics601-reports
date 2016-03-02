@@ -1,11 +1,11 @@
 # Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The MIT License
 
-.PRECIOUS: %.tex %.pdf build/page/%.pdf
+.PRECIOUS: %.tex %.pdf build/page/%.pdf build/page/%.tex
 
 SHELL = /bin/bash
 
-tail = tail -n 15
+tail = tail -n 20
 
 build = _build
 
@@ -20,6 +20,8 @@ figures_pdf := $(figures_tex:Figures/%.tex=$(build)/%.pdf)
 
 plots_tex := $(wildcard Plots/*.tex)
 plots_pdf := $(plots_tex:Plots/%.tex=$(build)/%.pdf)
+plots_page_pdf := $(plots_tex:Plots/%.tex=$(build)/page/%.pdf)
+plots_page_tex := $(plots_tex:Plots/%.tex=$(build)/page/%.tex)
 
 all: $(out)
 
@@ -41,14 +43,18 @@ $(tex): Template.tex $(build)/template.js
 	@echo "$(on)Inserting values into template$(off)"
 	../insert.py $^ $@
 
-$(plots_pdf): $(build)/template.js
+$(plots_pdf): $(build)/template.js $(build)/xy/*.csv
 
-$(build)/template.js: crunch.py | $(build)
+$(build)/template.js: crunch.py Data/* | $(build)
 	@echo "$(on)Crunching the numbers$(off)"
 	env PYTHONPATH=$$PYTHONPATH:.. ./$<
 
 $(build)/page/%.tex: Figures/%.tex | $(build)
 	@echo "$(on)Wrapping figure $< $(off)"
+	../tikzpicture_wrap.py $< $@
+
+$(build)/page/%.tex: Plots/%.tex | $(build)
+	@echo "$(on)Wrapping plot $< $(off)"
 	../tikzpicture_wrap.py $< $@
 
 $(build)/%.pdf: $(build)/page/%.pdf | $(build)
