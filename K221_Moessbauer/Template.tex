@@ -411,7 +411,7 @@ run) is $s = \SI{<< length_mm >>}{\milli\meter}$. The total time spend going
 from left to right is $\tLR$, so we can compute the velocity with
 \[
     \vLR = \frac{s N}{\tLR}
-    \qquad\text{and}
+    \qquad\text{and}\qquad
     \vRL = \frac{s N}{\tRL}
     \,.
 \]
@@ -542,6 +542,40 @@ $v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric
 >>}{\milli\meter\per\second}$.
 
 \subsection{Landé factors}
+
+From the six lines that we have, we can also compute the Landé factor $g$ for
+the ground state ($j = 1/2^-$) and $g'$ for the excited state ($j = 3/2^-$).
+First we must determine which line belongs to which transition. The distance
+between transitions with either $m_j$ or $m_j'$ fixed must be equal. Therefore
+there are only two possibilities:
+
+\begin{enumerate}
+    \item
+        \label{option-1}
+
+        The splitting in the ground state is large. Therefore we expect to see
+        two triplets which are displaced by more than their intermediate
+        spacing. Lines 1, 2 and 3 correspond to the three lines coming from
+        $m_j = +1/2$ and lines 4, 5, and 5 correspond to the three transitions
+        starting from $m_j = -1/2$.
+
+    \item
+        \label{option-2}
+
+        The splitting in the excited state is large. Therefore we expect two
+        wide triplets which are just slightly shifted against each other.
+        Another way would be to interpret this as a triplet where each line is
+        slightly split up again. Then lines 1, 3 and 5 come from $m_j = +1/2$
+        and 2, 4 and 6 come from $m_j = -1/2$.
+\end{enumerate}
+
+Option~\ref{option-1} seems to be the obvious choice from
+Figure~\ref{fig:count_rate}. We have tried this, but we do not get reasonable
+results for $g$ and $g'$ this way. Looking at the literature values for Landé
+factors, it seems we must expect $g' > g$. Therefore option~\ref{option-2} is
+the actual phenomenon. Looking at the intensities of the absorption lines,
+option~\ref{option-2} seems to be more likely as adjacent pairs have roughly
+the same intensity.
 
 \[
     \Delta v(m_j \text{ fixed}) = \SI{<< v_shift_g >>}{\milli\meter\per\second}
