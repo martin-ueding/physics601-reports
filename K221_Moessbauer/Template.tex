@@ -530,7 +530,40 @@ The relative line widths are in the order of \num{e-12}. Compared to the
 natural line width of \num{3.3e-13} this is only a factor of three to four
 larger!
 
+\subsection{Isomeric shift}
+
+Assuming that we do not have any quadrupole splitting in our energies, the
+spectrum must be symmetric around $v = 0$. However, if we have an isomeric
+shift, the whole spectrum will be shifted to some $v_0$ and the spectrum is
+symmetric around that.
+
+Taking a simple average of the velocities of all the dips, we will obtain
+$v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric
+>>}{\milli\meter\per\second}$.
+
 \subsection{Landé factors}
+
+\[
+    \Delta v(m_j \text{ fixed}) = \SI{<< v_shift_g >>}{\milli\meter\per\second}
+    \eqnsep
+    \Delta v(m_j' \text{ fixed}) = \SI{<< v_shift_e >>}{\milli\meter\per\second}
+\]
+
+Converting with the fixed factor, we obtain the Landé factors
+\[
+    g = \num{<< lande_g >>}
+    \eqnsep
+    g' = \num{<< lande_e >>} \,.
+\]
+The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
+this was given by $B = \SI{<< B >>}{\tesla}$. Our values should be compared with
+the literature values
+\[
+    g_\text{lit} = \num{0.090604(9)} \,
+    \eqnsep
+    g'_\text{lit} = \num{-0.15531(4)} \,,
+\]
+taken from \textcite[Fig.~4.8]{Schatz/Nukleare_Festkoerperphysik}.
 
 \end{document}
 
