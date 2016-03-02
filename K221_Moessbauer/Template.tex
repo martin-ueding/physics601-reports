@@ -11,6 +11,13 @@
     pdftitle=
 }
 
+\newcommand\tRL{t_\text{RL}}
+\newcommand\tLR{t_\text{LR}}
+\newcommand\nRL{n_\text{RL}}
+\newcommand\nLR{n_\text{LR}}
+\newcommand\vRL{v_\text{RL}}
+\newcommand\vLR{v_\text{LR}}
+
 \subject{Lab report}
 \title{Mößbauer effect}
 \subtitle{Experiment K221 -- Universität Bonn}
@@ -367,13 +374,29 @@ We start the first measurement by resetting all the counters and starting the
 motor controller. On the next full left swing of the absorber, the gates are
 opened and we see the counters work.
 
+After a couple minutes, the number of events on both sides ($\nLR$ and $\nRL$)
+are over \num{7000}. We instruct the motor controller to stop. Then at at the
+next full left swing, the measurement is stopped. The number of runs $N$, the
+motor setting, the times $\tLR$ and $\tRL$ as well as the number of events
+$\nLR$ and $\nRL$ are read off by us.
+
+Then we change the motor setting by four ticks on the scale and let it run
+again.
+
 \section{Analysis}
 
 \subsection{Velocity of target}
 
 First we have to compute the actual velocity of the target. In each measurement
 we have $N$ runs back and forth. The displacement for one direction (half a
-run) is $s = \SI{<< length_mm >>}{\milli\meter}$. The time 
+run) is $s = \SI{<< length_mm >>}{\milli\meter}$. The total time spend going
+from left to right is $\tLR$, so we can compute the velocity with
+\[
+    \vLR = \frac{s N}{\tLR}
+    \qquad\text{and}
+    \vRL = \frac{s N}{\tRL}
+    \,.
+\]
 
 We were warned that the relation between the motor setting and the actual speed
 might not be linear. Therefore we have checked this, see Figure~\ref{fig:motor}
