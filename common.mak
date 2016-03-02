@@ -1,11 +1,11 @@
 # Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The MIT License
 
-.PRECIOUS: %.tex %.pdf build/page/%.pdf
+.PRECIOUS: %.tex %.pdf build/page/%.pdf build/page/%.tex
 
 SHELL = /bin/bash
 
-tail = tail -n 15
+tail = tail -n 20
 
 build = _build
 
@@ -18,14 +18,22 @@ out := "$(build)/physics601-$(number)-Ueding_Lemmer.pdf"
 figures_tex := $(wildcard Figures/*.tex)
 figures_pdf := $(figures_tex:Figures/%.tex=$(build)/%.pdf)
 
+plots_tex := $(wildcard Plots/*.tex)
+plots_pdf := $(plots_tex:Plots/%.tex=$(build)/%.pdf)
+plots_page_pdf := $(plots_tex:Plots/%.tex=$(build)/page/%.pdf)
+plots_page_tex := $(plots_tex:Plots/%.tex=$(build)/page/%.tex)
+
 all: $(out)
+
+crunch: $(build)/template.js
 
 $(build):
 	@echo "$(on)Creating build directory$(off)"
 	mkdir -p $(build)
 	mkdir -p $(build)/page
+	mkdir -p $(build)/xy
 
-$(out): $(tex) $(figures_pdf)
+$(out): $(tex) $(figures_pdf) $(plots_pdf)
 	@echo "$(on)Compiling main document$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
@@ -35,12 +43,18 @@ $(tex): Template.tex $(build)/template.js
 	@echo "$(on)Inserting values into template$(off)"
 	../insert.py $^ $@
 
-$(build)/template.js: crunch | $(build)
+$(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.csv)
+
+$(build)/template.js: crunch.py Data/* | $(build)
 	@echo "$(on)Crunching the numbers$(off)"
-	env PYTHONPATH=$PYTHONPATH:.. ./$<
+	env PYTHONPATH=$$PYTHONPATH:.. ./$<
 
 $(build)/page/%.tex: Figures/%.tex | $(build)
 	@echo "$(on)Wrapping figure $< $(off)"
+	../tikzpicture_wrap.py $< $@
+
+$(build)/page/%.tex: Plots/%.tex | $(build)
+	@echo "$(on)Wrapping plot $< $(off)"
 	../tikzpicture_wrap.py $< $@
 
 $(build)/%.pdf: $(build)/page/%.pdf | $(build)

@@ -29,6 +29,10 @@ mu_n = 5.5e-27 # A m^2
 room_temp = 292 # K
 speed_of_light = 3e8 # m / s
 
+length_val = 25.1e-3
+length_err = 0.2e-3
+
+
 def job_theory(T):
     prefactor_val = speed_of_light * B_val * mu_n / hbar_omega0_joule
     prefactor_err = speed_of_light * B_err * mu_n / hbar_omega0_joule
@@ -49,6 +53,61 @@ def job_theory(T):
     T['B'] = siunitx(B_val, B_err)
     T['hbar_omega0_joule'] = siunitx(hbar_omega0_joule)
     T['hbar_omega0_ev'] = siunitx(hbar_omega0_ev)
+
+
+def job_spectrum(T):
+    data = np.loadtxt('Data/runs.tsv')
+
+    runs = data[:, 0]
+    motor = data[:, 1]
+    T_LR = data[:, 2]
+    N_LR = data[:, 3]
+    T_RL = data[:, 4]
+    N_RL = data[:, 5]
+
+    time_lr = T_LR * 10e-3
+    time_rl = T_RL * 10e-3
+
+    velocity_lr_val = - length_val * runs / time_lr
+    velocity_rl_val = length_val * runs / time_rl
+    velocity_lr_err = - length_err * runs / time_lr
+    velocity_rl_err = length_err * runs / time_rl
+
+    rate_lr_val = N_LR / time_lr
+    rate_rl_val = N_RL / time_rl
+    rate_lr_err = np.sqrt(N_LR) / time_lr
+    rate_rl_err = np.sqrt(N_RL) / time_rl
+
+    np.savetxt('_build/xy/rate_lr.csv', np.column_stack([
+        velocity_lr_val / 1e-3, rate_lr_val, rate_lr_err,
+    ]))
+    np.savetxt('_build/xy/rate_rl.csv', np.column_stack([
+        velocity_rl_val / 1e-3, rate_rl_val, rate_rl_err,
+    ]))
+
+    np.savetxt('_build/xy/motor_lr.csv', np.column_stack([
+        motor, -velocity_lr_val / 1e-3, velocity_lr_err / 1e-3,
+    ]))
+    np.savetxt('_build/xy/motor_rl.csv', np.column_stack([
+        motor, velocity_rl_val / 1e-3, velocity_rl_err / 1e-3,
+    ]))
+
+    pl.errorbar(velocity_lr_val, rate_lr_val, rate_lr_err, xerr=velocity_lr_err, marker='o', linestyle='none')
+    pl.errorbar(velocity_rl_val, rate_rl_val, rate_lr_err,  xerr=velocity_rl_err, marker='o', linestyle='none')
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
+    pl.savefig('_build/mpl-rate.pdf')
+    pl.clf()
+
+    pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
+    pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
+    pl.savefig('_build/mpl-motor.pdf')
+    pl.clf()
+
 
 
 def test_keys(T):
@@ -76,6 +135,7 @@ def test_keys(T):
 def main():
     T = {}
 
+    job_spectrum(T)
     job_theory(T)
 
     test_keys(T)
