@@ -420,7 +420,10 @@ We were warned that the relation between the motor setting and the actual speed
 might not be linear. Therefore we have checked this, see Figure~\ref{fig:motor}
 for a graphical representation of the data. It is linear but the velocities in
 left--right and right--left direction are not the same. This is not a problem
-as we use the velocity and not the motor setting for the analysis.
+as we use the velocity and not the motor setting for the analysis. We
+lack a few data points as we could not reach small negative velocities due
+to this shifting. Setting the motor control below 10 would just reverse the
+velocity, not making it slower.
 
 \begin{figure}
     \centering
@@ -431,6 +434,8 @@ as we use the velocity and not the motor setting for the analysis.
     }
     \label{fig:motor}
 \end{figure}
+
+\subsection{Count rates}
 
 For each measurement, we compute the count rate simply with $\rateLR = \nLR /
 \tLR$ (and similar to right--left). The count rates are shown versus the
@@ -451,12 +456,18 @@ sharp.
     \label{fig:count_rate}
 \end{figure}
 
+The dips are modeled with a Lorentzian curve, we choose the following
+parametrization:
+\[
+    L(x, \mu, \Gamma, I) = \frac I \piup \frac{\frac12 \Gamma}{(x - \mu)^2 +
+    \del{\frac 12 \Gamma}^2} \,.
+\]
 We fit a sum of six Lorentzian curves and a constant offset to the data. In
 order to make this $6 \times 3 + 1 = 19$ parameter system stable, we carefully
 tune the initial parameters of the least-squares-algorithm. Table~\ref{tab:fit}
-holds our fit parameters for the Lorentzian curves, the constant offset is
-\SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots of the
-diagonal of the covariance matrix.
+holds our final fit parameters for the Lorentzian curves, the constant offset
+is \SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots
+of the diagonal of the covariance matrix.
 
 \begin{table}
     \centering
@@ -477,6 +488,8 @@ diagonal of the covariance matrix.
     }
     \label{tab:fit}
 \end{table}
+
+\subsection{Line widths}
 
 From the width $\Gamma$ in \si{\milli\meter\per\second}, which is the \emph{full width at half maximum} (FWHM)
 of the Lorentzian curve, we can compute the width in energy $\Deltaup E$ using
@@ -516,6 +529,8 @@ Table~\ref{tab:widths}.
 The relative line widths are in the order of \num{e-12}. Compared to the
 natural line width of \num{3.3e-13} this is only a factor of three to four
 larger!
+
+\subsection{Landé factors}
 
 \end{document}
 
