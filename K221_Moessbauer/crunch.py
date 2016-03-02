@@ -86,7 +86,7 @@ def job_spectrum(T):
     ]))
 
     np.savetxt('_build/xy/motor_lr.csv', np.column_stack([
-        motor, velocity_lr_val / 1e-3, velocity_lr_err / 1e-3,
+        motor, -velocity_lr_val / 1e-3, velocity_lr_err / 1e-3,
     ]))
     np.savetxt('_build/xy/motor_rl.csv', np.column_stack([
         motor, velocity_rl_val / 1e-3, velocity_rl_err / 1e-3,

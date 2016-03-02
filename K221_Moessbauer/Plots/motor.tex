@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={Motor setting},
+            ylabel={$|v| / \si{\milli\meter\per\second}$},
+            grid=major,
+            legend pos=north west,
+        ]
+        \addplot[
+            black,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/motor_lr.csv};
+        \addlegendentry{Left to right}
+        \addplot[
+            blue,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/motor_rl.csv};
+        \addlegendentry{Right to left}
+    \end{axis}
+\end{tikzpicture}
