@@ -462,6 +462,24 @@ diagonal of the covariance matrix.
     \label{tab:fit}
 \end{table}
 
+\begin{table}
+    \centering
+    \begin{tabular}{SSS}
+        \toprule
+        {$\Gamma / \si{\micro\meter\per\second}$}
+        & {$\Gamma / \si{\nano\electronvolt}$}
+        & {$\delta$ / \num{e-12}} \\
+        \midrule
+        %< for row in widths_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+    }
+    \label{tab:widths}
+\end{table}
+
 \end{document}
 
 % vim: spell spelllang=en tw=79

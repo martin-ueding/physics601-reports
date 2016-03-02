@@ -129,6 +129,18 @@ def job_spectrum(T):
     widths_val = fit_val[1::3]
     widths_err = fit_err[1::3]
 
+    delta_e_val = hbar_omega0_ev * widths_val / speed_of_light
+    delta_e_err = hbar_omega0_ev * widths_err / speed_of_light
+
+    relative_width_val = widths_val / speed_of_light
+    relative_width_err = widths_err / speed_of_light
+
+    T['widths_table'] = list(zip(*[
+        siunitx(widths_val / 1e-6, widths_err / 1e-6),
+        siunitx(delta_e_val / 1e-9, delta_e_err / 1e-9),
+        siunitx(relative_width_val / 1e-12, relative_width_err / 1e-12),
+    ]))
+
     formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
     offset = siunitx(fit_val[-1], fit_err[-1])
 
