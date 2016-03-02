@@ -41,16 +41,16 @@ def lorentz6(x,
              mean2, width2, integral2,
              mean3, width3, integral3,
              mean4, width4, integral4,
-             #mean5, width5, integral5,
-             #mean6, width6, integral6,
+             mean5, width5, integral5,
+             mean6, width6, integral6,
              offset):
     return lorentz(x, mean1, width1, integral1) \
             + lorentz(x, mean2, width2, integral2) \
             + lorentz(x, mean3, width3, integral3) \
             + lorentz(x, mean4, width4, integral4) \
+            + lorentz(x, mean5, width5, integral5) \
+            + lorentz(x, mean6, width6, integral6) \
             + offset
-            #+ lorentz(x, mean5, width5, integral5) \
-            #+ lorentz(x, mean6, width6, integral6) \
 
 def fit_dip(v, rate_val, rate_err):
     p0_width = 1e-3
@@ -61,8 +61,8 @@ def fit_dip(v, rate_val, rate_err):
                                p0=[
                                    -5.3e-3, p0_width, p0_integral,
                                    -3.1e-3, p0_width, p0_integral,
-                                   #-0.8e-3, p0_width, p0_integral,
-                                   #0.6e-3, p0_width, p0_integral,
+                                   -0.8e-3, p0_width, p0_integral,
+                                   0.6e-3, p0_width, p0_integral,
                                    2.9e-3, p0_width, p0_integral,
                                    5.2e-3, p0_width, p0_integral,
                                    p0_offset,
@@ -128,6 +128,18 @@ def job_spectrum(T):
 
     widths_val = fit_val[1::3]
     widths_err = fit_err[1::3]
+
+    delta_e_val = hbar_omega0_ev * widths_val / speed_of_light
+    delta_e_err = hbar_omega0_ev * widths_err / speed_of_light
+
+    relative_width_val = widths_val / speed_of_light
+    relative_width_err = widths_err / speed_of_light
+
+    T['widths_table'] = list(zip(*[
+        siunitx(widths_val / 1e-6, widths_err / 1e-6),
+        siunitx(delta_e_val / 1e-9, delta_e_err / 1e-9),
+        siunitx(relative_width_val / 1e-12, relative_width_err / 1e-12),
+    ]))
 
     formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
     offset = siunitx(fit_val[-1], fit_err[-1])
