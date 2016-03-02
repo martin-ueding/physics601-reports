@@ -18,6 +18,9 @@ out := "$(build)/physics601-$(number)-Ueding_Lemmer.pdf"
 figures_tex := $(wildcard Figures/*.tex)
 figures_pdf := $(figures_tex:Figures/%.tex=$(build)/%.pdf)
 
+plots_tex := $(wildcard Plots/*.tex)
+plots_pdf := $(plots_tex:Plots/%.tex=$(build)/%.pdf)
+
 all: $(out)
 
 crunch: $(build)/template.js
@@ -26,8 +29,9 @@ $(build):
 	@echo "$(on)Creating build directory$(off)"
 	mkdir -p $(build)
 	mkdir -p $(build)/page
+	mkdir -p $(build)/xy
 
-$(out): $(tex) $(figures_pdf)
+$(out): $(tex) $(figures_pdf) $(plots_pdf)
 	@echo "$(on)Compiling main document$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
@@ -36,6 +40,8 @@ $(out): $(tex) $(figures_pdf)
 $(tex): Template.tex $(build)/template.js
 	@echo "$(on)Inserting values into template$(off)"
 	../insert.py $^ $@
+
+$(plots_pdf): $(build)/template.js
 
 $(build)/template.js: crunch.py | $(build)
 	@echo "$(on)Crunching the numbers$(off)"
