@@ -41,16 +41,16 @@ def lorentz6(x,
              mean2, width2, integral2,
              mean3, width3, integral3,
              mean4, width4, integral4,
-             #mean5, width5, integral5,
-             #mean6, width6, integral6,
+             mean5, width5, integral5,
+             mean6, width6, integral6,
              offset):
     return lorentz(x, mean1, width1, integral1) \
             + lorentz(x, mean2, width2, integral2) \
             + lorentz(x, mean3, width3, integral3) \
             + lorentz(x, mean4, width4, integral4) \
+            + lorentz(x, mean5, width5, integral5) \
+            + lorentz(x, mean6, width6, integral6) \
             + offset
-            #+ lorentz(x, mean5, width5, integral5) \
-            #+ lorentz(x, mean6, width6, integral6) \
 
 def fit_dip(v, rate_val, rate_err):
     p0_width = 1e-3
@@ -61,8 +61,8 @@ def fit_dip(v, rate_val, rate_err):
                                p0=[
                                    -5.3e-3, p0_width, p0_integral,
                                    -3.1e-3, p0_width, p0_integral,
-                                   #-0.8e-3, p0_width, p0_integral,
-                                   #0.6e-3, p0_width, p0_integral,
+                                   -0.8e-3, p0_width, p0_integral,
+                                   0.6e-3, p0_width, p0_integral,
                                    2.9e-3, p0_width, p0_integral,
                                    5.2e-3, p0_width, p0_integral,
                                    p0_offset,
