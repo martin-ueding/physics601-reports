@@ -92,21 +92,21 @@ def job_spectrum(T):
         motor, velocity_rl_val / 1e-3, velocity_rl_err / 1e-3,
     ]))
 
-    pl.errorbar(velocity_lr_val, rate_lr_val, rate_lr_err, xerr=velocity_lr_err, marker='o', linestyle='none')
-    pl.errorbar(velocity_rl_val, rate_rl_val, rate_lr_err,  xerr=velocity_rl_err, marker='o', linestyle='none')
-    pl.grid(True)
-    pl.margins(0.05)
-    pl.tight_layout()
-    pl.savefig('_build/mpl-rate.pdf')
-    pl.clf()
+    #pl.errorbar(velocity_lr_val, rate_lr_val, rate_lr_err, xerr=velocity_lr_err, marker='o', linestyle='none')
+    #pl.errorbar(velocity_rl_val, rate_rl_val, rate_lr_err,  xerr=velocity_rl_err, marker='o', linestyle='none')
+    #pl.grid(True)
+    #pl.margins(0.05)
+    #pl.tight_layout()
+    #pl.savefig('_build/mpl-rate.pdf')
+    #pl.clf()
 
-    pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
-    pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
-    pl.grid(True)
-    pl.margins(0.05)
-    pl.tight_layout()
-    pl.savefig('_build/mpl-motor.pdf')
-    pl.clf()
+    #pl.errorbar(motor, -velocity_lr_val, velocity_lr_err, marker='o')
+    #pl.errorbar(motor,  velocity_rl_val, velocity_rl_err, marker='o')
+    #pl.grid(True)
+    #pl.margins(0.05)
+    #pl.tight_layout()
+    #pl.savefig('_build/mpl-motor.pdf')
+    #pl.clf()
 
 
 
