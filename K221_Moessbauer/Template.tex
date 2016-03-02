@@ -11,6 +11,8 @@
     pdftitle=
 }
 
+\usepackage{longtable}
+
 \newcommand\tRL{t_\text{RL}}
 \newcommand\tLR{t_\text{LR}}
 \newcommand\nRL{n_\text{RL}}
@@ -381,7 +383,6 @@ respectively, also depending on the moving direction.
     \label{fig:electronics}
 \end{figure}
 
-
 \section{Measurement}
 
 Before starting we have to find the measurement's energy window with an
@@ -604,7 +605,6 @@ obtain the Landé factors
 The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
 this was given by $B = \SI{<< B >>}{\tesla}$.
 
-
 \chapter{Conclusion}
 
 In the measured spectrum, we resolved the fine structure of $^{57}\text{Fe}$
@@ -637,8 +637,27 @@ this, so we cannot compare this. Qualitatively, this effect comes from the
 different environment the $^{57}\text{Fe}$ nuclei are exposed to in source and
 target material.
 
+\begin{appendix}
+    \chapter{Raw measurements}
 
-% TODO Long table with all the raw data.
+    All our raw measurements are in the following table.
+
+    \begin{longtable}{*6S}
+        \toprule
+        {$N$}
+        & {Motor}
+        & {$\tLR$}
+        & {$\nLR$}
+        & {$\tRL$}
+        & {$\nRL$} \\
+        \midrule
+        \endhead
+        %< for row in raw_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{longtable}
+\end{appendix}
 
 \end{document}
 

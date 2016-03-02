@@ -97,6 +97,9 @@ def job_theory(T):
 def job_spectrum(T):
     data = np.loadtxt('Data/runs.tsv')
 
+
+    T['raw_table'] = list([[str(int(x)) for x in row] for row in data])
+
     runs = data[:, 0]
     motor = data[:, 1]
     T_LR = data[:, 2]
