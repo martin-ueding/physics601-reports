@@ -124,13 +124,15 @@ def job_spectrum(T):
     fit_val, fit_err = fit_dip(velocity_val, rate_val, rate_err)
     x = np.linspace(np.min(velocity_val), np.max(velocity_val), 1000)
     y = lorentz6(x, *fit_val)
-    print(fit_val)
     pl.plot(x, y)
+
+    widths_val = fit_val[1::3]
+    widths_err = fit_err[1::3]
 
     formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
     offset = siunitx(fit_val[-1], fit_err[-1])
 
-    print(formatted)
+    print(widths_val)
 
     T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))
     T['fit_offset'] = offset
