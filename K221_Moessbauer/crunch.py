@@ -15,6 +15,7 @@ import scipy.optimize as op
 import scipy.stats
 
 from unitprint2 import siunitx
+import bootstrap
 
 atomic_unit = 1.6605e-27 # kg
 B_err = 1 # T
@@ -47,6 +48,10 @@ def lorentz6(x,
             + lorentz(x, mean4, width4, integral4) \
             + offset
 
+def boot_fit_dip(sample):
+    v, rate_val, rate_err = zip(*sample)
+    return fit_dip(v, rate_val, rate_err)
+
 def fit_dip(v, rate_val, rate_err):
     p0_width = 1e-3
     p0_integral = -1e-2
@@ -61,10 +66,7 @@ def fit_dip(v, rate_val, rate_err):
                                    p0_offset,
                                ])
 
-    x = np.linspace(np.min(v), np.max(v), 1000)
-    y = lorentz6( x, *popt)
-
-    return popt, x, y
+    return popt
 
 
 def job_theory(T):
@@ -115,18 +117,25 @@ def job_spectrum(T):
     velocity_val = np.concatenate((velocity_lr_val, velocity_rl_val))
     velocity_err = np.concatenate((velocity_lr_err, velocity_rl_err))
 
-    popt, x, y = fit_dip(velocity_val, rate_val, rate_err)
+    popt = fit_dip(velocity_val, rate_val, rate_err)
+    x = np.linspace(np.min(velocity_val), np.max(velocity_val), 1000)
+    y = lorentz6(x, *popt)
     print(popt)
     pl.plot(x, y)
 
-    popt4 = popt[:-1]
-    popt_r = popt4.reshape((-1,3))
 
-    popt_r /= 1e-3
+    sets = list(zip(velocity_val, rate_val, rate_err))
+    fit = boot_fit_dip(sets)
+    fit_val, fit_err = bootstrap.bootstrap_and_transform(boot_fit_dip, sets)
 
-    T['fit_param'] = list(map(siunitx, popt_r))
+    print('Bootstrapped:')
+    print(fit_val, fit_err)
 
-    print(popt_r)
+    formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
+
+    print(formatted)
+
+    T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))
 
     np.savetxt('_build/xy/rate_fit.csv', np.column_stack([
         x / 1e-3, y

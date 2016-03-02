@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014-2015 Martin Ueding <dev@martin-ueding.de>
+# Copyright © 2014-2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The GNU Public License Version 2
 
 from __future__ import division, absolute_import, print_function, \
@@ -18,7 +18,7 @@ def average_arrays(arrays):
     '''
     total = np.column_stack(arrays)
 
-    val = np.real(np.mean(total, axis=1))
+    val = np.mean(total, axis=1)
 
     return val
 
@@ -28,9 +28,11 @@ def average_and_std_arrays(arrays):
     Computes the element wise average of a list of arrays.
     '''
     total = np.column_stack(arrays)
+    
+    print(total)
 
-    val = np.real(np.mean(total, axis=1))
-    err = np.real(np.std(total, axis=1))
+    val = np.mean(total, axis=1)
+    err = np.std(total, axis=1)
 
     return val, err
 
@@ -48,10 +50,14 @@ def bootstrap_and_transform(transform, sets, sample_count=250, seed=None):
     random.seed(seed)
 
     results = []
-    for sample_id in xrange(sample_count):
+    for sample_id in range(sample_count):
         sample = generate_sample(sets)
-        transformed = transform(sample)
-        results.append(transformed)
+        try:
+            transformed = transform(sample)
+        except RuntimeError as e:
+            print(e)
+        else:
+            results.append(transformed)
 
     val, err = average_and_std_arrays(results)
 
@@ -73,7 +79,7 @@ def generate_reduced_samples(sets, sample_count, seed=None):
 
     results = [
         average_combined_array(generate_sample(sets))
-        for sample_if in xrange(sample_count)
+        for sample_if in range(sample_count)
     ]
 
     return results
@@ -87,7 +93,7 @@ def generate_sample(elements):
     of elements given.
     '''
     result = []
-    for i in xrange(len(elements)):
+    for i in range(len(elements)):
         result.append(random.choice(elements))
 
     return result
