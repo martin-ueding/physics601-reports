@@ -29,6 +29,10 @@ mu_n = 5.5e-27 # A m^2
 room_temp = 292 # K
 speed_of_light = 3e8 # m / s
 
+length_val = 25.1e-3
+length_err = 0.2e-3
+
+
 def job_theory(T):
     prefactor_val = speed_of_light * B_val * mu_n / hbar_omega0_joule
     prefactor_err = speed_of_light * B_err * mu_n / hbar_omega0_joule
@@ -49,6 +53,37 @@ def job_theory(T):
     T['B'] = siunitx(B_val, B_err)
     T['hbar_omega0_joule'] = siunitx(hbar_omega0_joule)
     T['hbar_omega0_ev'] = siunitx(hbar_omega0_ev)
+
+
+def job_spectrum(T):
+    data = np.loadtxt('Data/runs.tsv')
+
+    runs = data[:, 0]
+    motor = data[:, 1]
+    T_LR = data[:, 2]
+    N_LR = data[:, 3]
+    T_RL = data[:, 4]
+    N_RL = data[:, 5]
+
+    time_lr = T_LR * 10e-3
+    time_rl = T_RL * 10e-3
+
+    velocity_lr = length_val * runs / time_lr
+    velocity_rl = length_val * runs / time_rl
+
+    rate_lr = N_LR / time_lr
+    rate_rl = N_RL / time_rl
+
+    pl.plot(velocity_lr, rate_lr, marker='o')
+    pl.plot(velocity_rl, rate_rl, marker='o')
+    pl.savefig('_build/mpl-rate.pdf')
+
+    pass
+
+
+def job_motor(T):
+    pass
+
 
 
 def test_keys(T):
@@ -76,6 +111,8 @@ def test_keys(T):
 def main():
     T = {}
 
+    job_spectrum(T)
+    job_motor(T)
     job_theory(T)
 
     test_keys(T)

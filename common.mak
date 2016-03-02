@@ -20,6 +20,8 @@ figures_pdf := $(figures_tex:Figures/%.tex=$(build)/%.pdf)
 
 all: $(out)
 
+crunch: $(build)/template.js
+
 $(build):
 	@echo "$(on)Creating build directory$(off)"
 	mkdir -p $(build)
@@ -35,9 +37,9 @@ $(tex): Template.tex $(build)/template.js
 	@echo "$(on)Inserting values into template$(off)"
 	../insert.py $^ $@
 
-$(build)/template.js: crunch | $(build)
+$(build)/template.js: crunch.py | $(build)
 	@echo "$(on)Crunching the numbers$(off)"
-	env PYTHONPATH=$PYTHONPATH:.. ./$<
+	env PYTHONPATH=$$PYTHONPATH:.. ./$<
 
 $(build)/page/%.tex: Figures/%.tex | $(build)
 	@echo "$(on)Wrapping figure $< $(off)"
