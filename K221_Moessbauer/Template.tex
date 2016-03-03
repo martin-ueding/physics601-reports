@@ -12,6 +12,7 @@
 }
 
 \usepackage{longtable}
+\usepackage{subcaption}
 
 \newcommand\tRL{t_\text{RL}}
 \newcommand\tLR{t_\text{LR}}
@@ -521,22 +522,48 @@ of the diagonal of the covariance matrix and therefore likely to be too small.
 
 \begin{table}
     \centering
-    \begin{tabular}{SSS}
-        \toprule
-        {$\mu / \si{\micro\meter\per\second}$}
-        & {$\Gamma / \si{\micro\meter\per\second}$}
-        & {$I / \si{\micro\meter\per\second\squared}$} \\
-        \midrule
-        %< for row in fit_param >%
-        << ' & '.join(row) >> \\
-        %< endfor >%
-        \bottomrule
-    \end{tabular}
+    \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \begin{tabular}{SSS}
+            \toprule
+            {$\mu / \si{\micro\meter\per\second}$}
+            & {$\Gamma / \si{\micro\meter\per\second}$}
+            & {$I / \si{\micro\meter\per\second\squared}$} \\
+            \midrule
+            %< for row in fit_param >%
+            << ' & '.join(row) >> \\
+            %< endfor >%
+            \bottomrule
+        \end{tabular}
+        \caption{%
+            Fit parameters and errors for the Lorentz dips. We have the mean $\mu$,
+            the width $\Gamma$ and the integral $I$.
+        }
+        \label{tab:fit}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\linewidth}
+        \centering
+        \begin{tabular}{SSS}
+            \toprule
+            {$\Gamma / \si{\micro\meter\per\second}$}
+            & {$\Deltaup E / \si{\nano\electronvolt}$}
+            & {$\delta$ / \num{e-13}} \\
+            \midrule
+            %< for row in widths_table >%
+            << ' & '.join(row) >> \\
+            %< endfor >%
+            \bottomrule
+        \end{tabular}
+        \caption{%
+            Velocity width $\Gamma$ of the absorption lines, corresponding energy
+            width and also relative line width.
+        }
+        \label{tab:widths}
+    \end{subfigure}
     \caption{%
-        Fit parameters and errors for the Lorentz dips. We have the mean $\mu$,
-        the width $\Gamma$ and the integral $I$.
+        Fit parameters and derived quantities.
     }
-    \label{tab:fit}
 \end{table}
 
 \section{Line widths}
@@ -555,26 +582,6 @@ Our $\Gamma$ describes the width of $v$, so we can write
 The relative width $\delta$ is $\Deltaup E / E$ and using above relations we
 have $\delta = \Gamma / c$. The converted widths are shown in
 Table~\ref{tab:widths}.
-
-\begin{table}
-    \centering
-    \begin{tabular}{SSS}
-        \toprule
-        {$\Gamma / \si{\micro\meter\per\second}$}
-        & {$\Deltaup E / \si{\nano\electronvolt}$}
-        & {$\delta$ / \num{e-13}} \\
-        \midrule
-        %< for row in widths_table >%
-        << ' & '.join(row) >> \\
-        %< endfor >%
-        \bottomrule
-    \end{tabular}
-    \caption{%
-        Velocity width $\Gamma$ of the absorption lines, corresponding energy
-        width and also relative line width.
-    }
-    \label{tab:widths}
-\end{table}
 
 The relative line widths are in the order of \num{e-12}. Compared to the
 natural line width of \num{3.3e-13} this is only a factor of three to four
