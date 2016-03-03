@@ -221,7 +221,7 @@ def lande_factors(T, centers_val, centers_err):
             centers_err[4]**2,
         ]))
 
-        v_shift_q_val = ((centers_val[5] - centers_val[3]) - (centers_val[2] - centers_val[0]))/2
+        v_shift_q_val = ((centers_val[5] - centers_val[4]) - (centers_val[1] - centers_val[0]))/2
         v_shift_q_err = np.sqrt(
             centers_err[0]**2 + centers_err[2]**2 + centers_err[3]**2 + centers_err[5]**2
         ) / 2
