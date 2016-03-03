@@ -408,9 +408,9 @@ $\nLR$ and $\nRL$ are read off by us.
 Then we change the motor setting by four ticks on the scale and let it run
 again.
 
-\section{Analysis}
+\chapter{Analysis}
 
-\subsection{Velocity of target}
+\section{Velocity of target}
 
 First we have to compute the actual velocity of the target. In each measurement
 we have $N$ runs back and forth. The displacement for one direction (half a
@@ -442,7 +442,7 @@ velocity, not making it slower.
     \label{fig:motor}
 \end{figure}
 
-\subsection{Count rates}
+\section{Count rates}
 
 For each measurement, we compute the count rate simply with $\rateLR = \nLR /
 \tLR$ (and similar to right--left). The count rates are shown versus the
@@ -496,7 +496,7 @@ of the diagonal of the covariance matrix.
     \label{tab:fit}
 \end{table}
 
-\subsection{Line widths}
+\section{Line widths}
 
 From the width $\Gamma$ in \si{\milli\meter\per\second}, which is the
 \emph{full width at half maximum} (FWHM) of the Lorentzian curve, we can
@@ -537,7 +537,7 @@ The relative line widths are in the order of \num{e-12}. Compared to the
 natural line width of \num{3.3e-13} this is only a factor of three to four
 larger!
 
-\subsection{Isomeric shift}
+\section{Isomeric shift}
 
 Assuming that we do not have any quadrupole splitting in our energies, the
 spectrum must be symmetric around $v = 0$. However, if we have an isomeric
@@ -549,7 +549,7 @@ $v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric_mm_s
 >>}{\milli\meter\per\second}$. This corresponds do an energy shift of \SI{<<
 isomeric_nev >>}{\nano\electronvolt}.
 
-\subsection{Landé factors}
+\section{Landé factors}
 
 From the six lines that we have, we can also compute the Landé factor $g$ for
 the ground state ($j = 1/2^-$) and $g'$ for the excited state ($j = 3/2^-$).
@@ -610,7 +610,7 @@ obtain the Landé factors
 The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
 this was given by $B = \SI{<< B >>}{\tesla}$.
 
-\subsection{Quadrupole shift}
+\section{Quadrupole shift}
 
 The quadrupole shift is the difference in $|m_j'| = 3/2$ and $|m_j'| = 1/2$
 states. In order to compute the shift, we use
