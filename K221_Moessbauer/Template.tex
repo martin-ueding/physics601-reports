@@ -381,19 +381,23 @@ $\gammaup$-rays escape through an opening in the target's direction. The
 absorber is a thin $^{57}\mathrm{Fe}$ plate attached to a motor, which allows
 us to move it with tunable but constant velocity over a distance of \SI{25.1 +-
 0.2}{\milli\meter} unto the source and away from it. Behind the absorber, there
-is a proportional detector. Its signal is fed into an amplifier and then into a
-single channel analyzer (\textsc{sca}), compare to
-Figure~\ref{fig:electronics}. After digitizing the signals, they are counted in
-two counters ($n_\text{RL}$ and $n_\text{LR}$) depending on the direction of
-motion of the absorber.
+is a proportional detector.
 
-The motor steering control opens the gates on the respective counters,
-depending on the direction of motion. Every full left-swing, the run
-counter~$N$ is increased by one. The motor control also takes care that a
-measurement starts and stop only at full left-swing. The timer gives a signal
-every \SI{10}{\milli\second} to another \textsc{sca}, which sends the signal to
-the two counters $t_\text{RL}$ and $t_\text{LR}$. Their gates are also
-controlled by the motor control.
+\begin{figure}
+    \centering
+    \includegraphics{setup}
+    \caption{%
+        Setup of the experiment, source emits photons which might be absorbed
+        by the target or go through to the detector. The velocity~$v$ is
+        defined towards the source, i.e.\ higher $v$ means higher $E_\gammaup$.
+    }
+    \label{fig:setup}
+\end{figure}
+
+Its signal is fed into an amplifier and then into a single channel analyzer
+(\textsc{sca}), compare to Figure~\ref{fig:electronics}. After digitizing the
+signals, they are counted in two counters ($n_\text{RL}$ and $n_\text{LR}$)
+depending on the direction of motion of the absorber.
 
 \begin{figure}
     \centering
@@ -407,6 +411,14 @@ controlled by the motor control.
     }
     \label{fig:electronics}
 \end{figure}
+
+The motor steering control opens the gates on the respective counters,
+depending on the direction of motion. Every full left-swing, the run
+counter~$N$ is increased by one. The motor control also takes care that a
+measurement starts and stop only at full left-swing. The timer gives a signal
+every \SI{10}{\milli\second} to another \textsc{sca}, which sends the signal to
+the two counters $t_\text{RL}$ and $t_\text{LR}$. Their gates are also
+controlled by the motor control.
 
 \section{Measurement}
 
@@ -707,9 +719,9 @@ iron metal is a conductor.
         \toprule
         {$N$}
         & {Motor}
-        & {$\tLR$}
+        & {$\tLR / \SI{10}{\milli\second}$}
         & {$\nLR$}
-        & {$\tRL$}
+        & {$\tRL / \SI{10}{\milli\second}$}
         & {$\nRL$} \\
         \midrule
         \endhead
