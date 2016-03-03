@@ -1,7 +1,9 @@
-\usetikzlibrary{positioning}
 \usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shapes.multipart}
 
 \begin{tikzpicture}[
+        every text node part/.style={align=center},
         transition/.style={
             ->,
             thick,
@@ -21,7 +23,7 @@
     \coordinate[right=1.5 of a1] (a1e);
     \coordinate[right=1.5 of b1] (b1e);
 
-    \draw (a1) node[left] {$3/2^-$} to (a1e);
+    \draw (a1) node[left] (jp) {$3/2^-$} to (a1e);
     \draw (b1) node[left] {$1/2^-$} to (b1e);
 
     % Define levels with magnetic splitting.
@@ -79,7 +81,7 @@
     \coordinate[right=4.5 of f2] (f2e);
 
     % Draw levels.
-    \draw (e1) to (e1e) node[right] {$+3/2$};
+    \draw (e1) to (e1e) node[right] (mj) {$+3/2$};
     \draw (e2) to (e2e) node[right] {$+1/2$};
     \draw (e3) to (e3e) node[right] {$-1/2$};
     \draw (e4) to (e4e) node[right] {$-3/2$};
@@ -105,5 +107,13 @@
     \draw[transition] ($(f2)+(3.0,0)$)-- node[number] {5} ($(e2)+(3.0,0)$);
     \draw[transition] ($(f2)+(3.5,0)$)-- node[number] {6} ($(e1)+(3.5,0)$);
 
+
+    \node[draw, below right=0.6 and 0.75 of b1, anchor=north] {$B = 0$ \\ $Q = 0$};
+    \node[draw, below right=0.4 and 0.75 of d2, anchor=north] {$B \neq 0$ \\ $Q = 0$};
+    \node[draw, below right=0.4 and 2.25 of f2, anchor=north] {$B \neq 0$ \\ $Q \neq 0$};
+
+
+    \node[draw, above=1.8 of jp] {$j^P$};
+    \node[draw, above=0.2 of mj] {$m_j$};
 
 \end{tikzpicture}
