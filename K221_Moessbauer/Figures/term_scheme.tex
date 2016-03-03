@@ -80,13 +80,13 @@
     \coordinate[below right=0 and 0.7 of d1e] (f1);
     \coordinate[below right=0 and 0.7 of d2e] (f2);
 
-    \coordinate[right=4.5 of e1] (e1e);
-    \coordinate[right=4.5 of e2] (e2e);
-    \coordinate[right=4.5 of e3] (e3e);
-    \coordinate[right=4.5 of e4] (e4e);
+    \coordinate[right=5.2 of e1] (e1e);
+    \coordinate[right=5.2 of e2] (e2e);
+    \coordinate[right=5.2 of e3] (e3e);
+    \coordinate[right=5.2 of e4] (e4e);
 
-    \coordinate[right=4.5 of f1] (f1e);
-    \coordinate[right=4.5 of f2] (f2e);
+    \coordinate[right=5.2 of f1] (f1e);
+    \coordinate[right=5.2 of f2] (f2e);
 
     % Draw levels.
     \draw (e1) to (e1e) node[right] (mj) {$+3/2$};
@@ -107,18 +107,17 @@
     \draw[dotted] (d2e) to (f2);
 
 
-    \draw[transition] ($(f1)+(1.0,0)$)-- node[number] {1} ($(e4)+(1.0,0)$);
-    \draw[transition] ($(f1)+(1.5,0)$)-- node[number] {2} ($(e3)+(1.5,0)$);
-    \draw[transition] ($(f2)+(2.0,0)$)-- node[number] {3} ($(e3)+(2.0,0)$);
-                                                                     
-    \draw[transition] ($(f1)+(2.5,0)$)-- node[number] {4} ($(e2)+(2.5,0)$);
-    \draw[transition] ($(f2)+(3.0,0)$)-- node[number] {5} ($(e2)+(3.0,0)$);
-    \draw[transition] ($(f2)+(3.5,0)$)-- node[number] {6} ($(e1)+(3.5,0)$);
+    \draw[transition] ($(f1)+(1.0,0)+0*(0.7,0)$)-- node[number] {1} ($(e4)+(1.0,0)+0*(0.7,0)$);
+    \draw[transition] ($(f1)+(1.0,0)+1*(0.7,0)$)-- node[number] {2} ($(e3)+(1.0,0)+1*(0.7,0)$);
+    \draw[transition] ($(f2)+(1.0,0)+2*(0.7,0)$)-- node[number] {3} ($(e3)+(1.0,0)+2*(0.7,0)$);
+    \draw[transition] ($(f1)+(1.0,0)+3*(0.7,0)$)-- node[number] {4} ($(e2)+(1.0,0)+3*(0.7,0)$);
+    \draw[transition] ($(f2)+(1.0,0)+4*(0.7,0)$)-- node[number] {5} ($(e2)+(1.0,0)+4*(0.7,0)$);
+    \draw[transition] ($(f2)+(1.0,0)+5*(0.7,0)$)-- node[number] {6} ($(e1)+(1.0,0)+5*(0.7,0)$);
 
 
     \node[draw, below right=0.6 and 0.75 of b1, anchor=north] {$B = 0$ \\ $Q = 0$};
     \node[draw, below right=0.4 and 0.75 of d2, anchor=north] {$B \neq 0$ \\ $Q = 0$};
-    \node[draw, below right=0.4 and 2.25 of f2, anchor=north] {$B \neq 0$ \\ $Q \neq 0$};
+    \node[draw, below right=0.4 and 2.6 of f2, anchor=north] {$B \neq 0$ \\ $Q \neq 0$};
 
 
     \node[draw, above=1.8 of jp] {$j^P$};
