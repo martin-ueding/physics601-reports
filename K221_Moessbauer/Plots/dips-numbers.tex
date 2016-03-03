@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={$v / \si{\milli\meter\per\second}$},
+            ylabel={Count rate / \si{\per\second}},
+            ymin=45,
+            grid=major,
+        ]
+
+        \addplot[
+            red,
+        ] table {../xy/rate_fit.csv};
+
+    \end{axis}
+\end{tikzpicture}

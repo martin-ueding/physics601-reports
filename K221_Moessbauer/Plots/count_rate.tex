@@ -5,6 +5,7 @@
             xlabel={$v / \si{\milli\meter\per\second}$},
             ylabel={Count rate / \si{\per\second}},
             grid=major,
+            ymin=45,
         ]
 
         \addplot[
@@ -26,6 +27,13 @@
         \addplot[
             red,
         ] table {../xy/rate_fit.csv};
+
+        \node[draw, circle, fill=white] at (axis cs:-5.357, 46) {1};
+        \node[draw, circle, fill=white] at (axis cs:-3.142, 46) {2};
+        \node[draw, circle, fill=white] at (axis cs:-0.927, 50) {3};
+        \node[draw, circle, fill=white] at (axis cs:0.745,  49) {4};
+        \node[draw, circle, fill=white] at (axis cs:2.947,  48) {5};
+        \node[draw, circle, fill=white] at (axis cs:5.184,  48) {6};
 
     \end{axis}
 \end{tikzpicture}

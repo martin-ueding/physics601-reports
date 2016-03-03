@@ -605,9 +605,13 @@ isomeric_nev >>}{\nano\electronvolt}.
 
 From the six lines that we have, we can also compute the Landé factor $g$ for
 the ground state ($j = 1/2^-$) and $g'$ for the excited state ($j = 3/2^-$).
-First we must determine which line belongs to which transition. The distance
-between transitions with either $m_j$ or $m_j'$ fixed must be equal. Therefore
-there are only two possibilities:
+First we must determine which line belongs to which transition.
+We number
+the lines with increasing energy according to Figure~\ref{fig:count_rate}.
+
+The distance between transitions with either $m_j$ or $m_j'$ fixed must be
+equal, anticipating a negligible quadrupole splitting. Therefore there are only
+two possibilities:
 
 \begin{enumerate}
     \item
@@ -635,7 +639,21 @@ results for $g$ and $g'$ this way. Looking at the literature values for Landé
 factors, it seems we must expect $|g'| > |g|$. Therefore option~\ref{option-2}
 is the actual phenomenon. Looking at the intensities of the absorption lines,
 option~\ref{option-2} seems to be more likely as adjacent pairs have roughly
-the same intensity.
+the same intensity. Figure~\ref{fig:term_scheme} shows the energy levels and
+our six transitions.
+
+\begin{figure}
+    \centering
+    \includegraphics{term_scheme}
+    \caption{%
+        Transition lines with no splitting (left), purely magnetic splitting
+        (center) and magnetic and quadrupole splitting (right). Our six
+        transitions from the spectrum are ordered by energy. Note that the
+        $m_j$ for the groundstate are switched as the sign of $g$ differs from
+        the sign of $g'$.
+    }
+    \label{fig:term_scheme}
+\end{figure}
 
 We therefore average over the following velocity differences to obtain the
 ground state energy splitting: $(v_3-v_2)$ and $(v_5-v_4)$. For the excited
