@@ -9,6 +9,7 @@ import sys
 
 import matplotlib.pyplot as pl
 import numpy as np
+import scipy.interpolate
 import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
@@ -17,9 +18,37 @@ import scipy.stats
 from unitprint2 import siunitx
 import bootstrap
 
+
+
+
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
+
+def radiative_correction(T):
+    data = np.loadtxt('Data/radiative_corrections.tsv')
+    sqrt_mandelstam_s = data[:, 0]
+    correction = data[:, 1]
+
+    pl.plot(sqrt_mandelstam_s, correction)
+
+    interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
+
+    x = np.linspace(np.min(sqrt_mandelstam_s), np.max(sqrt_mandelstam_s))
+    y = interpolator(x)
+
+    pl.plot(x, y)
+
+    pl.savefig('_build/mpl-radiative.pdf')
+
+    np.savetxt('_build/xy/radiative_data.tsv', np.column_stack([
+        sqrt_mandelstam_s, correction
+    ]))
+    np.savetxt('_build/xy/radiative_interpolated.tsv', np.column_stack([
+        x, y,
+    ]))
+
+    return interpolator
 
 
 def test_keys(T):
@@ -46,6 +75,8 @@ def test_keys(T):
 
 def main():
     T = {}
+
+    radiative_correction(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
