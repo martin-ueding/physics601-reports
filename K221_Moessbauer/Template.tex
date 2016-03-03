@@ -381,7 +381,7 @@ $\gammaup$-rays escape through an opening in the target's direction. The
 absorber is a thin $^{57}\mathrm{Fe}$ plate attached to a motor, which allows
 us to move it with tunable but constant velocity over a distance of \SI{25.1 +-
 0.2}{\milli\meter} unto the source and away from it. Behind the absorber, there
-is a proportional detector.
+is a proportional detector. This setup is shown in Figure~\ref{fig:setup}.
 
 \begin{figure}
     \centering
@@ -395,7 +395,7 @@ is a proportional detector.
 \end{figure}
 
 Its signal is fed into an amplifier and then into a single channel analyzer
-(\textsc{sca}), compare to Figure~\ref{fig:electronics}. After digitizing the
+(\textsc{sca}), c.f.\ Figure~\ref{fig:electronics}. After digitizing the
 signals, they are counted in two counters ($n_\text{RL}$ and $n_\text{LR}$)
 depending on the direction of motion of the absorber.
 
@@ -474,7 +474,7 @@ This is not a problem as we use the velocity and not the motor setting for the
 analysis. We lack a few data points as we could not reach small negative
 velocities due to this shifting.
 
-\begin{figure}
+\begin{figure}[b!]
     \centering
     \includegraphics{motor}
     \caption{%
@@ -523,9 +523,9 @@ of the diagonal of the covariance matrix and therefore likely to be too small.
     \centering
     \begin{tabular}{SSS}
         \toprule
-        {$\mu / \si{\milli\meter\per\second}$}
-        & {$\Gamma / \si{\milli\meter\per\second}$}
-        & {$I / \si{\milli\meter\per\second\squared}$} \\
+        {$\mu / \si{\micro\meter\per\second}$}
+        & {$\Gamma / \si{\micro\meter\per\second}$}
+        & {$I / \si{\micro\meter\per\second\squared}$} \\
         \midrule
         %< for row in fit_param >%
         << ' & '.join(row) >> \\
@@ -563,7 +563,7 @@ Table~\ref{tab:widths}.
         \toprule
         {$\Gamma / \si{\micro\meter\per\second}$}
         & {$\Deltaup E / \si{\nano\electronvolt}$}
-        & {$\delta / \num{e-12}$} \\
+        & {$\delta$ / \num{e-13}} \\
         \midrule
         %< for row in widths_table >%
         << ' & '.join(row) >> \\
