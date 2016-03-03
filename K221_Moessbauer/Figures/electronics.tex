@@ -5,8 +5,8 @@ minimum height=.6cm,
 minimum width=1.cm,
 },
 ]
-    \node (det) at (0,.5) [rect] {Det};
-    \node (amp) at (2,.5) [rect] {Amp};
+    \node (det) at (-0.5,.5) [rect] {Detector};
+    \node (amp) at (2,.5) [rect] {Amplifier};
     \node (sca_det) at (4,.5) [rect] {\textsc{sca}};
     \node (timer) at (0,-.5) [rect] {Timer};
     \node (sca_timer) at (4,-.5) [rect] {\textsc{sca}};
@@ -15,7 +15,7 @@ minimum width=1.cm,
     \draw[->] (amp) to (sca_det);
     \draw[->] (timer) to (sca_timer);
 
-    \node  at (6,2.2)  {Counter};
+    \node  at (6,2.2)  {Counters};
     \node (NRL) at (6,1.5) [rect] {$n_\text{RL}$};
     \node (TRL) at (6,0.5) [rect] {$t_\text{RL}$};
     \node (NLR) at (6,-.5) [rect] {$n_\text{LR}$};

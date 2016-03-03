@@ -22,9 +22,6 @@
 \newcommand\rateRL{\dot n_\text{RL}}
 \newcommand\rateLR{\dot n_\text{LR}}
 
-\def\table{\def\figurename{Table}\figure}
-\let\endtable\endfigure
-
 \subject{Lab report}
 \title{Mößbauer effect}
 \subtitle{Experiment K221 -- Universität Bonn}
@@ -47,11 +44,11 @@
 \begin{abstract}
     In this experiment we examine the $\gammaup$-spectrum of
     $^{57}\mathrm{Fe}$. The aim is to find the Landé factors $g$ for the ground
-    state and the first excited state, by measuring the hyperfine structure and
+    state and the first excited state by measuring the hyperfine structure and
     Mößbauer spectrum respectively of the $\SI{14.4}{\kilo\electronvolt}$
-    transition. Also line widths and the isometric shift are to be determined.
-    By this a deeper understanding of recoilless emission and absorption as
-    well of basic terms in nuclear physics should be achieved.
+    transition. Line widths and the isometric shift are to be determined from
+    the spectrum. By this a deeper understanding of recoilless emission and
+    absorption as well of basic terms in nuclear physics should be achieved.
 \end{abstract}
 
 \tableofcontents
@@ -84,13 +81,14 @@ in a metal are in the groundstate, the highest absorption can be obtained by a
 transition from the groundstate. Photons with the required energy are created
 by an excited nucleus of the same isotope decaying into the groundstate.
 
-The experimental setup here will have a radiation source made from cobalt. This
-decays into excited iron via electron capture (EC), see Figure~\ref{fig:ec}.
-The excited nucleus in turn will decay into the groundstate via some
-metastable states. See Figure~\ref{fig:co57} for the decay scheme of the
-radioactive material used in this experiment. The transition into the
-groundstate is the one from $3/2^-$ to $1/2^-$ with an energy gap of $\hbar
-\omega = \SI{14.4}{\kilo\electronvolt}$.
+The experimental setup here has a radiation source made from cobalt
+($^{57}\text{Co}$). This decays into excited iron ($^{57}\text{Fe}$) via
+electron capture (EC), see Figure~\ref{fig:ec}. The excited nucleus in turn
+will decay into the groundstate via some metastable states. See
+Figure~\ref{fig:co57} for the decay scheme of the radioactive material used in
+this experiment. The transition into the groundstate is the one from $j^P =
+3/2^-$ to $1/2^-$ with an energy gap of $\hbar \omega_0 =
+\SI{14.4}{\kilo\electronvolt}$.
 
 \begin{figure}
     \centering
@@ -128,26 +126,30 @@ following:
         \[
             \Gamma = \frac\hbar\tau \,.
         \]
-        This lifetime broadening leads to an Lorentzian line shape.
-        Our line of interest, the \SI{14.4}{\kilo\electronvolt}-line has a
+        This broadening via finite lifetime leads to an Lorentzian line shape
+        stemming from the Breit-Wigner prescription for a resonance which is a
+        good approximation for narrow resonances.
+
+        Our line of interest, the \SI{14.4}{\kilo\electronvolt}-line, has a
         lifetime of \SI{141}{\nano\second} and therefore a width of $\Gamma =
         \SI{4.7e-9}{\electronvolt}$. Compared to energy of the photons
-        themselves, this is a relative width of \num{3.3e-13} which is very
+        themselves, this is a relative width of \num{3.3e-13}. That is very
         small compared to the other effects.
         \parencite[42]{Schatz/Nukleare_Festkoerperphysik}
 
     \item[Doppler effect]
         A relative motion between source and target will lead to a Doppler
         shift. The Lorentz transformation connecting the two systems boosts the
-        photon's energy. If the source particles are subject to thermal
-        motions, the spectrum will be broadened. At room temperature the shifts
-        in energy are around \SI{10e-2}{\electronvolt}
+        photon's energy. Linearizing the $\cosh(\rho)$, we obtain a boosted
+        energy of $\hbar\omega_0(1 + v/c)$. If the source particles are subject
+        to thermal motions, the spectrum will be broadened. At room
+        temperature, the shifts in energy are around \SI{10e-2}{\electronvolt}
         \parencite[43]{Schatz/Nukleare_Festkoerperphysik}, depending on the
         angle of motion and emission. Doppler broadening leads to an Gaussian
         line shape.
 
-        The natural line width could be ignored when the Doppler effect is
-        present.
+        The natural line width can be ignored when the thermal Doppler effect
+        is present.
 
     \item[Recoil]
         The photon carries momentum $\hbar k$. In the center of mass frame of
@@ -159,11 +161,11 @@ following:
 
 Taking all those effects together, it becomes unlikely that the photons emitted
 by a gas of decaying cobalt will be absorbed by a gas of iron, ignoring that it
-might be impractical to realize this situation. The issue of the recoil can be
-reduced by embedding the nuclei of interest into a solid. The lattice will
-absorb the excess momentum and due to its practically infinite mass (\num{e23}
-larger), there will be no recoil velocity and therefore no energy shift in the
-photon.
+might be impractical to realize this situation experimentally. The issue of the
+recoil can be reduced by embedding the nuclei of interest into a solid state.
+The lattice will absorb the excess momentum and due to its practically infinite
+mass (some \num{e23} larger), there will be no recoil velocity and therefore no
+energy shift in the photon.
 
 \section{Debye-Waller Factor}
 
@@ -173,7 +175,7 @@ be a shift because of zero-point energy. To get a measure of how temperature,
 $\gammaup$-energy and mass of the lattice influence the emission, one can find
 the Debye-Waller factor, which is the ratio of the unshifted spectrum to the
 real one. For temperatures below the material specific Debye
-temperature~$\Theta$ the factor is given by
+temperature~$\Theta$, the factor is given by
 \[
     f_\text{D} (T, E_\gammaup, M)
     = \exp \del{
@@ -181,24 +183,25 @@ temperature~$\Theta$ the factor is given by
         \sbr{1 + \frac{2\piup^2}3 \del{\frac T\Theta}^2}
     } \,,
 \]
-analogue to the expression given by
+analog to the expression given by
 \textcite[42]{Schatz/Nukleare_Festkoerperphysik}.
 
 For iron, the Debye temperature is $\Theta = \SI{470}{\kelvin}$
 \parencite[Tab.~6.1]{Hunklinger/Festkoerperphysik}, so we are well below this
 in our experiment. Together with $E_\gammaup = \SI{14.4}{\kilo\electronvolt}$,
 the iron mass $M = \SI{<< iron_mass >>}{\kilogram}$ and assuming room
-temperature ($T = \SI{<< room_temperature >>}{\kelvin}$), we see that the
-fraction has the value \num{<< debye_1 >>}, the square bracket has the value
-\num{<< debye_2 >>} which yields a total Debye-Waller factor of \num{<< debye_3
->>} for our experimental situation.
+temperature ($T = \SI{<< room_temp >>}{\kelvin}$), we see that the fraction has
+the value \num{<< debye_1 >>}, the square bracket has the value \num{<< debye_2
+>>} which yields a total Debye-Waller factor of \num{<< debye_3 >>} for our
+experimental situation. This is high enough to give a decent signal-to-noise
+ratio.
 
 \section{Magnetic hyperfine structure}
 
-The angular momentum $l$ and the spin $s$ of the nucleus couple to a combined
-spin $j$. The component along the quantization axis, $m_j$, takes values
+The angular momentum~$l$ and the spin~$s$ of the nucleus couple to a combined
+spin~$j$. The component along the quantization axis, $m_j$, takes values
 between $-j$ and $j$. The various states organize themselves into the
-irreducible representations of $\SU(2)$, the multiplets with spin $j$ and
+irreducible representations of $\SU(2)$, the multiplets with spin~$j$ and
 $(2j+1)$ states each. The different multiplets have different energies, the
 energies within the same multiplet are degenerate, see left part of
 Figure~\ref{fig:M1}. Breaking the $\SU(2)$ symmetry of the spins give the
@@ -207,15 +210,15 @@ field by the interaction term $- \vec\mu \cdot \vec B$. The degeneracy is
 broken and each multiplet is split up into equidistant levels, see the right
 part of said figure.
 
-The magnetic moment $\vec \mu$ is coupled to the spin via the nuclear magneton
-$\mu_\text N$ or the gyromagnetic ratio $\gamma$,
+The magnetic moment~$\vec \mu$ is related to the spin~$j$ via the nuclear
+magneton~$\mu_\text N$ or the gyromagnetic ratio~$\gamma$,
 \[
     \mu = \underbrace{g \frac{\mu_\text N}{\hbar}}_{\gamma} \hbar j \,.
 \]
 Choosing the quantization axis along the external magnetic field $\vec B$ will
-simplify the interaction $- \vec \mu \cdot \vec B$ to $- g \mu_\text N m_j$.
-The $m_j$ are (half-)integers and therefore equidistant. This makes the energy
-levels equidistant within a multiplet.
+simplify the interaction $- \vec \mu \cdot \vec B$ to $- |\vec B| g \mu_\text N
+m_j$. The $m_j$ are (half-)integers and therefore equidistant. This makes the
+energy levels equidistant within a multiplet.
 
 \begin{figure}
     \centering
@@ -229,14 +232,16 @@ levels equidistant within a multiplet.
     \label{fig:M1}
 \end{figure}
 
-Both source and target are embedded into a solid, therefore there is
-little thermal fluctuation and also very little recoil. This means that the
-lines are rather sharp. Only the target is embedded into a magnetic field. The
-source iron nuclei do not have the Zeeman splitting and therefore always emit a
-pretty exact \SI{14.4}{\kilo\electronvolt} line. In order for the target in the
-magnetic field to absorb this line, the energy needs to be adjusted.
+Both source and target are embedded into a solid, therefore there is little
+thermal fluctuation and also very little recoil. This means that the lines are
+rather sharp. Only the target nuclei is embedded into a magnetic field. This
+magnetic field comes from the magnetic domains in the ferromagnetic iron metal.
+The source iron nuclei do not have the Zeeman splitting and therefore always
+emit a pretty exact \SI{14.4}{\kilo\electronvolt} line. In order for the target
+in the magnetic field to absorb the emitted photons, their energy needs to be
+adjusted.
 
-By moving the source with a motor, one can leverage the Doppler shift to alter
+By moving the target with a motor, one can leverage the Doppler shift to alter
 the energy of the photon. As this velocity is controlled, one can effectively
 measure the energy shifts and therefore the hyperfine structure in the iron
 target. We are interested in the deviation from $\hbar \omega_0 =
@@ -314,21 +319,22 @@ we have
 \]
 Since the Hessian is a real symmetric matrix, it can be diagonalized by an
 orthogonal transformation. Let the eigenvalues of the Hessian be $\lambda_i$,
-then we can split up the electric energy like follows:
+then we can split up the electric energy like follows into a pure-trace and a
+traceless term:
 \begin{align*}
     E^{(2)}
     &= \frac12 \sum_i \lambda_i \int \dif^3 r \, \rho(\vec r) \, x_i^2 \\
     &= \frac16 \sum_i \lambda_i \int \dif^3 r \, \rho(\vec r) \, r^2
-    + \frac12 \sum_i \lambda_i \int \dif^3 r \, \rho(\vec r) \sbr{x_i^2 -
+    + \frac12 \int \dif^3 r \, \rho(\vec r) \sum_i \lambda_i \sbr{x_i^2 -
     \frac{r^2}3} \,.
 \end{align*}
 The electric potential also obeys the Poisson equation, therefore we also have
 \[
     \laplace \Phi = \sum_i \lambda_i = \frac{e}{\varepsilon_0} |\psi(0)|^2 \,,
 \]
-i.e.\ the charge density at the origin by the electron wavefunctions is the
-trace of the Hessian. The first summand in the above splitting is the isomeric
-term and we can rewrite it as
+i.e.\ the charge density at the origin by the electron wave functions is
+proportional to the trace of the Hessian. The first summand in the above
+splitting is the isomeric term and we can rewrite it as
 \[
     E_\text I := \frac16 \frac{e}{\varepsilon_0} |\psi(0)|^2
     \int \dif^3 r \, \rho(\vec r) \, r^2 \,.
@@ -354,59 +360,96 @@ the excited (e) and ground (g) state to differ in order for this effect to be
 picked up. In our experiment we will see this as a common shift independent of
 $m_j$.
 
+The second term in the splitting is the quadrupole term. If the potential is
+$\SO(3)$ symmetric, all the eigenvalues~$\lambda_i$ are equal. The three
+summands will all yield the same term, the sum will be zero. Only if the
+potential is asymmetric, the eigenvalues will be different. Such an electric
+potential with a quadrupole moment will give rise to another energy splitting,
+the quadrupole splitting.
+
+This expression is invariant under parity, so the splitting is only sensitive
+to $|m_j'|$ and we can therefore distinguish it from the magnetic splitting.
+
 \parencite[33, 34]{Schatz/Nukleare_Festkoerperphysik}
 
 \chapter{Experimental setup and measurement}
 
 \section{Setup}
 
-The $^{57}\mathrm{Co}$ source is located in a shielding led box. The
+The $^{57}\mathrm{Co}$ source is located in a shielding lead box. The
 $\gammaup$-rays escape through an opening in the target's direction. The
 absorber is a thin $^{57}\mathrm{Fe}$ plate attached to a motor, which allows
 us to move it with tunable but constant velocity over a distance of \SI{25.1 +-
-0.2}{\milli\meter} unto the source and away from it. Behind the absorber there
-is a proportional detector. Its signal is fed into an amplifier and then into a
-single channel analyser (\textsc{sca}) compare to Figure~\ref{fig:electronics}.
-After that the signals are counted in two counters ($n_\text{RL}$ and
-$n_\text{LR}$) depending on the moving direction of the absorber. The direction
-is given by the motor steering, as well as the total run number $N$. The timer
-gives a signal every \SI{10}{\milli\second} to another \textsc{sca}, which
-leads the signal to the two counters $t_\text{RL}$ and $t_\text{LR}$
-respectively, also depending on the moving direction.
+0.2}{\milli\meter} unto the source and away from it. Behind the absorber, there
+is a proportional detector.
+
+\begin{figure}
+    \centering
+    \includegraphics{setup}
+    \caption{%
+        Setup of the experiment, source emits photons which might be absorbed
+        by the target or go through to the detector. The velocity~$v$ is
+        defined towards the source, i.e.\ higher $v$ means higher $E_\gammaup$.
+    }
+    \label{fig:setup}
+\end{figure}
+
+Its signal is fed into an amplifier and then into a single channel analyzer
+(\textsc{sca}), compare to Figure~\ref{fig:electronics}. After digitizing the
+signals, they are counted in two counters ($n_\text{RL}$ and $n_\text{LR}$)
+depending on the direction of motion of the absorber.
 
 \begin{figure}
     \centering
     \includegraphics{electronics}
     \caption{%
-        Principal scheme of the electronic setup.
+        Principal scheme of the electronic setup. The events are counted in
+        $\nRL$ and $\nLR$. The timer gives events to the time counters $\tRL$
+        and $\tLR$. The gates of the counters are controlled by the motor
+        control unit. Every full left-swing leads to a bump of the run counter
+        $N$.
     }
     \label{fig:electronics}
 \end{figure}
 
+The motor steering control opens the gates on the respective counters,
+depending on the direction of motion. Every full left-swing, the run
+counter~$N$ is increased by one. The motor control also takes care that a
+measurement starts and stop only at full left-swing. The timer gives a signal
+every \SI{10}{\milli\second} to another \textsc{sca}, which sends the signal to
+the two counters $t_\text{RL}$ and $t_\text{LR}$. Their gates are also
+controlled by the motor control.
+
 \section{Measurement}
 
-Before starting we have to find the measurement's energy window with an
-oscilloscope to only count $\SI{14.4}{\kilo\electronvolt}$ incidents and to
-reduce noise. For that the window is opened completely. The oscilloscope is
-triggered with the SCA signal and shows the analog signal from the amplifier.
-On the screen we can see the typical asymmetric peak shape of a proportional
-photon detector. With the fluorescence of screen we can see a couple lumps of
-peaks, the lump in the middle is the one of the line that we are interested in.
-The SCA window is restricted on the range of \numrange{66}{100} and we can see
-that only the interesting lump of peaks is left.
+Before starting, we have to find the energy window for the \textsc{sca} with an
+oscilloscope to only count $\SI{14.4}{\kilo\electronvolt}$ incidents. This also
+reduces noise. For that the window is opened completely. The oscilloscope is
+triggered with the \textsc{sca} signal and shows the analog signal from the
+amplifier. On the screen, we can see the typical asymmetric peak shape of a
+proportional photon detector. With the fluorescence of screen we can see a
+couple lumps of peaks. The lump in the middle is the one of the line that we
+are interested in. The \textsc{sca} window is restricted on the range of
+\numrange{66}{100} and we can see that only the interesting lump of peaks is
+left.
 
-After that we start the first measurement by resetting all the
-counters and starting the motor controller. On the next full left swing of the
-absorber, the gates are opened and we see the counters work.
+After that, we start the first measurement by resetting all the counters and
+checking every single \textsc{led}. Then we press \enquote{Start} on the motor
+controller. On the next full left swing of the absorber, the gates are opened
+and we see the counters start registering events.
 
 After a couple minutes, the number of events on both sides ($\nLR$ and $\nRL$)
-are over \num{7000}. We instruct the motor controller to stop. Then at at the
-next full left swing, the measurement is stopped. The number of runs $N$, the
-motor setting, the times $\tLR$ and $\tRL$ as well as the number of events
-$\nLR$ and $\nRL$ are read off by us.
+are over \num{7000}. This number was chosen as the relative uncertainty of
+$1/\sqrt{n}$ then is around $1/83$, which should be good enough for our
+purposes here. We instruct the motor controller to stop. Then at at the next
+full left-swing, the measurement is stopped. The number of runs $N$, the motor
+setting, the times $\tLR$ and $\tRL$ as well as the number of events $\nLR$ and
+$\nRL$ are read off by us. All raw measurements can be fund in the table in
+Appendix~\ref{raw-measurements}.
 
-Then we change the motor setting by four ticks on the scale and let it run
-again.
+From here, we change the motor setting by four ticks on the scale and let it run
+again. We repeat this procedure until the motor setting is down to 10. After
+that, the motor does not become slower but reverses the direction.
 
 \chapter{Analysis}
 
@@ -424,20 +467,20 @@ from left to right is $\tLR$, so we can compute the velocity with
 \]
 
 We were warned that the relation between the motor setting and the actual speed
-might not be linear. Therefore we have checked this, see Figure~\ref{fig:motor}
-for a graphical representation of the data. It is linear but the velocities in
-left--right and right--left direction are not the same. This is not a problem
-as we use the velocity and not the motor setting for the analysis. We
-lack a few data points as we could not reach small negative velocities due
-to this shifting. Setting the motor control below 10 would just reverse the
-velocity, not making it slower.
+might not be monotonic. Therefore we have checked this, see
+Figure~\ref{fig:motor} for a graphical representation of the data. It is linear
+but the velocities in left--right and right--left direction are not the same.
+This is not a problem as we use the velocity and not the motor setting for the
+analysis. We lack a few data points as we could not reach small negative
+velocities due to this shifting.
 
 \begin{figure}
     \centering
     \includegraphics{motor}
     \caption{%
         Relation of motor setting (units on the control potentiometer) and the
-        actual speed.
+        actual speed. The error bars are so small, that they hide behind the
+        markers.
     }
     \label{fig:motor}
 \end{figure}
@@ -445,13 +488,13 @@ velocity, not making it slower.
 \section{Count rates}
 
 For each measurement, we compute the count rate simply with $\rateLR = \nLR /
-\tLR$ (and similar to right--left). The count rates are shown versus the
-velocity in Figure~\ref{fig:count_rate}. There we can see the transmission
+\tLR$ (and similarly for right--left). The count rates versus the velocity are
+shown in Figure~\ref{fig:count_rate}. There we can see the transmission
 spectrum. The background of around \SI{60}{\per\second} is the transmission of
-the lines to the detectors. We see six distinct dips in the transmission, those
-are the resonance frequencies. Keeping in mind that the photon energy is $\hbar
-\omega_0 (1 + v/c)$ and $v \ll c$ in our experiment, the lines are remarkably
-sharp.
+the photons to the detector. We see six distinct dips in the transmission,
+those are the resonance frequencies. Keeping in mind that the photon energy is
+$\hbar \omega_0 (1 + v/c)$ and $v \ll c$ in our experiment, the lines are
+remarkably sharp.
 
 \begin{figure}
     \centering
@@ -474,7 +517,7 @@ order to make this $6 \times 3 + 1 = 19$ parameter system stable, we carefully
 tune the initial parameters of the least-squares-algorithm. Table~\ref{tab:fit}
 holds our final fit parameters for the Lorentzian curves, the constant offset
 is \SI{<< fit_offset >>}{\per\second}. The error estimates are the square roots
-of the diagonal of the covariance matrix.
+of the diagonal of the covariance matrix and therefore likely to be too small.
 
 \begin{table}
     \centering
@@ -505,7 +548,7 @@ the velocity dependent energy of the photon is given by
 \[
     E(v) = \hbar \omega_0 \del{1 + \frac vc} \,.
 \]
-Our $\Gamma$ describes the width on $v$, so we can write
+Our $\Gamma$ describes the width of $v$, so we can write
 \[
     \Deltaup E = \hbar \omega_0 \frac{\Gamma}{c} \,.
 \]
@@ -540,13 +583,13 @@ larger!
 
 \section{Isomeric shift}
 
-Assuming that we do not have any quadrupole splitting in our energies, the
-spectrum must be symmetric around $v = 0$. However, if we have an isomeric
-shift, the whole spectrum will be shifted to some $v_0$ and the spectrum is
-symmetric around that.
+Assuming that we the energy splitting is symmetric (as it definitely is for the
+magnetic splitting), the spectrum must be symmetric around $v = 0$. However, if
+we have an isomeric shift, the whole spectrum will be shifted to some $v_0$ and
+the spectrum is symmetric around that velocity.
 
-Taking a simple average of the velocities of all the dips, we will obtain
-$v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric_mm_s
+Taking a simple average of the velocities of all dips, we will obtain $v_0$.
+Using the six values that we have, we get $v_0 = \SI{<< isomeric_mm_s
 >>}{\milli\meter\per\second}$. This corresponds do an energy shift of \SI{<<
 isomeric_nev >>}{\nano\electronvolt}.
 
@@ -563,7 +606,7 @@ there are only two possibilities:
         \label{option-1}
 
         The splitting in the ground state is large. Therefore we expect to see
-        two triplets which are displaced by more than their intermediate
+        two narrow triplets which are displaced by more than their intermediate
         spacing. Lines 1, 2 and 3 correspond to the three lines coming from
         $m_j = +1/2$ and lines 4, 5, and 5 correspond to the three transitions
         starting from $m_j = -1/2$.
@@ -646,29 +689,31 @@ We were able to determine the Landé factors for the $j^P = 1/2^-$ and $j^P =
     \eqnsep
     g' = \num{<< lande_e >>} \,.
 \]
-Our values should be compared with
-the literature values
+Our values should be compared to the literature values
 \[
-    g_\text{lit} = \num{0.090604(9)} \,
+    g_\text{lit} = \num{0.090604(9)}
     \eqnsep
     g'_\text{lit} = \num{-0.15531(4)} \,,
 \]
 taken from \textcite[Fig.~4.8]{Schatz/Nukleare_Festkoerperphysik}. The
 literature value is too many standard errors away from our measurements.
-Therefore we must have underestimated our errors. Otherwise the ratio of $g/g'$
-is roughly correct.
+Therefore we must have underestimated our errors. Otherwise the values are in
+the right ballpark.
 
-The isomeric shift from iron in cobalt to iron in iron is $v_0 = \SI{<<
-isomeric_nev >>}{\nano\electronvolt}$. We did not find a literature value for
-this, so we cannot compare this. Qualitatively, this effect comes from the
-different environment the $^{57}\text{Fe}$ nuclei are exposed to in source and
-target material.
+The isomeric shift from the source to target material is $v_0 = \SI{<<
+isomeric_nev >>}{\nano\electronvolt}$. Qualitatively, this effect comes from
+the different environment the $^{57}\text{Fe}$ nuclei are exposed to in source
+and target material. We know that the mean square radius of the groundstate and
+excited state are different each in both materials and that the electron
+density at the nucleus is also different in both materials.
 
 We determined that there is vanishing quadrupole splitting in the iron
-absorber.
+absorber. This is probably due to the symmetry of the iron lattice and that the
+iron metal is a conductor.
 
 \begin{appendix}
     \chapter{Raw measurements}
+    \label{raw-measurements}
 
     All our raw measurements are in the following table.
 
@@ -676,9 +721,9 @@ absorber.
         \toprule
         {$N$}
         & {Motor}
-        & {$\tLR$}
+        & {$\tLR / \SI{10}{\milli\second}$}
         & {$\nLR$}
-        & {$\tRL$}
+        & {$\tRL / \SI{10}{\milli\second}$}
         & {$\nRL$} \\
         \midrule
         \endhead
@@ -700,4 +745,4 @@ absorber.
 
 \end{document}
 
-% vim: spell spelllang=en tw=79
+% vim: spell spelllang=en_us tw=79
