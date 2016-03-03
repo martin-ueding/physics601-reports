@@ -142,10 +142,10 @@ def job_spectrum(T):
     T['widths_table'] = list(zip(*[
         siunitx(widths_val / 1e-6, widths_err / 1e-6),
         siunitx(delta_e_val / 1e-9, delta_e_err / 1e-9),
-        siunitx(relative_width_val / 1e-12, relative_width_err / 1e-12),
+        siunitx(relative_width_val / 1e-13, relative_width_err / 1e-13),
     ]))
 
-    formatted = siunitx(fit_val / 1e-3, fit_err / 1e-3)
+    formatted = siunitx(fit_val / 1e-6, fit_err / 1e-6)
     offset = siunitx(fit_val[-1], fit_err[-1])
 
     T['fit_param'] = list(zip(*[iter(formatted[:-1])]*3))

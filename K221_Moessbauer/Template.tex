@@ -523,9 +523,9 @@ of the diagonal of the covariance matrix and therefore likely to be too small.
     \centering
     \begin{tabular}{SSS}
         \toprule
-        {$\mu / \si{\milli\meter\per\second}$}
-        & {$\Gamma / \si{\milli\meter\per\second}$}
-        & {$I / \si{\milli\meter\per\second\squared}$} \\
+        {$\mu / \si{\micro\meter\per\second}$}
+        & {$\Gamma / \si{\micro\meter\per\second}$}
+        & {$I / \si{\micro\meter\per\second\squared}$} \\
         \midrule
         %< for row in fit_param >%
         << ' & '.join(row) >> \\
@@ -562,7 +562,7 @@ Table~\ref{tab:widths}.
         \toprule
         {$\Gamma / \si{\micro\meter\per\second}$}
         & {$\Deltaup E / \si{\nano\electronvolt}$}
-        & {$\delta$ / \num{e-12}} \\
+        & {$\delta$ / \num{e-13}} \\
         \midrule
         %< for row in widths_table >%
         << ' & '.join(row) >> \\
