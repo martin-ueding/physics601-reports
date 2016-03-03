@@ -11,6 +11,8 @@
     pdftitle=
 }
 
+\usepackage{longtable}
+
 \newcommand\tRL{t_\text{RL}}
 \newcommand\tLR{t_\text{LR}}
 \newcommand\nRL{n_\text{RL}}
@@ -47,9 +49,9 @@
     $^{57}\mathrm{Fe}$. The aim is to find the Landé factors $g$ for the ground
     state and the first excited state, by measuring the hyperfine structure and
     Mößbauer spectrum respectively of the $\SI{14.4}{\kilo\electronvolt}$
-    transition. Also line widths and the isometric shift are to be ascertained.
-    By this a deeper understanding of recoilless emission and absorption and
-    basic terms in nuclear physics should be achieved.
+    transition. Also line widths and the isometric shift are to be determined.
+    By this a deeper understanding of recoilless emission and absorption as
+    well of basic terms in nuclear physics should be achieved.
 \end{abstract}
 
 \tableofcontents
@@ -381,14 +383,19 @@ respectively, also depending on the moving direction.
     \label{fig:electronics}
 \end{figure}
 
-
 \section{Measurement}
-
-Amplitude SCA: 66 to 100
 
 Before starting we have to find the measurement's energy window with an
 oscilloscope to only count $\SI{14.4}{\kilo\electronvolt}$ incidents and to
-reduce noise. After that we start the first measurement by resetting all the
+reduce noise. For that the window is opened completely. The oscilloscope is
+triggered with the SCA signal and shows the analog signal from the amplifier.
+On the screen we can see the typical asymmetric peak shape of a proportional
+photon detector. With the fluorescence of screen we can see a couple lumps of
+peaks, the lump in the middle is the one of the line that we are interested in.
+The SCA window is restricted on the range of \numrange{66}{100} and we can see
+that only the interesting lump of peaks is left.
+
+After that we start the first measurement by resetting all the
 counters and starting the motor controller. On the next full left swing of the
 absorber, the gates are opened and we see the counters work.
 
@@ -401,9 +408,9 @@ $\nLR$ and $\nRL$ are read off by us.
 Then we change the motor setting by four ticks on the scale and let it run
 again.
 
-\section{Analysis}
+\chapter{Analysis}
 
-\subsection{Velocity of target}
+\section{Velocity of target}
 
 First we have to compute the actual velocity of the target. In each measurement
 we have $N$ runs back and forth. The displacement for one direction (half a
@@ -435,7 +442,7 @@ velocity, not making it slower.
     \label{fig:motor}
 \end{figure}
 
-\subsection{Count rates}
+\section{Count rates}
 
 For each measurement, we compute the count rate simply with $\rateLR = \nLR /
 \tLR$ (and similar to right--left). The count rates are shown versus the
@@ -489,12 +496,12 @@ of the diagonal of the covariance matrix.
     \label{tab:fit}
 \end{table}
 
-\subsection{Line widths}
+\section{Line widths}
 
-From the width $\Gamma$ in \si{\milli\meter\per\second}, which is the \emph{full width at half maximum} (FWHM)
-of the Lorentzian curve, we can compute the width in energy $\Deltaup E$ using
-the Doppler effect. We had that the velocity dependent energy of the photon is
-given by
+From the width $\Gamma$ in \si{\milli\meter\per\second}, which is the
+\emph{full width at half maximum} (FWHM) of the Lorentzian curve, we can
+compute the width in energy $\Deltaup E$ using the Doppler effect. We had that
+the velocity dependent energy of the photon is given by
 \[
     E(v) = \hbar \omega_0 \del{1 + \frac vc} \,.
 \]
@@ -531,7 +538,7 @@ The relative line widths are in the order of \num{e-12}. Compared to the
 natural line width of \num{3.3e-13} this is only a factor of three to four
 larger!
 
-\subsection{Isomeric shift}
+\section{Isomeric shift}
 
 Assuming that we do not have any quadrupole splitting in our energies, the
 spectrum must be symmetric around $v = 0$. However, if we have an isomeric
@@ -543,7 +550,7 @@ $v_0$. Using the six values that we have, we obtain $v_0 = \SI{<< isomeric_mm_s
 >>}{\milli\meter\per\second}$. This corresponds do an energy shift of \SI{<<
 isomeric_nev >>}{\nano\electronvolt}.
 
-\subsection{Landé factors}
+\section{Landé factors}
 
 From the six lines that we have, we can also compute the Landé factor $g$ for
 the ground state ($j = 1/2^-$) and $g'$ for the excited state ($j = 3/2^-$).
@@ -581,8 +588,13 @@ the same intensity.
 
 We therefore average over the following velocity differences to obtain the
 ground state energy splitting: $(v_2-v_1)$ and $(v_4-v_3)$. For the excited
-state, we take $(v_2-v_0)$, $(v_3-v_1)$, $(v_4-v_2)$ and $(v_5-v_3)$. From this
-we obtain the averaged velocities
+state, we take $(v_3-v_1)$, and $(v_4-v_2)$. In principle, the differences
+$(v_2-v_0)$ and $(v_5-v_3)$ are also suitable if we assume that we do not have
+any quadrupole splitting. As we want to compute the quadrupole splitting as
+well, we may only use the former two differences. Those only have $m_j' = \pm
+1/2$ and are therefore unaffected by quadrupole splitting.
+
+From this we obtain the averaged velocities
 \[
     \Delta v = \SI{<< v_shift_g >>}{\milli\meter\per\second}
     \eqnsep
@@ -600,6 +612,25 @@ obtain the Landé factors
 The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
 this was given by $B = \SI{<< B >>}{\tesla}$.
 
+\section{Quadrupole shift}
+
+The quadrupole shift is the difference in $|m_j'| = 3/2$ and $|m_j'| = 1/2$
+states. In order to compute the shift, we use
+\[
+    \Delta v_Q = \frac{(v_5-v_3) - (v_2-v_0)}2 \,.
+\]
+The first summand is the difference between the $m_j' = +3/2$ and $+1/2$ lines.
+The second summand is the difference between the $-1/2$ and $-3/2$ line. If we
+do not have any quadrupole splitting, both would be equal (within uncertainty),
+the quadrupole shift would be zero.
+
+The numerical value that we obtain is
+\[
+    \Delta v_Q = \SI{<< v_shift_q >>}{\milli\meter\per\second} \,,
+\]
+which is indeed zero well within our uncertainty. Therefore can conclude that
+there is vanishing quadrupole distortion of the electric field around the iron
+nucleus.
 
 \chapter{Conclusion}
 
@@ -632,6 +663,40 @@ isomeric_nev >>}{\nano\electronvolt}$. We did not find a literature value for
 this, so we cannot compare this. Qualitatively, this effect comes from the
 different environment the $^{57}\text{Fe}$ nuclei are exposed to in source and
 target material.
+
+We determined that there is vanishing quadrupole splitting in the iron
+absorber.
+
+\begin{appendix}
+    \chapter{Raw measurements}
+
+    All our raw measurements are in the following table.
+
+    \begin{longtable}{*6S}
+        \toprule
+        {$N$}
+        & {Motor}
+        & {$\tLR$}
+        & {$\nLR$}
+        & {$\tRL$}
+        & {$\nRL$} \\
+        \midrule
+        \endhead
+        %< for row in raw_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{longtable}
+
+    You can also view this data at
+    \begin{small}
+        \url{https://github.com/martin-ueding/physics601-reports/blob/master/K221_Moessbauer/Data/runs.tsv}
+    \end{small}
+    and download it at
+    \begin{small}
+        \url{https://raw.githubusercontent.com/martin-ueding/physics601-reports/master/K221_Moessbauer/Data/runs.tsv}.
+    \end{small}
+\end{appendix}
 
 \end{document}
 
