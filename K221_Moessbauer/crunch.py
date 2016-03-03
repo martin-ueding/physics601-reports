@@ -203,18 +203,28 @@ def lande_factors(T, centers_val, centers_err):
 
     if True:
         v_shift_e_val = - np.mean([
-            centers_val[2] - centers_val[0],
+            #centers_val[2] - centers_val[0],
             centers_val[3] - centers_val[1],
             centers_val[4] - centers_val[2],
-            centers_val[5] - centers_val[3],
+            #centers_val[5] - centers_val[3],
         ])
         v_shift_e_err = np.std([
-            centers_val[2] - centers_val[0],
+            #centers_val[2] - centers_val[0],
             centers_val[3] - centers_val[1],
             centers_val[4] - centers_val[2],
-            centers_val[5] - centers_val[3],
+            #centers_val[5] - centers_val[3],
         ])
-        #v_shift_e_err = np.sqrt(np.mean(centers_err**2))
+        v_shift_e_err = np.sqrt(np.mean([
+            centers_err[1]**2,
+            centers_err[2]**2,
+            centers_err[3]**2,
+            centers_err[4]**2,
+        ]))
+
+        v_shift_q_val = ((centers_val[5] - centers_val[3]) - (centers_val[2] - centers_val[0]))/2
+        v_shift_q_err = np.sqrt(
+            centers_err[0]**2 + centers_err[2]**2 + centers_err[3]**2 + centers_err[5]**2
+        ) / 2
 
         v_shift_g_val = np.mean([
             centers_val[2] - centers_val[1],
@@ -255,6 +265,7 @@ def lande_factors(T, centers_val, centers_err):
 
     T['v_shift_g'] = siunitx(v_shift_g_val / 1e-3, v_shift_g_err / 1e-3)
     T['v_shift_e'] = siunitx(v_shift_e_val / 1e-3, v_shift_e_err / 1e-3)
+    T['v_shift_q'] = siunitx(v_shift_q_val / 1e-3, v_shift_q_err / 1e-3, error_digits=2)
     T['lande_g'] = siunitx(lande_g_val, lande_g_err)
     T['lande_e'] = siunitx(lande_e_val, lande_e_err)
 

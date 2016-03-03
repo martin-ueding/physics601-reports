@@ -587,8 +587,13 @@ the same intensity.
 
 We therefore average over the following velocity differences to obtain the
 ground state energy splitting: $(v_2-v_1)$ and $(v_4-v_3)$. For the excited
-state, we take $(v_2-v_0)$, $(v_3-v_1)$, $(v_4-v_2)$ and $(v_5-v_3)$. From this
-we obtain the averaged velocities
+state, we take $(v_3-v_1)$, and $(v_4-v_2)$. In principle, the differences
+$(v_2-v_0)$ and $(v_5-v_3)$ are also suitable if we assume that we do not have
+any quadrupole splitting. As we want to compute the quadrupole splitting as
+well, we may only use the former two differences. Those only have $m_j' = \pm
+1/2$ and are therefore unaffected by quadrupole splitting.
+
+From this we obtain the averaged velocities
 \[
     \Delta v = \SI{<< v_shift_g >>}{\milli\meter\per\second}
     \eqnsep
@@ -604,6 +609,26 @@ obtain the Landé factors
 \]
 The uncertainty in $g$ and $g'$ includes the uncertainty in the magnetic as
 this was given by $B = \SI{<< B >>}{\tesla}$.
+
+\subsection{Quadrupole shift}
+
+The quadrupole shift is the difference in $|m_j'| = 3/2$ and $|m_j'| = 1/2$
+states. In order to compute the shift, we use
+\[
+    \Delta v_Q = \frac{(v_5-v_3) - (v_2-v_0)}2 \,.
+\]
+The first summand is the difference between the $m_j' = +3/2$ and $+1/2$ lines.
+The second summand is the difference between the $-1/2$ and $-3/2$ line. If we
+do not have any quadrupole splitting, both would be equal (within uncertainty),
+the quadrupole shift would be zero.
+
+The numerical value that we obtain is
+\[
+    \Delta v_Q = \SI{<< v_shift_q >>}{\milli\meter\per\second} \,,
+\]
+which is indeed zero, well within our uncertainty. Therefore can conclude that
+there is vanishing quadrupole distortion of the electric field around the iron
+nucleus.
 
 \chapter{Conclusion}
 
@@ -636,6 +661,9 @@ isomeric_nev >>}{\nano\electronvolt}$. We did not find a literature value for
 this, so we cannot compare this. Qualitatively, this effect comes from the
 different environment the $^{57}\text{Fe}$ nuclei are exposed to in source and
 target material.
+
+We determined that there is vanishing quadrupole splitting in the iron
+absorber.
 
 \begin{appendix}
     \chapter{Raw measurements}
