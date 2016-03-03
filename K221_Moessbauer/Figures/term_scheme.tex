@@ -1,12 +1,20 @@
 \usetikzlibrary{calc}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.multipart}
+\usetikzlibrary{decorations}
 
 \begin{tikzpicture}[
         every text node part/.style={align=center},
         transition/.style={
             ->,
-            thick,
+            %thick,
+            decorate,
+            decoration={
+                snake,
+                amplitude=0.2ex,
+                segment length=1.5ex,
+                post length=0.5ex,
+            },
         },
         number/.style={
             draw,
