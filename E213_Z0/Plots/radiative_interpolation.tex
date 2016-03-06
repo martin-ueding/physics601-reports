@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={$\sqrt{s} / \si{\giga\electronvolt}$},
+            ylabel={Radiative correction factor},
+            grid=major,
+            legend pos=north west,
+        ]
+        \addplot[
+            black,
+            mark=*,
+            only marks,
+        ] table {../xy/radiative_data.tsv};
+        \addplot[
+            black,
+        ] table {../xy/radiative_interpolated.tsv};
+    \end{axis}
+\end{tikzpicture}

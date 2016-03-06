@@ -1,0 +1,77 @@
+\documentclass[11pt, english, fleqn, DIV=15, headinclude, BCOR=2cm]{scrreprt}
+
+\usepackage[
+    color,
+    bibatend,
+]{../../header}
+
+\graphicspath{{_build/}{../Figures/}}
+
+\hypersetup{
+    pdftitle=
+}
+
+\usepackage{longtable}
+\usepackage{subcaption}
+
+\usepackage[all]{nowidow}
+
+\newcommand\tRL{t_\text{RL}}
+\newcommand\tLR{t_\text{LR}}
+\newcommand\nRL{n_\text{RL}}
+\newcommand\nLR{n_\text{LR}}
+\newcommand\vRL{v_\text{RL}}
+\newcommand\vLR{v_\text{LR}}
+\newcommand\rateRL{\dot n_\text{RL}}
+\newcommand\rateLR{\dot n_\text{LR}}
+
+\subject{Lab report}
+\title{Analysis of $Z_0$ decays}
+\subtitle{Experiment K213 -- Universität Bonn}
+\author{%
+    Martin Ueding \\
+    \small{\href{mailto:mu@martin-ueding.de}{mu@martin-ueding.de}}
+    \and
+    Lino Lemmer \\
+    \small{\href{mailto:l2@uni-bonn.de}{l2@uni-bonn.de}}
+}
+
+\date{2016-03-02}
+
+\publishers{Tutor: Peter Klassen}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\tableofcontents
+
+\chapter*{Permission to upload}
+
+I, Martin Ueding, would like to scan and upload this lab report with your
+corrections to my website \href{http://martin-ueding.de}{martin-ueding.de}.
+There, the original lab report as well as the reviewed one will be licensed
+under the “\href{http://creativecommons.org/licenses/by-sa/4.0/}{Creative
+Commons Attribution-ShareAlike 4.0 International License}”. Is that okay with
+you?
+
+Yes $\Box$ \hspace{2cm} No $\Box$
+
+\chapter{Theory}
+
+\begin{figure}
+    \centering
+    \includegraphics{radiative_interpolation}
+    \caption{%
+        Radiation corrections given in the experiment description on page~4. We
+        have interpolated with quadratic splines.
+    }
+    \label{fig:radiative_interpolation}
+\end{figure}
+
+\end{document}
+
+% vim: spell spelllang=en_us tw=79
