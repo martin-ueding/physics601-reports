@@ -7,6 +7,8 @@
 
 \graphicspath{{_build/}{../Figures/}}
 
+\newcommand\MZ{M_{\mathrm Z^0}}
+
 \usepackage{mathtools}
 
 \hypersetup{
@@ -393,8 +395,14 @@ their partial widths.
     \item[Total width]
         Summing all those widths up, we obtain
         $\Gamma_\text{tot.} = \SI{<< total_width >>}{\mega\electronvolt}$.
-
 \end{description}
+
+All numerical values as well as the partial cross sections are in
+Table~\ref{tab:partial_stuff}. The total cross section is
+\[
+    \sigma_f^\text{peak} = \frac{12 \piup}{\MZ^2} \frac{\Gamma_\text
+    e}{\Gamma_{\mathrm Z^0}} \,.
+\]
 
 
 \begin{table}
@@ -419,8 +427,9 @@ their partial widths.
         \bottomrule
     \end{tabular}
     \caption{%
+        Partial decay widths, branching ratios and cross sections.
     }
-    \label{tab:decay_widths}
+    \label{tab:partial_stuff}
 \end{table}
 
 
