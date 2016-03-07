@@ -5,8 +5,8 @@
 
 SHELL = /bin/bash
 
-tail = tail -n 20
-
+lines = 20
+tail = tail -n $(lines)
 build = _build
 
 on := $(shell tput smso)

@@ -2,8 +2,8 @@
     horizontal=z to v,
 ]
 {
-    z --[photon, particle={$\mathrm Z^0$}, momentum={$\four q$}] v;
-    v --[fermion] f[particle={$\mathrm f$}];
-    v --[anti fermion] fbar[particle={$\bar{\mathrm f}$}];
+    z[particle={$\mathrm Z^-$}] --[photon, particle={$\mathrm Z^0$}, momentum={$\four q$}] v;
+    v --[fermion, momentum={$\four p$}] f[particle={$\mathrm f$}];
+    v --[anti fermion, momentum'={$\four k$}] fbar[particle={$\bar{\mathrm f}$}];
 
 };

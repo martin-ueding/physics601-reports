@@ -7,6 +7,8 @@
 
 \graphicspath{{_build/}{../Figures/}}
 
+\usepackage{mathtools}
+
 \hypersetup{
     pdftitle=
 }
@@ -15,15 +17,6 @@
 \usepackage{subcaption}
 
 \usepackage[all]{nowidow}
-
-\newcommand\tRL{t_\text{RL}}
-\newcommand\tLR{t_\text{LR}}
-\newcommand\nRL{n_\text{RL}}
-\newcommand\nLR{n_\text{LR}}
-\newcommand\vRL{v_\text{RL}}
-\newcommand\vLR{v_\text{LR}}
-\newcommand\rateRL{\dot n_\text{RL}}
-\newcommand\rateLR{\dot n_\text{LR}}
 
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
@@ -62,15 +55,6 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \chapter{Theory}
 
-
-\chapter{Exercises}
-
-There are a couple of exercises that are supposed to be done before the
-experiment.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{figure}
     \centering
     \includegraphics{radiative_interpolation}
@@ -80,6 +64,167 @@ experiment.
     }
     \label{fig:radiative_interpolation}
 \end{figure}
+
+\chapter{Exercises}
+
+There are a couple of exercises that are supposed to be done before the
+experiment.
+
+\section{Decay width}
+
+We are to compute the decay width~$\Gamma$ of a $\mathrm Z^0$ particle into a
+pair of various fermions. The top-quark is heavier than the gauge boson,
+therefore it cannot decay into a pair of top-quarks. The Feynman diagram
+corresponding to the decay is shown in Figure~\ref{fig:z0-decay}.
+
+\begin{figure}
+    \centering
+    \includegraphics{z0-decay}
+    \caption{%
+        Decay of a $\mathrm Z^0$ gauge boson into a pair of fermions. Time is
+        to the right.
+    }
+    \label{fig:z0-decay}
+\end{figure}
+
+First we compute the invariant matrix element~$\mathcal M$. Reading off the
+Feynman diagram, we have
+\begin{align*}
+    \iup \mathcal M
+    &= \epsilon^\mu \bar u^s(\four p) \frac{\iup g}{\cos(\theta_\text w)}
+    \mat\gamma_\mu \del{g_\text v^f - g_\text a \mat\gamma_5} v^{s'}(\four k)
+    \,,
+    \intertext{%
+        where we have used the rules given by \textcite[(D.56)]{romao/aqt}. We
+        chose the center of mass system, as we always can for a single massive
+        particle, and have $\four q = (\sqrt s, \vec 0)$. As the gauge boson
+        does not have any three momentum direction, we can choose the
+        polarization vector $\four \epsilon$ like we want. We chose it in the
+        positive $x^3$-direction and have $\four \epsilon = (0, 0, 0, 1)$. With
+        that we can simplify the Lorentz structure a little bit and obtain
+    }
+    &= \bar u^s(\four p) \frac{\iup g}{\cos(\theta_\text w)}
+    \mat\gamma_3 \del{g_\text v^f - g_\text a \mat\gamma_5} v^{s'}(\four k)
+    \,.
+\end{align*}
+
+For the decay width, which we are interested in, we need the modulus squared of
+the matrix element. For that we need the following:
+\begin{multline*}
+    \sbr{\bar u^s(\four p) \mat\gamma_3 \del{g_\text v^f - g_\text a \mat\gamma_5}
+    v^{s'}(\four k)}^\dagger \\
+    =
+    v^{s'}(\four k)^\dagger
+    \del{g_\text v^f - g_\text a \mat\gamma_5^\dagger}
+    \mat\gamma_3^\dagger
+    \mat\gamma_0
+    u^s(\four p) \\
+    =
+    \underbracket{v^{s'}(\four k)^\dagger
+    \mat\gamma_0}
+    \underbracket{\mat\gamma_0
+        \del{g_\text v^f - g_\text a \mat\gamma_5^\dagger}
+    \mat\gamma_0}
+    \underbracket{\mat\gamma_0
+        \mat\gamma_3^\dagger
+    \mat\gamma_0}
+    u^s(\four p) \\
+    = \bar v^{s'}(\four k)
+    \del{g_\text v^f + g_\text a \mat\gamma_5}
+    \mat\gamma_3
+    u^s(\four p) \\
+    = \bar v^{s'}(\four k)
+    \mat\gamma_3
+    \del{g_\text v^f - g_\text a \mat\gamma_5}
+    u^s(\four p) \,. \\
+\end{multline*}
+
+Now we can write the modulus squared of the matrix element
+\begin{align*}
+    |\mathcal M|^2
+    &= \frac{g^2}{\cos(\theta_\text w)^2}
+    \bar v^{s'}(\four k)
+    \mat\gamma_3
+    \del{g_\text v^f - g_\text a \mat\gamma_5}
+    u^s(\four p)
+    \bar u^s(\four p)
+    \mat\gamma_3
+    \del{g_\text v^f - g_\text a \mat\gamma_5}
+    v^{s'}(\four k)
+    \,. \\
+    \intertext{%
+        As the detector is not sensitive to the spin of the resulting fermions,
+        we need to sum over all the final state spin configurations $s$ and
+        $s'$. This will give us a fermion trace,
+    }
+    \sum_\text{spins} |\mathcal M|^2
+    &=
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \tr\del{
+        \four k
+        \mat\gamma_3
+        \del{g_\text v^f - g_\text a \mat\gamma_5}
+        \four p
+        \mat\gamma_3
+        \del{g_\text v^f - g_\text a \mat\gamma_5}
+    }
+    \,, \\
+    \intertext{%
+        where we have neglected the masses of the fermions. The second
+        parentheses with $\mat\gamma_5$ can be anticommuted twice and be
+        collapsed with the first one. We have
+    }
+    &=
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \tr\del{
+        \four k
+        \mat\gamma_3
+        \del{g_\text v^f - g_\text a \mat\gamma_5}^2
+        \four p
+        \mat\gamma_3
+    }
+    \,, \\
+    \intertext{%
+        where we can now simplify this. As an aside, we have
+        \[
+            \del{g_\text v^f - g_\text a \mat\gamma_5}^2
+            = (g_\text v^f)^2 - (g_\text a)^2 - 2 g_\text v^f g_\text a
+            \mat\gamma_5 \,.
+        \]
+        The square of $\mat\gamma_5$ is just the unit matrix in Dirac space.
+        The term with $\mat\gamma_5$ will drop out as the trace identity
+        contains the Levi-Civita symbol~$\epsilon_{\mu\nu\rho\gamma}$ which
+        will be zero if two of the indices are 3, as we have in our case.
+        Therefore we can directly drop that term. As it does not contain any
+        further Dirac structure, we can pull it out front and obtain
+    }
+    &=
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \tr\del{
+        \four k
+        \mat\gamma_3
+        \four p
+        \mat\gamma_3
+    }
+    \,.
+    \intertext{%
+        Using a trace identity like given by \textcite[(A.27)]{Peskin/QFT/1995}
+        we obtain
+    }
+    &= \frac{4 g^2}{\cos(\theta_\text w)^2} \del{(g_\text v^f)^2 - (g_\text a)^2}
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+\end{align*}
+This is our final form of the matrix element.
+
+The decay width is given by additional factors and a integration over phase
+space. We have
+\begin{align*}
+    \Gamma_f
+    &= \frac{1}{2 M_{\mathrm Z^0}}
+\end{align*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
 
