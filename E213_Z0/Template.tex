@@ -446,6 +446,48 @@ to add to the total width. The ratio is
 We see that another generation of quarks and leptons significantly changes the
 total width and therefore also the total cross section.
 
+\section{Angular dependence}
+
+As we can see from the tree-level QFT calculation for the $\mathrm Z^0$ decay
+in the first problem, the angular dependence is indeed $(1 + \cos(\theta)^2)$
+as stated in the last paragraph on page~27 in the manual. This is the
+$s$-channel. For the $t$-channel the angular dependence is $(1 -
+\cos(\theta))\inv$.
+
+The reaction $\mathrm{e^+ e^- \to \muup^+ \muup^-}$ only works in the
+$s$-channel. The reaction $\mathrm{e^+ e^- \to e^+ e^-}$ works in both $s$- and
+$t$-channel.
+
+All we have to do is to plot those two simple functions. The plots are shown in
+Figure~\ref{fig:channels}. As written in the manual, the $t$-channel becomes
+dominant for very small angles.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.49\linewidth}
+        \centering
+        \includegraphics{s-channel}
+        \caption{%
+            $s$-channel
+        }
+        \label{fig:s-channel}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.49\linewidth}
+        \centering
+        \includegraphics{t-channel}
+        \caption{%
+            $t$-channel
+        }
+        \label{fig:t-channel}
+    \end{subfigure}
+    \caption{%
+        Angular dependence of differential cross section in the $s$- and
+        $t$-channel. The units are arbitrary.
+    }
+    \label{fig:channels}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{document}

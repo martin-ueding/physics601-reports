@@ -86,6 +86,15 @@ def job_decay_widths(T):
     T['extra_width'] = siunitx(extra_width)
 
 
+def job_angular_dependence(T):
+    x = np.linspace(0.1, np.pi, 100)
+    y1 = 1 + np.cos(x)**2
+    y2 = 1/(1 - np.cos(x))
+
+    np.savetxt('_build/xy/s-channel.tsv', np.column_stack([x, y1]))
+    np.savetxt('_build/xy/t-channel.tsv', np.column_stack([x, y2]))
+
+
 
 
 def lorentz(x, mean, width, integral):
@@ -145,6 +154,7 @@ def main():
 
     job_decay_widths(T)
     job_radiative_correction(T)
+    job_angular_dependence(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:

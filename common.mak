@@ -55,7 +55,7 @@ $(tex): Template.tex $(build)/template.js
 	@echo "$(on)Inserting values into template$(off)"
 	../insert.py $^ $@
 
-$(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.csv)
+$(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.?sv)
 
 $(build)/template.js: crunch.py Data/* | $(build)/xy
 	@echo "$(on)Crunching the numbers$(off)"
