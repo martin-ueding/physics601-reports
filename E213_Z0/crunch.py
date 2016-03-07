@@ -18,8 +18,8 @@ import scipy.stats
 from unitprint2 import siunitx
 import bootstrap
 
-fermi_coupling = 1.6637e-5 # GeV^{-2}
-mass_z = 91.182 # GeV
+fermi_coupling = 1.6637e-11 # MeV^{-2}
+mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
@@ -52,8 +52,6 @@ def job_decay_widths(T):
         decay_width = n_c / (12 * np.pi) * fermi_coupling \
                 * mass_z**3 * (g_a**2 + g_v**2)
 
-        decay_width *= 1000
-
         print('Decay width Γ:', decay_width, 'MeV')
 
         T['gamma_'+particle] = siunitx(decay_width)
@@ -76,6 +74,12 @@ def job_decay_widths(T):
 
         ratios[group] = widths[group] / total_width
         T[group+'_ratio'] = siunitx(ratios[group])
+
+        partial_cross_section = 12 * np.pi / mass_z**2 * widths['electron'] * widths[group] / total_width**2
+        T[group+'_partial_cross_section'] = siunitx(partial_cross_section / 1e-11)
+
+    total_cross_section = 12 * np.pi / mass_z**2 * widths['electron'] / total_width
+    T['total_cross_section'] = siunitx(total_cross_section / 1e-11)
 
 
 
