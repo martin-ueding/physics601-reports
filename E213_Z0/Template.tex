@@ -221,7 +221,78 @@ The decay width is given by additional factors and a integration over phase
 space. We have
 \begin{align*}
     \Gamma_f
-    &= \frac{1}{2 M_{\mathrm Z^0}}
+    &= \frac{1}{2 M_{\mathrm Z^0}} (2 \piup)^4 \int
+    \frac{\dif^3 p}{(2\piup)^3 2 E_{\vec p}}
+    \frac{\dif^3 k}{(2\piup)^3 2 E_{\vec k}}
+    \delta^4(\four q - \four k - \four p)
+    |\mathcal M|^2 \,.
+    \intertext{%
+        We simplify the factors and insert the matrix element and get
+    }
+    &= \frac{1}{32 \piup^2 M_{\mathrm Z^0}} \int
+    \frac{\dif^3 p}{E_{\vec p}}
+    \frac{\dif^3 k}{E_{\vec k}}
+    \delta^4(\four q - \four k - \four p)
+    \frac{4 g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+    \intertext{%
+        Then we simplify even more and obtain
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \int
+    \frac{\dif^3 p}{E_{\vec p}}
+    \frac{\dif^3 k}{E_{\vec k}}
+    \delta^4(\four q - \four k - \four p)
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+    \intertext{%
+        The total energy-momentum conserving Dirac-distribution can be split
+        into time-like and space-like part. In the center-of-mass frame, this
+        gives us
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \\&\qquad\times
+    \int
+    \frac{\dif^3 p}{E_{\vec p}}
+    \frac{\dif^3 k}{E_{\vec k}}
+    \delta(\sqrt s - E_{\four k} - E_{\four p})
+    \delta^3(\vec k + \vec p)
+    (2 k_3 p_3 + \four k \cdot \four p) \,,
+    \intertext{%
+        which suggests the following change in variables:
+        \[
+            \vec a := \vec p + \vec k
+            \eqnsep
+            \vec b := \frac{\vec p - \vec k}{2} \,.
+        \]
+        The Jacobian of this transformation is unity. The $\delta^3(\vec k +
+        \vec p)$ will become $\delta^3(\vec a)$, in the $\int \dif^3 a$
+        integral, this will set $\vec a$ to $\vec 0$. So far we have
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \int
+    \frac{\dif^3 b}{E_{\vec p} E_{\vec k}}
+    \delta(\sqrt s - E_{\vec k} - E_{\vec p})
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+    \intertext{%
+        Now we have to replace $k$ and $p$ with $b$. We have $\vec p = \vec b$
+        and $\vec k = - \vec b$. Their magnitude is the same, which is expected
+        in the center-of-mass frame in a two body decay. This simplifies the
+        relations to
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \int
+    \frac{\dif^3 b}{E_{\vec b}^2}
+    \delta(\sqrt s - 2 E_{\vec b})
+    (- 2 b_3 b_3 + E_{\vec b}^2 + \vec b \cdot \vec b) \,.
 \end{align*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
