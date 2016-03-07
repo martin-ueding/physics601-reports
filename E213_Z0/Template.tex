@@ -92,7 +92,7 @@ Feynman diagram, we have
 \begin{align*}
     \iup \mathcal M
     &= \epsilon^\mu \bar u^s(\four p) \frac{\iup g}{\cos(\theta_\text w)}
-    \mat\gamma_\mu \del{g_\text v^f - g_\text a \mat\gamma_5} v^{s'}(\four k)
+    \mat\gamma_\mu \del{g_\text v^f - g_\text a^f \mat\gamma_5} v^{s'}(\four k)
     \,,
     \intertext{%
         where we have used the rules given by \textcite[(D.56)]{romao/aqt}. We
@@ -104,18 +104,18 @@ Feynman diagram, we have
         that we can simplify the Lorentz structure a little bit and obtain
     }
     &= \bar u^s(\four p) \frac{\iup g}{\cos(\theta_\text w)}
-    \mat\gamma_3 \del{g_\text v^f - g_\text a \mat\gamma_5} v^{s'}(\four k)
+    \mat\gamma_3 \del{g_\text v^f - g_\text a^f \mat\gamma_5} v^{s'}(\four k)
     \,.
 \end{align*}
 
 For the decay width, which we are interested in, we need the modulus squared of
 the matrix element. For that we need the following:
 \begin{multline*}
-    \sbr{\bar u^s(\four p) \mat\gamma_3 \del{g_\text v^f - g_\text a \mat\gamma_5}
+    \sbr{\bar u^s(\four p) \mat\gamma_3 \del{g_\text v^f - g_\text a^f \mat\gamma_5}
     v^{s'}(\four k)}^\dagger \\
     =
     v^{s'}(\four k)^\dagger
-    \del{g_\text v^f - g_\text a \mat\gamma_5^\dagger}
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5^\dagger}
     \mat\gamma_3^\dagger
     \mat\gamma_0
     u^s(\four p) \\
@@ -123,19 +123,19 @@ the matrix element. For that we need the following:
     \underbracket{v^{s'}(\four k)^\dagger
     \mat\gamma_0}
     \underbracket{\mat\gamma_0
-        \del{g_\text v^f - g_\text a \mat\gamma_5^\dagger}
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5^\dagger}
     \mat\gamma_0}
     \underbracket{\mat\gamma_0
         \mat\gamma_3^\dagger
     \mat\gamma_0}
     u^s(\four p) \\
     = \bar v^{s'}(\four k)
-    \del{g_\text v^f + g_\text a \mat\gamma_5}
+    \del{g_\text v^f + g_\text a^f \mat\gamma_5}
     \mat\gamma_3
     u^s(\four p) \\
     = \bar v^{s'}(\four k)
     \mat\gamma_3
-    \del{g_\text v^f - g_\text a \mat\gamma_5}
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5}
     u^s(\four p) \,. \\
 \end{multline*}
 
@@ -145,11 +145,11 @@ Now we can write the modulus squared of the matrix element
     &= \frac{g^2}{\cos(\theta_\text w)^2}
     \bar v^{s'}(\four k)
     \mat\gamma_3
-    \del{g_\text v^f - g_\text a \mat\gamma_5}
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5}
     u^s(\four p)
     \bar u^s(\four p)
     \mat\gamma_3
-    \del{g_\text v^f - g_\text a \mat\gamma_5}
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5}
     v^{s'}(\four k)
     \,. \\
     \intertext{%
@@ -163,10 +163,10 @@ Now we can write the modulus squared of the matrix element
     \tr\del{
         \four k
         \mat\gamma_3
-        \del{g_\text v^f - g_\text a \mat\gamma_5}
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5}
         \four p
         \mat\gamma_3
-        \del{g_\text v^f - g_\text a \mat\gamma_5}
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5}
     }
     \,, \\
     \intertext{%
@@ -179,7 +179,7 @@ Now we can write the modulus squared of the matrix element
     \tr\del{
         \four k
         \mat\gamma_3
-        \del{g_\text v^f - g_\text a \mat\gamma_5}^2
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5}^2
         \four p
         \mat\gamma_3
     }
@@ -187,8 +187,8 @@ Now we can write the modulus squared of the matrix element
     \intertext{%
         where we can now simplify this. As an aside, we have
         \[
-            \del{g_\text v^f - g_\text a \mat\gamma_5}^2
-            = (g_\text v^f)^2 - (g_\text a)^2 - 2 g_\text v^f g_\text a
+            \del{g_\text v^f - g_\text a^f \mat\gamma_5}^2
+            = (g_\text v^f)^2 - (g_\text a^f)^2 - 2 g_\text v^f g_\text a^f
             \mat\gamma_5 \,.
         \]
         The square of $\mat\gamma_5$ is just the unit matrix in Dirac space.
@@ -200,7 +200,7 @@ Now we can write the modulus squared of the matrix element
     }
     &=
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     \tr\del{
         \four k
         \mat\gamma_3
@@ -212,7 +212,7 @@ Now we can write the modulus squared of the matrix element
         Using a trace identity like given by \textcite[(A.27)]{Peskin/QFT/1995}
         we obtain
     }
-    &= \frac{4 g^2}{\cos(\theta_\text w)^2} \del{(g_\text v^f)^2 - (g_\text a)^2}
+    &= \frac{4 g^2}{\cos(\theta_\text w)^2} \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     (2 k_3 p_3 + \four k \cdot \four p) \,.
 \end{align*}
 This is our final form of the matrix element.
@@ -234,14 +234,14 @@ space. We have
     \frac{\dif^3 k}{E_{\vec k}}
     \delta^4(\four q - \four k - \four p)
     \frac{4 g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     (2 k_3 p_3 + \four k \cdot \four p) \,.
     \intertext{%
         Then we simplify even more and obtain
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     \int
     \frac{\dif^3 p}{E_{\vec p}}
     \frac{\dif^3 k}{E_{\vec k}}
@@ -254,7 +254,7 @@ space. We have
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     \\&\qquad\times
     \int
     \frac{\dif^3 p}{E_{\vec p}}
@@ -275,7 +275,7 @@ space. We have
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     \int
     \frac{\dif^3 b}{E_{\vec p} E_{\vec k}}
     \delta(\sqrt s - E_{\vec k} - E_{\vec p})
@@ -288,11 +288,27 @@ space. We have
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
     \int
     \frac{\dif^3 b}{E_{\vec b}^2}
     \delta(\sqrt s - 2 E_{\vec b})
     (- 2 b_3 b_3 + E_{\vec b}^2 + \vec b \cdot \vec b) \,.
+    \intertext{%
+        As we have massless particles, we have $E_{\vec b} = |\vec b|$. We
+        change into spherical coordinates in $\vec b$ and obtain
+    }
+    &= \frac{1}{4 \piup M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \\&\qquad\times
+    \int \dif b \, b^2 \int \dif \cos(\theta) \,
+    \frac{1}{b^2}
+    \delta(\sqrt s - 2 b)
+    (- 2 b^2 \cos(\theta)^2 + b^2 + b^2) \,,
+    \intertext{%
+        where we have performed $\int \dif \phi = 2 \piup$ already as we do not
+        have any explicit $\phi$-dependence.
+    }
 \end{align*}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
