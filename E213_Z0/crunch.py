@@ -34,6 +34,8 @@ def job_decay_widths(T):
 
     T['fermi_coupling'] = siunitx(fermi_coupling)
 
+    widths = {}
+
     for particle, (i_3, q, n_c) in quantum_numbers.items():
         print()
         print('Particle:', particle)
@@ -50,9 +52,31 @@ def job_decay_widths(T):
         decay_width = n_c / (12 * np.pi) * fermi_coupling \
                 * mass_z**3 * (g_a**2 + g_v**2)
 
-        print('Decay width Γ:', decay_width, 'GeV')
+        decay_width *= 1000
 
-        T['gamma_'+particle] = siunitx(decay_width * 1000)
+        print('Decay width Γ:', decay_width, 'MeV')
+
+        T['gamma_'+particle] = siunitx(decay_width)
+
+        widths[particle] = decay_width
+
+    hadronic_width = 2 * widths['up_type'] + 3 * widths['down_type']
+    charged_leptonic_width = 3 * widths['electron']
+    neutral_leptonic_width = 3 * widths['neutrino']
+    total_width = hadronic_width + charged_leptonic_width + neutral_leptonic_width
+
+    T['hadronic_width'] = siunitx(hadronic_width)
+    T['charged_leptonic_width'] = siunitx(charged_leptonic_width)
+    T['neutral_leptonic_width'] = siunitx(neutral_leptonic_width)
+    T['total_width'] = siunitx(total_width)
+
+    hadronic_ratio = hadronic_width / total_width
+    charged_leptonic_ratio = charged_leptonic_width / total_width
+    neutral_leptonic_ratio = neutral_leptonic_width / total_width
+
+    T['hadronic_ratio'] = siunitx(hadronic_ratio)
+    T['charged_leptonic_ratio'] = siunitx(charged_leptonic_ratio)
+    T['neutral_leptonic_ratio'] = siunitx(neutral_leptonic_ratio)
 
 
 def lorentz(x, mean, width, integral):
