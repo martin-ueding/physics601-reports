@@ -60,23 +60,24 @@ def job_decay_widths(T):
 
         widths[particle] = decay_width
 
-    hadronic_width = 2 * widths['up_type'] + 3 * widths['down_type']
-    charged_leptonic_width = 3 * widths['electron']
-    neutral_leptonic_width = 3 * widths['neutrino']
-    total_width = hadronic_width + charged_leptonic_width + neutral_leptonic_width
+    groups = ['hadronic', 'charged_leptonic', 'neutral_leptonic']
 
-    T['hadronic_width'] = siunitx(hadronic_width)
-    T['charged_leptonic_width'] = siunitx(charged_leptonic_width)
-    T['neutral_leptonic_width'] = siunitx(neutral_leptonic_width)
-    T['total_width'] = siunitx(total_width)
+    widths['hadronic'] = 2 * widths['up_type'] + 3 * widths['down_type']
+    widths['charged_leptonic'] = 3 * widths['electron']
+    widths['neutral_leptonic'] = 3 * widths['neutrino']
 
-    hadronic_ratio = hadronic_width / total_width
-    charged_leptonic_ratio = charged_leptonic_width / total_width
-    neutral_leptonic_ratio = neutral_leptonic_width / total_width
+    total_width = widths['hadronic'] + widths['charged_leptonic'] + widths['neutral_leptonic']
 
-    T['hadronic_ratio'] = siunitx(hadronic_ratio)
-    T['charged_leptonic_ratio'] = siunitx(charged_leptonic_ratio)
-    T['neutral_leptonic_ratio'] = siunitx(neutral_leptonic_ratio)
+    ratios = {}
+
+    for group in groups:
+        T[group+'_width'] = siunitx(widths[group])
+        T['total_width'] = siunitx(total_width)
+
+        ratios[group] = widths[group] / total_width
+        T[group+'_ratio'] = siunitx(ratios[group])
+
+
 
 
 def lorentz(x, mean, width, integral):
