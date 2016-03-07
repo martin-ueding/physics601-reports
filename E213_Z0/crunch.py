@@ -82,6 +82,10 @@ def job_decay_widths(T):
     T['total_cross_section'] = siunitx(total_cross_section / 1e-11)
 
 
+    extra_width = 1 + (widths['up_type'] + widths['down_type'] + widths['charged_leptonic'] + widths['neutral_leptonic']) / total_width
+    T['extra_width'] = siunitx(extra_width)
+
+
 
 
 def lorentz(x, mean, width, integral):
