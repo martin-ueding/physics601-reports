@@ -32,6 +32,8 @@ def job_decay_widths(T):
         'down_type': [-1/2, -1/3, 3],
     }
 
+    T['fermi_coupling'] = siunitx(fermi_coupling)
+
     for particle, (i_3, q, n_c) in quantum_numbers.items():
         print()
         print('Particle:', particle)
