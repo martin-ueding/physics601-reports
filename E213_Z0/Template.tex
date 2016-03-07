@@ -31,7 +31,7 @@
 
 \date{2016-03-02}
 
-\publishers{Tutor: Peter Klassen}
+\publishers{Tutor: David Hohn}
 
 \begin{document}
 
@@ -307,9 +307,57 @@ space. We have
     (- 2 b^2 \cos(\theta)^2 + b^2 + b^2) \,,
     \intertext{%
         where we have performed $\int \dif \phi = 2 \piup$ already as we do not
-        have any explicit $\phi$-dependence.
+        have any explicit $\phi$-dependence. The radial integration will set $b
+        = \sqrt s / 2$. In our case $s = M_{\mathrm Z^0}^2$ and we have
     }
+    &= \frac{M_{\mathrm Z^0}}{16 \piup}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \int \dif \cos(\theta) \,
+    (- 2 \cos(\theta)^2 + 2) \,.
+    \intertext{%
+        The angular integration gives $(-4/3 + 4) = 8/3$, so we get
+    }
+    &= \frac{M_{\mathrm Z^0}}{6 \piup}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
+    \intertext{%
+        Replacing $g^2$ with $8 M_{\mathrm Z^0}^2 G_\text F / \sqrt 2$, we will
+        obtain
+    }
+    &= \frac{4}{3 \piup \sqrt 2}
+    \frac{G_\text F M_{\mathrm Z^0}^3}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
 \end{align*}
+
+Except for factors up front, this is the same as Equation~(2.12) given in the
+manual.
+
+% FIXME Find the missing factors.
+
+We can now insert the various quantum numbers of particles, insert the numbers
+and obtain the decay widths. Our results are listed in
+Table~\ref{tab:decay_widths}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lcccS}
+        \toprule
+        Flavor & $I_3$ & $Q$ & $N_\text c$ & $\Gamma / \si{\mega\electronvolt}$ \\
+        \midrule
+        Electron & $-1/2$ & $-1$ & 1 & << gamma_electron >> \\
+        Neutrino & $1/2$ & $0$ & 1 & << gamma_neutrino >> \\
+        Up-Quark & $1/2$ & $2/3$ & 3 & << gamma_up_type >> \\
+        Down-Quark & $-1/2$ & $-1/3$ & 3 & << gamma_down_type >> \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Decay widths for the various families of fermions. As the fermions are
+        taken to be massless, only one representative of the family is
+        mentioned in the column \enquote{Flavor}.
+    }
+    \label{tab:decay_widths}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

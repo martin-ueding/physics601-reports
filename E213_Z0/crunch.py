@@ -28,8 +28,8 @@ def job_decay_widths(T):
     quantum_numbers = {
         'electron': [-1/2, -1, 1],
         'neutrino': [+1/2, 0, 1],
-        'up-type-quark': [+1/2, 2/3, 3],
-        'down-type-quark': [-1/2, -1/3, 3],
+        'up_type': [+1/2, 2/3, 3],
+        'down_type': [-1/2, -1/3, 3],
     }
 
     for particle, (i_3, q, n_c) in quantum_numbers.items():
@@ -50,6 +50,7 @@ def job_decay_widths(T):
 
         print('Decay width Γ:', decay_width, 'GeV')
 
+        T['gamma_'+particle] = siunitx(decay_width * 1000)
 
 
 def lorentz(x, mean, width, integral):

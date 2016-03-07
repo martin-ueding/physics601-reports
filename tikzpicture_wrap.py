@@ -37,6 +37,9 @@ def main():
     with open(options.infile) as f:
         snippet = f.read()
 
+    if options.packages is None:
+        options.packages = []
+
     rendered = template.render(lang=options.lang, snippet=snippet, packages=options.packages)
 
     with open(options.outfile, 'w') as f:
