@@ -17,6 +17,9 @@ build = _build
 # Emphasis format strings for turning emphasis on and off.
 on := $(shell tput smso)
 off := $(shell tput rmso)
+green := $(shell tput setaf 2)
+red := $(shell tput setaf 1)
+reset := $(shell tput sgr0)
 
 # Main document.
 tex := "$(build)/physics601-$(number)-Ueding_Lemmer.tex"
@@ -48,10 +51,10 @@ ifneq "$(wildcard /etc/fedora-release)" ""
     $(out): $(feynman_pdf)
 
 show-distribution:
-	@echo "$(on)This is running on Fedora. Typesetting Feynman diagrams.$(off)"
+	@echo "This is running on Fedora. $(green)Typesetting Feynman diagrams.$(reset)"
 else
 show-distribution:
-	@echo "$(on)This is running on something other than Fedora. Not typesetting Feynman diagrams.$(off)"
+	@echo "This is running on something other than Fedora. $(red)Not typesetting Feynman diagrams.$(reset)"
 endif
 
 $(build):
