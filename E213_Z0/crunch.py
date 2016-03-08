@@ -37,26 +37,25 @@ def job_decay_widths(T):
     widths = {}
 
     for particle, (i_3, q, n_c) in quantum_numbers.items():
-        print()
-        print('Particle:', particle)
-        print('I_3:', i_3)
-        print('Q:', q)
-        print('N_color:', n_c)
-
         g_v = i_3 - 2 * q * sin_sq_weak_mixing
         g_a = i_3
-
-        print('g_v:', g_v)
-        print('g_a:', g_a)
 
         decay_width = n_c / (12 * np.pi) * fermi_coupling \
                 * mass_z**3 * (g_a**2 + g_v**2)
 
-        print('Decay width Γ:', decay_width, 'MeV')
-
         T['gamma_'+particle] = siunitx(decay_width)
 
         widths[particle] = decay_width
+
+        if False:
+            print()
+            print('Particle:', particle)
+            print('I_3:', i_3)
+            print('Q:', q)
+            print('N_color:', n_c)
+            print('g_v:', g_v)
+            print('g_a:', g_a)
+            print('Decay width Γ:', decay_width, 'MeV')
 
     groups = ['hadronic', 'charged_leptonic', 'neutral_leptonic']
 
@@ -64,6 +63,7 @@ def job_decay_widths(T):
     widths['charged_leptonic'] = 3 * widths['electron']
     widths['neutral_leptonic'] = 3 * widths['neutrino']
 
+    global total_width
     total_width = widths['hadronic'] + widths['charged_leptonic'] + widths['neutral_leptonic']
 
     ratios = {}
@@ -94,6 +94,30 @@ def job_angular_dependence(T):
     np.savetxt('_build/xy/s-channel.tsv', np.column_stack([x, y1]))
     np.savetxt('_build/xy/t-channel.tsv', np.column_stack([x, y2]))
 
+
+def job_asymetry(T):
+    s_array = np.array([91.225, 89.225, 93.225])
+    sin_sq_array = np.array([0.21, 0.23, 0.25])
+    q = -1
+    i_3 = -1/2
+
+    angle_array = np.arcsin(np.sqrt(sin_sq_array))
+    #re_propagator = 1 / (s_array - (mass_z/1000)**2)
+    re_propagator = s_array * (s_array - (mass_z/1000)**2) / \
+            ((s_array - (mass_z/1000)**2)**2 + s_array * total_width / (mass_z/1000))
+
+    a_e = i_3 / (2 * np.sin(angle_array) * np.cos(angle_array))
+    a_f = a_e
+    v_e = (i_3 - 2 * q * sin_sq_array) / (2 * np.sin(angle_array) * np.cos(angle_array))
+    v_f = v_e
+
+    asymmetry = np.outer(re_propagator, -3/2 * a_e * a_f * q / ((v_e**2 + a_e**2) * (a_f**2 + a_f**2)))
+
+    print(asymmetry)
+
+    T['asymmetry_table'] = list([[siunitx(s)] + siunitx(row, digits=5) for s, row in zip(s_array, asymmetry)])
+    T['sin_sq_array'] = siunitx(sin_sq_array)
+    T['s_array'] = siunitx(s_array)
 
 
 
@@ -155,6 +179,7 @@ def main():
     job_decay_widths(T)
     job_radiative_correction(T)
     job_angular_dependence(T)
+    job_asymetry(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
