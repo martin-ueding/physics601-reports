@@ -75,7 +75,7 @@ $(build)/xy:
 
 # The main document depends on the main LaTeX file as well as all the rendered
 # TikZ graphics.
-$(out): $(tex) $(figures_pdf) $(plots_pdf) $(feynman_pdf)
+$(out): $(tex) $(figures_pdf) $(plots_pdf)
 	@echo "$(on)Compiling main document$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
