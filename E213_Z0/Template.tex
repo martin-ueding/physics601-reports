@@ -324,16 +324,24 @@ space. We have
     \frac{g^2}{\cos(\theta_\text w)^2}
     \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
     \intertext{%
-        Replacing $g^2$ with $8 M_{\mathrm Z^0}^2 G_\text F / \sqrt 2$ (see
-        Equation~(2.1) from the manual), we will obtain
+        Replacing $g^2$ with $8 M_{\mathrm W}^2 G_\text F / \sqrt 2$ (see
+        Equation~(2.1) from the manual) and using $M_\mathrm W = \MZ
+        \cos(\theta_\mathrm w)$ (see (2.3)), we will obtain
     }
-    &= \frac{4}{3 \piup \sqrt 2}
-    \frac{G_\text F M_{\mathrm Z^0}^3}{\cos(\theta_\text w)^2}
+    &= \frac{2 \sqrt 2}{3 \piup}
+    G_\text F M_{\mathrm Z^0}^3
+    \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
+    \intertext{%
+        For quarks, we also need to sum over all the colors, which just gives
+        the factor $N_\mathrm c^f$ for the given flavor $f$.
+    }
+    &= \frac{N_\mathrm c^f 2 \sqrt 2}{3 \piup}
+    G_\text F M_{\mathrm Z^0}^3
     \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
 \end{align*}
 
-Except for factors up front, this is the same as Equation~(2.12) given in the
-manual.
+Except for a missing factor $1/8$ up front, this is the same as
+Equation~(2.12) given in the manual.
 
 % FIXME Find the missing factors.
 
@@ -343,7 +351,6 @@ Table~\ref{tab:decay_widths}.
 
 The Fermi coupling constant has the value \SI{<< fermi_coupling
 >>}{\per\giga\electronvolt\squared}, see Equation~(2.1) in the manual.
-
 
 \begin{table}
     \centering
@@ -487,6 +494,61 @@ dominant for very small angles.
     }
     \label{fig:channels}
 \end{figure}
+
+\section{Asymmetry}
+
+We are to compute the forward--backward asymmetry of the reaction $\mathrm e^+
+\mathrm e^- \to \muup^+ \muup^-$. The given values for Mandelstam-$s$ are
+\SIlist{<< ';'.join(s_array) >>}{\giga\electronvolt}. The values for the weak
+mixing angle in terms of $\sin(\theta_\text w)^2$ given are \numlist{<<
+';'.join(sin_sq_array) >>}. In total there are nine combinations, all are shown
+in Table~\ref{tab:asymmetry}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{S|*3S}
+        \toprule
+        {$s$ \textbackslash\ $\sin(\theta_\text w)^2$}
+        & << ' & '.join(sin_sq_array) >> \\
+        \midrule
+        %< for row in asymmetry_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Forward--backward asymmetry $A_\text{FB}^\muup$ for different
+        values of Mandelstam-$s$ (rows) and different values of $\theta_\text
+        w$ (columns).
+    }
+    \label{tab:asymmetry}
+\end{table}
+
+The equation that we use is (2.19) from the manual:
+\[
+    A_\text{FB}^f(s) \simeq - \frac 32 \frac{a_\mathrm e a_f Q_f \Re(\chi(s))}{(v_\mathrm e^2
+    + a_\mathrm e^2)(v_f^2 + a_f^2)} \,,
+\]
+where $\chi(s)$ is the propagator of the $\mathrm Z^0$ boson as given in
+(2.11). It differs from the usual propagator of a vector particle and does not
+have any Lorentz structure. This is odd, we will just use the given propagator.
+The real part of that propagator has to be found by making the denominator
+real:
+\[
+    \chi(s)
+    = \frac{s}{s - \MZ^2 + \frac{\iup s \Gamma_{\mathrm Z^0}}\MZ}
+    = s \frac{s - \MZ^2 - \frac{\iup s \Gamma_{\mathrm Z^0}}\MZ}
+    {\del{s - \MZ^2}^2 + \del{\frac{s \Gamma_{\mathrm Z^0}}\MZ}^2} \,.
+\]
+The real part then is
+\[
+    \Re(\chi(s))
+    = \frac{s(s - \MZ^2)}
+    {\del{s - \MZ^2}^2 + \del{\frac{s \Gamma_{\mathrm Z^0}}\MZ}^2} \,.
+\]
+
+Now we just need to insert all the numbers with $I_3 = -1/2$ and $Q = -1$ in
+both $f = \mathrm e$ and $f = \muup$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
