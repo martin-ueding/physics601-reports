@@ -25,7 +25,7 @@ sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
 def job_grope(T):
-    files = ['electrons', 'muons', 'quarks']
+    files = ['electrons', 'muons', 'quarks', 'tauons']
     colors = iter([
         '#377eb8',
         '#984ea3',
@@ -42,7 +42,7 @@ def job_grope(T):
     log_bins = np.logspace(0, 2, 20)
 
     for file_ in files:
-        data = np.loadtxt(os.path.join('Data', file_ + '.txt'))
+        data = np.loadtxt(os.path.join('Data', file_ + '.txt'), usecols=(0, 1, 2, 3))
 
         ctrk_n = data[:, 0]
         ctrk_sump = data[:, 1]
