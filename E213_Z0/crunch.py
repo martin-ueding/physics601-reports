@@ -25,7 +25,13 @@ sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
 def job_grope(T):
-    files = ['electrons', 'muons']
+    files = ['electrons', 'muons', 'quarks']
+    colors = iter([
+        '#377eb8',
+        '#984ea3',
+        '#e41a1c',
+        '#4daf4a',
+    ])
 
     fig = pl.figure(figsize=(12, 10))
     ax_n = fig.add_subplot(2, 2, 1)
@@ -41,9 +47,13 @@ def job_grope(T):
         ecal_sume = data[:, 2]
         hcal_sume = data[:, 3]
 
+        color = next(colors)
+
         options = {
             'label': file_,
-            'alpha': 0.7,
+            'color': color,
+            'edgecolor': color,
+            'alpha': 0.6,
         }
 
         ax_n.hist(ctrk_n, **options)
