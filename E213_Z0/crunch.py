@@ -5,6 +5,7 @@
 # Licensed under The GNU Public License Version 2 (or later)
 
 import json
+import os
 import sys
 
 import matplotlib.pyplot as pl
@@ -22,6 +23,42 @@ fermi_coupling = 1.6637e-11 # MeV^{-2}
 mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
+
+def job_grope(T):
+    files = ['electrons']
+
+    fig = pl.figure(figsize=(12, 10))
+    ax_n = fig.add_subplot(2, 2, 1)
+    ax_sump = fig.add_subplot(2, 2, 2)
+    ax_ecal = fig.add_subplot(2, 2, 3)
+    ax_hcal = fig.add_subplot(2, 2, 4)
+
+    for file_ in files:
+        data = np.loadtxt(os.path.join('Data', file_ + '.txt'))
+
+        ctrk_n = data[:, 0]
+        ctrk_sump = data[:, 1]
+        ecal_sume = data[:, 2]
+        hcal_sume = data[:, 3]
+
+        ax_n.hist(ctrk_n, label=file_)
+        ax_sump.hist(ctrk_sump, label=file_)
+        ax_ecal.hist(ecal_sume, label=file_)
+        ax_hcal.hist(hcal_sume, label=file_)
+
+    ax_n.set_xlabel('Ctrk(N)')
+    ax_sump.set_xlabel('Ctrk(Sump)')
+    ax_ecal.set_xlabel('Ecal(SumE)')
+    ax_hcal.set_xlabel('Hcal(SumE)')
+
+    for i in range(1, 5):
+        ax = fig.add_subplot(2, 2, i)
+        ax.legend(loc='best')
+
+
+    fig.tight_layout()
+    fig.savefig('_build/mpl-hist.pdf')
+
 
 def job_decay_widths(T):
     # T_3, Q, N_color
@@ -176,6 +213,7 @@ def test_keys(T):
 def main():
     T = {}
 
+    job_grope(T)
     job_decay_widths(T)
     job_radiative_correction(T)
     job_angular_dependence(T)
