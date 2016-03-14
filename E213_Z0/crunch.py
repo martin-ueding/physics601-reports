@@ -39,6 +39,8 @@ def job_grope(T):
     ax_ecal = fig.add_subplot(2, 2, 3)
     ax_hcal = fig.add_subplot(2, 2, 4)
 
+    log_bins = np.logspace(0, 2, 20)
+
     for file_ in files:
         data = np.loadtxt(os.path.join('Data', file_ + '.txt'))
 
@@ -56,12 +58,13 @@ def job_grope(T):
             'alpha': 0.6,
         }
 
-        ax_n.hist(ctrk_n, **options)
+        ax_n.hist(ctrk_n, bins=log_bins, **options)
         ax_sump.hist(ctrk_sump, **options)
         ax_ecal.hist(ecal_sume, **options)
         ax_hcal.hist(hcal_sume, **options)
 
     ax_n.set_xlabel('Ctrk(N)')
+    ax_n.set_xscale('log')
     ax_sump.set_xlabel('Ctrk(Sump)')
     ax_ecal.set_xlabel('Ecal(SumE)')
     ax_hcal.set_xlabel('Hcal(SumE)')
