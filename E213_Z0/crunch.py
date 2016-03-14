@@ -25,7 +25,7 @@ sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
 def job_grope(T):
-    files = ['electrons']
+    files = ['electrons', 'muons']
 
     fig = pl.figure(figsize=(12, 10))
     ax_n = fig.add_subplot(2, 2, 1)
