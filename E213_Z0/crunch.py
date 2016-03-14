@@ -4,6 +4,7 @@
 # Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The GNU Public License Version 2 (or later)
 
+import argparse
 import json
 import os
 import sys
@@ -25,8 +26,11 @@ mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
-def job_grope(T):
-    files = ['electrons', 'muons', 'quarks', 'tauons']
+def job_grope(T, show=False):
+    files = ['electrons',
+             'muons',
+             'quarks',
+             'tauons']
     colors = iter([
         '#377eb8',
         '#984ea3',
@@ -67,7 +71,10 @@ def job_grope(T):
         ax_ecal.hist(ecal_sume, **options)
         ax_hcal.hist(hcal_sume, **options)
 
-        ax_3d.scatter(ctrk_n, ctrk_sump, ecal_sume, marker="x", color=color)
+        ax_3d.scatter(
+            ctrk_n,
+            #hcal_sume,
+            ctrk_sump, ecal_sume, marker="o", color=color, label=file_, s=80)
 
     ax_n.set_xscale('log')
     ax_n.set_xlabel('Ctrk(N)')
@@ -76,8 +83,10 @@ def job_grope(T):
     ax_hcal.set_xlabel('Hcal(SumE)')
 
     ax_3d.set_xlabel('Ctrk(N)')
+    #ax_3d.set_xlabel('Hcal(SumE)')
     ax_3d.set_ylabel('Ctrk(Sump)')
     ax_3d.set_zlabel('Ecal(SumE)')
+    ax_3d.legend(loc='best')
 
     for i in range(1, 5):
         ax = fig.add_subplot(2, 2, i)
@@ -88,8 +97,10 @@ def job_grope(T):
     fig.tight_layout()
     fig.savefig('_build/mpl-hist.pdf')
 
-    #fig_3d.show()
-    #input()
+    if show:
+        fig_3d.show()
+        input()
+
     fig_3d.savefig('_build/mpl-scatter.pdf')
 
 def job_decay_widths(T):
@@ -246,7 +257,11 @@ def test_keys(T):
 def main():
     T = {}
 
-    job_grope(T)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--show', action='store_true')
+    options = parser.parse_args()
+
+    job_grope(T, options.show)
     job_decay_widths(T)
     job_radiative_correction(T)
     job_angular_dependence(T)

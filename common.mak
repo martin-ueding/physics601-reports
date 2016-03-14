@@ -7,6 +7,8 @@
 # Set the shell to Bash, does not make any difference, probably.
 SHELL = /bin/bash
 
+op :=
+
 # Print at most $(lines) from the LaTeX runs, see usage below.
 lines = 20
 tail = tail -n $(lines)
@@ -96,7 +98,7 @@ $(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.?sv)
 
 $(build)/template.js: crunch.py Data/* | $(build)/xy
 	@echo "$(on)Crunching the numbers$(off)"
-	env PYTHONPATH=$$PYTHONPATH:.. ./$<
+	env PYTHONPATH=$$PYTHONPATH:.. ./$< $(op)
 
 # TikZ figures need to be wrapped into a full document.
 $(build)/page/%.tex: Figures/%.tex | $(build)/page
