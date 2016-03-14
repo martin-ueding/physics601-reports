@@ -199,6 +199,7 @@ def job_radiative_correction(T):
     sqrt_mandelstam_s = data[:, 0]
     correction = data[:, 1]
 
+    pl.clf()
     pl.plot(sqrt_mandelstam_s, correction)
 
     interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
