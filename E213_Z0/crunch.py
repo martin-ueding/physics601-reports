@@ -41,10 +41,15 @@ def job_grope(T):
         ecal_sume = data[:, 2]
         hcal_sume = data[:, 3]
 
-        ax_n.hist(ctrk_n, label=file_)
-        ax_sump.hist(ctrk_sump, label=file_)
-        ax_ecal.hist(ecal_sume, label=file_)
-        ax_hcal.hist(hcal_sume, label=file_)
+        options = {
+            'label': file_,
+            'alpha': 0.7,
+        }
+
+        ax_n.hist(ctrk_n, **options)
+        ax_sump.hist(ctrk_sump, **options)
+        ax_ecal.hist(ecal_sume, **options)
+        ax_hcal.hist(hcal_sume, **options)
 
     ax_n.set_xlabel('Ctrk(N)')
     ax_sump.set_xlabel('Ctrk(Sump)')
@@ -54,6 +59,7 @@ def job_grope(T):
     for i in range(1, 5):
         ax = fig.add_subplot(2, 2, i)
         ax.legend(loc='best')
+        ax.margins(0.05)
 
 
     fig.tight_layout()
