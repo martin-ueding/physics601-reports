@@ -15,6 +15,7 @@ import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
 import scipy.stats
+import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
 import bootstrap
@@ -32,6 +33,9 @@ def job_grope(T):
         '#e41a1c',
         '#4daf4a',
     ])
+
+    fig_3d = pl.figure()
+    ax_3d = p3.Axes3D(fig_3d)
 
     fig = pl.figure(figsize=(12, 10))
     ax_n = fig.add_subplot(2, 2, 1)
@@ -63,11 +67,17 @@ def job_grope(T):
         ax_ecal.hist(ecal_sume, **options)
         ax_hcal.hist(hcal_sume, **options)
 
-    ax_n.set_xlabel('Ctrk(N)')
+        ax_3d.scatter(ctrk_n, ctrk_sump, ecal_sume, marker="x", color=color)
+
     ax_n.set_xscale('log')
+    ax_n.set_xlabel('Ctrk(N)')
     ax_sump.set_xlabel('Ctrk(Sump)')
     ax_ecal.set_xlabel('Ecal(SumE)')
     ax_hcal.set_xlabel('Hcal(SumE)')
+
+    ax_3d.set_xlabel('Ctrk(N)')
+    ax_3d.set_ylabel('Ctrk(Sump)')
+    ax_3d.set_zlabel('Ecal(SumE)')
 
     for i in range(1, 5):
         ax = fig.add_subplot(2, 2, i)
@@ -78,6 +88,9 @@ def job_grope(T):
     fig.tight_layout()
     fig.savefig('_build/mpl-hist.pdf')
 
+    #fig_3d.show()
+    #input()
+    fig_3d.savefig('_build/mpl-scatter.pdf')
 
 def job_decay_widths(T):
     # T_3, Q, N_color
