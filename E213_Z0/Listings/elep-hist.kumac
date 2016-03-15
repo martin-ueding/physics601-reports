@@ -1,0 +1,23 @@
+nt/plot daten1.e_lep
+pict/print daten1-e_lep.ps
+
+nt/plot daten1.e_lep $11
+pict/print daten1-e_lep-energy1.ps
+
+nt/plot daten1.e_lep $12
+pict/print daten1-e_lep-energy2.ps
+
+nt/plot daten1.e_lep $13
+pict/print daten1-e_lep-energy3.ps
+
+nt/plot daten1.e_lep $14
+pict/print daten1-e_lep-energy4.ps
+
+nt/plot daten1.e_lep $15
+pict/print daten1-e_lep-energy5.ps
+
+nt/plot daten1.e_lep $16
+pict/print daten1-e_lep-energy6.ps
+
+nt/plot daten1.e_lep $17
+pict/print daten1-e_lep-energy7.ps

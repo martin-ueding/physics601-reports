@@ -1,0 +1,45 @@
+nt/plot electrons.ncharged
+pict/print electrons-ncharged.ps
+nt/plot muons.ncharged
+pict/print muons-ncharged.ps
+nt/plot hadrons.ncharged
+pict/print hadrons-ncharged.ps
+nt/plot taus.ncharged
+pict/print taus-ncharged.ps
+
+nt/plot electrons.pcharged $6
+pict/print electrons-pcharged.ps
+nt/plot muons.pcharged $6
+pict/print muons-pcharged.ps
+nt/plot hadrons.pcharged $6
+pict/print hadrons-pcharged.ps
+nt/plot taus.pcharged $6
+pict/print taus-pcharged.ps
+
+nt/plot electrons.e_ecal
+pict/print electrons-e_ecal.ps
+nt/plot muons.e_ecal
+pict/print muons-e_ecal.ps
+nt/plot hadrons.e_ecal
+pict/print hadrons-e_ecal.ps
+nt/plot taus.e_ecal
+pict/print taus-e_ecal.ps
+
+nt/plot electrons.e_hcal
+pict/print electrons-e_hcal.ps
+nt/plot muons.e_hcal
+pict/print muons-e_hcal.ps
+nt/plot hadrons.e_hcal
+pict/print hadrons-e_hcal.ps
+nt/plot taus.e_hcal
+pict/print taus-e_hcal.ps
+
+nt/plot electrons.cos_thet cos_thet<2.
+pict/print electrons-cos_thet.ps
+nt/plot muons.cos_thet cos_thet<2.
+pict/print muons-cos_thet.ps
+nt/plot hadrons.cos_thet cos_thet<2.
+pict/print hadrons-cos_thet.ps
+nt/plot taus.cos_thet cos_thet<2.
+pict/print taus-cos_thet.ps
+

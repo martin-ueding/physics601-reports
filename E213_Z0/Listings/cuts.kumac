@@ -1,0 +1,17 @@
+nt/cuts $1 ncharged<4.and.e_ecal>60.and.cos_thet<.5.and.cos_thet>-0.9
+nt/cuts $2 pcharged>75.and.ncharged<4.and.e_ecal<20.and.cos_thet<.9.and.cos_thet>-0.9
+nt/cuts $3 pcharged<75.and.ncharged<7.and.e_ecal<75
+nt/cuts $4 ncharged>7
+
+nt/cuts $6 pcharged<120
+
+nt/cuts $7 cos_thet<.5.and.cos_thet>-0.9
+nt/cuts $8 cos_thet<.9.and.cos_thet>-0.9
+
+nt/cuts $11 e_lep>44.0.and.e_lep<44.5
+nt/cuts $12 e_lep>44.5.and.e_lep<45.0
+nt/cuts $13 e_lep>45.0.and.e_lep<45.5
+nt/cuts $14 e_lep>45.5.and.e_lep<45.7
+nt/cuts $15 e_lep>45.7.and.e_lep<46.3
+nt/cuts $16 e_lep>46.3.and.e_lep<46.7
+nt/cuts $17 e_lep>46.7

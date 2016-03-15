@@ -1,0 +1,44 @@
+nt/plot muons.cos_thet cos_thet<0.
+pict/print afb-muons-mc-negative.ps
+nt/plot muons.cos_thet cos_thet>0..and.cos_thet<2.
+pict/print afb-muons-mc-positive.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0.
+pict/print afb-muons-daten1-negative.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2.
+pict/print afb-muons-daten1-positive.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$11
+pict/print afb-muons-daten1-negative-energy1.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$11
+pict/print afb-muons-daten1-positive-energy1.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$12
+pict/print afb-muons-daten1-negative-energy2.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$12
+pict/print afb-muons-daten1-positive-energy2.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$13
+pict/print afb-muons-daten1-negative-energy3.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$13
+pict/print afb-muons-daten1-positive-energy3.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$14
+pict/print afb-muons-daten1-negative-energy4.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$14
+pict/print afb-muons-daten1-positive-energy4.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$15
+pict/print afb-muons-daten1-negative-energy5.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$15
+pict/print afb-muons-daten1-positive-energy5.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$16
+pict/print afb-muons-daten1-negative-energy6.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$16
+pict/print afb-muons-daten1-positive-energy6.ps
+
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$17
+pict/print afb-muons-daten1-negative-energy7.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$17
+pict/print afb-muons-daten1-positive-energy7.ps

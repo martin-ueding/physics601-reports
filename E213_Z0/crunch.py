@@ -4,7 +4,9 @@
 # Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The GNU Public License Version 2 (or later)
 
+import argparse
 import json
+import os
 import sys
 
 import matplotlib.pyplot as pl
@@ -14,6 +16,7 @@ import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
 import scipy.stats
+import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
 import bootstrap
@@ -22,6 +25,83 @@ fermi_coupling = 1.6637e-11 # MeV^{-2}
 mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
+
+def job_grope(T, show=False):
+    files = ['electrons',
+             'muons',
+             'quarks',
+             'tauons']
+    colors = iter([
+        '#377eb8',
+        '#984ea3',
+        '#e41a1c',
+        '#4daf4a',
+    ])
+
+    fig_3d = pl.figure()
+    ax_3d = p3.Axes3D(fig_3d)
+
+    fig = pl.figure(figsize=(12, 10))
+    ax_n = fig.add_subplot(2, 2, 1)
+    ax_sump = fig.add_subplot(2, 2, 2)
+    ax_ecal = fig.add_subplot(2, 2, 3)
+    ax_hcal = fig.add_subplot(2, 2, 4)
+
+    log_bins = np.logspace(0, 2, 20)
+
+    for file_ in files:
+        data = np.loadtxt(os.path.join('Data', file_ + '.txt'), usecols=(0, 1, 2, 3))
+
+        ctrk_n = data[:, 0]
+        ctrk_sump = data[:, 1]
+        ecal_sume = data[:, 2]
+        hcal_sume = data[:, 3]
+
+        color = next(colors)
+
+        options = {
+            'label': file_,
+            'color': color,
+            'edgecolor': color,
+            'alpha': 0.6,
+        }
+
+        ax_n.hist(ctrk_n, bins=log_bins, **options)
+        ax_sump.hist(ctrk_sump, **options)
+        ax_ecal.hist(ecal_sume, **options)
+        ax_hcal.hist(hcal_sume, **options)
+
+        ax_3d.scatter(
+            ctrk_n,
+            #hcal_sume,
+            ctrk_sump, ecal_sume, marker="o", color=color, label=file_, s=80)
+
+    ax_n.set_xscale('log')
+    ax_n.set_xlabel('Ctrk(N)')
+    ax_sump.set_xlabel('Ctrk(Sump)')
+    ax_ecal.set_xlabel('Ecal(SumE)')
+    ax_hcal.set_xlabel('Hcal(SumE)')
+
+    ax_3d.set_xlabel('Ctrk(N)')
+    #ax_3d.set_xlabel('Hcal(SumE)')
+    ax_3d.set_ylabel('Ctrk(Sump)')
+    ax_3d.set_zlabel('Ecal(SumE)')
+    ax_3d.legend(loc='best')
+
+    for i in range(1, 5):
+        ax = fig.add_subplot(2, 2, i)
+        ax.legend(loc='best')
+        ax.margins(0.05)
+
+
+    fig.tight_layout()
+    fig.savefig('_build/mpl-hist.pdf')
+
+    if show:
+        fig_3d.show()
+        input()
+
+    fig_3d.savefig('_build/mpl-scatter.pdf')
 
 def job_decay_widths(T):
     # T_3, Q, N_color
@@ -130,6 +210,7 @@ def job_radiative_correction(T):
     sqrt_mandelstam_s = data[:, 0]
     correction = data[:, 1]
 
+    pl.clf()
     pl.plot(sqrt_mandelstam_s, correction)
 
     interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
@@ -176,6 +257,11 @@ def test_keys(T):
 def main():
     T = {}
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--show', action='store_true')
+    options = parser.parse_args()
+
+    job_grope(T, options.show)
     job_decay_widths(T)
     job_radiative_correction(T)
     job_angular_dependence(T)
