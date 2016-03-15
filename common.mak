@@ -37,6 +37,9 @@ plots_pdf := $(plots_tex:Plots/%.tex=$(build)/%.pdf)
 plots_page_pdf := $(plots_tex:Plots/%.tex=$(build)/page/%.pdf)
 plots_page_tex := $(plots_tex:Plots/%.tex=$(build)/page/%.tex)
 
+postscript_ps := $(wildcard Postscript/*.ps)
+postscript_pdf := $(postscript_ps:Postscript/%.ps=$(build)/%.pdf)
+
 # The default target is the main PDF document of the report.
 all: show-distribution $(out)
 
@@ -77,7 +80,7 @@ $(build)/xy:
 
 # The main document depends on the main LaTeX file as well as all the rendered
 # TikZ graphics.
-$(out): $(tex) $(figures_pdf) $(plots_pdf)
+$(out): $(tex) $(figures_pdf) $(plots_pdf) $(postscript_pdf)
 	@echo "$(on)Compiling main document$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
@@ -102,43 +105,48 @@ $(build)/template.js: crunch.py Data/* | $(build)/xy
 
 # TikZ figures need to be wrapped into a full document.
 $(build)/page/%.tex: Figures/%.tex | $(build)/page
-	@echo "$(on)Wrapping figure $< $(off)"
+	@echo "$(on)Wrapping figure $<$(off)"
 	../tikzpicture_wrap.py $< $@
 
 # TikZ plots need to be wrapped into a full document.
 $(build)/page/%.tex: Plots/%.tex | $(build)/page
-	@echo "$(on)Wrapping plot $< $(off)"
+	@echo "$(on)Wrapping plot $<$(off)"
 	../tikzpicture_wrap.py $< $@
 
 # TikZ Feynman diagrams need to be wrapped into a full document with the
 # `tikz-feynman` package.
 $(build)/page-lualatex/%.tex: Feynman/%.tex | $(build)/page-lualatex
-	@echo "$(on)Wrapping plot $< $(off)"
+	@echo "$(on)Wrapping plot $<$(off)"
 	../tikzpicture_wrap.py --packages tikz-feynman -- $< $@
 
 # Feynman diagrams must be compiled with LuaLaTeX.
 $(build)/page-lualatex/%.pdf: $(build)/page-lualatex/%.tex
-	@echo "$(on)Typesetting Feynman diagram $< $(off)"
+	@echo "$(on)Typesetting Feynman diagram $<$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='lualatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
 	     2>&1 |$(tail)
 
 # Figures and plots are typeset on an A4 page and therefore need to be cropped.
 $(build)/%.pdf: $(build)/page/%.pdf | $(build)/page
-	@echo "$(on)Cropping figure $< $(off)"
+	@echo "$(on)Cropping figure $<$(off)"
 	pdfcrop $< $@
 
 # Feynman diagrams are typeset on an A4 page and therefore need to be cropped.
 $(build)/%.pdf: $(build)/page-lualatex/%.pdf | $(build)/page
-	@echo "$(on)Cropping figure $< $(off)"
+	@echo "$(on)Cropping figure $<$(off)"
 	pdfcrop $< $@
 
 # Figures and plots (but not Feynman diagrams) can be compiled using pdflatex.
 %.pdf: %.tex
-	@echo "$(on)Typesetting figure $< $(off)"
+	@echo "$(on)Typesetting figure $<$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
 	     2>&1 |$(tail)
+
+$(build)/%.pdf: Postscript/%.ps
+	@echo "$(on)Converting PS file $<$(off)"
+	ps2pdf $< /tmp/ps2pdf_$$(basename $@)
+	pdfcrop /tmp/ps2pdf_$$(basename $@) $@
 
 .PHONY: clean
 clean:
