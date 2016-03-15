@@ -99,7 +99,7 @@ $(tex): Template.tex $(build)/template.js
 # included files is changed.
 $(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.?sv)
 
-$(build)/template.js: crunch.py Data/* | $(build)/xy
+$(build)/template.js: crunch.py $(wildcard Data/*.*) | $(build)/xy
 	@echo "$(on)Crunching the numbers$(off)"
 	env PYTHONPATH=$$PYTHONPATH:.. ./$< $(op)
 
