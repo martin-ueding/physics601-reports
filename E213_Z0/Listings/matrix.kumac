@@ -1,0 +1,35 @@
+nt/plot electrons.ncharged $1
+pict/print matrix-electrons-with-electron-filter.ps
+nt/plot electrons.ncharged $2
+pict/print matrix-electrons-with-muon-filter.ps
+nt/plot electrons.ncharged $3
+pict/print matrix-electrons-with-tau-filter.ps
+nt/plot electrons.ncharged $4
+pict/print matrix-electrons-with-hadron-filter.ps
+
+nt/plot muons.ncharged $1
+pict/print matrix-muons-with-electron-filter.ps
+nt/plot muons.ncharged $2
+pict/print matrix-muons-with-muon-filter.ps
+nt/plot muons.ncharged $3
+pict/print matrix-muons-with-tau-filter.ps
+nt/plot muons.ncharged $4
+pict/print matrix-muons-with-hadron-filter.ps
+
+nt/plot taus.ncharged $1
+pict/print matrix-taus-with-electron-filter.ps
+nt/plot taus.ncharged $2
+pict/print matrix-taus-with-muon-filter.ps
+nt/plot taus.ncharged $3
+pict/print matrix-taus-with-tau-filter.ps
+nt/plot taus.ncharged $4
+pict/print matrix-taus-with-hadron-filter.ps
+
+nt/plot hadrons.ncharged $1
+pict/print matrix-hadrons-with-electron-filter.ps
+nt/plot hadrons.ncharged $2
+pict/print matrix-hadrons-with-muon-filter.ps
+nt/plot hadrons.ncharged $3
+pict/print matrix-hadrons-with-tau-filter.ps
+nt/plot hadrons.ncharged $4
+pict/print matrix-hadrons-with-hadron-filter.ps

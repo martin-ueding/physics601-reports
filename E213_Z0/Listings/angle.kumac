@@ -1,0 +1,14 @@
+nt/plot daten1.cos_thet cos_thet<2.
+pict/print angle-daten1.ps
+
+nt/plot electrons.cos_thet $7
+pict/print angle-mc-electrons.ps
+
+nt/plot muons.cos_thet $8
+pict/print angle-mc-muons.ps
+
+nt/plot taus.cos_thet cos_thet<2
+pict/print angle-mc-taus.ps
+
+nt/plot hadrons.cos_thet cos_thet<2
+pict/print angle-mc-hadrons.ps

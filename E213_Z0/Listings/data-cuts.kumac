@@ -1,0 +1,62 @@
+nt/plot daten1.ncharged $1.and.$11
+pict/print filtered-daten1-as-electron-energy1.ps
+nt/plot daten1.ncharged $2.and.$11
+pict/print filtered-daten1-as-muon-energy1.ps
+nt/plot daten1.ncharged $3.and.$11
+pict/print filtered-daten1-as-tau-energy1.ps
+nt/plot daten1.ncharged $4.and.$11
+pict/print filtered-daten1-as-hadron-energy1.ps
+
+nt/plot daten1.ncharged $1.and.$12
+pict/print filtered-daten1-as-electron-energy2.ps
+nt/plot daten1.ncharged $2.and.$12
+pict/print filtered-daten1-as-muon-energy2.ps
+nt/plot daten1.ncharged $3.and.$12
+pict/print filtered-daten1-as-tau-energy2.ps
+nt/plot daten1.ncharged $4.and.$12
+pict/print filtered-daten1-as-hadron-energy2.ps
+
+nt/plot daten1.ncharged $1.and.$13
+pict/print filtered-daten1-as-electron-energy3.ps
+nt/plot daten1.ncharged $2.and.$13
+pict/print filtered-daten1-as-muon-energy3.ps
+nt/plot daten1.ncharged $3.and.$13
+pict/print filtered-daten1-as-tau-energy3.ps
+nt/plot daten1.ncharged $4.and.$13
+pict/print filtered-daten1-as-hadron-energy3.ps
+
+nt/plot daten1.ncharged $1.and.$14
+pict/print filtered-daten1-as-electron-energy4.ps
+nt/plot daten1.ncharged $2.and.$14
+pict/print filtered-daten1-as-muon-energy4.ps
+nt/plot daten1.ncharged $3.and.$14
+pict/print filtered-daten1-as-tau-energy4.ps
+nt/plot daten1.ncharged $4.and.$14
+pict/print filtered-daten1-as-hadron-energy4.ps
+
+nt/plot daten1.ncharged $1.and.$15
+pict/print filtered-daten1-as-electron-energy5.ps
+nt/plot daten1.ncharged $2.and.$15
+pict/print filtered-daten1-as-muon-energy5.ps
+nt/plot daten1.ncharged $3.and.$15
+pict/print filtered-daten1-as-tau-energy5.ps
+nt/plot daten1.ncharged $4.and.$15
+pict/print filtered-daten1-as-hadron-energy5.ps
+
+nt/plot daten1.ncharged $1.and.$16
+pict/print filtered-daten1-as-electron-energy6.ps
+nt/plot daten1.ncharged $2.and.$16
+pict/print filtered-daten1-as-muon-energy6.ps
+nt/plot daten1.ncharged $3.and.$16
+pict/print filtered-daten1-as-tau-energy6.ps
+nt/plot daten1.ncharged $4.and.$16
+pict/print filtered-daten1-as-hadron-energy6.ps
+
+nt/plot daten1.ncharged $1.and.$17
+pict/print filtered-daten1-as-electron-energy7.ps
+nt/plot daten1.ncharged $2.and.$17
+pict/print filtered-daten1-as-muon-energy7.ps
+nt/plot daten1.ncharged $3.and.$17
+pict/print filtered-daten1-as-tau-energy7.ps
+nt/plot daten1.ncharged $4.and.$17
+pict/print filtered-daten1-as-hadron-energy7.ps
