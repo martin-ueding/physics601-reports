@@ -147,6 +147,7 @@ $(build)/%.pdf: Postscript/%.ps
 	@echo "$(on)Converting PS file $<$(off)"
 	ps2pdf $< /tmp/ps2pdf_$$(basename $@)
 	pdfcrop /tmp/ps2pdf_$$(basename $@) $@
+	rm -f /tmp/ps2pdf_$$(basename $@)
 
 .PHONY: clean
 clean:
