@@ -48,13 +48,28 @@ def matrix(T):
 
     fig = pl.figure(figsize=default_figsize)
     ax = fig.add_subplot(1, 1, 1)
-    ax.imshow(matrix, cmap='Greens', interpolation='nearest')
+    im = ax.imshow(matrix, cmap='Greens', interpolation='nearest')
     ax.set_xticks([0, 1, 2, 3])
     ax.set_yticks([0, 1, 2, 3])
     ax.set_xticklabels([r'{} $\to$'.format(name) for name in names], rotation=20)
     ax.set_yticklabels([r'$\to$ {}'.format(name) for name in names])
+    fig.colorbar(im)
     fig.tight_layout()
     fig.savefig(figname('normalized_matrix'))
+
+    inverted = np.linalg.inv(matrix)
+
+    fig = pl.figure(figsize=default_figsize)
+    ax = fig.add_subplot(1, 1, 1)
+    im = ax.imshow(inverted, cmap='Greens', interpolation='nearest')
+    ax.set_xticks([0, 1, 2, 3])
+    ax.set_yticks([0, 1, 2, 3])
+    ax.set_xticklabels([r'$\to$ {}'.format(name) for name in names], rotation=20)
+    ax.set_yticklabels([r'{} $\to$'.format(name) for name in names])
+    fig.colorbar(im)
+    fig.tight_layout()
+    fig.savefig(figname('inverted_matrix'))
+
 
 
 def job_grope(T, show=False):
