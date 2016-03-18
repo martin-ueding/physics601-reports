@@ -11,6 +11,8 @@
 \newcommand\electron{\mathrm e^-}
 \newcommand\positron{\mathrm e^+}
 
+\usepackage{needspace}
+
 \usepackage{mathtools}
 
 \hypersetup{
@@ -702,7 +704,8 @@ decays have more than seven tracks, whereas the leptonic decays have less. In
 the histogram for \sump, we see that a cut at around
 \SI{80}{\giga\electronvolt} can separate taus and muons. Another cut in the
 \ecal-energy at around \SI{75}{\giga\electronvolt} allows us to separate taus
-and electrons.
+and electrons. The energy deposited into the \hcal\ is not very helpful for
+cutting.
 
 \begin{figure}
     \centering
@@ -743,9 +746,108 @@ one could even do a 3D-histogram and find cut surfaces which separate the data
 most cleanly. In \textsc{paw} we were limited to hyperplanes anyway, so we just
 chose a few axis-parallel planes as they did the job sufficiently well.
 
-% TODO Insert the cuts that we had at this point.
+\needspace{4cm}
+
+After the refining, we have the following cuts:
+
+\begin{tabular}{r|cccc}
+    \toprule
+    Particle
+    & \ncharged
+    & \sump/\si{\giga\electronvolt}
+    & \ecal/\si{\giga\electronvolt}
+    & \hcal/\si{\giga\electronvolt} \\
+    \midrule
+    % TODO Insert the cuts that we had at this point.
+    Electrons & $\leq 2$ &  &  &  \\
+    Muons & $\leq 2$ &  &  &  \\
+    Taus & $< 7$ &  &  &  \\
+    Hadrons & $> 7$ &  &  &  \\
+    \bottomrule
+\end{tabular}
+
+Our histograms are only filled with a limited amount of data. It would be wise
+to use more data to refine the cuts further. To that end, we change from
+the single event viewer \textsc{grope} to the analysis tool \textsc{paw} which
+is a predecessor to \textsc{root}.
+
+We load the big Monte Carlo datasets into \textsc{paw} and let it generate
+histograms with the characteristics. Sadly we only have the exported postscript
+documents and not the raw data. Therefore we can only present ill-looking plots
+in Figure~\ref{fig:paw-ncharged}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{electrons-ncharged}
+        \caption{%
+            Electrons
+        }
+        \label{fig:paw-ncharged/electrons}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{muons-ncharged}
+        \caption{%
+            Muons
+        }
+        \label{fig:paw-ncharged/muons}
+    \end{subfigure}
+
+    \vspace{2ex}
+
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{taus-ncharged}
+        \caption{%
+            Taus
+        }
+        \label{fig:paw-ncharged/taus}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{hadrons-ncharged}
+        \caption{%
+            Hadrons
+        }
+        \label{fig:paw-ncharged/hadrons}
+    \end{subfigure}
+
+    \caption{%
+        Number of charged tracks, \ncharged, for the four decay types.
+        Histograms generated with \textsc{paw} from Monte Carlo datasets.
+    }
+    \label{fig:paw-ncharged}
+\end{figure}
+
+\needspace{4cm}
+
+\begin{tabular}{r|cccc}
+    \toprule
+    Particle
+    & \ncharged
+    & \sump/\si{\giga\electronvolt}
+    & \ecal/\si{\giga\electronvolt}
+    & \hcal/\si{\giga\electronvolt} \\
+    \midrule
+    % TODO Insert the cuts that we had at this point.
+    Electrons & $\leq 2$ &  &  &  \\
+    Muons & $\leq 2$ &  &  &  \\
+    Taus & $< 7$ &  &  &  \\
+    Hadrons & $> 7$ &  &  &  \\
+    \bottomrule
+\end{tabular}
+
+
+
 
 \section{Detection efficiency}
+
+By choosing the cuts in a particular way, we make a compromise between
+detection efficiency and underground.
 
 \begin{figure}
     \centering
