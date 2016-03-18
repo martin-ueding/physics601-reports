@@ -40,8 +40,20 @@ plots_page_tex := $(plots_tex:Plots/%.tex=$(build)/page/%.tex)
 postscript_ps := $(wildcard Postscript/*.ps)
 postscript_pdf := $(postscript_ps:Postscript/%.ps=$(build)/%.pdf)
 
+to_crop_in = $(wildcard $(build)/to_crop/*.pdf)
+to_crop_out = $(to_crop_in:$(build)/to_crop/%=$(build)/%)
+
 # The default target is the main PDF document of the report.
 all: show-distribution $(out)
+
+test:
+	@echo "$(on)to_crop_in$(off)"
+	@echo $(to_crop_in)
+	@echo "$(on)to_crop_out$(off)"
+	@echo $(to_crop_out)
+
+
+$(out): $(to_crop_out)
 
 # Running `make crunch` will only run `crunch.py`, nothing more. This is handy
 # if has output from the Python program but does not want to typeset the
@@ -78,6 +90,10 @@ $(build)/xy:
 	@echo "$(on)Creating directory for X-Y data$(off)"
 	mkdir -p $(build)/xy
 
+$(build)/to_crop:
+	@echo "$(on)Creating directory for PDF to crop$(off)"
+	mkdir -p $(build)/to_crop
+
 # The main document depends on the main LaTeX file as well as all the rendered
 # TikZ graphics.
 $(out): $(tex) $(figures_pdf) $(plots_pdf) $(postscript_pdf)
@@ -99,7 +115,7 @@ $(tex): Template.tex $(build)/template.js
 # included files is changed.
 $(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.?sv)
 
-$(build)/template.js: crunch.py $(wildcard Data/*.*) | $(build)/xy
+$(build)/template.js: crunch.py $(wildcard Data/*.*) | $(build)/xy $(build)/to_crop
 	@echo "$(on)Crunching the numbers$(off)"
 	env PYTHONPATH=$$PYTHONPATH:.. ./$< $(op)
 
@@ -135,6 +151,11 @@ $(build)/%.pdf: $(build)/page/%.pdf | $(build)/page
 $(build)/%.pdf: $(build)/page-lualatex/%.pdf | $(build)/page
 	@echo "$(on)Cropping figure $<$(off)"
 	pdfcrop $< $@
+
+$(build)/%.pdf: $(build)/to_crop/%.pdf
+	@echo "$(on)Cropping matplotlib figure $<$(off)"
+	pdfcrop $< $@
+
 
 # Figures and plots (but not Feynman diagrams) can be compiled using pdflatex.
 %.pdf: %.tex

@@ -72,7 +72,7 @@ def job_cross_sections(T):
         
 
 def figname(basename):
-    return '_build/mpl-{}.pdf'.format(basename)
+    return '_build/to_crop/mpl-{}.pdf'.format(basename)
 
 
 def matrix(T):
@@ -210,13 +210,13 @@ def job_grope(T, show=False):
 
 
     fig.tight_layout()
-    fig.savefig('_build/mpl-hist.pdf')
+    fig.savefig(figname('hist'))
 
     if show:
         fig_3d.show()
         input()
 
-    fig_3d.savefig('_build/mpl-scatter.pdf')
+    fig_3d.savefig(figname('scatter'))
 
 def job_decay_widths(T):
     # T_3, Q, N_color
@@ -351,7 +351,7 @@ def job_radiative_correction(T):
 
     pl.plot(x, y)
 
-    pl.savefig('_build/mpl-radiative.pdf')
+    pl.savefig(figname('radiative'))
 
     np.savetxt('_build/xy/radiative_data.tsv', np.column_stack([
         sqrt_mandelstam_s, correction

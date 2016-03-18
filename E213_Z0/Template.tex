@@ -689,11 +689,49 @@ classify as their number of charged tracks is always rather large.
 
 \begin{figure}
     \centering
-    \includegraphics{mpl-normalized_matrix}
+    \includegraphics[width=\linewidth]{mpl-hist}
     \caption{%
-        %
+        Histograms with data gathered from Monte Carlo datasets in
+        \textsc{grope}. The number of charged tracks is shown as a histogram
+        with logarithmic bins.
     }
-    \label{fig:mpl-normalized_matrix}
+    \label{fig:mpl-hist}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{mpl-scatter}
+    \caption{%
+        3D visualization of the three best characteristics.
+    }
+    \label{fig:mpl-scatter}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{mpl-normalized_matrix}
+        \caption{%
+            Detection matrix. Left-multiply with a vector which contains actual
+            event numbers to get event numbers identified by our cuts.
+        }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{mpl-inverted_matrix}
+        \caption{%
+            Inverse matrix. Left-multiply with a vector containing our
+            measurements to get actual event numbers.
+        }
+        \label{fig:/2}
+    \end{subfigure}
+    \caption{%
+        Normalized conversion matrices between detected and actual event types.
+    }
+    \label{fig:}
 \end{figure}
 
 \section{Muon forward--backward asymmetry}
