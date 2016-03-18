@@ -26,6 +26,11 @@
         ] table[y error index=2] {../xy/afb_corr.tsv};
         \addlegendentry{With corrections}
 
+        \addplot[
+            black,
+        ] table {../xy/afb_theory.tsv};
+        \addlegendentry{Theory}
+
         % TODO Add horizontal line at Z-mass.
 
     \end{axis}

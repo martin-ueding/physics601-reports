@@ -273,6 +273,19 @@ def job_asymetry(T):
 
 
 
+    s_array = np.linspace(88.4, 93.8, 200)
+    re_propagator = s_array * (s_array - (mass_z/1000)**2) / \
+            ((s_array - (mass_z/1000)**2)**2 + s_array * total_width / (mass_z/1000))
+    a_e = i_3 / (2 * np.sin(weak_mixing_angle) * np.cos(weak_mixing_angle))
+    a_f = a_e
+    v_e = (i_3 - 2 * q * sin_sq_weak_mixing) / (2 * np.sin(weak_mixing_angle) * np.cos(weak_mixing_angle))
+    v_f = v_e
+    asymmetry = re_propagator * (-3)/2 * a_e * a_f * q / ((v_e**2 + a_e**2) * (a_f**2 + a_f**2))
+
+    np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
+
+
+
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
