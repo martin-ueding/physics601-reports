@@ -86,8 +86,10 @@ def job_afb_analysis(T, interpolator):
     fig.savefig(figname('afb_raw'))
 
     afb_val = (positive - negative) / (positive + negative)
-    # FIXME Proper error computation
-    afb_err = afb_val * 0
+    afb_err = np.sqrt(
+        (2 * negative / (positive + negative)**2 * np.sqrt(positive))**2
+        + (2 * positive / (positive + negative)**2 * np.sqrt(negative))**2
+    )
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
