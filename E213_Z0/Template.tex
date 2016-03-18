@@ -22,6 +22,9 @@
 
 \usepackage[all]{nowidow}
 
+\newcommand\ecal{\emph{e-cal}}
+\newcommand\hcal{\emph{h-cal}}
+
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
 \subtitle{Experiment E213 -- Universität Bonn}
@@ -586,6 +589,54 @@ both $f = \mathrm e$ and $f = \muup$.
 \chapter{Analysis}
 
 \section{Screening some decays}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{opal-electrons}
+    \caption{%
+        Electrons
+    }
+    \label{fig:opal/electrons}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{opal-muons}
+    \caption{%
+        Muons
+    }
+    \label{fig:opal/muons}
+    \end{subfigure}
+
+    \vspace{2ex}
+
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{opal-taus}
+        \caption{%
+            Taus
+        }
+        \label{fig:opal/taus}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{opal-hadrons}
+        \caption{%
+            Hadrons
+        }
+        \label{fig:opal/hadrons}
+    \end{subfigure}
+    \caption{%
+        Event display of Monte Carlo events. One can see the traces from the
+        vertex chamber in cyan, the hits in the \ecal{} are shown in yellow
+        (probably hard to see on paper). In magenta, one has the hits in the
+        \hcal{}. Muon penetrations are indicated with red arrows.
+    }
+    \label{fig:opal}
+\end{figure}
 
 \section{Defining the cuts}
 
