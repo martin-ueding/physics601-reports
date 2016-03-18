@@ -25,6 +25,8 @@
 \newcommand\ecal{\emph{e-cal}}
 \newcommand\hcal{\emph{h-cal}}
 \newcommand\sump{\emph{sum-p}}
+\newcommand\pcharged{\emph{p-charged}}
+\newcommand\ncharged{\emph{n-charged}}
 
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
@@ -687,6 +689,21 @@ classify as their number of charged tracks is always rather large.
 
 \section{Defining the cuts}
 
+While reviewing the Monte Carlo events in \textsc{grope}, we generate
+histograms with the various characteristics. We choose to write down
+\ncharged{}, \sump{}, the deposited energy in \ecal{} and \hcal{}. Those
+characteristics are also available in the later analysis of larger datasets
+using \textsc{paw}.
+
+Using some twenty points per event class, we obtain the histograms shown in
+Figure~\ref{fig:mpl-hist}. There one can see that some characteristics are well
+suited to cut the data. For instance in \ncharged, we see that hadronic
+decays have more than seven tracks, whereas the leptonic decays have less. In
+the histogram for \sump, we see that a cut at around
+\SI{80}{\giga\electronvolt} can separate taus and muons. Another cut in the
+\ecal-energy at around \SI{75}{\giga\electronvolt} allows us to separate taus
+and electrons.
+
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{mpl-hist}
@@ -698,14 +715,33 @@ classify as their number of charged tracks is always rather large.
     \label{fig:mpl-hist}
 \end{figure}
 
+Having those cuts in place, we take a look at the \texttt{test} datasets which
+are not sorted by event type. There we try to use our fresh intuition about the
+decay channels to identify the type of decay. Then we take a look at the
+characteristics and see whether our cuts would come to the same conclusion. For
+most decays, this worked out well. Some were not classified correctly; this is
+somewhat expected as we will never be able to avoid false-positives and
+false-negatives.
+
+While we were trying to find suitable cuts, a 3D visualization like shown in
+Figure~\ref{fig:mpl-scatter} was really helpful. There we could turn the cloud
+of events in the parameter space and see different clusters. Such a
+3D-representation can hardly be printed and must be viewed interactively,
+though.
+
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth]{mpl-scatter}
+    \includegraphics[width=.6\linewidth]{mpl-scatter}
     \caption{%
-        3D visualization of the three best characteristics.
+        3D visualization of the three most expressive characteristics.
     }
     \label{fig:mpl-scatter}
 \end{figure}
+
+We would really have liked to perform this visualization with more data. Then
+one could even do a 3D-histogram and find cut surfaces which separate the data
+most cleanly. In \textsc{paw} we were limited to hyperplanes anyway, so we just
+chose a few axis-parallel planes as they did the job sufficiently well.
 
 \begin{figure}
     \centering

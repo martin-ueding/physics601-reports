@@ -156,7 +156,7 @@ def job_grope(T, show=False):
     fig_3d = pl.figure()
     ax_3d = p3.Axes3D(fig_3d)
 
-    fig = pl.figure(figsize=(12, 10))
+    fig = pl.figure(figsize=(12, 8))
     ax_n = fig.add_subplot(2, 2, 1)
     ax_sump = fig.add_subplot(2, 2, 2)
     ax_ecal = fig.add_subplot(2, 2, 3)
