@@ -1,5 +1,5 @@
 # Data for muon forward-backward asymetry. Split by negative and positive
-# cos(θ) for the seven energies.
+# cos(\theta) for the seven energies.
 #
 # Negative  Positive
 72      52

@@ -70,6 +70,30 @@ def matrix(T):
     fig.tight_layout()
     fig.savefig(figname('inverted_matrix'))
 
+    return inverted
+
+
+def job_afb_analysis(T, interpolator):
+    energies = np.loadtxt('Data/energies.txt')
+    data = np.loadtxt('Data/afb.txt')
+    negative = data[:, 0]
+    positive = data[:, 1]
+
+    fig = pl.figure(figsize=default_figsize)
+    ax = fig.add_subplot(1, 1, 1)
+    ax.plot(energies, negative)
+    ax.plot(energies, positive)
+    fig.savefig(figname('afb_raw'))
+
+    afb_val = (positive - negative) / (positive + negative)
+    # FIXME Proper error computation
+    afb_err = afb_val * 0
+
+    np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
+
+    afb_corr_val = afb_val + interpolator(energies)
+
+    np.savetxt('_build/xy/afb_corr.tsv', np.column_stack([energies, afb_corr_val, afb_err]))
 
 
 def job_grope(T, show=False):
@@ -259,6 +283,9 @@ def job_radiative_correction(T):
     pl.clf()
     pl.plot(sqrt_mandelstam_s, correction)
 
+    sqrt_mandelstam_s[0] -= 1e-2
+    sqrt_mandelstam_s[-1] += 1e-2
+
     interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
 
     x = np.linspace(np.min(sqrt_mandelstam_s), np.max(sqrt_mandelstam_s))
@@ -307,10 +334,12 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
+    interpolator = job_radiative_correction(T)
+
+    job_afb_analysis(T, interpolator)
     matrix(T)
     job_grope(T, options.show)
     job_decay_widths(T)
-    job_radiative_correction(T)
     job_angular_dependence(T)
     job_asymetry(T)
 
