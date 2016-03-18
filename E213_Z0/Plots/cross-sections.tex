@@ -1,0 +1,50 @@
+\input{../colors}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={CMS Energy $\sqrt{s} / \si{\giga\electronvolt}$},
+            ylabel={$A_\text{FB}$},
+            grid=major,
+            legend pos=north west,
+        ]
+
+        \addplot[
+            electrons,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/cross_section-electrons.tsv};
+        \addlegendentry{Electrons}
+
+        \addplot[
+            muons,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/cross_section-muons.tsv};
+        \addlegendentry{Muons}
+
+        \addplot[
+            taus,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/cross_section-taus.tsv};
+        \addlegendentry{Taus}
+
+        \addplot[
+            hadrons,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/cross_section-hadrons.tsv};
+        \addlegendentry{Hadrons}
+
+    \end{axis}
+\end{tikzpicture}

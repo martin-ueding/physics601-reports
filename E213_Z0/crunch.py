@@ -30,8 +30,50 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 names = ['electron', 'muon', 'tau', 'hadron']
 
+
+def job_colors():
+    colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
+
+    with open('_build/colors.tex', 'w') as f:
+        for name, color in zip(names, colors):
+            f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
+
+
+def job_cross_sections(T):
+    inverse_val, inverse_err = matrix(T)
+
+    filtered = np.loadtxt('Data/filtered.txt')
+    energies = np.loadtxt('Data/energies.txt')
+
+    lum_data = np.loadtxt('Data/luminosity.txt')
+    lum_val = lum_data[:, 0]
+    lum_err = lum_data[:, 3]
+
+    corr_list = []
+
+    for i in range(7):
+        vector = filtered[i, :]
+        corrected_val = inverse_val.dot(vector)
+
+        corr_list.append(corrected_val)
+
+    corr = np.column_stack(corr_list)
+
+    print('Corr')
+    print(corr)
+
+    for i, name in zip(range(7), names):
+        counts = corr[i, :]
+        cross_section_val = counts / lum_val
+        cross_section_err = counts / lum_val**2 * lum_err
+
+        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name), np.column_stack([energies, cross_section_val, cross_section_err]))
+
+        
+
 def figname(basename):
     return '_build/mpl-{}.pdf'.format(basename)
+
 
 def matrix(T):
     '''
@@ -70,7 +112,8 @@ def matrix(T):
     fig.tight_layout()
     fig.savefig(figname('inverted_matrix'))
 
-    return inverted
+    # FIXME Actual error matrix
+    return inverted, inverted
 
 
 def job_afb_analysis(T, interpolator):
@@ -351,8 +394,9 @@ def main():
 
     interpolator = job_radiative_correction(T)
 
+    job_colors()
+    job_cross_sections(T)
     job_afb_analysis(T, interpolator)
-    matrix(T)
     job_grope(T, options.show)
     job_decay_widths(T)
     job_angular_dependence(T)
