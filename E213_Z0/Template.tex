@@ -24,6 +24,7 @@
 
 \newcommand\ecal{\emph{e-cal}}
 \newcommand\hcal{\emph{h-cal}}
+\newcommand\sump{\emph{sum-p}}
 
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
@@ -594,26 +595,39 @@ both $f = \mathrm e$ and $f = \muup$.
 
 \chapter{Analysis}
 
+The data used in this lab experiment was gathered in the year 1992 and before.
+Therefore we only do analysis of the data. Part of the analysis is done at the
+university, the remainder is done at home. We will group our work by topic and
+not split by university and home.
+
 \section{Screening some decays}
+
+At first we looked at some decays in the event display software
+\textsc{grope}. In order to learn the signatures of the various decays, we
+start with Monte Carlo datasets which only contain decays into a given channel.
+
+Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
+picked a representative event for each category of decay (electrons, muons,
+taus, hadrons).
 
 \begin{figure}
     \centering
     \begin{subfigure}[c]{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{opal-electrons}
-    \caption{%
-        Electrons
-    }
-    \label{fig:opal/electrons}
+        \centering
+        \includegraphics[width=\linewidth]{opal-electrons}
+        \caption{%
+            Electrons
+        }
+        \label{fig:grope/electrons}
     \end{subfigure}
     \hfill
     \begin{subfigure}[c]{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth]{opal-muons}
-    \caption{%
-        Muons
-    }
-    \label{fig:opal/muons}
+        \centering
+        \includegraphics[width=\linewidth]{opal-muons}
+        \caption{%
+            Muons
+        }
+        \label{fig:grope/muons}
     \end{subfigure}
 
     \vspace{2ex}
@@ -624,7 +638,7 @@ both $f = \mathrm e$ and $f = \muup$.
         \caption{%
             Taus
         }
-        \label{fig:opal/taus}
+        \label{fig:grope/taus}
     \end{subfigure}
     \hfill
     \begin{subfigure}[c]{0.48\linewidth}
@@ -633,16 +647,43 @@ both $f = \mathrm e$ and $f = \muup$.
         \caption{%
             Hadrons
         }
-        \label{fig:opal/hadrons}
+        \label{fig:grope/hadrons}
     \end{subfigure}
     \caption{%
         Event display of Monte Carlo events. One can see the traces from the
         vertex chamber in cyan, the hits in the \ecal{} are shown in yellow
         (probably hard to see on paper). In magenta, one has the hits in the
-        \hcal{}. Muon penetrations are indicated with red arrows.
+        \hcal{}. Muon penetrations are indicated with red arrows. Images are
+        rendered with \textsc{grope}.
     }
-    \label{fig:opal}
+    \label{fig:grope}
 \end{figure}
+
+The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
+back-to-back signature of two very fast (no curvature in the vertex chamber)
+charged particles. All the energy is deposited in the \ecal{}. In the dark blue
+header one can see that the missing energy is very small. The energy deposited
+in the \ecal{} is pretty much identical with \sump{}. Both energies are almost
+the beam energy.
+
+Decays into muons have a different signature. The most prominent feature are
+the hits in the muon chambers, as one can see in Figure~\ref{fig:grope/muons}.
+The \sump{} is the beam energy, little energy is unaccounted for. This means
+that there are no neutrinos created in that decay. The energies deposited in
+\ecal{} and \hcal{} is small, this is due to the big mass of the muon (compared
+to electrons).
+
+Figure~\ref{fig:grope/taus} shows a decay into taus. This decay is not as
+simple as the previous ones. We have some missing energy (around a third), more
+than one charged track and also energy deposited into the various calorimeters.
+The missing energy comes from the neutrinos in the weak decay of the tau. The
+number of charged tracks is still small (just five), therefore we can
+differentiate from the hadronic decays.
+
+Lastly, a decay into hadrons is shown in Figure~\ref{fig:grope/hadrons}. One
+directly sees the large number of tracks (26) which exhibit a larger curvature.
+Also we have energy deposited into \hcal{}. Hadronic decays are easy to
+classify as their number of charged tracks is always rather large.
 
 \section{Defining the cuts}
 
