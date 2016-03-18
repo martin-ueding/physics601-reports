@@ -26,6 +26,37 @@ mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
+default_figsize = (15.1 / 2.54, 8.3 / 2.54)
+
+names = ['electron', 'muon', 'tau', 'hadron']
+
+def figname(basename):
+    return '_build/mpl-{}.pdf'.format(basename)
+
+def matrix(T):
+    '''
+    Generate the inverse mixing matrix and corresponding error matrix.
+    '''
+    raw_matrix = np.loadtxt('Data/matrix.txt')
+    mc_sizes = np.loadtxt('Data/monte-carlo-sizes.txt')
+
+    print(raw_matrix)
+    print(np.diag(1/mc_sizes))
+
+    # Normalize the raw_matrix.
+    matrix = raw_matrix.dot(np.diag(1/mc_sizes))
+
+    fig = pl.figure(figsize=default_figsize)
+    ax = fig.add_subplot(1, 1, 1)
+    ax.imshow(matrix, cmap='Greens', interpolation='nearest')
+    ax.set_xticks([0, 1, 2, 3])
+    ax.set_yticks([0, 1, 2, 3])
+    ax.set_xticklabels([r'{} $\to$'.format(name) for name in names], rotation=20)
+    ax.set_yticklabels([r'$\to$ {}'.format(name) for name in names])
+    fig.tight_layout()
+    fig.savefig(figname('normalized_matrix'))
+
+
 def job_grope(T, show=False):
     files = ['electrons',
              'muons',
@@ -261,6 +292,7 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
+    matrix(T)
     job_grope(T, options.show)
     job_decay_widths(T)
     job_radiative_correction(T)

@@ -1,9 +1,9 @@
 # Filtered data set 1, as electrons, muons, taus and hadrons. Each row contains
 # the four types, the rows are for the seven energies.
-138     124     483
-219     217     488
-246     310     436
-2588    3502    5485
-395     627     913
-155     232     473
-206     302     532
+138     124     483     3528
+219     217     488     5322
+246     310     436     7542
+2588    3502    5485    92766
+395     627     913     15294
+155     232     473     6644
+206     302     532     7421
