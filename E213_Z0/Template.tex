@@ -602,13 +602,38 @@ At first we looked at some decays in the event display software
 \textsc{grope}. In order to learn the signatures of the various decays, we
 start with Monte Carlo datasets which only contain decays into a given channel.
 
+The characteristics have different names within \textsc{grope} and
+\textsc{paw}. Both are programming language identifiers and hard to
+read. Since we do not want to clutter our report with those identifiers, we use
+ones close to \textsc{paw} but formatted nicer. See
+Table~\ref{tab:nomenclature} for an overview.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textsc{grope}
+        & \textsc{paw}
+        & Our name \\
+        \midrule
+        \texttt{Ctrk(N)} & \texttt{ncharged} & \ncharged\ \\
+        \texttt{Ctrk(Sump)} & \texttt{pcharged} & \pcharged\ \\
+        \texttt{Ecal(SumE)} & \texttt{e\_ecal} & \eecal\ \\
+        \texttt{Hcal(SumE)} & \texttt{e\_hcal} & \ehcal\ \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Nomenclature used by \textsc{grope}, \textsc{paw} and within this lab
+        report.
+    }
+    \label{tab:nomenclature}
+\end{table}
+
 Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
 picked a representative event for each category of decay (electrons, muons,
 taus, hadrons).
 
 \input{../Snippets/grope.tex}
-
-% TODO Table with out names, GROPE and PAW names.
 
 The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
