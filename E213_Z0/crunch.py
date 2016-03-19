@@ -101,7 +101,7 @@ def matrix(T):
     '''
     Generate the inverse mixing matrix and corresponding error matrix.
     '''
-    raw_matrix = np.loadtxt('Data/matrix.txt')
+    raw_matrix = np.loadtxt('Data/matrix.txt').T
     mc_sizes = np.loadtxt('Data/monte-carlo-sizes.txt')
 
     print(raw_matrix)

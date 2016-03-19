@@ -14,6 +14,11 @@
 \usepackage{needspace}
 
 \usepackage{mathtools}
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\small\ttfamily,
+}
 
 \hypersetup{
     pdftitle=
@@ -600,54 +605,9 @@ Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
 picked a representative event for each category of decay (electrons, muons,
 taus, hadrons).
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-electrons}
-        \caption{%
-            Electrons
-        }
-        \label{fig:grope/electrons}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-muons}
-        \caption{%
-            Muons
-        }
-        \label{fig:grope/muons}
-    \end{subfigure}
+\input{../Snippets/grope.tex}
 
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-taus}
-        \caption{%
-            Taus
-        }
-        \label{fig:grope/taus}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-hadrons}
-        \caption{%
-            Hadrons
-        }
-        \label{fig:grope/hadrons}
-    \end{subfigure}
-    \caption{%
-        Event display of Monte Carlo events. One can see the traces from the
-        vertex chamber in cyan, the hits in the \ecal{} are shown in yellow
-        (probably hard to see on paper). In magenta, one has the hits in the
-        \hcal{}. Muon penetrations are indicated with red arrows. Images are
-        rendered with \textsc{grope}.
-    }
-    \label{fig:grope}
-\end{figure}
+% TODO Table with out names, GROPE and PAW names.
 
 The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
@@ -840,7 +800,74 @@ Our refined and final cuts including the angle are:
 \section{Detection efficiency}
 
 By choosing the cuts in a particular way, we make a compromise between
-detection efficiency and underground.
+detection efficiency and underground. Choosing a tight cut will discard events
+that should have been counted. This will lead to a loss of a certain fractions
+of events. This is not directly a problem as we can just compensate by this
+loss factor. However, our statistical errors will grow as we have less
+statistics. A loose cut will water the sorting with underground events. Say we
+want to filter out electrons but our cuts are too loose. Then some tau events
+might slip into the electrons category.
+
+Both types of errors, the false-negatives and the false-positives, can be
+handled using a detection efficiency matrix~$\mat E$ and Monte Carlo datasets.
+The Monte Carlo datasets are purely of one decay channel. Therefore we know
+exactly that we only have, say, electrons. Applying our cuts to the Monte Carlo
+electrons, we will see how many are actually detected as electrons. This is our
+efficiency. Then we take the other three kinds (muons, taus, hadrons) of the
+Monte Carlo datasets and apply the electron cuts to it. Ideally, we should not
+get any events. The ratio of other events that we falsely identify as electrons
+is the underground.
+
+Using a linear model for this, we need a mapping from the actual events vector
+$\vec A$ (in electron-muon-tau-hadrons space, $\N^4$) to the identified events
+vector $\vec I$ (same space). The efficiency matrix is then defined via $\vec I
+= \mat E \vec A$. In order to find the sixteen matrix elements, we apply a
+vector with Monte Carlo electrons.
+
+\subsection{Determining matrix elements}
+
+In order to do this with \textsc{paw}, we define our final cuts for electrons,
+muons, taus and hadrons:
+
+\begin{lstlisting}
+nt/cuts $1 ncharged<4.and.e_ecal>60.and.cos_thet<.5.and.cos_thet>-0.9
+nt/cuts $2 pcharged>75.and.ncharged<4.and.e_ecal<20.and.cos_thet<.9.and.cos_thet>-0.9
+nt/cuts $3 pcharged<75.and.ncharged<7.and.e_ecal<75
+nt/cuts $4 ncharged>7
+\end{lstlisting}
+
+We need to count the number of events that matched a given cut. Creating a
+histogram with respect to an arbitrary characteristic will give us this number
+as a side effect. The following generates a histogram with electron data and
+the electron filter:
+
+\begin{lstlisting}
+nt/plot electrons.ncharged $1
+pict/print matrix-electrons-with-electron-filter.ps
+\end{lstlisting}
+
+And this generates a histogram with muon data and the same filter:
+
+\begin{lstlisting}
+nt/plot muons.ncharged $1
+pict/print matrix-muons-with-electron-filter.ps
+\end{lstlisting}
+
+Similar expressions are needed for the other matrix element, in total we need
+16 of those counting histograms. The resulting histograms are shown in
+Figure~\ref{fig:paw-matrix-electrons}. Squint at the row \enquote{Entries} in
+the legend, this is the interesting number.
+
+For the electrons, the input vector is $\vec A = (94381, 0, 0,
+0)^\mathrm T$. Then we look at the output and find $\vec I = (20474, 1, 1013,
+0)^\mathrm T$. From this, we can construct the first row in the matrix. Using
+the other filters, we can construct the whole matrix. Figure~\ref{fig:matrix/1}
+shows the matrix. It can be seen that it is mostly diagonal, just as we want it
+to be. The detection efficiency for the electrons is not very great. This comes
+from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
+
+% TODO Error estimation.
+
 
 \begin{figure}
     \centering
@@ -851,7 +878,7 @@ detection efficiency and underground.
             Detection matrix. Left-multiply with a vector which contains actual
             event numbers to get event numbers identified by our cuts.
         }
-        \label{fig:/1}
+        \label{fig:matrix/1}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.48\linewidth}
@@ -861,13 +888,15 @@ detection efficiency and underground.
             Inverse matrix. Left-multiply with a vector containing our
             measurements to get actual event numbers.
         }
-        \label{fig:/2}
+        \label{fig:matrix/2}
     \end{subfigure}
     \caption{%
         Normalized conversion matrices between detected and actual event types.
     }
-    \label{fig:}
+    \label{fig:matrix}
 \end{figure}
+
+\subsection{Inverting the matrix}
 
 \section{Muon forward--backward asymmetry}
 
@@ -931,6 +960,8 @@ detection efficiency and underground.
 
     \input{../Snippets/paw-e_hcal}
     
+    \input{../Snippets/matrix-electrons}
+
 \end{appendix}
 
 \end{document}
