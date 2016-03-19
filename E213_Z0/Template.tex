@@ -1034,9 +1034,14 @@ which we assume to be $\sqrt{N}$ as this is a counting experiment.
 
 Those counts are just the counts which are left after applying the cuts. As
 argued in regarding the detection efficiency (c.f.\
-Section~\label{sec:detection-efficiency}), those counts include some number of
+Section~\ref{sec:detection-efficiency}), those counts include some number of
 false-positives (underground) and false-negatives (inefficiency). Therefore we
 need to correct for that with the inverse matrix derived above.
+
+Taking the four counts at each beam energy as a \enquote{identified events}
+vector $\vec I$, we can use $\mat D\inv$ to give us the \enquote{actual events}
+vector $\vec A$. We do this for each of the seven beam energies and obtain the
+corrected counts. Those are shown in Table~\ref{tab:corrected-counts}.
 
 \begin{table}
     \centering
