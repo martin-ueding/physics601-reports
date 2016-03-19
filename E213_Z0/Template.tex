@@ -645,13 +645,38 @@ At first we looked at some decays in the event display software
 \textsc{grope}. In order to learn the signatures of the various decays, we
 start with Monte Carlo datasets which only contain decays into a given channel.
 
+The characteristics have different names within \textsc{grope} and
+\textsc{paw}. Both are programming language identifiers and hard to
+read. Since we do not want to clutter our report with those identifiers, we use
+ones close to \textsc{paw} but formatted nicer. See
+Table~\ref{tab:nomenclature} for an overview.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textsc{grope}
+        & \textsc{paw}
+        & Our name \\
+        \midrule
+        \texttt{Ctrk(N)} & \texttt{ncharged} & \ncharged\ \\
+        \texttt{Ctrk(Sump)} & \texttt{pcharged} & \pcharged\ \\
+        \texttt{Ecal(SumE)} & \texttt{e\_ecal} & \eecal\ \\
+        \texttt{Hcal(SumE)} & \texttt{e\_hcal} & \ehcal\ \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Nomenclature used by \textsc{grope}, \textsc{paw} and within this lab
+        report.
+    }
+    \label{tab:nomenclature}
+\end{table}
+
 Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
 picked a representative event for each category of decay (electrons, muons,
 taus, hadrons).
 
 \input{../Snippets/grope.tex}
-
-% TODO Table with out names, GROPE and PAW names.
 
 The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
@@ -904,6 +929,7 @@ almost constant) of the asymmetry. However, as the errors are quite large, our
 measurements are still consistent with it.
 
 \section{Detection efficiency}
+\label{sec:detection-efficiency}
 
 By choosing the cuts in a particular way, we make a compromise between
 detection efficiency and underground. Choosing a tight cut will discard events
@@ -1011,6 +1037,129 @@ The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
 
 \section{Partial cross sections}
 
+\subsection{Counts}
+
+In order to compute cross sections, we need count rates. We have filtered the
+dataset with our cuts and an energy selection. For instance the following
+snippet we use the muon filter (\texttt{\$2}) with the third beam energy
+(\texttt{\$13}):
+
+\begin{lstlisting}
+nt/plot daten1.ncharged $2.and.$13
+pict/print filtered-daten1-as-muon-energy3.ps
+\end{lstlisting}
+
+The full code listing can be found in Section~\ref{data-cuts.kumac}. We look at
+the generated histograms and extract the number of events from each histogram.
+The results are collected in Table~\ref{tab:counts}. Not shown is the error
+which we assume to be $\sqrt{N}$ as this is a counting experiment.
+
+\begin{table}
+    \centering
+    \begin{tabular}{S|SSSS}
+        \toprule
+        {$\sqrt s / \si{\giga\electronvolt}$}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in counts_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Raw counts for the four decay types and seven beam energies.
+    }
+    \label{tab:counts}
+\end{table}
+
+Those counts are just the counts which are left after applying the cuts. As
+argued in regarding the detection efficiency (c.f.\
+Section~\ref{sec:detection-efficiency}), those counts include some number of
+false-positives (underground) and false-negatives (inefficiency). Therefore we
+need to correct for that with the inverse matrix derived above.
+
+Taking the four counts at each beam energy as a \enquote{identified events}
+vector $\vec I$, we can use $\mat D\inv$ to give us the \enquote{actual events}
+vector $\vec A$. We do this for each of the seven beam energies and obtain the
+corrected counts. Those are shown in Table~\ref{tab:corrected-counts}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{S|SSSS}
+        \toprule
+        {$\sqrt s / \si{\giga\electronvolt}$}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in corrected_counts_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Corrected counts for the four decay types and seven beam energies.
+    }
+    \label{tab:corrected-counts}
+\end{table}
+
+\subsection{Incorporating the luminosity}
+
+We want to compute the partial cross sections, those are the cross sections of
+the individual decay channels. For this we just need to take the number of
+counts in each channel and divide by the integrated luminosity. Therefore we
+have
+\[
+    \sigma_i = \frac{N_i}{\int \dif t \, \mathcal L} \,.
+\]
+
+Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
+
+\begin{table}
+    \centering
+    \begin{tabular}{SS}
+        \toprule
+        {$\sqrt s / \si{\giga\electronvolt}$}
+        & {$\int \dif t \, \mathcal L / \si{\per\nano\barn}$} \\
+        \midrule
+        %< for row in luminosities_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Integrated luminosities $\int \dif t \, \mathcal L$ for the seven beam
+        energies. The values are taken from the experiment description, the
+        error is the total error (combined statistical and systematic error).
+    }
+    \label{tab:luminosities}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{tabular}{S|SSSS}
+        \toprule
+        {$\sigma_i / \si{\nano\barn}$}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in cross_sections_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Cross sections for the four decay types and seven beam energies.
+    }
+    \label{tab:cross-sections}
+\end{table}
+
 \begin{figure}
     \centering
     \includegraphics{cross-sections}
@@ -1045,6 +1194,7 @@ The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
     \label{tab:lorentz-fits}
 \end{table}
 
+%< if False >%
 \begin{appendix}
 
     \chapter{PAW Histograms}
@@ -1059,7 +1209,50 @@ The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
     
     \input{../Snippets/matrix-electrons}
 
+    \chapter{PAW scripts}
+
+    \section{main.kumac}
+    \label{main.kumac}
+
+    \lstinputlisting{../Listings/main.kumac}
+
+    \section{cuts.kumac}
+    \label{cuts.kumac}
+
+    \lstinputlisting{../Listings/cuts.kumac}
+
+    \section{elep-hist.kumac}
+    \label{elep-hist.kumac}
+
+    \lstinputlisting{../Listings/elep-hist.kumac}
+
+    \section{angle.kumac}
+    \label{angle.kumac}
+
+    \lstinputlisting{../Listings/angle.kumac}
+
+    \section{afb.kumac}
+    \label{afb.kumac}
+
+    \lstinputlisting{../Listings/afb.kumac}
+
+    \section{raw-histograms.kumac}
+    \label{raw-histograms.kumac}
+
+    \lstinputlisting{../Listings/raw-histograms.kumac}
+
+    \section{matrix.kumac}
+    \label{matrix.kumac}
+
+    \lstinputlisting{../Listings/matrix.kumac}
+
+    \section{data-cuts.kumac}
+    \label{data-cuts.kumac}
+
+    \lstinputlisting{../Listings/data-cuts.kumac}
+
 \end{appendix}
+%< endif >%
 
 \end{document}
 

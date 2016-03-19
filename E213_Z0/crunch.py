@@ -53,6 +53,8 @@ def job_cross_sections(T):
     lum_val = lum_data[:, 0]
     lum_err = lum_data[:, 3]
 
+    T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
+
     corr_list = []
 
     for i in range(7):
@@ -69,7 +71,10 @@ def job_cross_sections(T):
     masses = {}
     widths = {}
 
-    for i, name in zip(range(7), names):
+    table_counts = []
+    table_cross_sections = []
+
+    for i, name in zip(range(len(names)), names):
         counts = corr[i, :]
         cross_section_val = counts / lum_val
         cross_section_err = counts / lum_val**2 * lum_err
@@ -87,10 +92,17 @@ def job_cross_sections(T):
         masses[name] = popt[0], perr[0]
         widths[name] = popt[1], perr[1]
 
+        table_counts.append(map(str, map(int, counts)))
+        table_cross_sections.append(siunitx(cross_section_val, cross_section_err))
+
     T['lorentz_fits_table'] = []
 
     for name in names:
         T['lorentz_fits_table'].append([name.capitalize(), siunitx(*masses[name]), siunitx(*widths[name])])
+
+    T['counts_table'] = list(zip(siunitx(energies), *[map(str, map(int, row)) for row in filtered.T]))
+    T['corrected_counts_table'] = list(zip(siunitx(energies), *table_counts))
+    T['cross_sections_table'] = list(zip(siunitx(energies), *table_cross_sections))
         
 
 def figname(basename):
