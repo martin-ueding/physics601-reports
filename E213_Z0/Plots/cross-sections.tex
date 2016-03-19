@@ -46,5 +46,10 @@
         ] table[y error index=2] {../xy/cross_section-hadrons.tsv};
         \addlegendentry{Hadrons}
 
+        \addplot[electrons] table {../xy/cross_section-electrons-fit.tsv};
+        \addplot[muons] table {../xy/cross_section-muons-fit.tsv};
+        \addplot[taus] table {../xy/cross_section-taus-fit.tsv};
+        \addplot[hadrons] table {../xy/cross_section-hadrons-fit.tsv};
+
     \end{axis}
 \end{tikzpicture}

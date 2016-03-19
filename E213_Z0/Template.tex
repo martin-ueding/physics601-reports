@@ -996,6 +996,26 @@ detection efficiency and underground.
     \label{fig:cross-sections}
 \end{figure}
 
+\begin{table}
+    \centering
+    \begin{tabular}{lSS}
+        \toprule
+        Type
+        & {$\MZ / \si{\giga\electronvolt}$}
+        & {$\Gamma_i / \si{\giga\electronvolt}$} \\
+        \midrule
+        %< for row in lorentz_fits_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Fit parameters of the Lorentzian curves used in
+        Figure~\ref{fig:cross-sections} for the partial cross sections.
+    }
+    \label{tab:lorentz-fits}
+\end{table}
+
 \section{Decay widths}
 
 \begin{appendix}

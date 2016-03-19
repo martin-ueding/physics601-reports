@@ -31,6 +31,10 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 names = ['electron', 'muon', 'tau', 'hadron']
 
 
+def lorentz(x, mean, width, integral):
+    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+
+
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
 
@@ -62,6 +66,9 @@ def job_cross_sections(T):
     print('Corr')
     print(corr)
 
+    masses = {}
+    widths = {}
+
     for i, name in zip(range(7), names):
         counts = corr[i, :]
         cross_section_val = counts / lum_val
@@ -69,6 +76,21 @@ def job_cross_sections(T):
 
         np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name), np.column_stack([energies, cross_section_val, cross_section_err]))
 
+        popt, pconv = op.curve_fit(lorentz, energies, cross_section_val, sigma=cross_section_err)
+
+        x = np.linspace(np.min(energies), np.max(energies), 500)
+        y = lorentz(x, *popt)
+        np.savetxt('_build/xy/cross_section-{}s-fit.tsv'.format(name), np.column_stack([x, y]))
+
+        perr = np.sqrt(pconv.diagonal())
+
+        masses[name] = popt[0], perr[0]
+        widths[name] = popt[1], perr[1]
+
+    T['lorentz_fits_table'] = []
+
+    for name in names:
+        T['lorentz_fits_table'].append([name.capitalize(), siunitx(*masses[name]), siunitx(*widths[name])])
         
 
 def figname(basename):
