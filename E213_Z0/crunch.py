@@ -26,6 +26,121 @@ mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
 weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 
+default_figsize = (15.1 / 2.54, 8.3 / 2.54)
+
+names = ['electron', 'muon', 'tau', 'hadron']
+
+
+def job_colors():
+    colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
+
+    with open('_build/colors.tex', 'w') as f:
+        for name, color in zip(names, colors):
+            f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
+
+
+def job_cross_sections(T):
+    inverse_val, inverse_err = matrix(T)
+
+    filtered = np.loadtxt('Data/filtered.txt')
+    energies = np.loadtxt('Data/energies.txt')
+
+    lum_data = np.loadtxt('Data/luminosity.txt')
+    lum_val = lum_data[:, 0]
+    lum_err = lum_data[:, 3]
+
+    corr_list = []
+
+    for i in range(7):
+        vector = filtered[i, :]
+        corrected_val = inverse_val.dot(vector)
+
+        corr_list.append(corrected_val)
+
+    corr = np.column_stack(corr_list)
+
+    print('Corr')
+    print(corr)
+
+    for i, name in zip(range(7), names):
+        counts = corr[i, :]
+        cross_section_val = counts / lum_val
+        cross_section_err = counts / lum_val**2 * lum_err
+
+        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name), np.column_stack([energies, cross_section_val, cross_section_err]))
+
+        
+
+def figname(basename):
+    return '_build/to_crop/mpl-{}.pdf'.format(basename)
+
+
+def matrix(T):
+    '''
+    Generate the inverse mixing matrix and corresponding error matrix.
+    '''
+    raw_matrix = np.loadtxt('Data/matrix.txt')
+    mc_sizes = np.loadtxt('Data/monte-carlo-sizes.txt')
+
+    print(raw_matrix)
+    print(np.diag(1/mc_sizes))
+
+    # Normalize the raw_matrix.
+    matrix = raw_matrix.dot(np.diag(1/mc_sizes))
+
+    fig = pl.figure(figsize=default_figsize)
+    ax = fig.add_subplot(1, 1, 1)
+    im = ax.imshow(matrix, cmap='Greens', interpolation='nearest')
+    ax.set_xticks([0, 1, 2, 3])
+    ax.set_yticks([0, 1, 2, 3])
+    ax.set_xticklabels([r'{} $\to$'.format(name) for name in names], rotation=20)
+    ax.set_yticklabels([r'$\to$ {}'.format(name) for name in names])
+    fig.colorbar(im)
+    fig.tight_layout()
+    fig.savefig(figname('normalized_matrix'))
+
+    inverted = np.linalg.inv(matrix)
+
+    fig = pl.figure(figsize=default_figsize)
+    ax = fig.add_subplot(1, 1, 1)
+    im = ax.imshow(inverted, cmap='Greens', interpolation='nearest')
+    ax.set_xticks([0, 1, 2, 3])
+    ax.set_yticks([0, 1, 2, 3])
+    ax.set_xticklabels([r'$\to$ {}'.format(name) for name in names], rotation=20)
+    ax.set_yticklabels([r'{} $\to$'.format(name) for name in names])
+    fig.colorbar(im)
+    fig.tight_layout()
+    fig.savefig(figname('inverted_matrix'))
+
+    # FIXME Actual error matrix
+    return inverted, inverted
+
+
+def job_afb_analysis(T, interpolator):
+    energies = np.loadtxt('Data/energies.txt')
+    data = np.loadtxt('Data/afb.txt')
+    negative = data[:, 0]
+    positive = data[:, 1]
+
+    fig = pl.figure(figsize=default_figsize)
+    ax = fig.add_subplot(1, 1, 1)
+    ax.plot(energies, negative)
+    ax.plot(energies, positive)
+    fig.savefig(figname('afb_raw'))
+
+    afb_val = (positive - negative) / (positive + negative)
+    afb_err = np.sqrt(
+        (2 * negative / (positive + negative)**2 * np.sqrt(positive))**2
+        + (2 * positive / (positive + negative)**2 * np.sqrt(negative))**2
+    )
+
+    np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
+
+    afb_corr_val = afb_val + interpolator(energies)
+
+    np.savetxt('_build/xy/afb_corr.tsv', np.column_stack([energies, afb_corr_val, afb_err]))
+
+
 def job_grope(T, show=False):
     files = ['electrons',
              'muons',
@@ -41,7 +156,7 @@ def job_grope(T, show=False):
     fig_3d = pl.figure()
     ax_3d = p3.Axes3D(fig_3d)
 
-    fig = pl.figure(figsize=(12, 10))
+    fig = pl.figure(figsize=(12, 8))
     ax_n = fig.add_subplot(2, 2, 1)
     ax_sump = fig.add_subplot(2, 2, 2)
     ax_ecal = fig.add_subplot(2, 2, 3)
@@ -95,13 +210,13 @@ def job_grope(T, show=False):
 
 
     fig.tight_layout()
-    fig.savefig('_build/mpl-hist.pdf')
+    fig.savefig(figname('hist'))
 
     if show:
         fig_3d.show()
         input()
 
-    fig_3d.savefig('_build/mpl-scatter.pdf')
+    fig_3d.savefig(figname('scatter'))
 
 def job_decay_widths(T):
     # T_3, Q, N_color
@@ -201,6 +316,19 @@ def job_asymetry(T):
 
 
 
+    s_array = np.linspace(88.4, 93.8, 200)
+    re_propagator = s_array * (s_array - (mass_z/1000)**2) / \
+            ((s_array - (mass_z/1000)**2)**2 + s_array * total_width / (mass_z/1000))
+    a_e = i_3 / (2 * np.sin(weak_mixing_angle) * np.cos(weak_mixing_angle))
+    a_f = a_e
+    v_e = (i_3 - 2 * q * sin_sq_weak_mixing) / (2 * np.sin(weak_mixing_angle) * np.cos(weak_mixing_angle))
+    v_f = v_e
+    asymmetry = re_propagator * (-3)/2 * a_e * a_f * q / ((v_e**2 + a_e**2) * (a_f**2 + a_f**2))
+
+    np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
+
+
+
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
@@ -213,6 +341,9 @@ def job_radiative_correction(T):
     pl.clf()
     pl.plot(sqrt_mandelstam_s, correction)
 
+    sqrt_mandelstam_s[0] -= 1e-2
+    sqrt_mandelstam_s[-1] += 1e-2
+
     interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
 
     x = np.linspace(np.min(sqrt_mandelstam_s), np.max(sqrt_mandelstam_s))
@@ -220,7 +351,7 @@ def job_radiative_correction(T):
 
     pl.plot(x, y)
 
-    pl.savefig('_build/mpl-radiative.pdf')
+    pl.savefig(figname('radiative'))
 
     np.savetxt('_build/xy/radiative_data.tsv', np.column_stack([
         sqrt_mandelstam_s, correction
@@ -261,9 +392,13 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
+    interpolator = job_radiative_correction(T)
+
+    job_colors()
+    job_cross_sections(T)
+    job_afb_analysis(T, interpolator)
     job_grope(T, options.show)
     job_decay_widths(T)
-    job_radiative_correction(T)
     job_angular_dependence(T)
     job_asymetry(T)
 

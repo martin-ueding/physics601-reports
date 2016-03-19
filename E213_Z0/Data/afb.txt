@@ -1,0 +1,11 @@
+# Data for muon forward-backward asymetry. Split by negative and positive
+# cos(\theta) for the seven energies.
+#
+# Negative  Positive
+72      52
+106     111
+179     131
+1773    1729
+315     312
+97      135
+127     165

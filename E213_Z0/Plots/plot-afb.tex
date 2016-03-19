@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={CMS Energy $\sqrt{s} / \si{\giga\electronvolt}$},
+            ylabel={$A_\text{FB}$},
+            grid=major,
+            legend pos=north west,
+        ]
+
+        \addplot[
+            black,
+            mark=o,
+            only marks,
+            %error bars/y dir=both,
+            %error bars/y explicit,
+        ] table[y error index=2] {../xy/afb.tsv};
+        \addlegendentry{Without corrections}
+
+        \addplot[
+            black,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/afb_corr.tsv};
+        \addlegendentry{With corrections}
+
+        \addplot[
+            black,
+        ] table {../xy/afb_theory.tsv};
+        \addlegendentry{Theory}
+
+        % TODO Add horizontal line at Z-mass.
+
+    \end{axis}
+\end{tikzpicture}

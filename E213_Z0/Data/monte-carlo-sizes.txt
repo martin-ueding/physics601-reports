@@ -1,0 +1,5 @@
+# Sizes of the Monte Carlo datasets for electrons, muons, taus and hadrons.
+94381
+93802
+79214
+98563

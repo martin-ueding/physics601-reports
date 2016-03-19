@@ -1,0 +1,8 @@
+# Monte Carlo calibration matrix for our cuts. The rows are electrons, muons,
+# taus, hadrons. The columns are the filter. This matrix contains the pure
+# counts, not normalized.
+#
+20474   0       2618        6
+1       78792   8600        0
+1013    82      76687       544
+0       0       495         97548
