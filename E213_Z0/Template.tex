@@ -993,8 +993,6 @@ The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
 
 \section{Partial cross sections}
 
-Having just derived the inverse detection matrix, we can use it.
-
 \begin{table}
     \centering
     \begin{tabular}{S|SSSS}
@@ -1016,7 +1014,7 @@ Having just derived the inverse detection matrix, we can use it.
     \label{tab:counts}
 \end{table}
 
-
+Having derived the inverse detection matrix, we can use it.
 
 \begin{table}
     \centering
@@ -1038,8 +1036,6 @@ Having just derived the inverse detection matrix, we can use it.
     }
     \label{tab:corrected-counts}
 \end{table}
-
-
 
 We want to compute the partial cross sections, those are the cross sections of
 the individual decay channels. For this we just need to take the number of
@@ -1069,6 +1065,27 @@ Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
         error is the total error (combined statistical and systematic error).
     }
     \label{tab:luminosities}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{tabular}{S|SSSS}
+        \toprule
+        {$\sigma_i / \si{\nano\barn}$}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in cross_sections_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Cross sections for the four decay types and seven beam energies.
+    }
+    \label{tab:cross-sections}
 \end{table}
 
 \begin{figure}
@@ -1118,6 +1135,40 @@ Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
     \input{../Snippets/paw-e_hcal}
     
     \input{../Snippets/matrix-electrons}
+
+    \chapter{PAW scripts}
+
+    \section{main.kumac}
+
+    \lstinputlisting{../Listings/main.kumac}
+
+    \section{cuts.kumac}
+
+    \lstinputlisting{../Listings/cuts.kumac}
+
+    \section{elep-hist.kumac}
+
+    \lstinputlisting{../Listings/elep-hist.kumac}
+
+    \section{angle.kumac}
+
+    \lstinputlisting{../Listings/angle.kumac}
+
+    \section{afb.kumac}
+
+    \lstinputlisting{../Listings/afb.kumac}
+
+    \section{raw-histograms.kumac}
+
+    \lstinputlisting{../Listings/raw-histograms.kumac}
+
+    \section{matrix.kumac}
+
+    \lstinputlisting{../Listings/matrix.kumac}
+
+    \section{data-cuts.kumac}
+
+    \lstinputlisting{../Listings/data-cuts.kumac}
 
 \end{appendix}
 
