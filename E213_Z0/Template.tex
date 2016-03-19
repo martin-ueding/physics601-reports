@@ -886,6 +886,7 @@ almost constant) of the asymmetry. However, as the errors are quite large, our
 measurements are still consistent with it.
 
 \section{Detection efficiency}
+\label{sec:detection-efficiency}
 
 By choosing the cuts in a particular way, we make a compromise between
 detection efficiency and underground. Choosing a tight cut will discard events
@@ -993,6 +994,23 @@ The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
 
 \section{Partial cross sections}
 
+\subsection{Counts}
+
+In order to compute cross sections, we need count rates. We have filtered the
+dataset with our cuts and an energy selection. For instance the following
+snippet we use the muon filter (\texttt{\$2}) with the third beam energy
+(\texttt{\$13}):
+
+\begin{lstlisting}
+nt/plot daten1.ncharged $2.and.$13
+pict/print filtered-daten1-as-muon-energy3.ps
+\end{lstlisting}
+
+The full code listing can be found in Section~\ref{data-cuts.kumac}. We look at
+the generated histograms and extract the number of events from each histogram.
+The results are collected in Table~\ref{tab:counts}. Not shown is the error
+which we assume to be $\sqrt{N}$ as this is a counting experiment.
+
 \begin{table}
     \centering
     \begin{tabular}{S|SSSS}
@@ -1014,7 +1032,11 @@ The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
     \label{tab:counts}
 \end{table}
 
-Having derived the inverse detection matrix, we can use it.
+Those counts are just the counts which are left after applying the cuts. As
+argued in regarding the detection efficiency (c.f.\
+Section~\label{sec:detection-efficiency}), those counts include some number of
+false-positives (underground) and false-negatives (inefficiency). Therefore we
+need to correct for that with the inverse matrix derived above.
 
 \begin{table}
     \centering
@@ -1036,6 +1058,8 @@ Having derived the inverse detection matrix, we can use it.
     }
     \label{tab:corrected-counts}
 \end{table}
+
+\subsection{Incorporating the luminosity}
 
 We want to compute the partial cross sections, those are the cross sections of
 the individual decay channels. For this we just need to take the number of
@@ -1140,34 +1164,42 @@ Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
     \chapter{PAW scripts}
 
     \section{main.kumac}
+    \label{main.kumac}
 
     \lstinputlisting{../Listings/main.kumac}
 
     \section{cuts.kumac}
+    \label{cuts.kumac}
 
     \lstinputlisting{../Listings/cuts.kumac}
 
     \section{elep-hist.kumac}
+    \label{elep-hist.kumac}
 
     \lstinputlisting{../Listings/elep-hist.kumac}
 
     \section{angle.kumac}
+    \label{angle.kumac}
 
     \lstinputlisting{../Listings/angle.kumac}
 
     \section{afb.kumac}
+    \label{afb.kumac}
 
     \lstinputlisting{../Listings/afb.kumac}
 
     \section{raw-histograms.kumac}
+    \label{raw-histograms.kumac}
 
     \lstinputlisting{../Listings/raw-histograms.kumac}
 
     \section{matrix.kumac}
+    \label{matrix.kumac}
 
     \lstinputlisting{../Listings/matrix.kumac}
 
     \section{data-cuts.kumac}
+    \label{data-cuts.kumac}
 
     \lstinputlisting{../Listings/data-cuts.kumac}
 
