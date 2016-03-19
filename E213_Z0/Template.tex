@@ -24,11 +24,13 @@
 
 \usepackage[all]{nowidow}
 
-\newcommand\ecal{\emph{e-cal}}
-\newcommand\hcal{\emph{h-cal}}
-\newcommand\sump{\emph{sum-p}}
-\newcommand\pcharged{\emph{p-charged}}
-\newcommand\ncharged{\emph{n-charged}}
+\newcommand\ecal{e-cal}
+\newcommand\hcal{h-cal}
+\newcommand\eecal{$E$-e-cal}
+\newcommand\ehcal{$E$-h-cal}
+\newcommand\sump{sum-$p$}
+\newcommand\pcharged{$p$-charged}
+\newcommand\ncharged{$n$-charged}
 
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
@@ -666,16 +668,14 @@ taus, hadrons).
 The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
 charged particles. All the energy is deposited in the \ecal{}. In the dark blue
-header one can see that the missing energy is very small. The energy deposited
-in the \ecal{} is pretty much identical with \sump{}. Both energies are almost
-the beam energy.
+header one can see that the missing energy is very small. The \eecal{} is
+pretty much identical with \sump{}. Both energies are almost the beam energy.
 
 Decays into muons have a different signature. The most prominent feature are
 the hits in the muon chambers, as one can see in Figure~\ref{fig:grope/muons}.
 The \sump{} is the beam energy, little energy is unaccounted for. This means
-that there are no neutrinos created in that decay. The energies deposited in
-\ecal{} and \hcal{} is small, this is due to the big mass of the muon (compared
-to electrons).
+that there are no neutrinos created in that decay. \eecal{} and \ehcal{} is
+small, this is due to the big mass of the muon (compared to electrons).
 
 Figure~\ref{fig:grope/taus} shows a decay into taus. This decay is not as
 simple as the previous ones. We have some missing energy (around a third), more
@@ -686,16 +686,15 @@ differentiate from the hadronic decays.
 
 Lastly, a decay into hadrons is shown in Figure~\ref{fig:grope/hadrons}. One
 directly sees the large number of tracks (26) which exhibit a larger curvature.
-Also we have energy deposited into \hcal{}. Hadronic decays are easy to
-classify as their number of charged tracks is always rather large.
+Also we have nonzero \ehcal{}. Hadronic decays are easy to classify as their
+number of charged tracks is always rather large.
 
 \section{Defining the cuts}
 
 While reviewing the Monte Carlo events in \textsc{grope}, we generate
 histograms with the various characteristics. We choose to write down
-\ncharged{}, \sump{}, the deposited energy in \ecal{} and \hcal{}. Those
-characteristics are also available in the later analysis of larger datasets
-using \textsc{paw}.
+\ncharged{}, \sump{}, \eecal{} and \ehcal{}. Those characteristics are also
+available in the later analysis of larger datasets using \textsc{paw}.
 
 Using some twenty points per event class, we obtain the histograms shown in
 Figure~\ref{fig:mpl-hist}. There one can see that some characteristics are well
@@ -755,8 +754,8 @@ After the refining, we have the following cuts:
     Particle
     & \ncharged
     & \sump/\si{\giga\electronvolt}
-    & \ecal/\si{\giga\electronvolt}
-    & \hcal/\si{\giga\electronvolt} \\
+    & \eecal/\si{\giga\electronvolt}
+    & \ehcal/\si{\giga\electronvolt} \\
     \midrule
     % TODO Insert the cuts that we had at this point.
     Electrons & $\leq 2$ &  &  &  \\
@@ -790,11 +789,11 @@ As expected from decay modes with hadrons, we see that taus can have six
 charged tracks. Hadrons can also decay with six or less charged tracks, but the
 most part decays with more than then tracks.
 
-The other characteristics, \pcharged\ as well as energy deposited into \ecal\
-and \hcal, were also plotted using \textsc{paw}. The energy in charged tracks
-is shown in Figure~\ref{fig:paw-pcharged}. The deposited energies are in
-Figure~\ref{fig:paw-e_ecal} for the \ecal\ and Figure~\ref{fig:paw-e_hcal} for
-the \hcal.
+The other characteristics, \pcharged\ as well as \eecal\ and \ehcal, were also
+plotted using \textsc{paw}. The energy in charged tracks is shown in
+Figure~\ref{fig:paw-pcharged}. The deposited energies are in
+Figure~\ref{fig:paw-e_ecal} for the \eecal\ and Figure~\ref{fig:paw-e_hcal} for
+the \ehcal.
 
 As one can see in Figure~\ref{fig:paw-angle}, the angular distribution of the
 four decay modes is not the shifted parabola as expected from the $s$-channel
@@ -830,8 +829,8 @@ Our refined and final cuts including the angle are:
     Particle
     & \ncharged
     & \sump/\si{\giga\electronvolt}
-    & \ecal/\si{\giga\electronvolt}
-    & \hcal/\si{\giga\electronvolt}
+    & \eecal/\si{\giga\electronvolt}
+    & \ehcal/\si{\giga\electronvolt}
     & $\cos(\theta)$
     \\
     \midrule
