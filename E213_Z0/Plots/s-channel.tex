@@ -1,11 +1,18 @@
 \begin{tikzpicture}
     \begin{axis}[
-            width=0.48\linewidth,
-            height=0.3\linewidth,
-            xlabel={Angle $\theta$},
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={$\cos(\theta)$},
             grid=major,
+            ytick=\empty,
             legend pos=north west,
         ]
         \addplot[black] table {../xy/s-channel.tsv};
+        \addplot[black, dashed] table {../xy/t-channel.tsv};
+        \addplot[black, thick] table {../xy/s-t-channel.tsv};
+
+        \addlegendentry{$s$-channel}
+        \addlegendentry{$t$-channel}
+        \addlegendentry{Sum}
     \end{axis}
 \end{tikzpicture}

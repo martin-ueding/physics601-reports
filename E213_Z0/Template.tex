@@ -514,30 +514,14 @@ $t$-channel.
 
 All we have to do is to plot those two simple functions. The plots are shown in
 Figure~\ref{fig:channels}. As written in the manual, the $t$-channel becomes
-dominant for very small angles.
+dominant for very small angles, i.e.\ large $\cos(\theta)$.
 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.49\linewidth}
-        \centering
-        \includegraphics{s-channel}
-        \caption{%
-            $s$-channel
-        }
-        \label{fig:s-channel}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.49\linewidth}
-        \centering
-        \includegraphics{t-channel}
-        \caption{%
-            $t$-channel
-        }
-        \label{fig:t-channel}
-    \end{subfigure}
+    \includegraphics{s-channel}
     \caption{%
         Angular dependence of differential cross section in the $s$- and
-        $t$-channel. The units are arbitrary.
+        $t$-channel.
     }
     \label{fig:channels}
 \end{figure}
@@ -799,32 +783,37 @@ and \ehcal\ in Figure~\ref{fig:paw-e_hcal}.
 
 \subsection{Angular distribution}
 
-% TODO Plot of pure s- and t-channels.
-
 As one can see in Figure~\ref{fig:paw-angle}, the angular distribution of the
 four decay modes is not the shifted parabola as expected from the $s$-channel
-theory. For the electrons, this arises from the mixing with the $t$-channel.
-Therefore we need to cut large $\cos(\theta)$ out of our analysis. The
-efficiency will do down, but the quality of the remaining data will be better.
-We also cut the peak at $\cos(\theta) < -0.9$ as we do not know its origin but
-know that it cannot come from a simple $s$-channel process.
+theory. For the electrons, this arises from the mixing with the $t$-channel. We
+do not want to include the $t$-channel reactions as this would make a
+comparison to the other leptonic channels (only $s$-channel) impossible.
+
+We have shown in Figure~\ref{fig:channels} how the $s$- and $t$-channel scale
+with the angle. At small angle, the unwanted $t$-channel dominates. Therefore
+we need to cut large $\cos(\theta)$ out of our analysis. The efficiency will do
+down, but the quality of the remaining data will be better. We also cut the
+peak at $\cos(\theta) < -0.9$ as we do not know its origin but know that it
+cannot come from a simple $s$-channel process.
 
 \input{../Snippets/paw-angle}
 
-The muons look pretty good. At $|\cos(\theta)| > 0.9$ we have a sharp drop
-which we blame on the detector not covering the whole solid angle. Since the
-beam pipe needs to go through the detector, one cannot detect collinear events.
-We therefore cut those events away.
+The muons (see Figure~\ref{fig:paw-angle/muons}) look pretty good. At
+$|\cos(\theta)| > 0.9$ we have a sharp drop which we blame on the detector not
+covering the whole solid angle. Since the beam pipe needs to go through the
+detector, one cannot detect collinear events. We therefore cut those events
+away.
 
-The shape of the taus seems to be a parabola in the middle but flatten off to
-the sides. Events with only one charged positive track have to be a decay into
-an positron or an anti-muon. A neutrino is created in those processes, skewing
-the angular distribution. Therefore this flattening does not need to be cut
-out.
+The shape of the taus (see Figure~\ref{fig:paw-angle/taus}) seems to be a
+parabola in the middle but flatten off to the sides. Events with only one
+charged positive track have to be a decay into an positron or an anti-muon. A
+neutrino is created in those processes, skewing the angular distribution.
+Therefore this flattening does not need to be cut out.
 
-For the hadrons, an angular distribution is rarely defined, there is only one
-event that even has a well-defined $\theta$-angle. Therefore we do not perform
-any cutting in the hadronic sector.
+For the hadrons (see Figure~\ref{fig:paw-angle/hadrons}), an angular
+distribution is rarely defined, there is only one event that even has a
+well-defined $\theta$-angle. Therefore we do not perform any cutting in the
+hadronic sector.
 
 \needspace{20ex}
 

@@ -304,12 +304,13 @@ def job_decay_widths(T):
 
 
 def job_angular_dependence(T):
-    x = np.linspace(0.1, np.pi, 100)
-    y1 = 1 + np.cos(x)**2
-    y2 = 1/(1 - np.cos(x))
+    x = np.linspace(-0.9, 0.9, 100)
+    y1 = 1 + x**2
+    y2 = 1/(1 - x)
 
     np.savetxt('_build/xy/s-channel.tsv', np.column_stack([x, y1]))
     np.savetxt('_build/xy/t-channel.tsv', np.column_stack([x, y2]))
+    np.savetxt('_build/xy/s-t-channel.tsv', np.column_stack([x, y1+y2]))
 
 
 def job_asymetry(T):
