@@ -780,52 +780,7 @@ had the raw data, we would have combined the four decay modes into a single
 histogram like we have done in Figure~\ref{fig:mpl-hist} with the data we
 collected manually.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{electrons-ncharged}
-        \caption{%
-            Electrons
-        }
-        \label{fig:paw-ncharged/electrons}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{muons-ncharged}
-        \caption{%
-            Muons
-        }
-        \label{fig:paw-ncharged/muons}
-    \end{subfigure}
-
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{taus-ncharged}
-        \caption{%
-            Taus
-        }
-        \label{fig:paw-ncharged/taus}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{hadrons-ncharged}
-        \caption{%
-            Hadrons
-        }
-        \label{fig:paw-ncharged/hadrons}
-    \end{subfigure}
-
-    \caption{%
-        Number of charged tracks, \ncharged, for the four decay types.
-        Histograms generated with \textsc{paw} from Monte Carlo datasets.
-    }
-    \label{fig:paw-ncharged}
-\end{figure}
+\input{../Snippets/paw-ncharged}
 
 With a magnifying glass we can see that there are mostly two charged tracks for
 electron and muon decays. Interestingly, there are occasionally three to four
@@ -849,55 +804,7 @@ efficiency will do down, but the quality of the remaining data will be better.
 We also cut the peak at $\cos(\theta) < -0.9$ as we do not know its origin but
 know that it cannot come from a simple $s$-channel process.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{electrons-cos_thet}
-        \caption{%
-            Electrons
-        }
-        \label{fig:paw-ncharged/electrons}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{muons-cos_thet}
-        \caption{%
-            Muons
-        }
-        \label{fig:paw-ncharged/muons}
-    \end{subfigure}
-
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{taus-cos_thet}
-        \caption{%
-            Taus
-        }
-        \label{fig:paw-ncharged/taus}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{hadrons-cos_thet}
-        \caption{%
-            Hadrons
-        }
-        \label{fig:paw-angle-mc}
-    \end{subfigure}
-
-    \caption{%
-        Angular distribution with respect to $\cos(\theta)$ for the four decay
-        types. Histograms generated with \textsc{paw} from Monte Carlo
-        datasets. Events without a defined angle are excluded, therefore there
-        are no events with more or less than one positively charged track
-        included.
-    }
-    \label{fig:paw-angle}
-\end{figure}
+\input{../Snippets/paw-angle}
 
 The muons look pretty good. At $|\cos(\theta)| > 0.9$ we have a sharp drop
 which we blame on the detector not covering the whole solid angle. Since the
@@ -1024,144 +931,12 @@ detection efficiency and underground.
 
     \section{Monte Carlo data}
 
-    \begin{figure}[h!]
-        \centering
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{electrons-pcharged}
-            \caption{%
-                Electrons
-            }
-            \label{fig:paw-pcharged/electrons}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{muons-pcharged}
-            \caption{%
-                Muons
-            }
-            \label{fig:paw-pcharged/muons}
-        \end{subfigure}
+    \input{../Snippets/paw-pcharged}
 
-        \vspace{2ex}
+    \input{../Snippets/paw-e_ecal}
 
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{taus-pcharged}
-            \caption{%
-                Taus
-            }
-            \label{fig:paw-pcharged/taus}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{hadrons-pcharged}
-            \caption{%
-                Hadrons
-            }
-            \label{fig:paw-pcharged/hadrons}
-        \end{subfigure}
-        \caption{%
-            Energy in charged tracks, \pcharged, for the four decay types.
-            Histograms generated with \textsc{paw} from Monte Carlo datasets.
-        }
-        \label{fig:paw-pcharged}
-    \end{figure}
+    \input{../Snippets/paw-e_hcal}
     
-    \begin{figure}
-        \centering
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{electrons-e_ecal}
-            \caption{%
-                Electrons
-            }
-            \label{fig:paw-e_ecal/electrons}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{muons-e_ecal}
-            \caption{%
-                Muons
-            }
-            \label{fig:paw-e_ecal/muons}
-        \end{subfigure}
-
-        \vspace{2ex}
-
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{taus-e_ecal}
-            \caption{%
-                Taus
-            }
-            \label{fig:paw-e_ecal/taus}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{hadrons-e_ecal}
-            \caption{%
-                Hadrons
-            }
-            \label{fig:paw-e_ecal/hadrons}
-        \end{subfigure}
-        \caption{%
-            Energy deposited into the \ecal\ for the four decay types.
-            Histograms generated with \textsc{paw} from Monte Carlo datasets.
-        }
-        \label{fig:paw-e_ecal}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{electrons-e_hcal}
-            \caption{%
-                Electrons
-            }
-            \label{fig:paw-e_hcal/electrons}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{muons-e_hcal}
-            \caption{%
-                Muons
-            }
-            \label{fig:paw-e_hcal/muons}
-        \end{subfigure}
-
-        \vspace{2ex}
-
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{taus-e_hcal}
-            \caption{%
-                Taus
-            }
-            \label{fig:paw-e_hcal/taus}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{hadrons-e_hcal}
-            \caption{%
-                Hadrons
-            }
-            \label{fig:paw-e_hcal/hadrons}
-        \end{subfigure}
-        \caption{%
-            Energy deposited into the \hcal\ for the four decay types.
-            Histograms generated with \textsc{paw} from Monte Carlo datasets.
-        }
-        \label{fig:paw-e_hcal}
-    \end{figure}
-
 \end{appendix}
 
 \end{document}
