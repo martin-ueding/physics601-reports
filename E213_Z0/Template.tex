@@ -797,6 +797,61 @@ Our refined and final cuts including the angle are:
     \bottomrule
 \end{tabular}
 
+\section{Muon forward--backward asymmetry}
+
+The muon forward--backward asymmetry is a quantity that we want to extract from
+the data. For this we need to filter the actual dataset (in our case number 1)
+for muons. Then we also need to filter by beam energy. The dataset contains
+seven different beam energies, we define seven more filters like the following:
+
+\begin{lstlisting}
+nt/cuts $11 e_lep>44.0.and.e_lep<44.5
+nt/cuts $12 e_lep>44.5.and.e_lep<45.0
+\end{lstlisting}
+
+Using those, we can filter the data for muons (\texttt{\$2}), positive or
+negative angle (\texttt{cos\_thet<0.} or \texttt{cos\_thet>0}) and for the energy (\texttt{\$11}). Printing this as
+a histogram, we use the following code:
+
+\begin{lstlisting}
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$11
+pict/print afb-muons-daten1-negative-energy1.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$11
+pict/print afb-muons-daten1-positive-energy1.ps
+\end{lstlisting}
+
+We have also supplied the additional criterion for sensible angles
+(\texttt{cos\_thet<2.}) because undefined angles have a numerical value way
+greater than two.
+
+From the exported diagrams (not included in this report) we extract the number
+of events with $\cos(\theta) > 0$, which we call $N_+$, and the events with
+$\cos(\theta) < 0$, which we call $N_-$. The asymmetry is then simply
+\[
+    A_\text{FB} = \frac{N_+ - N_-}{N_+ + N_-} \,.
+\]
+
+Our analysis to this point is based on the tree level formalism. Higher order
+corrections are needed in every QFT for more accurate result. Here we are given
+the combined effect of all those corrections as a table of shift for
+$A_\text{FB}$. For each beam energy, we add the correction and obtain a final
+value for $A_\text{FB}$. The resulting asymmetry for the different beam
+energies is shown in Figure~\ref{fig:plot-afb}. Error estimation is done by
+assuming an error of $\sqrt{N}$ for all the counts and using Gaussian error
+propagation for the final result.
+
+\begin{figure}
+    \centering
+    \includegraphics{plot-afb}
+    \caption{%
+        Forward--backward asymmetry in the muon events. Shown are both
+        uncorrected and corrected values for $A_\text{FB}$. Both values have
+        the same error, therefore we only show the error bar for the corrected
+        values.
+    }
+    \label{fig:plot-afb}
+\end{figure}
+
 \section{Detection efficiency}
 
 By choosing the cuts in a particular way, we make a compromise between
@@ -809,7 +864,7 @@ want to filter out electrons but our cuts are too loose. Then some tau events
 might slip into the electrons category.
 
 Both types of errors, the false-negatives and the false-positives, can be
-handled using a detection efficiency matrix~$\mat E$ and Monte Carlo datasets.
+handled using a detection matrix~$\mat D$ and Monte Carlo datasets.
 The Monte Carlo datasets are purely of one decay channel. Therefore we know
 exactly that we only have, say, electrons. Applying our cuts to the Monte Carlo
 electrons, we will see how many are actually detected as electrons. This is our
@@ -820,8 +875,8 @@ is the underground.
 
 Using a linear model for this, we need a mapping from the actual events vector
 $\vec A$ (in electron-muon-tau-hadrons space, $\N^4$) to the identified events
-vector $\vec I$ (same space). The efficiency matrix is then defined via $\vec I
-= \mat E \vec A$. In order to find the sixteen matrix elements, we apply a
+vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
+= \mat D \vec A$. In order to find the sixteen matrix elements, we apply a
 vector with Monte Carlo electrons.
 
 \subsection{Determining matrix elements}
@@ -868,7 +923,6 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
 
 % TODO Error estimation.
 
-
 \begin{figure}
     \centering
     \begin{subfigure}[t]{0.48\linewidth}
@@ -898,19 +952,9 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
 
 \subsection{Inverting the matrix}
 
-\section{Muon forward--backward asymmetry}
-
-\begin{figure}
-    \centering
-    \includegraphics{plot-afb}
-    \caption{%
-        Forward--backward asymmetry in the muon events. Shown are both
-        uncorrected and corrected values for $A_\text{FB}$. Both values have
-        the same error, therefore we only show the error bar for the corrected
-        values.
-    }
-    \label{fig:plot-afb}
-\end{figure}
+In order to use this efficiency matrix~$\mat D$ as a correction, we need to
+invert the matrix. As it is almost diagonal, this will be numerically stable.
+The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
 
 \section{Partial cross sections}
 
@@ -925,6 +969,8 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
     }
     \label{fig:cross-sections}
 \end{figure}
+
+\section{Decay widths}
 
 \begin{table}
     \centering
@@ -945,8 +991,6 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
     }
     \label{tab:lorentz-fits}
 \end{table}
-
-\section{Decay widths}
 
 \begin{appendix}
 
