@@ -14,6 +14,11 @@
 \usepackage{needspace}
 
 \usepackage{mathtools}
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\small\ttfamily,
+}
 
 \hypersetup{
     pdftitle=
@@ -24,11 +29,13 @@
 
 \usepackage[all]{nowidow}
 
-\newcommand\ecal{\emph{e-cal}}
-\newcommand\hcal{\emph{h-cal}}
-\newcommand\sump{\emph{sum-p}}
-\newcommand\pcharged{\emph{p-charged}}
-\newcommand\ncharged{\emph{n-charged}}
+\newcommand\ecal{e-cal}
+\newcommand\hcal{h-cal}
+\newcommand\eecal{$E$-e-cal}
+\newcommand\ehcal{$E$-h-cal}
+\newcommand\sump{sum-$p$}
+\newcommand\pcharged{$p$-charged}
+\newcommand\ncharged{$n$-charged}
 
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
@@ -555,35 +562,20 @@ $t$-channel.
 
 All we have to do is to plot those two simple functions. The plots are shown in
 Figure~\ref{fig:channels}. As written in the manual, the $t$-channel becomes
-dominant for very small angles.
+dominant for very small angles, i.e.\ large $\cos(\theta)$.
 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.49\linewidth}
-        \centering
-        \includegraphics{s-channel}
-        \caption{%
-            $s$-channel
-        }
-        \label{fig:s-channel}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.49\linewidth}
-        \centering
-        \includegraphics{t-channel}
-        \caption{%
-            $t$-channel
-        }
-        \label{fig:t-channel}
-    \end{subfigure}
+    \includegraphics{s-channel}
     \caption{%
         Angular dependence of differential cross section in the $s$- and
-        $t$-channel. The units are arbitrary.
+        $t$-channel.
     }
     \label{fig:channels}
 \end{figure}
 
 \section{Asymmetry}
+\label{sec:exercises-asymmetry}
 
 We are to compute the forward--backward asymmetry of the reaction $\mathrm e^+
 \mathrm e^- \to \muup^+ \muup^-$. The given values for Mandelstam-$s$ are
@@ -657,68 +649,21 @@ Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
 picked a representative event for each category of decay (electrons, muons,
 taus, hadrons).
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-electrons}
-        \caption{%
-            Electrons
-        }
-        \label{fig:grope/electrons}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-muons}
-        \caption{%
-            Muons
-        }
-        \label{fig:grope/muons}
-    \end{subfigure}
+\input{../Snippets/grope.tex}
 
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-taus}
-        \caption{%
-            Taus
-        }
-        \label{fig:grope/taus}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{opal-hadrons}
-        \caption{%
-            Hadrons
-        }
-        \label{fig:grope/hadrons}
-    \end{subfigure}
-    \caption{%
-        Event display of Monte Carlo events. One can see the traces from the
-        vertex chamber in cyan, the hits in the \ecal{} are shown in yellow
-        (probably hard to see on paper). In magenta, one has the hits in the
-        \hcal{}. Muon penetrations are indicated with red arrows. Images are
-        rendered with \textsc{grope}.
-    }
-    \label{fig:grope}
-\end{figure}
+% TODO Table with out names, GROPE and PAW names.
 
 The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
 charged particles. All the energy is deposited in the \ecal{}. In the dark blue
-header one can see that the missing energy is very small. The energy deposited
-in the \ecal{} is pretty much identical with \sump{}. Both energies are almost
-the beam energy.
+header one can see that the missing energy is very small. The \eecal{} is
+pretty much identical with \sump{}. Both energies are almost the beam energy.
 
 Decays into muons have a different signature. The most prominent feature are
 the hits in the muon chambers, as one can see in Figure~\ref{fig:grope/muons}.
 The \sump{} is the beam energy, little energy is unaccounted for. This means
-that there are no neutrinos created in that decay. The energies deposited in
-\ecal{} and \hcal{} is small, this is due to the big mass of the muon (compared
-to electrons).
+that there are no neutrinos created in that decay. \eecal{} and \ehcal{} is
+small, this is due to the big mass of the muon (compared to electrons).
 
 Figure~\ref{fig:grope/taus} shows a decay into taus. This decay is not as
 simple as the previous ones. We have some missing energy (around a third), more
@@ -729,16 +674,17 @@ differentiate from the hadronic decays.
 
 Lastly, a decay into hadrons is shown in Figure~\ref{fig:grope/hadrons}. One
 directly sees the large number of tracks (26) which exhibit a larger curvature.
-Also we have energy deposited into \hcal{}. Hadronic decays are easy to
-classify as their number of charged tracks is always rather large.
+Also we have nonzero \ehcal{}. Hadronic decays are easy to classify as their
+number of charged tracks is always rather large.
 
 \section{Defining the cuts}
 
 While reviewing the Monte Carlo events in \textsc{grope}, we generate
 histograms with the various characteristics. We choose to write down
-\ncharged{}, \sump{}, the deposited energy in \ecal{} and \hcal{}. Those
-characteristics are also available in the later analysis of larger datasets
-using \textsc{paw}.
+\ncharged{}, \sump{}, \eecal{} and \ehcal{}. Those characteristics are also
+available in the later analysis of larger datasets using \textsc{paw}.
+
+\subsection{Preliminary analysis}
 
 Using some twenty points per event class, we obtain the histograms shown in
 Figure~\ref{fig:mpl-hist}. There one can see that some characteristics are well
@@ -798,8 +744,8 @@ After the refining, we have the following cuts:
     Particle
     & \ncharged
     & \sump/\si{\giga\electronvolt}
-    & \ecal/\si{\giga\electronvolt}
-    & \hcal/\si{\giga\electronvolt} \\
+    & \eecal/\si{\giga\electronvolt}
+    & \ehcal/\si{\giga\electronvolt} \\
     \midrule
     % TODO Insert the cuts that we had at this point.
     Electrons & $\leq 2$ &  &  &  \\
@@ -808,6 +754,8 @@ After the refining, we have the following cuts:
     Hadrons & $> 7$ &  &  &  \\
     \bottomrule
 \end{tabular}
+
+\subsection{More data points}
 
 Our histograms are only filled with a limited amount of data. It would be wise
 to use more data to refine the cuts further. To that end, we change from
@@ -823,52 +771,7 @@ had the raw data, we would have combined the four decay modes into a single
 histogram like we have done in Figure~\ref{fig:mpl-hist} with the data we
 collected manually.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{electrons-ncharged}
-        \caption{%
-            Electrons
-        }
-        \label{fig:paw-ncharged/electrons}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{muons-ncharged}
-        \caption{%
-            Muons
-        }
-        \label{fig:paw-ncharged/muons}
-    \end{subfigure}
-
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{taus-ncharged}
-        \caption{%
-            Taus
-        }
-        \label{fig:paw-ncharged/taus}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{hadrons-ncharged}
-        \caption{%
-            Hadrons
-        }
-        \label{fig:paw-ncharged/hadrons}
-    \end{subfigure}
-
-    \caption{%
-        Number of charged tracks, \ncharged, for the four decay types.
-        Histograms generated with \textsc{paw} from Monte Carlo datasets.
-    }
-    \label{fig:paw-ncharged}
-\end{figure}
+\input{../Snippets/paw-ncharged}
 
 With a magnifying glass we can see that there are mostly two charged tracks for
 electron and muon decays. Interestingly, there are occasionally three to four
@@ -878,84 +781,43 @@ As expected from decay modes with hadrons, we see that taus can have six
 charged tracks. Hadrons can also decay with six or less charged tracks, but the
 most part decays with more than then tracks.
 
-The other characteristics, \pcharged\ as well as energy deposited into \ecal\
-and \hcal, were also plotted using \textsc{paw}. The energy in charged tracks
-is shown in Figure~\ref{fig:paw-pcharged}. The deposited energies are in
-Figure~\ref{fig:paw-e_ecal} for the \ecal\ and Figure~\ref{fig:paw-e_hcal} for
-the \hcal.
+The other characteristics, were also plotted using \textsc{paw}. \pcharged\ is
+shown in Figure~\ref{fig:paw-pcharged}, \eecal\ in Figure~\ref{fig:paw-e_ecal}
+and \ehcal\ in Figure~\ref{fig:paw-e_hcal}.
+
+\subsection{Angular distribution}
 
 As one can see in Figure~\ref{fig:paw-angle}, the angular distribution of the
 four decay modes is not the shifted parabola as expected from the $s$-channel
-theory. For the electrons, this arises from the mixing with the $t$-channel.
-Therefore we need to cut large $\cos(\theta)$ out of our analysis. The
-efficiency will do down, but the quality of the remaining data will be better.
-We also cut the peak at $\cos(\theta) < -0.9$ as we do not know its origin but
-know that it cannot come from a simple $s$-channel process.
+theory. For the electrons, this arises from the mixing with the $t$-channel. We
+do not want to include the $t$-channel reactions as this would make a
+comparison to the other leptonic channels (only $s$-channel) impossible.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{electrons-cos_thet}
-        \caption{%
-            Electrons
-        }
-        \label{fig:paw-ncharged/electrons}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{muons-cos_thet}
-        \caption{%
-            Muons
-        }
-        \label{fig:paw-ncharged/muons}
-    \end{subfigure}
+We have shown in Figure~\ref{fig:channels} how the $s$- and $t$-channel scale
+with the angle. At small angle, the unwanted $t$-channel dominates. Therefore
+we need to cut large $\cos(\theta)$ out of our analysis. The efficiency will do
+down, but the quality of the remaining data will be better. We also cut the
+peak at $\cos(\theta) < -0.9$ as we do not know its origin but know that it
+cannot come from a simple $s$-channel process.
 
-    \vspace{2ex}
+\input{../Snippets/paw-angle}
 
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{taus-cos_thet}
-        \caption{%
-            Taus
-        }
-        \label{fig:paw-ncharged/taus}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{hadrons-cos_thet}
-        \caption{%
-            Hadrons
-        }
-        \label{fig:paw-angle-mc}
-    \end{subfigure}
+The muons (see Figure~\ref{fig:paw-angle/muons}) look pretty good. At
+$|\cos(\theta)| > 0.9$ we have a sharp drop which we blame on the detector not
+covering the whole solid angle. Since the beam pipe needs to go through the
+detector, one cannot detect collinear events. We therefore cut those events
+away.
 
-    \caption{%
-        Angular distribution with respect to $\cos(\theta)$ for the four decay
-        types. Histograms generated with \textsc{paw} from Monte Carlo
-        datasets. Events without a defined angle are excluded, therefore there
-        are no events with more or less than one positively charged track
-        included.
-    }
-    \label{fig:paw-angle}
-\end{figure}
+The shape of the taus (see Figure~\ref{fig:paw-angle/taus}) seems to be a
+parabola in the middle but flatten off to the sides. Events with only one
+charged positive track have to be a decay into an positron or an anti-muon. A
+neutrino is created in those processes, skewing the angular distribution.
+Therefore this flattening does not need to be cut out.
 
-The muons look pretty good. At $|\cos(\theta)| > 0.9$ we have a sharp drop
-which we blame on the detector not covering the whole solid angle. Since the
-beam pipe needs to go through the detector, one cannot detect collinear events.
-We therefore cut those events away.
-
-The shape of the taus seems to be a parabola in the middle but flatten off to
-the sides. Events with only one charged positive track have to be a decay into
-an positron or an anti-muon. A neutrino is created in those processes, skewing
-the angular distribution. Therefore this flattening does not need to be cut
-out.
-
-For the hadrons, an angular distribution is rarely defined, there is only one
-event that even has a well-defined $\theta$-angle. Therefore we do not perform
-any cutting in the hadronic sector.
+For the hadrons (see Figure~\ref{fig:paw-angle/hadrons}), an angular
+distribution is rarely defined, there is only one event that even has a
+well-defined $\theta$-angle. Therefore we do not perform any cutting in the
+hadronic sector.
 
 \needspace{20ex}
 
@@ -966,8 +828,8 @@ Our refined and final cuts including the angle are:
     Particle
     & \ncharged
     & \sump/\si{\giga\electronvolt}
-    & \ecal/\si{\giga\electronvolt}
-    & \hcal/\si{\giga\electronvolt}
+    & \eecal/\si{\giga\electronvolt}
+    & \ehcal/\si{\giga\electronvolt}
     & $\cos(\theta)$
     \\
     \midrule
@@ -979,39 +841,48 @@ Our refined and final cuts including the angle are:
     \bottomrule
 \end{tabular}
 
-\section{Detection efficiency}
-
-By choosing the cuts in a particular way, we make a compromise between
-detection efficiency and underground.
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{mpl-normalized_matrix}
-        \caption{%
-            Detection matrix. Left-multiply with a vector which contains actual
-            event numbers to get event numbers identified by our cuts.
-        }
-        \label{fig:/1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{mpl-inverted_matrix}
-        \caption{%
-            Inverse matrix. Left-multiply with a vector containing our
-            measurements to get actual event numbers.
-        }
-        \label{fig:/2}
-    \end{subfigure}
-    \caption{%
-        Normalized conversion matrices between detected and actual event types.
-    }
-    \label{fig:}
-\end{figure}
-
 \section{Muon forward--backward asymmetry}
+
+The muon forward--backward asymmetry is a quantity that we want to extract from
+the data. For this we need to filter the actual dataset (in our case number 1)
+for muons. Then we also need to filter by beam energy. The dataset contains
+seven different beam energies, we define seven more filters like the following:
+
+\begin{lstlisting}
+nt/cuts $11 e_lep>44.0.and.e_lep<44.5
+nt/cuts $12 e_lep>44.5.and.e_lep<45.0
+\end{lstlisting}
+
+Using those, we can filter the data for muons (\texttt{\$2}), positive or
+negative angle (\texttt{cos\_thet<0.} or \texttt{cos\_thet>0}) and for the energy (\texttt{\$11}). Printing this as
+a histogram, we use the following code:
+
+\begin{lstlisting}
+nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$11
+pict/print afb-muons-daten1-negative-energy1.ps
+nt/plot daten1.cos_thet $2.and.cos_thet>0..and.cos_thet<2..and.$11
+pict/print afb-muons-daten1-positive-energy1.ps
+\end{lstlisting}
+
+We have also supplied the additional criterion for sensible angles
+(\texttt{cos\_thet<2.}) because undefined angles have a numerical value way
+greater than two.
+
+From the exported diagrams (not included in this report) we extract the number
+of events with $\cos(\theta) > 0$, which we call $N_+$, and the events with
+$\cos(\theta) < 0$, which we call $N_-$. The asymmetry is then simply
+\[
+    A_\text{FB} = \frac{N_+ - N_-}{N_+ + N_-} \,.
+\]
+
+Our analysis to this point is based on the tree level formalism. Higher order
+corrections are needed in every QFT for more accurate result. Here we are given
+the combined effect of all those corrections as a table of shift for
+$A_\text{FB}$. For each beam energy, we add the correction and obtain a final
+value for $A_\text{FB}$. The resulting asymmetry for the different beam
+energies is shown in Figure~\ref{fig:plot-afb}. Error estimation is done by
+assuming an error of $\sqrt{N}$ for all the counts and using Gaussian error
+propagation for the final result.
 
 \begin{figure}
     \centering
@@ -1024,6 +895,119 @@ detection efficiency and underground.
     }
     \label{fig:plot-afb}
 \end{figure}
+
+The figure also includes the theoretical expectation that we have computed in
+the exercises in Section~\ref{sec:exercises-asymmetry}. We have re-computed the
+expectation value with the physical value of $\sin(\theta_\text w)^2$ for the
+various beam energies used. Our results do not imply this exact trend (i.e.\
+almost constant) of the asymmetry. However, as the errors are quite large, our
+measurements are still consistent with it.
+
+\section{Detection efficiency}
+
+By choosing the cuts in a particular way, we make a compromise between
+detection efficiency and underground. Choosing a tight cut will discard events
+that should have been counted. This will lead to a loss of a certain fractions
+of events. This is not directly a problem as we can just compensate by this
+loss factor. However, our statistical errors will grow as we have less
+statistics. A loose cut will water the sorting with underground events. Say we
+want to filter out electrons but our cuts are too loose. Then some tau events
+might slip into the electrons category.
+
+Both types of errors, the false-negatives and the false-positives, can be
+handled using a detection matrix~$\mat D$ and Monte Carlo datasets.
+The Monte Carlo datasets are purely of one decay channel. Therefore we know
+exactly that we only have, say, electrons. Applying our cuts to the Monte Carlo
+electrons, we will see how many are actually detected as electrons. This is our
+efficiency. Then we take the other three kinds (muons, taus, hadrons) of the
+Monte Carlo datasets and apply the electron cuts to it. Ideally, we should not
+get any events. The ratio of other events that we falsely identify as electrons
+is the underground.
+
+Using a linear model for this, we need a mapping from the actual events vector
+$\vec A$ (in electron-muon-tau-hadrons space, $\N^4$) to the identified events
+vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
+= \mat D \vec A$. In order to find the sixteen matrix elements, we apply a
+vector with Monte Carlo electrons.
+
+\subsection{Determining matrix elements}
+
+In order to do this with \textsc{paw}, we define our final cuts for electrons,
+muons, taus and hadrons:
+
+\begin{lstlisting}
+nt/cuts $1 ncharged<4.and.e_ecal>60.and.cos_thet<.5.and.cos_thet>-0.9
+nt/cuts $2 pcharged>75.and.ncharged<4.and.e_ecal<20.and.cos_thet<.9.and.cos_thet>-0.9
+nt/cuts $3 pcharged<75.and.ncharged<7.and.e_ecal<75
+nt/cuts $4 ncharged>7
+\end{lstlisting}
+
+We need to count the number of events that matched a given cut. Creating a
+histogram with respect to an arbitrary characteristic will give us this number
+as a side effect. The following generates a histogram with electron data and
+the electron filter:
+
+\begin{lstlisting}
+nt/plot electrons.ncharged $1
+pict/print matrix-electrons-with-electron-filter.ps
+\end{lstlisting}
+
+And this generates a histogram with muon data and the same filter:
+
+\begin{lstlisting}
+nt/plot muons.ncharged $1
+pict/print matrix-muons-with-electron-filter.ps
+\end{lstlisting}
+
+Similar expressions are needed for the other matrix element, in total we need
+16 of those counting histograms. The resulting histograms are shown in
+Figure~\ref{fig:paw-matrix-electrons}. Squint at the row \enquote{Entries} in
+the legend, this is the interesting number.
+
+For the electrons, the input vector is $\vec A = (94381, 0, 0,
+0)^\mathrm T$. Then we look at the output and find $\vec I = (20474, 1, 1013,
+0)^\mathrm T$. From this, we can construct the first row in the matrix. Using
+the other filters, we can construct the whole matrix. Figure~\ref{fig:matrix/1}
+shows the matrix. It can be seen that it is mostly diagonal, just as we want it
+to be. The detection efficiency for the electrons is not very great. This comes
+from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
+
+% TODO Error estimation.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{mpl-normalized_matrix}
+        \caption{%
+            Detection matrix. Left-multiply with a vector which contains actual
+            event numbers to get event numbers identified by our cuts.
+        }
+        \label{fig:matrix/1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{mpl-inverted_matrix}
+        \caption{%
+            Inverse matrix. Left-multiply with a vector containing our
+            measurements to get actual event numbers.
+        }
+        \label{fig:matrix/2}
+    \end{subfigure}
+    \caption{%
+        Normalized conversion matrices between detected and actual event types.
+    }
+    \label{fig:matrix}
+\end{figure}
+
+\subsection{Inverting the matrix}
+
+In order to use this detection matrix~$\mat E$ as a correction, we need to
+invert the matrix. As it is almost diagonal, this will be numerically stable.
+The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
+
+% TODO Error calculation.
 
 \section{Partial cross sections}
 
@@ -1041,149 +1025,39 @@ detection efficiency and underground.
 
 \section{Decay widths}
 
+\begin{table}
+    \centering
+    \begin{tabular}{lSS}
+        \toprule
+        Type
+        & {$\MZ / \si{\giga\electronvolt}$}
+        & {$\Gamma_i / \si{\giga\electronvolt}$} \\
+        \midrule
+        %< for row in lorentz_fits_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Fit parameters of the Lorentzian curves used in
+        Figure~\ref{fig:cross-sections} for the partial cross sections.
+    }
+    \label{tab:lorentz-fits}
+\end{table}
+
 \begin{appendix}
 
     \chapter{PAW Histograms}
 
     \section{Monte Carlo data}
 
-    \begin{figure}[h!]
-        \centering
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{electrons-pcharged}
-            \caption{%
-                Electrons
-            }
-            \label{fig:paw-pcharged/electrons}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{muons-pcharged}
-            \caption{%
-                Muons
-            }
-            \label{fig:paw-pcharged/muons}
-        \end{subfigure}
+    \input{../Snippets/paw-pcharged}
 
-        \vspace{2ex}
+    \input{../Snippets/paw-e_ecal}
 
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{taus-pcharged}
-            \caption{%
-                Taus
-            }
-            \label{fig:paw-pcharged/taus}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{hadrons-pcharged}
-            \caption{%
-                Hadrons
-            }
-            \label{fig:paw-pcharged/hadrons}
-        \end{subfigure}
-        \caption{%
-            Energy in charged tracks, \pcharged, for the four decay types.
-            Histograms generated with \textsc{paw} from Monte Carlo datasets.
-        }
-        \label{fig:paw-pcharged}
-    \end{figure}
+    \input{../Snippets/paw-e_hcal}
     
-    \begin{figure}
-        \centering
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{electrons-e_ecal}
-            \caption{%
-                Electrons
-            }
-            \label{fig:paw-e_ecal/electrons}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{muons-e_ecal}
-            \caption{%
-                Muons
-            }
-            \label{fig:paw-e_ecal/muons}
-        \end{subfigure}
-
-        \vspace{2ex}
-
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{taus-e_ecal}
-            \caption{%
-                Taus
-            }
-            \label{fig:paw-e_ecal/taus}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{hadrons-e_ecal}
-            \caption{%
-                Hadrons
-            }
-            \label{fig:paw-e_ecal/hadrons}
-        \end{subfigure}
-        \caption{%
-            Energy deposited into the \ecal\ for the four decay types.
-            Histograms generated with \textsc{paw} from Monte Carlo datasets.
-        }
-        \label{fig:paw-e_ecal}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{electrons-e_hcal}
-            \caption{%
-                Electrons
-            }
-            \label{fig:paw-e_hcal/electrons}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{muons-e_hcal}
-            \caption{%
-                Muons
-            }
-            \label{fig:paw-e_hcal/muons}
-        \end{subfigure}
-
-        \vspace{2ex}
-
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{taus-e_hcal}
-            \caption{%
-                Taus
-            }
-            \label{fig:paw-e_hcal/taus}
-        \end{subfigure}
-        \hfill
-        \begin{subfigure}[c]{0.48\linewidth}
-            \centering
-            \includegraphics[width=\linewidth]{hadrons-e_hcal}
-            \caption{%
-                Hadrons
-            }
-            \label{fig:paw-e_hcal/hadrons}
-        \end{subfigure}
-        \caption{%
-            Energy deposited into the \hcal\ for the four decay types.
-            Histograms generated with \textsc{paw} from Monte Carlo datasets.
-        }
-        \label{fig:paw-e_hcal}
-    \end{figure}
+    \input{../Snippets/matrix-electrons}
 
 \end{appendix}
 
