@@ -55,6 +55,9 @@ test:
 
 $(out): $(to_crop_out)
 
+open:
+	xdg-open $(out)
+
 # Running `make crunch` will only run `crunch.py`, nothing more. This is handy
 # if has output from the Python program but does not want to typeset the
 # report.
