@@ -577,10 +577,13 @@ in Table~\ref{tab:asymmetry}.
     \centering
     \begin{tabular}{S*3S}
         \toprule
-        & \multicolumn{3}{c}{$\sin(\theta_\text w)^2$} \\
+        & \multicolumn{3}{c}{$A_\text{FB}^\muup$} \\
         \cmidrule(l){2-4}
         {$s$}
-        & << ' & '.join(sin_sq_array) >> \\
+        %< for x in sin_sq_array >%
+        & {$\sin(\theta_\text w)^2 = \num{<< x >>}$}
+        %< endfor >%
+        \\
         \midrule
         %< for row in asymmetry_table >%
         << ' & '.join(row) >> \\
@@ -757,7 +760,7 @@ After the refining, we have the following cuts:
 
 \begin{tabular}{lcccc}
     \toprule
-    & \multicolumn{4}{c}{Characteristic} \\
+    & \multicolumn{4}{c}{Cut criterion} \\
     \cmidrule(l){2-5}
     Particle
     & \ncharged
@@ -843,7 +846,7 @@ Our refined and final cuts including the angle are:
 
 \begin{tabular}{lccccc}
     \toprule
-    & \multicolumn{5}{c}{Characteristic} \\
+    & \multicolumn{5}{c}{Cut criterion} \\
     \cmidrule(l){2-6}
     Particle
     & \ncharged
@@ -1053,7 +1056,7 @@ which we assume to be $\sqrt{N}$ as this is a counting experiment.
     \centering
     \begin{tabular}{SSSSS}
         \toprule
-        & \multicolumn{4}{c}{Decay type} \\
+        & \multicolumn{4}{c}{Raw count} \\
         \cmidrule(l){2-5}
         {$\sqrt s / \si{\giga\electronvolt}$}
         & {Electrons}
@@ -1087,7 +1090,7 @@ corrected counts. Those are shown in Table~\ref{tab:corrected-counts}.
     \centering
     \begin{tabular}{SSSSS}
         \toprule
-        & \multicolumn{4}{c}{Decay type} \\
+        & \multicolumn{4}{c}{Corrected count} \\
         \cmidrule(l){2-5}
         {$\sqrt s / \si{\giga\electronvolt}$}
         & {Electrons}
