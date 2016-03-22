@@ -79,7 +79,10 @@
 
 % Set a margin around captions to make them stand out more in contrast to the
 % surrounding text.
+\if@beamer
+\else
 \setcapwidth[c]{0.9\linewidth}
+\fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                    Color                                    %
@@ -127,30 +130,33 @@
 %                         Hyperrefs and PDF metadata                          %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{hyperref}
-
-% This sets the author in the properties of the PDF as well. If you want to
-% change it, just override it with another ``\hypersetup`` call.
-\hypersetup{
-    breaklinks=false,
-    colorlinks=true,
-    pdfauthor={Martin Ueding},
-}
-
-\if@color
-    \hypersetup{
-        citecolor=darkgreen,
-        linkcolor=darkblue,
-        menucolor=black,
-        urlcolor=darkblue,
-    }
+\if@beamer
 \else
+    \RequirePackage{hyperref}
+
+    % This sets the author in the properties of the PDF as well. If you want to
+    % change it, just override it with another ``\hypersetup`` call.
     \hypersetup{
-        citecolor=black,
-        linkcolor=black,
-        menucolor=black,
-        urlcolor=black,
+        breaklinks=false,
+        colorlinks=true,
+        pdfauthor={Martin Ueding},
     }
+
+    \if@color
+        \hypersetup{
+            citecolor=darkgreen,
+            linkcolor=darkblue,
+            menucolor=black,
+            urlcolor=darkblue,
+        }
+    \else
+        \hypersetup{
+            citecolor=black,
+            linkcolor=black,
+            menucolor=black,
+            urlcolor=black,
+        }
+    \fi
 \fi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
