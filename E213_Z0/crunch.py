@@ -102,7 +102,7 @@ def bootstrap_driver(T):
 
     results = []
 
-    for r in range(10):
+    for r in range(300):
         # Draw new numbers for the matrix.
         boot_matrix = redraw_count(raw_matrix)
 
@@ -128,9 +128,9 @@ def bootstrap_driver(T):
 
 
     fig = pl.figure()
-    ax = fig.add_subplot(1, 1, 1)
 
-    for name, y_list, color, cs in zip(names, y_lists, channel_colors, cross_sections_3):
+    for i, name, y_list, color, cs in zip(itertools.count(), names, y_lists, channel_colors, cross_sections_3):
+        ax = fig.add_subplot(2, 2, i+1)
         y_val, y_err = bootstrap.average_and_std_arrays(y_list)
         cross_section_val, cross_section_err = bootstrap.average_and_std_arrays(cs)
         #ax.plot(x, y_val, color=color)
@@ -141,9 +141,12 @@ def bootstrap_driver(T):
         ax.errorbar(energies, cross_section_val, cross_section_err, color=color, linestyle='none', marker='+')
         ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
 
-    ax.margins(0.05)
+        ax.margins(0.05)
     fig.tight_layout()
     fig.savefig(figname('test-band'))
+
+    print('Masses', siunitx(masses_val, masses_err))
+    print('Widths', siunitx(widths_val, widths_err, error_digits=2))
 
 
 def redraw_count(a):
