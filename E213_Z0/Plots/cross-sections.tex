@@ -10,46 +10,46 @@
             legend pos=north west,
         ]
 
-        \addplot[
-            electrons,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
-        ] table[y error index=2] {../xy/cross_section-electrons.tsv};
-        \addlegendentry{Electrons}
-
-        \addplot[
-            muons,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
-        ] table[y error index=2] {../xy/cross_section-muons.tsv};
-        \addlegendentry{Muons}
-
-        \addplot[
-            taus,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
-        ] table[y error index=2] {../xy/cross_section-taus.tsv};
-        \addlegendentry{Taus}
-
-        \addplot[
-            hadrons,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
-        ] table[y error index=2] {../xy/cross_section-hadrons.tsv};
-        \addlegendentry{Hadrons}
-
-        \addplot[electrons] table {../xy/cross_section-electrons-fit.tsv};
-        \addplot[muons] table {../xy/cross_section-muons-fit.tsv};
-        \addplot[taus] table {../xy/cross_section-taus-fit.tsv};
-        \addplot[hadrons] table {../xy/cross_section-hadrons-fit.tsv};
+%        \addplot[
+%            electrons,
+%            mark=*,
+%            only marks,
+%            error bars/y dir=both,
+%            error bars/y explicit,
+%        ] table[y error index=2] {../xy/cross_section-electrons.tsv};
+%        \addlegendentry{Electrons}
+%
+%        \addplot[
+%            muons,
+%            mark=*,
+%            only marks,
+%            error bars/y dir=both,
+%            error bars/y explicit,
+%        ] table[y error index=2] {../xy/cross_section-muons.tsv};
+%        \addlegendentry{Muons}
+%
+%        \addplot[
+%            taus,
+%            mark=*,
+%            only marks,
+%            error bars/y dir=both,
+%            error bars/y explicit,
+%        ] table[y error index=2] {../xy/cross_section-taus.tsv};
+%        \addlegendentry{Taus}
+%
+%        \addplot[
+%            hadrons,
+%            mark=*,
+%            only marks,
+%            error bars/y dir=both,
+%            error bars/y explicit,
+%        ] table[y error index=2] {../xy/cross_section-hadrons.tsv};
+%        \addlegendentry{Hadrons}
+%
+%        \addplot[electrons] table {../xy/cross_section-electrons-fit.tsv};
+%        \addplot[muons] table {../xy/cross_section-muons-fit.tsv};
+%        \addplot[taus] table {../xy/cross_section-taus-fit.tsv};
+%        \addplot[hadrons] table {../xy/cross_section-hadrons-fit.tsv};
 
     \end{axis}
 \end{tikzpicture}

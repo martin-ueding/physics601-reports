@@ -1002,7 +1002,7 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
     \centering
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{mpl-normalized_matrix}
+        %\includegraphics[width=\linewidth]{mpl-normalized_matrix}
         \caption{%
             Detection matrix. Left-multiply with a vector which contains actual
             event numbers to get event numbers identified by our cuts.
@@ -1012,7 +1012,7 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
     \hfill
     \begin{subfigure}[t]{0.48\linewidth}
         \centering
-        \includegraphics[width=\linewidth]{mpl-inverted_matrix}
+        %\includegraphics[width=\linewidth]{mpl-inverted_matrix}
         \caption{%
             Inverse matrix. Left-multiply with a vector containing our
             measurements to get actual event numbers.
@@ -1098,9 +1098,9 @@ corrected counts. Those are shown in Table~\ref{tab:corrected-counts}.
         & {Taus}
         & {Hadrons} \\
         \midrule
-        %< for row in corrected_counts_table >%
+        %< for row in corrected_counts_table ->%
         << ' & '.join(row) >> \\
-        %< endfor >%
+        %< endfor ->%
         \bottomrule
     \end{tabular}
     \caption{%

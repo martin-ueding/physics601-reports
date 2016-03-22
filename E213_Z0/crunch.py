@@ -88,7 +88,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
         y = lorentz(x, *popt)
         y_list.append(y)
 
-    return x, masses, widths, cross_sections, y_list
+    return x, masses, widths, cross_sections, y_list, corr.T, matrix, inverted
 
 
 def bootstrap_driver(T):
@@ -102,7 +102,7 @@ def bootstrap_driver(T):
 
     results = []
 
-    for r in range(300):
+    for r in range(100):
         # Draw new numbers for the matrix.
         boot_matrix = redraw_count(raw_matrix)
 
@@ -115,12 +115,25 @@ def bootstrap_driver(T):
         results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val))
 
 
-    x_list, masses, widths, cross_sections, y_list = zip(*results)
+    x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list = zip(*results)
 
     x = x_list[0]
 
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths)
+
+    corr_val, corr_err = bootstrap.average_and_std_arrays(corr_list)
+    print()
+    print(corr_val)
+    print()
+    print(corr_err)
+
+    corr = []
+    for i in range(7):
+        corr.append([siunitx(energies[i])] + siunitx(corr_val[i, :], corr_err[i, :], allowed_hang=10))
+    pp.pprint(corr)
+
+    T['corrected_counts_table'] = list(corr)
 
 
     y_lists = zip(*y_list)
@@ -456,12 +469,10 @@ def main():
     interpolator = job_radiative_correction(T)
 
     bootstrap_driver(T)
-    return
-    eob_colors()
-    job_cross_sections(T)
+    job_decay_widths(T)
+    job_colors()
     job_afb_analysis(T, interpolator)
     job_grope(T, options.show)
-    job_decay_widths(T)
     job_angular_dependence(T)
     job_asymetry(T)
 
