@@ -1,0 +1,46 @@
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations}
+
+\begin{tikzpicture}[
+        transition/.style={
+            ->,
+            %thick,
+            decorate,
+            decoration={
+                snake,
+                amplitude=0.2ex,
+                segment length=1.5ex,
+                post length=0.5ex,
+            },
+        },
+        energy/.style={
+            midway,
+            fill=white,
+            inner sep=2pt,
+            font=\small,
+            draw,
+        },
+    ]
+
+    \coordinate (hf8) at (5, -2);
+
+    \node[draw, rectangle] at (1.5, 1) {$^{176}\mathrm{Lu}$};
+    \node[draw, rectangle] at (8.5, 1) {$^{176}\mathrm{Hf}$};
+
+    \draw[thick] (0, 0) node[left]  {$J^P = {7}^-$} -- ++(3, 0) node[right] {\SI{0}{\kilo\electronvolt}};
+
+    \draw[thick] ($(hf8)+0*(0, -1.5)$) node[left] {${8}^+$} -- ++(6, 0) node[right] {\SI{997.74}{\kilo\electronvolt}};
+    \draw[thick] ($(hf8)+1*(0, -1.5)$) node[left] {${6}^+$} -- ++(6, 0) node[right] {\SI{596.82}{\kilo\electronvolt}};
+    \draw[thick] ($(hf8)+2*(0, -1.5)$) node[left] {${4}^+$} -- ++(6, 0) node[right] {\SI{290.18}{\kilo\electronvolt}};
+    \draw[thick] ($(hf8)+3*(0, -1.5)$) node[left] {${2}^+$} -- ++(6, 0) node[right] {\SI{88.351}{\kilo\electronvolt}};
+    \draw[thick] ($(hf8)+4*(0, -1.5)$) node[left] {${0}^+$} -- ++(6, 0) node[right] {\SI{0}{\kilo\electronvolt}};
+
+    \draw[transition] (2.0, 0) -- ($(hf8)+(0.5, 0)$) node[energy] {\SI{0.34}{\percent}, \SI{20.1}{\milli\second}};
+    \draw[transition] (0.5, 0) -- ($(hf8)+(0.2, -1.5)$) node[energy] {\SI{99.66}{\percent}, \SI{19.2}{\milli\second}};
+
+    \draw[transition] ($(hf8)+(2,0)+0*(1,-1.5)$) -- ++(0, -1.5) node[energy] {\SI{0.329}{\milli\second}, \SI{400.99}{\kilo\electronvolt}};
+    \draw[transition] ($(hf8)+(2,0)+1*(1,-1.5)$) -- ++(0, -1.5) node[energy] {\SI{94}{\milli\second}, \SI{306.78}{\kilo\electronvolt}};
+    \draw[transition] ($(hf8)+(2,0)+2*(1,-1.5)$) -- ++(0, -1.5) node[energy] {\SI{86}{\milli\second}, \SI{201.83}{\kilo\electronvolt}};
+    \draw[transition] ($(hf8)+(2,0)+3*(1,-1.5)$) -- ++(0, -1.5) node[energy] {\SI{13.3}{\milli\second}, \SI{88.34}{\kilo\electronvolt}};
+
+\end{tikzpicture}
