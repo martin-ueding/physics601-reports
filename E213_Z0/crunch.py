@@ -143,6 +143,10 @@ def bootstrap_driver(T):
     print(cs_val)
     print(cs_err)
 
+    T['cross_sections_table'] = []
+    for i in range(7):
+        T['cross_sections_table'].append([siunitx(energies[i])] + siunitx(cs_val[:, i], cs_err[:, i]))
+
 
     fig = pl.figure()
 
@@ -158,6 +162,12 @@ def bootstrap_driver(T):
 
     print('Masses', siunitx(masses_val, masses_err))
     print('Widths', siunitx(widths_val, widths_err, error_digits=2))
+
+    T['lorentz_fits_table'] = list(zip(
+        [name.capitalize() for name in names],
+        siunitx(masses_val, masses_err),
+        siunitx(widths_val, widths_err, error_digits=2),
+    ))
 
 
 def redraw_count(a):
