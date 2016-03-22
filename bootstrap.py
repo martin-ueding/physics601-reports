@@ -29,8 +29,6 @@ def average_and_std_arrays(arrays):
     '''
     total = np.column_stack(arrays)
     
-    print(total)
-
     val = np.mean(total, axis=1)
     err = np.std(total, axis=1)
 
