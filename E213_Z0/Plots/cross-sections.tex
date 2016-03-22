@@ -8,58 +8,46 @@
             ylabel={$\sigma_i / \si{\nano\barn}$},
             grid=major,
             legend pos=north west,
+            mymarker/.style={
+                mark=+,
+                only marks,
+                error bars/y dir=both,
+                error bars/y explicit,
+            },
             band/.style={
-                draw=none, stack plots=y, forget plot,
+                draw=none,
+                opacity=0.6,
             },
         ]
 
         \addplot[
             electrons,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
+            mymarker,
         ] table[y error index=2] {../xy/cross_section-electrons.tsv};
         \addlegendentry{Electrons}
 
         \addplot[
             muons,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
+            mymarker,
         ] table[y error index=2] {../xy/cross_section-muons.tsv};
         \addlegendentry{Muons}
 
         \addplot[
             taus,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
+            mymarker,
         ] table[y error index=2] {../xy/cross_section-taus.tsv};
         \addlegendentry{Taus}
 
         \addplot[
             hadrons,
-            mark=*,
-            only marks,
-            error bars/y dir=both,
-            error bars/y explicit,
+            mymarker,
         ] table[y error index=2] {../xy/cross_section-hadrons.tsv};
         \addlegendentry{Hadrons}
 
-        \addplot [band] table {../xy/cross_section-electrons-band1.tsv};
-        \addplot [band, fill=gray!40] table {../xy/cross_section-electrons-band2.tsv} \closedcycle;
-
-        \addplot [band] table {../xy/cross_section-muons-band1.tsv};
-        \addplot [band, fill=gray!40] table {../xy/cross_section-muons-band2.tsv} \closedcycle;
-
-        \addplot [band] table {../xy/cross_section-taus-band1.tsv};
-        \addplot [band, fill=gray!40] table {../xy/cross_section-taus-band2.tsv} \closedcycle;
-
-        \addplot [band] table {../xy/cross_section-hadrons-band1.tsv};
-        \addplot [band, fill=gray!40] table {../xy/cross_section-hadrons-band2.tsv} \closedcycle;
+        \addplot [band, fill=electrons] table {../xy/cross_section-electrons-band.tsv} \closedcycle;
+        \addplot [band, fill=muons] table {../xy/cross_section-muons-band.tsv} \closedcycle;
+        \addplot [band, fill=taus] table {../xy/cross_section-taus-band.tsv} \closedcycle;
+        \addplot [band, fill=hadrons] table {../xy/cross_section-hadrons-band.tsv} \closedcycle;
 
 
     \end{axis}

@@ -1,0 +1,31 @@
+\input{../colors}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            width=0.45\linewidth,
+            height=0.3\linewidth,
+            xlabel={CMS Energy $\sqrt{s} / \si{\giga\electronvolt}$},
+            ylabel={$\sigma_i / \si{\nano\barn}$},
+            grid=major,
+            legend pos=north west,
+            mymarker/.style={
+                mark=+,
+                only marks,
+                error bars/y dir=both,
+                error bars/y explicit,
+            },
+            band/.style={
+                draw=none,
+                opacity=0.6,
+            },
+        ]
+
+        \addplot[
+            taus,
+            mymarker,
+        ] table[y error index=2] {../xy/cross_section-taus.tsv};
+
+        \addplot [band, fill=taus] table {../xy/cross_section-taus-band.tsv} \closedcycle;
+
+    \end{axis}
+\end{tikzpicture}

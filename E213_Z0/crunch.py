@@ -159,10 +159,14 @@ def bootstrap_driver(T):
 
         np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
                    np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
-        np.savetxt('_build/xy/cross_section-{}s-band1.tsv'.format(name),
-                   np.column_stack([x, y_val-y_err]))
-        np.savetxt('_build/xy/cross_section-{}s-band2.tsv'.format(name),
-                   np.column_stack([x, 2*y_err]))
+        np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
+                   np.column_stack([
+                       np.concatenate((x, x[::-1])),
+                       np.concatenate((
+                           (y_val-y_err),
+                           (y_val+y_err)[::-1]
+                       ))
+                   ]))
 
     fig.tight_layout()
     fig.savefig(figname('test-band'))

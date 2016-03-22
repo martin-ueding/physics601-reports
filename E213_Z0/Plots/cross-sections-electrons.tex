@@ -1,0 +1,31 @@
+\input{../colors}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            width=0.45\linewidth,
+            height=0.3\linewidth,
+            xlabel={CMS Energy $\sqrt{s} / \si{\giga\electronvolt}$},
+            ylabel={$\sigma_i / \si{\nano\barn}$},
+            grid=major,
+            legend pos=north west,
+            mymarker/.style={
+                mark=+,
+                only marks,
+                error bars/y dir=both,
+                error bars/y explicit,
+            },
+            band/.style={
+                draw=none,
+                opacity=0.6,
+            },
+        ]
+
+        \addplot[
+            electrons,
+            mymarker,
+        ] table[y error index=2] {../xy/cross_section-electrons.tsv};
+
+        \addplot [band, fill=electrons] table {../xy/cross_section-electrons-band.tsv} \closedcycle;
+
+    \end{axis}
+\end{tikzpicture}
