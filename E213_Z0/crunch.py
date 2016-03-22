@@ -88,7 +88,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
         y = lorentz(x, *popt)
         y_list.append(y)
 
-    return x, masses, widths, cross_sections, y_list, corr.T, matrix, inverted
+    return x, masses, widths, cross_sections, y_list, corr.T, matrix, inverted, readings
 
 
 def bootstrap_driver(T):
@@ -115,7 +115,7 @@ def bootstrap_driver(T):
         results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val))
 
 
-    x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list = zip(*results)
+    x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list, readings_list = zip(*results)
 
     x = x_list[0]
 
@@ -123,17 +123,16 @@ def bootstrap_driver(T):
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths)
 
     corr_val, corr_err = bootstrap.average_and_std_arrays(corr_list)
-    print()
-    print(corr_val)
-    print()
-    print(corr_err)
-
     corr = []
     for i in range(7):
         corr.append([siunitx(energies[i])] + siunitx(corr_val[i, :], corr_err[i, :], allowed_hang=10))
-    pp.pprint(corr)
-
     T['corrected_counts_table'] = list(corr)
+
+    val, err = bootstrap.average_and_std_arrays(readings_list)
+    readings = []
+    for i in range(7):
+        readings.append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
+    T['counts_table'] = list(readings)
 
 
     y_lists = zip(*y_list)
