@@ -88,7 +88,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
         y = lorentz(x, *popt)
         y_list.append(y)
 
-    return x, masses, widths, cross_sections, y_list, corr.T, matrix, inverted, readings
+    return x, masses, widths, np.array(cross_sections), y_list, corr.T, matrix, inverted, readings
 
 
 def bootstrap_driver(T):
@@ -138,21 +138,18 @@ def bootstrap_driver(T):
 
 
     y_lists = zip(*y_list)
-    cross_sections_3 = zip(*cross_sections)
+    cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections)
+    print('CS')
+    print(cs_val)
+    print(cs_err)
 
 
     fig = pl.figure()
 
-    for i, name, y_list, color, cs in zip(itertools.count(), names, y_lists, channel_colors, cross_sections_3):
+    for i, name, y_list, color in zip(itertools.count(), names, y_lists, channel_colors):
         ax = fig.add_subplot(2, 2, i+1)
         y_val, y_err = bootstrap.average_and_std_arrays(y_list)
-        cross_section_val, cross_section_err = bootstrap.average_and_std_arrays(cs)
-        #ax.plot(x, y_val, color=color)
-        print()
-        print(name)
-        print(cross_section_val)
-        print(cross_section_err)
-        ax.errorbar(energies, cross_section_val, cross_section_err, color=color, linestyle='none', marker='+')
+        ax.errorbar(energies, cs_val[i, :], cs_err[i, :], color=color, linestyle='none', marker='+')
         ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
 
         ax.margins(0.05)
