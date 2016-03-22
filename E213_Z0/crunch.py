@@ -96,6 +96,8 @@ def bootstrap_driver(T):
     lum_val = lum_data[:, 0]
     lum_err = lum_data[:, 3]
 
+    T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
+
     raw_matrix = np.loadtxt('Data/matrix.txt').T
     mc_sizes = np.loadtxt('Data/monte-carlo-sizes.txt')
     filtered = np.loadtxt('Data/filtered.txt')
@@ -194,8 +196,6 @@ def job_colors():
 
 def job_cross_sections(T):
     inverse_val, inverse_err = matrix(T)
-
-    T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
 
 def figname(basename):
     return '_build/to_crop/mpl-{}.pdf'.format(basename)
