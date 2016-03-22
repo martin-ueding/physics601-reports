@@ -157,12 +157,12 @@ def bootstrap_driver(T):
         ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
         ax.margins(0.05)
 
-        np.savetxt('_build/xy/cross-section-{}.tsv'.format(name),
+        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
                    np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
-        np.savetxt('_build/xy/cross-section-{}-band2.tsv'.format(name),
-                   np.column_stack([x, y_val+y_err]))
-        np.savetxt('_build/xy/cross-section-{}-band1.tsv'.format(name),
+        np.savetxt('_build/xy/cross_section-{}s-band1.tsv'.format(name),
                    np.column_stack([x, y_val-y_err]))
+        np.savetxt('_build/xy/cross_section-{}s-band2.tsv'.format(name),
+                   np.column_stack([x, 2*y_err]))
 
     fig.tight_layout()
     fig.savefig(figname('test-band'))
