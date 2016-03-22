@@ -155,8 +155,15 @@ def bootstrap_driver(T):
         y_val, y_err = bootstrap.average_and_std_arrays(y_list)
         ax.errorbar(energies, cs_val[i, :], cs_err[i, :], color=color, linestyle='none', marker='+')
         ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
-
         ax.margins(0.05)
+
+        np.savetxt('_build/xy/cross-section-{}.tsv'.format(name),
+                   np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
+        np.savetxt('_build/xy/cross-section-{}-band2.tsv'.format(name),
+                   np.column_stack([x, y_val+y_err]))
+        np.savetxt('_build/xy/cross-section-{}-band1.tsv'.format(name),
+                   np.column_stack([x, y_val-y_err]))
+
     fig.tight_layout()
     fig.savefig(figname('test-band'))
 
