@@ -38,8 +38,8 @@ energies = np.loadtxt('Data/energies.txt')
 channel_colors = [
     '#377eb8',
     '#984ea3',
-    '#e41a1c',
     '#4daf4a',
+    '#e41a1c',
 ]
 
 
@@ -130,11 +130,12 @@ def bootstrap_driver(T):
     fig = pl.figure()
     ax = fig.add_subplot(1, 1, 1)
 
-    for y_list, color, cs in zip(y_lists, channel_colors, cross_sections_3):
+    for name, y_list, color, cs in zip(names, y_lists, channel_colors, cross_sections_3):
         y_val, y_err = bootstrap.average_and_std_arrays(y_list)
         cross_section_val, cross_section_err = bootstrap.average_and_std_arrays(cs)
         #ax.plot(x, y_val, color=color)
         print()
+        print(name)
         print(cross_section_val)
         print(cross_section_err)
         ax.errorbar(energies, cross_section_val, cross_section_err, color=color, linestyle='none', marker='+')
