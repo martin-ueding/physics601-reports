@@ -794,26 +794,32 @@ one could even do a 3D-histogram and find cut surfaces which separate the data
 most cleanly. In \textsc{paw} we were limited to hyperplanes anyway, so we just
 chose a few axis-parallel planes as they did the job sufficiently well.
 
-\needspace{4cm}
+After the refining, we have the cuts listed in Table~\ref{tab:cuts}.
 
-After the refining, we have the following cuts:
-
-\begin{tabular}{lcccc}
-    \toprule
-    & \multicolumn{4}{c}{Cut criterion} \\
-    \cmidrule(l){2-5}
-    Particle
-    & \ncharged
-    & \sump/\si{\giga\electronvolt}
-    & \eecal/\si{\giga\electronvolt}
-    & \ehcal/\si{\giga\electronvolt} \\
-    \midrule
-    Electrons & $< 4$ &  & $> 60$ &  \\
-    Muons & $< 4$ & $> 75$ & $< 20$ &  \\
-    Taus & $< 7$ & $< 75$ & $\leq 75$ &  \\
-    Hadrons & $> 7$ &  &  &  \\
-    \bottomrule
-\end{tabular}
+\begin{table}
+    \centering
+    \begin{tabular}{lcccc}
+        \toprule
+        & \multicolumn{4}{c}{Cut criterion} \\
+        \cmidrule(l){2-5}
+        Particle
+        & \ncharged
+        & \sump/\si{\giga\electronvolt}
+        & \eecal/\si{\giga\electronvolt}
+        & \ehcal/\si{\giga\electronvolt} \\
+        \midrule
+        Electrons & $< 4$ &  & $> 60$ &  \\
+        Muons & $< 4$ & $> 75$ & $< 20$ &  \\
+        Taus & $< 7$ & $< 75$ & $\leq 75$ &  \\
+        Hadrons & $> 7$ &  &  &  \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Cuts derived from the few data points manually extracted from the Monte
+        Carlo events.
+    }
+    \label{tab:cuts}
+\end{table}
 
 \subsection{More data points}
 
@@ -879,28 +885,34 @@ distribution is rarely defined, there is only one event that even has a
 well-defined $\theta$-angle. Therefore we do not perform any cutting in the
 hadronic sector.
 
-\needspace{20ex}
+Our refined and final cuts including the angle are listed in
+Table~\ref{tab:cuts2}.
 
-Our refined and final cuts including the angle are:
-
-\begin{tabular}{lccccc}
-    \toprule
-    & \multicolumn{5}{c}{Cut criterion} \\
-    \cmidrule(l){2-6}
-    Particle
-    & \ncharged
-    & \sump/\si{\giga\electronvolt}
-    & \eecal/\si{\giga\electronvolt}
-    & \ehcal/\si{\giga\electronvolt}
-    & $\cos(\theta)$
-    \\
-    \midrule
-    Electrons & $< 4$ &  & $> 60$ &  & $\num{-.9}\leq\dots\leq\num{.5}$ \\
-    Muons & $< 4$ & $> 75$ & $< 20$ &  & $\num{-.9}\leq\dots\leq\num{.9}$ \\
-    Taus & $< 7$ & $< 75$ & $\leq 75$ &  &\\
-    Hadrons & $> 7$ &  &  &  & \\
-    \bottomrule
-\end{tabular}
+\begin{table}
+    \centering
+    \begin{tabular}{lccccc}
+        \toprule
+        & \multicolumn{5}{c}{Cut criterion} \\
+        \cmidrule(l){2-6}
+        Particle
+        & \ncharged
+        & \sump/\si{\giga\electronvolt}
+        & \eecal/\si{\giga\electronvolt}
+        & \ehcal/\si{\giga\electronvolt}
+        & $\cos(\theta)$
+        \\
+        \midrule
+        Electrons & $< 4$ &  & $> 60$ &  & $\num{-.9}\leq\dots\leq\num{.5}$ \\
+        Muons & $< 4$ & $> 75$ & $< 20$ &  & $\num{-.9}\leq\dots\leq\num{.9}$ \\
+        Taus & $< 7$ & $< 75$ & $\leq 75$ &  &\\
+        Hadrons & $> 7$ &  &  &  & \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Cuts derived from the full Monte Carlo datasets.
+    }
+    \label{tab:cuts2}
+\end{table}
 
 \section{Muon forward--backward asymmetry}
 
