@@ -44,7 +44,6 @@ channel_colors = [
 
 pp = pprint.PrettyPrinter()
 
-
 def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
     '''
     Core of the analysis.
@@ -80,6 +79,8 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
         counts = corr[i, :]
         cross_section_val = counts / lum_val
         cross_sections.append(cross_section_val)
+
+        # TODO Radiative corrections for cross section.
 
         popt, pconv = op.curve_fit(lorentz, energies, cross_section_val)
         masses.append(popt[0])
@@ -242,6 +243,7 @@ def figname(basename):
 
 
 def job_afb_analysis(T, interpolator):
+    # TODO Remove interpolator, use direct energies.
     energies = np.loadtxt('Data/energies.txt')
     data = np.loadtxt('Data/afb.txt')
     negative = data[:, 0]
@@ -330,6 +332,7 @@ def job_grope(T, show=False):
         np.savetxt('_build/xy/hist-hcal_sume-'+file_+'.tsv',
                    np.column_stack([edges, hist_extended]))
 
+        # TODO Better angle.
         ax_3d.scatter(
             ctrk_n,
             #hcal_sume,
