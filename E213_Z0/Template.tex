@@ -1014,6 +1014,9 @@ vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
 = \mat D \vec A$. In order to find the sixteen matrix elements, we apply a
 vector with Monte Carlo electrons.
 
+% TODO Explain efficiency of electrons is wrong due to cut in angle, we
+% introduce the t-channel back with the method that we have used here.
+
 \subsection{Determining matrix elements}
 
 In order to do this with \textsc{paw}, we define our final cuts for electrons,
@@ -1055,8 +1058,6 @@ the other filters, we can construct the whole matrix. Figure~\ref{fig:matrix/1}
 shows the matrix. It can be seen that it is mostly diagonal, just as we want it
 to be. The detection efficiency for the electrons is not very great. This comes
 from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
-
-% TODO Error estimation.
 
 \begin{figure}
     \centering
