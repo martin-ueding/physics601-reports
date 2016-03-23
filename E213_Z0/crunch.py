@@ -267,6 +267,8 @@ def job_afb_analysis(T, interpolator):
 
     np.savetxt('_build/xy/afb_corr.tsv', np.column_stack([energies, afb_corr_val, afb_err]))
 
+    # TODO Extract sin_sq.
+
 def job_grope(T, show=False):
     files = ['electrons',
              'muons',
