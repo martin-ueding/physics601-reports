@@ -5,8 +5,11 @@
 # Licensed under The GNU Public License Version 2 (or later)
 
 import argparse
+import itertools
 import json
 import os
+import pprint
+import random
 import sys
 
 import matplotlib.pyplot as pl
@@ -30,98 +33,164 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 names = ['electron', 'muon', 'tau', 'hadron']
 
+energies = np.loadtxt('Data/energies.txt')
 
-def lorentz(x, mean, width, integral):
-    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
-
-
-def job_colors():
-    colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
-
-    with open('_build/colors.tex', 'w') as f:
-        for name, color in zip(names, colors):
-            f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
+channel_colors = [
+    '#377eb8',
+    '#984ea3',
+    '#4daf4a',
+    '#e41a1c',
+]
 
 
-def job_cross_sections(T):
-    inverse_val, inverse_err = matrix(T)
+pp = pprint.PrettyPrinter()
 
-    filtered = np.loadtxt('Data/filtered.txt')
-    energies = np.loadtxt('Data/energies.txt')
+def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
+    '''
+    Core of the analysis.
 
+    :param np.array mc_sizes: List of raw number of MC events, four entries
+    :param np.array matrix: Detection matrix, 4×4 numbers
+    :param list(np.array) readings: For each energy, there is a reading 4-vector
+    :param np.array lum_val: Luminosity for the seven energies
+    '''
+    # Normalize the raw_matrix.
+    matrix = matrix.dot(np.diag(1/mc_sizes))
+
+    inverted = np.linalg.inv(matrix)
+
+    corr_list = []
+
+    for i in range(7):
+        vector = readings[i, :]
+        corrected_val = inverted.dot(vector)
+
+        corr_list.append(corrected_val)
+
+    corr = np.column_stack(corr_list)
+
+    masses = []
+    widths = []
+    cross_sections = []
+    y_list = []
+
+    x = np.linspace(np.min(energies), np.max(energies), 200)
+
+    for i, name in zip(range(len(names)), names):
+        counts = corr[i, :]
+        cross_section_val = counts / lum_val
+        cross_sections.append(cross_section_val)
+
+        popt, pconv = op.curve_fit(lorentz, energies, cross_section_val)
+        masses.append(popt[0])
+        widths.append(popt[1])
+
+        y = lorentz(x, *popt)
+        y_list.append(y)
+
+    return x, masses, widths, np.array(cross_sections), y_list, corr.T, matrix, inverted, readings
+
+
+def bootstrap_driver(T):
     lum_data = np.loadtxt('Data/luminosity.txt')
     lum_val = lum_data[:, 0]
     lum_err = lum_data[:, 3]
 
     T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
 
-    corr_list = []
-
-    for i in range(7):
-        vector = filtered[i, :]
-        corrected_val = inverse_val.dot(vector)
-
-        corr_list.append(corrected_val)
-
-    corr = np.column_stack(corr_list)
-
-    print('Corr')
-    print(corr)
-
-    masses = {}
-    widths = {}
-
-    table_counts = []
-    table_cross_sections = []
-
-    for i, name in zip(range(len(names)), names):
-        counts = corr[i, :]
-        cross_section_val = counts / lum_val
-        cross_section_err = counts / lum_val**2 * lum_err
-
-        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name), np.column_stack([energies, cross_section_val, cross_section_err]))
-
-        popt, pconv = op.curve_fit(lorentz, energies, cross_section_val, sigma=cross_section_err)
-
-        x = np.linspace(np.min(energies), np.max(energies), 500)
-        y = lorentz(x, *popt)
-        np.savetxt('_build/xy/cross_section-{}s-fit.tsv'.format(name), np.column_stack([x, y]))
-
-        perr = np.sqrt(pconv.diagonal())
-
-        masses[name] = popt[0], perr[0]
-        widths[name] = popt[1], perr[1]
-
-        table_counts.append(map(str, map(int, counts)))
-        table_cross_sections.append(siunitx(cross_section_val, cross_section_err))
-
-    T['lorentz_fits_table'] = []
-
-    for name in names:
-        T['lorentz_fits_table'].append([name.capitalize(), siunitx(*masses[name]), siunitx(*widths[name])])
-
-    T['counts_table'] = list(zip(siunitx(energies), *[map(str, map(int, row)) for row in filtered.T]))
-    T['corrected_counts_table'] = list(zip(siunitx(energies), *table_counts))
-    T['cross_sections_table'] = list(zip(siunitx(energies), *table_cross_sections))
-        
-
-def figname(basename):
-    return '_build/to_crop/mpl-{}.pdf'.format(basename)
-
-
-def matrix(T):
-    '''
-    Generate the inverse mixing matrix and corresponding error matrix.
-    '''
     raw_matrix = np.loadtxt('Data/matrix.txt').T
     mc_sizes = np.loadtxt('Data/monte-carlo-sizes.txt')
+    filtered = np.loadtxt('Data/filtered.txt')
 
-    print(raw_matrix)
-    print(np.diag(1/mc_sizes))
+    results = []
 
-    # Normalize the raw_matrix.
-    matrix = raw_matrix.dot(np.diag(1/mc_sizes))
+    for r in range(100):
+        # Draw new numbers for the matrix.
+        boot_matrix = redraw_count(raw_matrix)
 
+        # Draw new luminosities.
+        boot_lum_val = np.array([random.gauss(val, err) for val, err in zip(lum_val, lum_err)])
+
+        # Draw new filtered readings.
+        boot_readings = redraw_count(filtered)
+
+        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val))
+
+
+    x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list, readings_list = zip(*results)
+
+    x = x_list[0]
+
+    masses_val, masses_err = bootstrap.average_and_std_arrays(masses)
+    widths_val, widths_err = bootstrap.average_and_std_arrays(widths)
+
+    corr_val, corr_err = bootstrap.average_and_std_arrays(corr_list)
+    corr = []
+    for i in range(7):
+        corr.append([siunitx(energies[i])] + siunitx(corr_val[i, :], corr_err[i, :], allowed_hang=10))
+    T['corrected_counts_table'] = list(corr)
+
+    val, err = bootstrap.average_and_std_arrays(readings_list)
+    readings = []
+    for i in range(7):
+        readings.append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
+    T['counts_table'] = list(readings)
+
+
+    y_lists = zip(*y_list)
+    cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections)
+    print('CS')
+    print(cs_val)
+    print(cs_err)
+
+    T['cross_sections_table'] = []
+    for i in range(7):
+        T['cross_sections_table'].append([siunitx(energies[i])] + siunitx(cs_val[:, i], cs_err[:, i]))
+
+
+    fig = pl.figure()
+
+    for i, name, y_list, color in zip(itertools.count(), names, y_lists, channel_colors):
+        ax = fig.add_subplot(2, 2, i+1)
+        y_val, y_err = bootstrap.average_and_std_arrays(y_list)
+        ax.errorbar(energies, cs_val[i, :], cs_err[i, :], color=color, linestyle='none', marker='+')
+        ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
+        ax.margins(0.05)
+
+        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
+                   np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
+        np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
+                   np.column_stack([
+                       np.concatenate((x, x[::-1])),
+                       np.concatenate((
+                           (y_val-y_err),
+                           (y_val+y_err)[::-1]
+                       ))
+                   ]))
+
+    fig.tight_layout()
+    fig.savefig(figname('test-band'))
+
+    print('Masses', siunitx(masses_val, masses_err))
+    print('Widths', siunitx(widths_val, widths_err, error_digits=2))
+
+    T['lorentz_fits_table'] = list(zip(
+        [name.capitalize() for name in names],
+        siunitx(masses_val, masses_err),
+        siunitx(widths_val, widths_err, error_digits=2),
+    ))
+
+
+def redraw_count(a):
+    '''
+    Takes a ``np.array`` with counts and re-draws the counts from the implicit
+    Gaussian distribution with width ``sqrt(N)``.
+    '''
+    out = [random.gauss(x, np.sqrt(x)) for x in a]
+    return np.array(out).reshape(a.shape)
+
+
+def visualize_matrix(matrix, name):
     fig = pl.figure(figsize=default_figsize)
     ax = fig.add_subplot(1, 1, 1)
     im = ax.imshow(matrix, cmap='Greens', interpolation='nearest')
@@ -133,22 +202,21 @@ def matrix(T):
     fig.tight_layout()
     fig.savefig(figname('normalized_matrix'))
 
-    inverted = np.linalg.inv(matrix)
+def lorentz(x, mean, width, integral):
+    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
-    fig = pl.figure(figsize=default_figsize)
-    ax = fig.add_subplot(1, 1, 1)
-    im = ax.imshow(inverted, cmap='Greens', interpolation='nearest')
-    ax.set_xticks([0, 1, 2, 3])
-    ax.set_yticks([0, 1, 2, 3])
-    ax.set_xticklabels([r'$\to$ {}'.format(name) for name in names], rotation=20)
-    ax.set_yticklabels([r'{} $\to$'.format(name) for name in names])
-    fig.colorbar(im)
-    fig.tight_layout()
-    fig.savefig(figname('inverted_matrix'))
+def job_colors():
+    colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
 
-    # FIXME Actual error matrix
-    return inverted, inverted
+    with open('_build/colors.tex', 'w') as f:
+        for name, color in zip(names, colors):
+            f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
+def job_cross_sections(T):
+    inverse_val, inverse_err = matrix(T)
+
+def figname(basename):
+    return '_build/to_crop/mpl-{}.pdf'.format(basename)
 
 def job_afb_analysis(T, interpolator):
     energies = np.loadtxt('Data/energies.txt')
@@ -173,7 +241,6 @@ def job_afb_analysis(T, interpolator):
     afb_corr_val = afb_val + interpolator(energies)
 
     np.savetxt('_build/xy/afb_corr.tsv', np.column_stack([energies, afb_corr_val, afb_err]))
-
 
 def job_grope(T, show=False):
     files = ['electrons',
@@ -242,7 +309,6 @@ def job_grope(T, show=False):
         ax.legend(loc='best')
         ax.margins(0.05)
 
-
     fig.tight_layout()
     fig.savefig(figname('hist'))
 
@@ -310,10 +376,8 @@ def job_decay_widths(T):
     total_cross_section = 12 * np.pi / mass_z**2 * widths['electron'] / total_width
     T['total_cross_section'] = siunitx(total_cross_section / 1e-11)
 
-
     extra_width = 1 + (widths['up_type'] + widths['down_type'] + widths['charged_leptonic'] + widths['neutral_leptonic']) / total_width
     T['extra_width'] = siunitx(extra_width)
-
 
 def job_angular_dependence(T):
     x = np.linspace(-0.9, 0.9, 100)
@@ -323,7 +387,6 @@ def job_angular_dependence(T):
     np.savetxt('_build/xy/s-channel.tsv', np.column_stack([x, y1]))
     np.savetxt('_build/xy/t-channel.tsv', np.column_stack([x, y2]))
     np.savetxt('_build/xy/s-t-channel.tsv', np.column_stack([x, y1+y2]))
-
 
 def job_asymetry(T):
     s_array = np.array([91.225, 89.225, 93.225])
@@ -349,8 +412,6 @@ def job_asymetry(T):
     T['sin_sq_array'] = siunitx(sin_sq_array)
     T['s_array'] = siunitx(s_array)
 
-
-
     s_array = np.linspace(88.4, 93.8, 200)
     re_propagator = s_array * (s_array - (mass_z/1000)**2) / \
             ((s_array - (mass_z/1000)**2)**2 + s_array * total_width / (mass_z/1000))
@@ -362,11 +423,8 @@ def job_asymetry(T):
 
     np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
 
-
-
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
-
 
 def job_radiative_correction(T):
     data = np.loadtxt('Data/radiative_corrections.tsv')
@@ -397,7 +455,6 @@ def job_radiative_correction(T):
 
     return interpolator
 
-
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -419,7 +476,6 @@ def test_keys(T):
         print()
         sys.exit(100)
 
-
 def main():
     T = {}
 
@@ -429,11 +485,11 @@ def main():
 
     interpolator = job_radiative_correction(T)
 
+    bootstrap_driver(T)
+    job_decay_widths(T)
     job_colors()
-    job_cross_sections(T)
     job_afb_analysis(T, interpolator)
     job_grope(T, options.show)
-    job_decay_widths(T)
     job_angular_dependence(T)
     job_asymetry(T)
 

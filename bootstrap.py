@@ -27,12 +27,10 @@ def average_and_std_arrays(arrays):
     '''
     Computes the element wise average of a list of arrays.
     '''
-    total = np.column_stack(arrays)
+    total = np.array(arrays)
     
-    print(total)
-
-    val = np.mean(total, axis=1)
-    err = np.std(total, axis=1)
+    val = np.mean(total, axis=0)
+    err = np.std(total, axis=0)
 
     return val, err
 
