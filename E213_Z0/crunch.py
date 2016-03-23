@@ -183,6 +183,30 @@ def bootstrap_driver(T):
         siunitx(widths_val, widths_err, error_digits=2),
     ))
 
+    matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_list)
+    T['matrix'] = []
+    for i in range(4):
+        T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
+
+    inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_list)
+    T['inverted'] = []
+    for i in range(4):
+        T['inverted'].append([names[i].capitalize()] +
+                             list(map(number_padding,
+                             siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
+
+
+def number_padding(number):
+    if number[0] == '-':
+        return r'$\num{'+number+'}$'
+    else:
+        return r'$\phantom{-}\num{'+number+'}$'
+
+
+
+
+
+
 
 def redraw_count(a):
     '''

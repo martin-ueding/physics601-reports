@@ -1085,6 +1085,54 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
     \label{fig:matrix}
 \end{figure}
 
+\begin{table}
+    \centering
+    \begin{tabular}{lSSSS}
+        \toprule
+        & \multicolumn{4}{c}{Acceptance rate / \si{\percent}} \\
+        \cmidrule(l){2-5}
+        {Detected as}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in matrix >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Matrix
+    }
+    \label{tab:matrix}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        & \multicolumn{4}{c}{Correction factor} \\
+        \cmidrule(l){2-5}
+        {Actually are}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in inverted >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Inverted matrix
+    }
+    \label{tab:inverted}
+\end{table}
+
+
+
 \subsection{Inverting the matrix}
 
 In order to use this detection matrix~$\mat E$ as a correction, we need to
