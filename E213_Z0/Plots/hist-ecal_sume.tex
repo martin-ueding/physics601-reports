@@ -2,13 +2,12 @@
 
 \begin{tikzpicture}
     \begin{axis}[
-            width=0.49\linewidth,
+            width=0.6\linewidth,
             height=0.3\linewidth,
             bar/.style={
                 ybar interval,
                 opacity=0.5,
             },
-            xlabel={\eecal/\si{\giga\electronvolt}},
             yticklabels=none,
         ]
         \addplot[bar, draw=electrons, fill=electrons] table {../xy/hist-ecal_sume-electrons.tsv};
