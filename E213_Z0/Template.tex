@@ -137,7 +137,7 @@ The leptonic decay products, $\mathrm e^+ + \mathrm e^-$, $\muup^+ + \muup^-$
 and $\tauup^+ + \tauup^-$ behave similar in the beginning. They fly apart
 colinear in opposite directions. Because of their high mass the tauons decay
 very quickly through different decay channels listed in
-Tabular~\ref{tab:tau_decay}.  Because of the great number of neutrinos for
+Tabular~\ref{tab:tauon_decay}.  Because of the great number of neutrinos for
 this decay the missing total energy is characteristic. Also up to 6 charged
 tracks can be observed.
 
@@ -159,7 +159,7 @@ tracks can be observed.
     \caption{%
         Most likely decay channels of a $\tauup^-$. %TODO cite
     }
-    \label{tab:tau_decay}
+    \label{tab:tauon_decay}
 \end{table}
 
 The muons are lighter than the tauons, so they won't decay fast. Hence there
@@ -521,14 +521,14 @@ their partial widths.
         The branching ratio here is \num{<< hadronic_ratio >>}.
 
     \item[Charged leptonic width]
-        The charged leptons are the electron, the myon and the tau. The charged
+        The charged leptons are the electron, the muon and the tauon. The charged
         leptonic width therefore is
         $\Gamma_\text{ch.lep.} = \SI{<< charged_leptonic_width >>}{\mega\electronvolt}$.
         The branching ratio here is \num{<< charged_leptonic_ratio >>}.
 
     \item[Neutral leptonic width]
-        The neutral leptons are the electron-neutrino, the myon-neutrino and
-        the tau-neutrino. The neutral
+        The neutral leptons are the electron-neutrino, the muon-neutrino and
+        the tauon-neutrino. The neutral
         leptonic width therefore is
         $\Gamma_\text{n.lep.} = \SI{<< neutral_leptonic_width >>}{\mega\electronvolt}$.
         The branching ratio here is \num{<< neutral_leptonic_ratio >>}.
@@ -718,7 +718,7 @@ Table~\ref{tab:nomenclature} for an overview.
 
 Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
 picked a representative event for each category of decay (electrons, muons,
-taus, hadrons).
+tauons, hadrons).
 
 \input{../Snippets/grope.tex}
 
@@ -734,10 +734,10 @@ The \sump{} is the beam energy, little energy is unaccounted for. This means
 that there are no neutrinos created in that decay. \eecal{} and \ehcal{} is
 small, this is due to the big mass of the muon (compared to electrons).
 
-Figure~\ref{fig:grope/taus} shows a decay into taus. This decay is not as
+Figure~\ref{fig:grope/tauons} shows a decay into tauons. This decay is not as
 simple as the previous ones. We have some missing energy (around a third), more
 than one charged track and also energy deposited into the various calorimeters.
-The missing energy comes from the neutrinos in the weak decay of the tau. The
+The missing energy comes from the neutrinos in the weak decay of the tauon. The
 number of charged tracks is still small (just five), therefore we can
 differentiate from the hadronic decays.
 
@@ -760,8 +760,8 @@ Figure~\ref{fig:hist}. There one can see that some characteristics are well
 suited to cut the data. For instance in \ncharged, we see that hadronic decays
 have more than seven tracks, whereas the leptonic decays have less. In the
 histogram for \sump, we see that a cut at around \SI{80}{\giga\electronvolt}
-can separate taus and muons. Another cut in the \ecal-energy at around
-\SI{75}{\giga\electronvolt} allows us to separate taus and electrons. The
+can separate tauons and muons. Another cut in the \ecal-energy at around
+\SI{75}{\giga\electronvolt} allows us to separate tauons and electrons. The
 energy deposited into the \hcal\ is not very helpful for cutting.
 
 \input{../Snippets/monte-carlo-histograms}
@@ -843,7 +843,7 @@ With a magnifying glass we can see that there are mostly two charged tracks for
 electron and muon decays. Interestingly, there are occasionally three to four
 tracks for the electron.
 
-As expected from decay modes with hadrons, we see that taus can have six
+As expected from decay modes with hadrons, we see that tauons can have six
 charged tracks. Hadrons can also decay with six or less charged tracks, but the
 most part decays with more than then tracks.
 
@@ -874,7 +874,7 @@ covering the whole solid angle. Since the beam pipe needs to go through the
 detector, one cannot detect collinear events. We therefore cut those events
 away.
 
-The shape of the taus (see Figure~\ref{fig:paw-angle/taus}) seems to be a
+The shape of the tauons (see Figure~\ref{fig:paw-angle/tauons}) seems to be a
 parabola in the middle but flatten off to the sides. Events with only one
 charged positive track have to be a decay into an positron or an anti-muon. A
 neutrino is created in those processes, skewing the angular distribution.
@@ -985,7 +985,7 @@ that should have been counted. This will lead to a loss of a certain fractions
 of events. This is not directly a problem as we can just compensate by this
 loss factor. However, our statistical errors will grow as we have less
 statistics. A loose cut will water the sorting with underground events. Say we
-want to filter out electrons but our cuts are too loose. Then some tau events
+want to filter out electrons but our cuts are too loose. Then some tauon events
 might slip into the electrons category.
 
 Both types of errors, the false-negatives and the false-positives, can be
@@ -993,13 +993,13 @@ handled using a detection matrix~$\mat D$ and Monte Carlo datasets.
 The Monte Carlo datasets are purely of one decay channel. Therefore we know
 exactly that we only have, say, electrons. Applying our cuts to the Monte Carlo
 electrons, we will see how many are actually detected as electrons. This is our
-efficiency. Then we take the other three kinds (muons, taus, hadrons) of the
+efficiency. Then we take the other three kinds (muons, tauons, hadrons) of the
 Monte Carlo datasets and apply the electron cuts to it. Ideally, we should not
 get any events. The ratio of other events that we falsely identify as electrons
 is the underground.
 
 Using a linear model for this, we need a mapping from the actual events vector
-$\vec A$ (in electron-muon-tau-hadrons space, $\N^4$) to the identified events
+$\vec A$ (in electron-muon-tauon-hadrons space, $\N^4$) to the identified events
 vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
 = \mat D \vec A$. In order to find the sixteen matrix elements, we apply a
 vector with Monte Carlo electrons.
@@ -1010,7 +1010,7 @@ vector with Monte Carlo electrons.
 \subsection{Determining matrix elements}
 
 In order to do this with \textsc{paw}, we define our final cuts for electrons,
-muons, taus and hadrons:
+muons, tauons and hadrons:
 
 \begin{lstlisting}
 nt/cuts $1 ncharged<4.and.e_ecal>60.and.cos_thet<.5.and.cos_thet>-0.9
