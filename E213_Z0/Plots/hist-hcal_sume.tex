@@ -1,0 +1,20 @@
+\input{../colors}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            width=0.50\linewidth,
+            height=0.3\linewidth,
+            bar/.style={
+                ybar interval,
+                opacity=0.5,
+            },
+            xlabel={\ehcal/\si{\giga\electronvolt}},
+            yticklabel pos=right,
+            yticklabels=none,
+        ]
+        \addplot[bar, draw=electrons, fill=electrons] table {../xy/hist-hcal_sume-electrons.tsv};
+        \addplot[bar, draw=muons, fill=muons] table {../xy/hist-hcal_sume-muons.tsv};
+        \addplot[bar, draw=taus, fill=taus] table {../xy/hist-hcal_sume-tauons.tsv};
+        \addplot[bar, draw=hadrons, fill=hadrons] table {../xy/hist-hcal_sume-quarks.tsv};
+    \end{axis}
+\end{tikzpicture}

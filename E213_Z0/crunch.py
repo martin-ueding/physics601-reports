@@ -310,6 +310,26 @@ def job_grope(T, show=False):
         ax_ecal.hist(ecal_sume, **options)
         ax_hcal.hist(hcal_sume, **options)
 
+        hist, edges = np.histogram(ctrk_n, bins=log_bins)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-ctrk_n-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
+        hist, edges = np.histogram(ctrk_sump)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-ctrk_sump-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
+        hist, edges = np.histogram(ecal_sume)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-ecal_sume-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
+        hist, edges = np.histogram(hcal_sume)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-hcal_sume-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
         ax_3d.scatter(
             ctrk_n,
             #hcal_sume,
