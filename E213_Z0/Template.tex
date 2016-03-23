@@ -1059,32 +1059,32 @@ shows the matrix. It can be seen that it is mostly diagonal, just as we want it
 to be. The detection efficiency for the electrons is not very great. This comes
 from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        %\includegraphics[width=\linewidth]{mpl-normalized_matrix}
-        \caption{%
-            Detection matrix. Left-multiply with a vector which contains actual
-            event numbers to get event numbers identified by our cuts.
-        }
-        \label{fig:matrix/1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        %\includegraphics[width=\linewidth]{mpl-inverted_matrix}
-        \caption{%
-            Inverse matrix. Left-multiply with a vector containing our
-            measurements to get actual event numbers.
-        }
-        \label{fig:matrix/2}
-    \end{subfigure}
-    \caption{%
-        Normalized conversion matrices between detected and actual event types.
-    }
-    \label{fig:matrix}
-\end{figure}
+%\begin{figure}
+%    \centering
+%    \begin{subfigure}[t]{0.48\linewidth}
+%        \centering
+%        %\includegraphics[width=\linewidth]{mpl-normalized_matrix}
+%        \caption{%
+%            Detection matrix. Left-multiply with a vector which contains actual
+%            event numbers to get event numbers identified by our cuts.
+%        }
+%        \label{fig:matrix/1}
+%    \end{subfigure}
+%    \hfill
+%    \begin{subfigure}[t]{0.48\linewidth}
+%        \centering
+%        %\includegraphics[width=\linewidth]{mpl-inverted_matrix}
+%        \caption{%
+%            Inverse matrix. Left-multiply with a vector containing our
+%            measurements to get actual event numbers.
+%        }
+%        \label{fig:matrix/2}
+%    \end{subfigure}
+%    \caption{%
+%        Normalized conversion matrices between detected and actual event types.
+%    }
+%    \label{fig:matrix}
+%\end{figure}
 
 \begin{table}
     \centering
@@ -1104,7 +1104,12 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
         \bottomrule
     \end{tabular}
     \caption{%
-        Matrix
+        The detection matrix $\mat D$. Although it is displayed in a table, it is meant
+        as a matrix which can be right-multiplied with an actual events
+        vector $\vec A$. The resulting vector will be the vector of identified
+        events $\vec I$ of our cuts. The matrix is mostly diagonal, the low
+        number for electron--electron is due to our mistake in angular
+        restriction (see text).
     }
     \label{tab:matrix}
 \end{table}
@@ -1127,7 +1132,7 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
         \bottomrule
     \end{tabular}
     \caption{%
-        Inverted matrix
+        The inverted detection matrix $\mat D\inv$.
     }
     \label{tab:inverted}
 \end{table}

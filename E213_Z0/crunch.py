@@ -191,7 +191,7 @@ def bootstrap_driver(T):
     inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_list)
     T['inverted'] = []
     for i in range(4):
-        T['inverted'].append([names[i].capitalize()] +
+        T['inverted'].append([names[i].capitalize()+'s'] +
                              list(map(number_padding,
                              siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
 
