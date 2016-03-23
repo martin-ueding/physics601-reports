@@ -95,11 +95,39 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \subsection{LYSO spectrum}
 
+We take the LYSO spectrum of the left and right detectors.
+
 \subsection{Gain adjust using sodium}
+
+In the sodium spectrum, we expect to see the \SI{511}{\kilo\electronvolt} line
+from the annihilation as well as a \SI{1275}{\kilo\electronvolt} line from the
+excited neon.
+
+We adjust the gain of the amplifiers such that the sodium spectrum fill the
+8192 channels of the MCA\@. The maximum window width of the SCA is not
+sufficient to let everything through. Also the upper bound for the SCA is below
+the last channel of the MCA\@. Therefore we cannot set the amplifier as high as
+we would like to. For the spectrum, we adjust the lower bound such that the
+window covers the two lines we are interested.
+
+We check the coincidence of both SCA signals.
 
 \section{Fast circuit setup}
 
+Slow-signal and CFD signal, adjust CFD such that zero-line vanishes.
+
+Look at CFD signals where stop-signal is delayed. We can verify that there is a
+\SI{20}{\milli\second} delay between the two.
+
+TAC produces an output.
+
 \section{Time calibration}
+
+SCA coincidence already checked.
+
+TAC+coincidence has very nice overlap.
+
+Use coincidence as MCA-gate and TAC as MCA input, we take prompt curves.
 
 \section{Adjusting SCA windows}
 
