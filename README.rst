@@ -23,9 +23,11 @@ Building
 In order to build (or compile) the reports, you need the following software:
 
 - Python 3 and libraries:
+
   - NumPy
   - SciPy
   - Jinja2
+
 - LaTeX (pdflatex) and a bunch of packages
 - Make
 - pdfcrop
