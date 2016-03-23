@@ -109,7 +109,10 @@ def bootstrap_driver(T):
         boot_matrix = redraw_count(raw_matrix)
 
         # Draw new luminosities.
-        boot_lum_val = np.array([random.gauss(val, err) for val, err in zip(lum_val, lum_err)])
+        boot_lum_val = np.array([
+            random.gauss(val, err)
+            for val, err
+            in zip(lum_val, lum_err)])
 
         # Draw new filtered readings.
         boot_readings = redraw_count(filtered)
