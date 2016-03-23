@@ -1,0 +1,20 @@
+\input{../colors}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            width=0.49\linewidth,
+            height=0.3\linewidth,
+            bar/.style={
+                ybar interval,
+                opacity=0.5,
+            },
+            xlabel={\pcharged/\si{\giga\electronvolt}},
+            yticklabel pos=right,
+            yticklabels=none,
+        ]
+        \addplot[bar, draw=electrons, fill=electrons] table {../xy/hist-ctrk_sump-electrons.tsv};
+        \addplot[bar, draw=muons, fill=muons] table {../xy/hist-ctrk_sump-muons.tsv};
+        \addplot[bar, draw=taus, fill=taus] table {../xy/hist-ctrk_sump-tauons.tsv};
+        \addplot[bar, draw=hadrons, fill=hadrons] table {../xy/hist-ctrk_sump-quarks.tsv};
+    \end{axis}
+\end{tikzpicture}

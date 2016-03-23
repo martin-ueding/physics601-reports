@@ -42,8 +42,8 @@ channel_colors = [
     '#e41a1c',
 ]
 
-
 pp = pprint.PrettyPrinter()
+
 
 def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
     '''
@@ -109,7 +109,10 @@ def bootstrap_driver(T):
         boot_matrix = redraw_count(raw_matrix)
 
         # Draw new luminosities.
-        boot_lum_val = np.array([random.gauss(val, err) for val, err in zip(lum_val, lum_err)])
+        boot_lum_val = np.array([
+            random.gauss(val, err)
+            for val, err
+            in zip(lum_val, lum_err)])
 
         # Draw new filtered readings.
         boot_readings = redraw_count(filtered)
@@ -180,6 +183,25 @@ def bootstrap_driver(T):
         siunitx(widths_val, widths_err, error_digits=2),
     ))
 
+    matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_list)
+    T['matrix'] = []
+    for i in range(4):
+        T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
+
+    inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_list)
+    T['inverted'] = []
+    for i in range(4):
+        T['inverted'].append([names[i].capitalize()+'s'] +
+                             list(map(number_padding,
+                             siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
+
+
+def number_padding(number):
+    if number[0] == '-':
+        return r'$\num{'+number+'}$'
+    else:
+        return r'$\phantom{-}\num{'+number+'}$'
+
 
 def redraw_count(a):
     '''
@@ -202,8 +224,10 @@ def visualize_matrix(matrix, name):
     fig.tight_layout()
     fig.savefig(figname('normalized_matrix'))
 
+
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+
 
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
@@ -212,11 +236,10 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
-def job_cross_sections(T):
-    inverse_val, inverse_err = matrix(T)
 
 def figname(basename):
     return '_build/to_crop/mpl-{}.pdf'.format(basename)
+
 
 def job_afb_analysis(T, interpolator):
     energies = np.loadtxt('Data/energies.txt')
@@ -287,6 +310,26 @@ def job_grope(T, show=False):
         ax_ecal.hist(ecal_sume, **options)
         ax_hcal.hist(hcal_sume, **options)
 
+        hist, edges = np.histogram(ctrk_n, bins=log_bins)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-ctrk_n-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
+        hist, edges = np.histogram(ctrk_sump)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-ctrk_sump-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
+        hist, edges = np.histogram(ecal_sume)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-ecal_sume-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
+        hist, edges = np.histogram(hcal_sume)
+        hist_extended = np.array(list(hist) + [hist[-1]])
+        np.savetxt('_build/xy/hist-hcal_sume-'+file_+'.tsv',
+                   np.column_stack([edges, hist_extended]))
+
         ax_3d.scatter(
             ctrk_n,
             #hcal_sume,
@@ -317,6 +360,7 @@ def job_grope(T, show=False):
         input()
 
     fig_3d.savefig(figname('scatter'))
+
 
 def job_decay_widths(T):
     # T_3, Q, N_color
@@ -379,6 +423,7 @@ def job_decay_widths(T):
     extra_width = 1 + (widths['up_type'] + widths['down_type'] + widths['charged_leptonic'] + widths['neutral_leptonic']) / total_width
     T['extra_width'] = siunitx(extra_width)
 
+
 def job_angular_dependence(T):
     x = np.linspace(-0.9, 0.9, 100)
     y1 = 1 + x**2
@@ -387,6 +432,7 @@ def job_angular_dependence(T):
     np.savetxt('_build/xy/s-channel.tsv', np.column_stack([x, y1]))
     np.savetxt('_build/xy/t-channel.tsv', np.column_stack([x, y2]))
     np.savetxt('_build/xy/s-t-channel.tsv', np.column_stack([x, y1+y2]))
+
 
 def job_asymetry(T):
     s_array = np.array([91.225, 89.225, 93.225])
@@ -423,8 +469,6 @@ def job_asymetry(T):
 
     np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
 
-def lorentz(x, mean, width, integral):
-    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
 def job_radiative_correction(T):
     data = np.loadtxt('Data/radiative_corrections.tsv')
@@ -455,6 +499,7 @@ def job_radiative_correction(T):
 
     return interpolator
 
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -476,6 +521,7 @@ def test_keys(T):
         print()
         sys.exit(100)
 
+
 def main():
     T = {}
 
@@ -496,6 +542,7 @@ def main():
     test_keys(T)
     with open('_build/template.js', 'w') as f:
         json.dump(dict(T), f, indent=4, sort_keys=True)
+
 
 if __name__ == "__main__":
     main()

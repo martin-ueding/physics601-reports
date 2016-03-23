@@ -29,14 +29,6 @@
 
 \usepackage[all]{nowidow}
 
-\newcommand\ecal{e-cal}
-\newcommand\hcal{h-cal}
-\newcommand\eecal{$E$-e-cal}
-\newcommand\ehcal{$E$-h-cal}
-\newcommand\sump{sum-$p$}
-\newcommand\pcharged{$p$-charged}
-\newcommand\ncharged{$n$-charged}
-
 \subject{Lab report}
 \title{Analysis of $Z_0$ decays}
 \subtitle{Experiment E213 -- Universität Bonn}
@@ -769,25 +761,15 @@ available in the later analysis of larger datasets using \textsc{paw}.
 \subsection{Preliminary analysis}
 
 Using some twenty points per event class, we obtain the histograms shown in
-Figure~\ref{fig:mpl-hist}. There one can see that some characteristics are well
-suited to cut the data. For instance in \ncharged, we see that hadronic
-decays have more than seven tracks, whereas the leptonic decays have less. In
-the histogram for \sump, we see that a cut at around
-\SI{80}{\giga\electronvolt} can separate taus and muons. Another cut in the
-\ecal-energy at around \SI{75}{\giga\electronvolt} allows us to separate taus
-and electrons. The energy deposited into the \hcal\ is not very helpful for
-cutting.
+Figure~\ref{fig:hist}. There one can see that some characteristics are well
+suited to cut the data. For instance in \ncharged, we see that hadronic decays
+have more than seven tracks, whereas the leptonic decays have less. In the
+histogram for \sump, we see that a cut at around \SI{80}{\giga\electronvolt}
+can separate taus and muons. Another cut in the \ecal-energy at around
+\SI{75}{\giga\electronvolt} allows us to separate taus and electrons. The
+energy deposited into the \hcal\ is not very helpful for cutting.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{mpl-hist}
-    \caption{%
-        Histograms with data gathered from Monte Carlo datasets in
-        \textsc{grope}. The number of charged tracks is shown as a histogram
-        with logarithmic bins.
-    }
-    \label{fig:mpl-hist}
-\end{figure}
+\input{../Snippets/monte-carlo-histograms}
 
 Having those cuts in place, we take a look at the \texttt{test} datasets which
 are not sorted by event type. There we try to use our fresh intuition about the
@@ -1015,6 +997,9 @@ vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
 = \mat D \vec A$. In order to find the sixteen matrix elements, we apply a
 vector with Monte Carlo electrons.
 
+% TODO Explain efficiency of electrons is wrong due to cut in angle, we
+% introduce the t-channel back with the method that we have used here.
+
 \subsection{Determining matrix elements}
 
 In order to do this with \textsc{paw}, we define our final cuts for electrons,
@@ -1057,34 +1042,85 @@ shows the matrix. It can be seen that it is mostly diagonal, just as we want it
 to be. The detection efficiency for the electrons is not very great. This comes
 from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
 
-% TODO Error estimation.
+%\begin{figure}
+%    \centering
+%    \begin{subfigure}[t]{0.48\linewidth}
+%        \centering
+%        %\includegraphics[width=\linewidth]{mpl-normalized_matrix}
+%        \caption{%
+%            Detection matrix. Left-multiply with a vector which contains actual
+%            event numbers to get event numbers identified by our cuts.
+%        }
+%        \label{fig:matrix/1}
+%    \end{subfigure}
+%    \hfill
+%    \begin{subfigure}[t]{0.48\linewidth}
+%        \centering
+%        %\includegraphics[width=\linewidth]{mpl-inverted_matrix}
+%        \caption{%
+%            Inverse matrix. Left-multiply with a vector containing our
+%            measurements to get actual event numbers.
+%        }
+%        \label{fig:matrix/2}
+%    \end{subfigure}
+%    \caption{%
+%        Normalized conversion matrices between detected and actual event types.
+%    }
+%    \label{fig:matrix}
+%\end{figure}
 
-\begin{figure}
+\begin{table}
     \centering
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        %\includegraphics[width=\linewidth]{mpl-normalized_matrix}
-        \caption{%
-            Detection matrix. Left-multiply with a vector which contains actual
-            event numbers to get event numbers identified by our cuts.
-        }
-        \label{fig:matrix/1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        %\includegraphics[width=\linewidth]{mpl-inverted_matrix}
-        \caption{%
-            Inverse matrix. Left-multiply with a vector containing our
-            measurements to get actual event numbers.
-        }
-        \label{fig:matrix/2}
-    \end{subfigure}
+    \begin{tabular}{lSSSS}
+        \toprule
+        & \multicolumn{4}{c}{Acceptance rate / \si{\percent}} \\
+        \cmidrule(l){2-5}
+        {Detected as}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in matrix >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
     \caption{%
-        Normalized conversion matrices between detected and actual event types.
+        The detection matrix $\mat D$. Although it is displayed in a table, it is meant
+        as a matrix which can be right-multiplied with an actual events
+        vector $\vec A$. The resulting vector will be the vector of identified
+        events $\vec I$ of our cuts. The matrix is mostly diagonal, the low
+        number for electron--electron is due to our mistake in angular
+        restriction (see text).
     }
-    \label{fig:matrix}
-\end{figure}
+    \label{tab:matrix}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        & \multicolumn{4}{c}{Correction factor} \\
+        \cmidrule(l){2-5}
+        {Actually are}
+        & {Electrons}
+        & {Muons}
+        & {Taus}
+        & {Hadrons} \\
+        \midrule
+        %< for row in inverted >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        The inverted detection matrix $\mat D\inv$.
+    }
+    \label{tab:inverted}
+\end{table}
+
+
 
 \subsection{Inverting the matrix}
 
