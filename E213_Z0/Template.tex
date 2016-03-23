@@ -601,10 +601,10 @@ total width and therefore also the total cross section.
 
 \section{Angular dependence}
 
-As we can see from the tree-level QFT calculation for the $\mathrm Z^0$ decay
-in the first problem, the angular dependence is indeed $(1 + \cos(\theta)^2)$
-as stated in the last paragraph on page~27 in the manual. This is the
-$s$-channel. For the $t$-channel the angular dependence is $(1 -
+As we can see from the tree-level \textsc{qft} calculation for the $\mathrm
+Z^0$ decay in the first problem, the angular dependence is indeed $(1 +
+\cos(\theta)^2)$ as stated in the last paragraph on page~27 in the manual.
+This is the $s$-channel. For the $t$-channel the angular dependence is $(1 -
 \cos(\theta))\inv$.
 
 The reaction $\mathrm{e^+ e^- \to \muup^+ \muup^-}$ only works in the
@@ -830,10 +830,9 @@ After the refining, we have the following cuts:
     & \eecal/\si{\giga\electronvolt}
     & \ehcal/\si{\giga\electronvolt} \\
     \midrule
-    % TODO Insert the cuts that we had at this point.
-    Electrons & $\leq 2$ &  &  &  \\
-    Muons & $\leq 2$ &  &  &  \\
-    Taus & $< 7$ &  &  &  \\
+    Electrons & $< 4$ &  & $> 60$ &  \\
+    Muons & $< 4$ & $> 75$ & $< 20$ &  \\
+    Taus & $< 7$ & $< 75$ & $\leq 75$ &  \\
     Hadrons & $> 7$ &  &  &  \\
     \bottomrule
 \end{tabular}
