@@ -34,6 +34,7 @@ weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 names = ['electron', 'muon', 'tau', 'hadron']
+display_names = ['Electrons', 'Muons', 'Tauons', 'Hadrons']
 
 energies = np.loadtxt('Data/energies.txt')
 
@@ -181,7 +182,7 @@ def bootstrap_driver(T):
 
     # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
-        [name.capitalize() for name in names],
+        display_names,
         siunitx(masses_val, masses_err),
         siunitx(widths_val, widths_err, error_digits=2),
     ))
@@ -202,13 +203,13 @@ def bootstrap_driver(T):
     matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_dist)
     T['matrix'] = []
     for i in range(4):
-        T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
+        T['matrix'].append([display_names[i]] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
 
     # Format inverted matrix for the template.
     inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_dist)
     T['inverted'] = []
     for i in range(4):
-        T['inverted'].append([names[i].capitalize()+'s'] +
+        T['inverted'].append([display_names[i]] +
                              list(map(number_padding,
                              siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
 
@@ -254,8 +255,8 @@ def visualize_matrix(matrix, name):
     im = ax.imshow(matrix, cmap='Greens', interpolation='nearest')
     ax.set_xticks([0, 1, 2, 3])
     ax.set_yticks([0, 1, 2, 3])
-    ax.set_xticklabels([r'{} $\to$'.format(name) for name in names], rotation=20)
-    ax.set_yticklabels([r'$\to$ {}'.format(name) for name in names])
+    ax.set_xticklabels([r'{} $\to$'.format(name) for name in display_names], rotation=20)
+    ax.set_yticklabels([r'$\to$ {}'.format(name) for name in display_names])
     fig.colorbar(im)
     fig.tight_layout()
     fig.savefig(figname('normalized_matrix'))
