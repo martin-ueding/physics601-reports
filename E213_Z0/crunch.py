@@ -61,7 +61,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     :param np.array lum_val: Luminosity for the seven energies
     '''
     # Normalize the raw_matrix.
-    matrix = matrix.dot(np.diag(1/mc_sizes))
+    matrix = np.dot(matrix, np.diag(1/mc_sizes))
 
     inverted = np.linalg.inv(matrix)
 
