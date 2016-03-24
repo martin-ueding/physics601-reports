@@ -806,7 +806,7 @@ false-negatives.
 
 While we were trying to find suitable cuts, a 3D visualization like shown in
 Figure~\ref{fig:mpl-scatter} was really helpful. There we could turn the cloud
-of events in the parameter space and see different clusters. Such a
+of events in the characteristics space and see different clusters. Such a
 3D-representation can hardly be printed and must be viewed interactively,
 though.
 
@@ -824,7 +824,8 @@ one could even do a 3D-histogram and find cut surfaces which separate the data
 most cleanly. In \textsc{paw} we were limited to hyperplanes anyway, so we just
 chose a few axis-parallel planes as they did the job sufficiently well.
 
-After the refining, we have the cuts listed in Table~\ref{tab:cuts}.
+After the refining using events from the \texttt{test} dataset, we have the
+cuts listed in Table~\ref{tab:cuts}.
 
 \begin{table}
     \centering
@@ -862,10 +863,10 @@ We load the big Monte Carlo datasets into \textsc{paw} and let it generate
 histograms with the characteristics. Sadly we only have the exported postscript
 documents and not the raw data. Therefore we can only present ill-looking plots
 in Figure~\ref{fig:paw-ncharged}. Although the labels are ridiculously small,
-we have crammed four plots as we would have needed four pages otherwise. If we
-had the raw data, we would have combined the four decay modes into a single
-histogram like we have done in Figure~\ref{fig:mpl-hist} with the data we
-collected manually.
+we have crammed four plots on a single page; we would have needed four pages
+otherwise. If we had the raw data, we would have combined the four decay modes
+into a single histogram, just like what was done in Figure~\ref{fig:hist} with
+the manually collected data.
 
 \input{../Snippets/paw-ncharged}
 
@@ -875,9 +876,9 @@ tracks for the electron.
 
 As expected from decay modes with hadrons, we see that tauons can have six
 charged tracks. Hadrons can also decay with six or less charged tracks, but the
-most part decays with more than then tracks.
+most part decays with more than ten tracks.
 
-The other characteristics, were also plotted using \textsc{paw}. \pcharged\ is
+The other characteristics were also plotted using \textsc{paw}. \pcharged\ is
 shown in Figure~\ref{fig:paw-pcharged}, \eecal\ in Figure~\ref{fig:paw-e_ecal}
 and \ehcal\ in Figure~\ref{fig:paw-e_hcal}.
 
@@ -887,7 +888,7 @@ As one can see in Figure~\ref{fig:paw-angle}, the angular distribution of the
 four decay modes is not the shifted parabola as expected from the $s$-channel
 theory. For the electrons, this arises from the mixing with the $t$-channel. We
 do not want to include the $t$-channel reactions as this would make a
-comparison to the other leptonic channels (only $s$-channel) impossible.
+comparison to the other leptonic channels (only $s$-channel there) impossible.
 
 We have shown in Figure~\ref{fig:channels} how the $s$- and $t$-channel scale
 with the angle. At small angle, the unwanted $t$-channel dominates. Therefore
@@ -908,7 +909,8 @@ The shape of the tauons (see Figure~\ref{fig:paw-angle/tauons}) seems to be a
 parabola in the middle but flatten off to the sides. Events with only one
 charged positive track have to be a decay into an positron or an anti-muon. A
 neutrino is created in those processes, skewing the angular distribution.
-Therefore this flattening does not need to be cut out.
+Therefore this flattening does not need to be cut out as we have a physical
+explanation for it.
 
 For the hadrons (see Figure~\ref{fig:paw-angle/hadrons}), an angular
 distribution is rarely defined, there is only one event that even has a
@@ -1011,7 +1013,7 @@ measurements are still consistent with it.
 
 By choosing the cuts in a particular way, we make a compromise between
 detection efficiency and underground. Choosing a tight cut will discard events
-that should have been counted. This will lead to a loss of a certain fractions
+that should have been counted. This will lead to a loss of a certain fraction
 of events. This is not directly a problem as we can just compensate by this
 loss factor. However, our statistical errors will grow as we have less
 statistics. A loose cut will water the sorting with underground events. Say we
@@ -1031,11 +1033,8 @@ is the underground.
 Using a linear model for this, we need a mapping from the actual events vector
 $\vec A$ (in electron-muon-tauon-hadrons space, $\N^4$) to the identified events
 vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
-= \mat D \vec A$. In order to find the sixteen matrix elements, we apply a
-vector with Monte Carlo electrons.
-
-% TODO Explain efficiency of electrons is wrong due to cut in angle, we
-% introduce the t-channel back with the method that we have used here.
+= \mat D \vec A$. In order to find the sixteen matrix elements, we apply four
+four-vector with Monte Carlo events, one for each decay type.
 
 \subsection{Determining matrix elements}
 
@@ -1071,40 +1070,17 @@ Similar expressions are needed for the other matrix element, in total we need
 Figure~\ref{fig:paw-matrix-electrons}. Squint at the row \enquote{Entries} in
 the legend, this is the interesting number.
 
-For the electrons, the input vector is $\vec A = (94381, 0, 0,
-0)^\mathrm T$. Then we look at the output and find $\vec I = (20474, 1, 1013,
-0)^\mathrm T$. From this, we can construct the first row in the matrix. Using
-the other filters, we can construct the whole matrix. Figure~\ref{fig:matrix/1}
-shows the matrix. It can be seen that it is mostly diagonal, just as we want it
-to be. The detection efficiency for the electrons is not very great. This comes
-from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
+For the electrons, the Monte Carlo input vector is $\vec A = (94381, 0, 0,
+0)^\mathrm T$. Then we look at the output in the four histograms and find $\vec
+I = (20474, 1, 1013, 0)^\mathrm T$. From this, we can construct the first
+column
+in the matrix. Using the other filters, we can construct the whole matrix.
+Table~\ref{tab:matrix/} shows the matrix. It can be seen that it is mostly
+diagonal, just as we want it to be. The detection efficiency for the electrons
+is not very great. This comes from the severe cutting in $\cos(\theta) < 0.5$
+which discards a lot of events.
 
-%\begin{figure}
-%    \centering
-%    \begin{subfigure}[t]{0.48\linewidth}
-%        \centering
-%        %\includegraphics[width=\linewidth]{mpl-normalized_matrix}
-%        \caption{%
-%            Detection matrix. Left-multiply with a vector which contains actual
-%            event numbers to get event numbers identified by our cuts.
-%        }
-%        \label{fig:matrix/1}
-%    \end{subfigure}
-%    \hfill
-%    \begin{subfigure}[t]{0.48\linewidth}
-%        \centering
-%        %\includegraphics[width=\linewidth]{mpl-inverted_matrix}
-%        \caption{%
-%            Inverse matrix. Left-multiply with a vector containing our
-%            measurements to get actual event numbers.
-%        }
-%        \label{fig:matrix/2}
-%    \end{subfigure}
-%    \caption{%
-%        Normalized conversion matrices between detected and actual event types.
-%    }
-%    \label{fig:matrix}
-%\end{figure}
+% TODO Add a table with the matrix.
 
 \begin{table}
     \centering
@@ -1124,15 +1100,42 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
         \bottomrule
     \end{tabular}
     \caption{%
-        The detection matrix $\mat D$. Although it is displayed in a table, it is meant
-        as a matrix which can be right-multiplied with an actual events
-        vector $\vec A$. The resulting vector will be the vector of identified
-        events $\vec I$ of our cuts. The matrix is mostly diagonal, the low
-        number for electron--electron is due to our mistake in angular
+        The detection matrix $\mat D$. Although it is displayed in a table, it
+        is meant as a matrix which can be right-multiplied with an actual
+        events vector $\vec A$. The resulting vector will be the vector of
+        identified events $\vec I$ of our cuts. The matrix is mostly diagonal,
+        the low number for electron--electron is due to our mistake in angular
         restriction (see text).
     }
     \label{tab:matrix}
 \end{table}
+
+The error calculation is performed using resampling pseudo-bootstrap. As the
+detection of particles essentially is a counting experiment, we assume that a
+value $N$ is associated with a standard deviation of $\sqrt N$. We only have
+one data point, so we cannot do a bootstrap right away. Therefore we draw more
+data points from a Gaussian distribution centered on $N$ with width $\sqrt N$.
+The values that we get should roughly be the same we would have gotten when
+performing the analysis with another data set.
+
+Our input data is the number of events that were matched to a given channel,
+this gives us one matrix. We resample this matrix a couple hundred times in
+order to get some statistic. Taking the mean and standard deviation of each
+matrix element along the bootstrap dimension, we obtain the same values $N$
+with an error estimate of $\sqrt N$, of course.
+
+Using this resampled sets, we can perform the full analysis a couple hundred
+times. Taking the mean and standard deviation of the end results will give us
+the value and error estimate for any of our final results. This frees us from
+Gaussian error propagation and actually uses \emph{less} assumptions compared
+to the error propagation.
+
+\subsection{Inverting the matrix}
+
+In order to use this detection matrix~$\mat E$ as a correction, we need to
+invert the matrix. As it is almost diagonal, this will be numerically stable.
+The inverted matrix is shown in Table~\ref{tab:inverted}. The errors for the
+matrix elements come directly from the bootstrapping.
 
 \begin{table}
     \centering
@@ -1157,22 +1160,32 @@ from the severe cutting in $\cos(\theta) < 0.5$ which discards a lot of events.
     \label{tab:inverted}
 \end{table}
 
+There is one mistake that we did in the derivation of the matrix, and we cannot
+recover from this after the fact. The matrix was set up using the final cuts,
+which also means that we only allow $\cos(\theta) \leq \num{0.5}$ in the
+electrons. We did that to filter out the $t$-channel. As one can see in the
+inverse detection matrix in Table~\ref{tab:inverted}, the correction factor for
+the electron--electron case is around \num{4.6}. This is way larger than the
+other diagonal elements. The matrix element is this large as we have made a
+severe cut and filtered out most of the electron events. In contrast to the
+other channels, this is something we actually want in order to get rid of the
+$t$-channel!
 
-
-\subsection{Inverting the matrix}
-
-In order to use this detection matrix~$\mat E$ as a correction, we need to
-invert the matrix. As it is almost diagonal, this will be numerically stable.
-The inverted matrix is visualized in Figure~\ref{fig:matrix/2}.
-
-% TODO Error calculation.
+Using the matrix $\mat D\inv$ now, the $t$-channel will come back, at least
+from the numbers. Therefore we will find later on that the cross sections of
+the scattering into electrons. Table~\label{tab:cross-sections} and
+Figure~\label{fig:cross-sections} clearly show this apparent violation of
+lepton universality. This is an overcompensation in our correction, we should
+not have computed the matrix elements with the $t$-channel cut in place. We do
+not have access to the machines running \textsc{paw} now, so we can just
+explain why the results do not come out right.
 
 \section{Partial cross sections}
 
 \subsection{Counts}
 
 In order to compute cross sections, we need count rates. We have filtered the
-dataset with our cuts and an energy selection. For instance the following
+dataset with our cuts and an energy selection. For instance in the following
 snippet we use the muon filter (\texttt{\$2}) with the third beam energy
 (\texttt{\$13}):
 
@@ -1183,8 +1196,9 @@ pict/print filtered-daten1-as-muon-energy3.ps
 
 The full code listing can be found in Section~\ref{data-cuts.kumac}. We look at
 the generated histograms and extract the number of events from each histogram.
-The results are collected in Table~\ref{tab:counts}. Not shown is the error
-which we assume to be $\sqrt{N}$ as this is a counting experiment.
+The results are collected in Table~\ref{tab:counts}. Shown are the errors which
+we assume to be $\sqrt{N}$ as this is a counting experiment. Those errors are
+also used for resampling.
 
 \begin{table}
     \centering
@@ -1215,10 +1229,11 @@ Section~\ref{sec:detection-efficiency}), those counts include some number of
 false-positives (underground) and false-negatives (inefficiency). Therefore we
 need to correct for that with the inverse matrix derived above.
 
-Taking the four counts at each beam energy as a \enquote{identified events}
+Taking the four counts at each beam energy as an \enquote{identified events}
 vector $\vec I$, we can use $\mat D\inv$ to give us the \enquote{actual events}
 vector $\vec A$. We do this for each of the seven beam energies and obtain the
-corrected counts. Those are shown in Table~\ref{tab:corrected-counts}.
+corrected counts. Those are shown in Table~\ref{tab:corrected-counts}. Again,
+we have overcompensated the correction for the electrons.
 
 \begin{table}
     \centering
@@ -1253,7 +1268,10 @@ have
     \sigma_i = \frac{N_i}{\int \dif t \, \mathcal L} \,.
 \]
 
-Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
+Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset
+taken from the manual. As the luminosities also have an error associated with
+them, we will resample them as well in order to incorporate the error in our
+results.
 
 \begin{table}
     \centering
@@ -1274,6 +1292,15 @@ Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
     }
     \label{tab:luminosities}
 \end{table}
+
+\subsection{Cross sections}
+
+Using the relation between the counts and luminosity, we can compute the
+partial cross section for each of the channels. The results are shown in
+Table~\ref{tab:cross-sections}. Errors are the combined errors of luminosity,
+counts and matrix elements via the bootstrap method.
+
+% TODO Radiation corrections.
 
 \begin{table}
     \centering
@@ -1298,21 +1325,56 @@ Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
     \label{tab:cross-sections}
 \end{table}
 
+One can already see that for the central energies around $\MZ$, the electron
+cross section is too large compared to the muons and tauons. This is due to our
+mistake in determining the electron matrix elements.
+
+A graphical representation of the cross sections is shown in
+Figure~\ref{fig:cross-sections}. As the individual channels have very different
+height, the four channels are shown separately in
+Figure~\ref{fig:cross-sections-zoom}. The figures already feature the fitted
+function which we will turn to next.
+
 \begin{figure}
     \centering
     \includegraphics{cross-sections}
     \caption{%
         Partial cross sections for each type of final state. One can see that
-        the leptonic cross sections are all similar, as expected. The hadronic
-        cross section has to be $N_\text f N_\text c = 5 \cdot 3 = 15$ larger
-        than the one in the single leptonic channels.
+        the muon and tauon cross sections are similar, as expected. As we
+        incorrectly correct for a $t$-channel, the electron cross section is
+        too large. The hadronic cross section has to be $N_\text f N_\text c =
+        5 \cdot 3 = 15$ larger than the one in the single leptonic channels.
     }
     \label{fig:cross-sections}
 \end{figure}
 
 \input{../Snippets/cross-sections}
 
+\subsection{Lepton universality}
+
+% TODO
+
 \section{Decay widths}
+
+From the energy dependence of the cross sections, we can compute the decay
+width and the rest mass of the $\mathrm Z^0$ gauge boson generated by the
+spontaneous symmetry breaking of the Higgs field. As the tree-level cross
+section contains the modulus squared of the propagator, the expected energy
+dependence is that of a Lorentz curve. Therefore we fit a Lorentz curve to the
+partial cross sections for each decay channel. Luckily it is not 1992 any more
+and we can just do this ourselves.
+
+As we use a bootstrap scheme for error calculation, we perform the fit a couple
+hundred times with resampled input data. This gives us a set of hundreds of
+different fit parameters and also fit curves. For each interpolation value of
+$\sqrt s$ in the resulting Lorentz curve we take mean and standard deviation.
+The result is shown as an error band for each fit curve.
+
+The bootstrap also gives us hundreds of fit parameters, we can therefore also
+take mean and standard deviation to obtain an realistic error estimate for the
+resulting fit parameters. Just taking the diagonal of the covariance matrix of
+a least-squares fit greatly underestimates the error in most cases. Our fit
+parameters, the mass and width, are shown in Table~\ref{tab:lorentz-fits}.
 
 \begin{table}
     \centering
@@ -1333,6 +1395,30 @@ Table~\ref{tab:luminosities} lists the integrated luminosities for our dataset.
     }
     \label{tab:lorentz-fits}
 \end{table}
+
+We see that the error for the electron channel is very large. This originates
+in our severe restriction of the angle; only a fifth of the events are actually
+accepted. The error for the tauon channel is also rather large. In
+Figure~\ref{fig:cross-sections-zoom/tauons} one can see that fitting a
+Lorentz curve is actually quite brave, given the data.
+
+In all cases the mass very precise, most channels coincide very well, the
+electron channel is more than a few standard deviations off.
+
+% TODO Confidence level.
+
+\section{Neutrino generations}
+
+% TODO
+
+\chapter{Discussion}
+
+\section{Implicit assumptions}
+
+% TODO
+
+\chapter{Conclusion}
+
 
 %< if True >%
 \begin{appendix}
