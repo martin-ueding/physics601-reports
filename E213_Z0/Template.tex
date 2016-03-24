@@ -1353,10 +1353,6 @@ function which we will turn to next.
 
 \input{../Snippets/cross-sections}
 
-\subsection{Lepton universality}
-
-% TODO
-
 \section{Decay widths}
 
 From the energy dependence of the cross sections, we can compute the decay
@@ -1387,7 +1383,7 @@ Table~\ref{tab:lorentz-fits}.
         Type
         & {$\MZ / \si{\giga\electronvolt}$}
         & {$\Gamma_\mathrm Z / \si{\giga\electronvolt}$}
-        & {$\sigma_\text{Peak} / \si{\nano\barn}$} \\
+        & {$\sigma_f^\text{Peak} / \si{\nano\barn}$} \\
         \midrule
         %< for row in lorentz_fits_table >%
         << ' & '.join(row) >> \\
@@ -1401,19 +1397,60 @@ Table~\ref{tab:lorentz-fits}.
     \label{tab:lorentz-fits}
 \end{table}
 
-From here, we can compute the decay widths of the individual channels.
-
-% TODO
-
-\SIlist{<< width_electron >>}{\giga\electronvolt}
-
-\SIlist{<< ';'.join(width_flavors) >>}{\giga\electronvolt}
-
 % TODO Confidence level.
+
+\subsection{Lepton universality}
+
+Table~\ref{tab:lorentz-fits}
 
 \section{Neutrino generations}
 
-% TODO
+Using the relation
+\[
+    \sigma_f^\text{peak} = \frac{12\piup}{\MZ^2} \frac{\Gamma_\mathrm e
+    \Gamma_f}{\Gamma_\mathrm Z^2} \,
+\]
+given in the manual as (2.14), we can compute the partial decay widths for the
+individual flavors by solving for $\Gamma_\text e$ first and then for
+$\Gamma_f$. We compute the decay width of the electron via
+\[
+    \Gamma_\mathrm e = \MZ \Gamma_\mathrm Z
+    \sqrt{\frac{\sigma_\muup^\text{peak}}{12 \piup}}
+    = \SI{<< width_electron_mev >>}{\mega\electronvolt}
+    \,.
+\]
+Although the expression should use the peak cross section for the electron, we
+substitute the one for the muon. The rationale is simple: We know that the
+partial cross section of the electron is overestimated by our mistake in the
+cutting. Assuming the lepton universality actually holds, we can just
+substitute width into muons for the width into electrons. If we would not do
+this, we would end up with around 14 neutrino families. Therefore we work
+around the erroneous $\Gamma_\eup$ by substituting $\Gamma_\muup$.
+
+We also use our own values of $\MZ$ and $\Gamma_\mathrm Z$ that we obtain by
+averaging the fit results. This will make our result less accurate but more
+honest.
+
+With the decay width into electrons, we can compute the decay widths into other
+flavors using the similar expression
+\[
+    \Gamma_f = \frac{\MZ^2 \Gamma_\mathrm Z^2}{\Gamma_\mathrm e}
+    \frac{\sigma_f^\text{peak}}{12 \piup} \,.
+\]
+The resulting four decay widths are \SIlist{<< ';'.join(width_flavors_mev)
+>>}{\mega\electronvolt} for electrons, muons, tauons and hadrons, respectively.
+The decay width into muons has not changed as we have basically used that to
+compute the other widths.
+
+Subtracting the observed decay channels from the observed width of the Z-boson,
+we are missing a width of \SI{<< missing_width_mev >>}{\mega\electronvolt}. On
+average, the decay width into leptons is \SI{<< width_lepton
+>>}{\mega\electronvolt}. The quotient gives us the number of light neutrino
+families, \num{<< neutrino_families >>}. This number is many standard
+deviations away from the expected value of 3. At least 3 is the closest
+integer. Also we only used data from this analysis in order to obtain this
+result, therefore the limited accuracy is expected. The error should be larger
+in any case.
 
 \chapter{Discussion}
 
