@@ -44,7 +44,7 @@ channel_colors = [
 
 pp = pprint.PrettyPrinter()
 
-def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
+def bootstrap_kernel(mc_sizes, matrix, readings, lum):
     '''
     Core of the analysis.
 
@@ -62,9 +62,9 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
 
     for i in range(7):
         vector = readings[i, :]
-        corrected_val = inverted.dot(vector)
+        corrected = inverted.dot(vector)
 
-        corr_list.append(corrected_val)
+        corr_list.append(corrected)
 
     corr = np.column_stack(corr_list)
 
@@ -77,12 +77,12 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum_val):
 
     for i, name in zip(range(len(names)), names):
         counts = corr[i, :]
-        cross_section_val = counts / lum_val
-        cross_sections.append(cross_section_val)
+        cross_section = counts / lum
+        cross_sections.append(cross_section)
 
         # TODO Radiative corrections for cross section.
 
-        popt, pconv = op.curve_fit(lorentz, energies, cross_section_val)
+        popt, pconv = op.curve_fit(lorentz, energies, cross_section)
         masses.append(popt[0])
         widths.append(popt[1])
 
