@@ -44,9 +44,14 @@ channel_colors = [
 
 pp = pprint.PrettyPrinter()
 
-def bootstrap_kernel(mc_sizes, matrix, readings, lum):
+def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
+                     radiative_leptons):
     '''
     Core of the analysis.
+
+    Everything that is done here does not care about errors at all. The errors
+    only emerge via a lot (> 100) runs of this bootstrap kernel with slightly
+    different input values.
 
     :param np.array mc_sizes: List of raw number of MC events, four entries
     :param np.array matrix: Detection matrix, 4×4 numbers
@@ -78,14 +83,23 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum):
     for i, name in zip(range(len(names)), names):
         counts = corr[i, :]
         cross_section = counts / lum
+
+        # Radiative corrections for cross section.
+        if i == 3:
+            cross_section += radiative_hadrons
+        else:
+            cross_section += radiative_leptons
+
+        # Add the seven cross sections for this type to the list of cross
+        # sections.
         cross_sections.append(cross_section)
 
-        # TODO Radiative corrections for cross section.
-
+        # Fit the curve, add the fit parameters to the lists.
         popt, pconv = op.curve_fit(lorentz, energies, cross_section)
         masses.append(popt[0])
         widths.append(popt[1])
 
+        # Sample the fitted curve, add to the list.
         y = lorentz(x, *popt)
         y_list.append(y)
 
@@ -96,6 +110,9 @@ def bootstrap_driver(T):
     lum_data = np.loadtxt('Data/luminosity.txt')
     lum_val = lum_data[:, 0]
     lum_err = lum_data[:, 3]
+
+    radiative_hadrons = np.loadtxt('Data/radiative-hadrons.tsv')
+    radiative_leptons = np.loadtxt('Data/radiative-leptons.tsv')
 
     T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
 
@@ -118,7 +135,7 @@ def bootstrap_driver(T):
         # Draw new filtered readings.
         boot_readings = redraw_count(filtered)
 
-        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val))
+        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val, radiative_hadrons, radiative_leptons))
 
 
     x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list, readings_list = zip(*results)
