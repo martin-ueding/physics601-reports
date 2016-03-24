@@ -171,6 +171,13 @@ def bootstrap_driver(T):
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
 
+    # Format masses and widths for the template.
+    T['lorentz_fits_table'] = list(zip(
+        [name.capitalize() for name in names],
+        siunitx(masses_val, masses_err),
+        siunitx(widths_val, widths_err, error_digits=2),
+    ))
+
     # Format original counts for the template.
     val, err = bootstrap.average_and_std_arrays(readings_dist)
     T['counts_table'] = []
@@ -183,11 +190,13 @@ def bootstrap_driver(T):
     for i in range(7):
         T['corrected_counts_table'].append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
 
+    # Format matrix for the template.
     matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_dist)
     T['matrix'] = []
     for i in range(4):
         T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
 
+    # Format inverted matrix for the template.
     inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_dist)
     T['inverted'] = []
     for i in range(4):
@@ -195,27 +204,24 @@ def bootstrap_driver(T):
                              list(map(number_padding,
                              siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
 
+    # Format cross sections for the template.
     cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections_dist)
     T['cross_sections_table'] = []
     for i in range(7):
         T['cross_sections_table'].append([siunitx(energies[i])] + siunitx(cs_val[:, i], cs_err[:, i]))
 
+    # Build error band for pgfplots.
     y_list_val, y_list_err = bootstrap.average_and_std_arrays(y_dist)
-
     for i, name in zip(itertools.count(), names):
+        # Extract the y-values for the given decay type.
         y_val = y_list_val[i, :]
         y_err = y_list_err[i, :]
 
+        # Store the data for pgfplots.
         np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
                    np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
         np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
-
-    T['lorentz_fits_table'] = list(zip(
-        [name.capitalize() for name in names],
-        siunitx(masses_val, masses_err),
-        siunitx(widths_val, widths_err, error_digits=2),
-    ))
 
 
 def number_padding(number):
