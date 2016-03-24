@@ -1377,7 +1377,8 @@ The bootstrap also gives us hundreds of fit parameters, we can therefore also
 take mean and standard deviation to obtain an realistic error estimate for the
 resulting fit parameters. Just taking the diagonal of the covariance matrix of
 a least-squares fit greatly underestimates the error in most cases. Our fit
-parameters, the mass and width, are shown in Table~\ref{tab:lorentz-fits}.
+parameters, the mass and width of the Z-boson, are shown in
+Table~\ref{tab:lorentz-fits}.
 
 \begin{table}
     \centering
@@ -1400,14 +1401,13 @@ parameters, the mass and width, are shown in Table~\ref{tab:lorentz-fits}.
     \label{tab:lorentz-fits}
 \end{table}
 
-We see that the error for the electron channel is very large. This originates
-in our severe restriction of the angle; only a fifth of the events are actually
-accepted. The error for the tauon channel is also rather large. In
-Figure~\ref{fig:cross-sections-zoom/tauons} one can see that fitting a
-Lorentz curve is actually quite brave, given the data.
+From here, we can compute the decay widths of the individual channels.
 
-In all cases the mass very precise, most channels coincide very well, the
-electron channel is more than a few standard deviations off.
+% TODO
+
+\SIlist{<< width_electron >>}{\giga\electronvolt}
+
+\SIlist{<< ';'.join(width_flavors) >>}{\giga\electronvolt}
 
 % TODO Confidence level.
 

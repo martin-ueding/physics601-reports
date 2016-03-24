@@ -114,8 +114,18 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         y = lorentz(x, *popt)
         y_list.append(y)
 
+    peaks = np.array(peaks)
+    peaks_gev = peaks * 2.58e-6
+
+    mean_mass = np.mean(masses)
+    mean_width = np.mean(widths)
+
+    width_electron = mean_mass * mean_width * np.sqrt(peaks[0] / (12*np.pi))
+    width_flavors = mean_width**2 * mean_mass**2 / width_electron \
+            * peaks / (12 * np.pi)
+
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
-            matrix, inverted, readings, peaks
+            matrix, inverted, readings, peaks, width_electron, width_flavors
 
 
 def bootstrap_driver(T):
@@ -168,7 +178,8 @@ def bootstrap_driver(T):
     # quantities. Each of the new variables created here is a list of R
     # bootstrap samples.
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
-            matrix_dist, inverted_dist, readings_dist, peaks_dist \
+            matrix_dist, inverted_dist, readings_dist, peaks_dist, \
+            width_electron_dist, width_flavors_dist \
             = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
@@ -193,6 +204,12 @@ def bootstrap_driver(T):
         siunitx(widths_val, widths_err),
         siunitx(peaks_val, peaks_err),
     ))
+
+    width_electron_val, width_electron_err = bootstrap.average_and_std_arrays(width_electron_dist)
+    width_flavors_val, width_flavors_err = bootstrap.average_and_std_arrays(width_flavors_dist)
+
+    T['width_electron'] = siunitx(width_electron_val, width_electron_err)
+    T['width_flavors'] = siunitx(width_flavors_val, width_flavors_err)
 
     # Format original counts for the template.
     val, err = bootstrap.average_and_std_arrays(readings_dist)
