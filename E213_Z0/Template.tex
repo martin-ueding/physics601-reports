@@ -732,11 +732,11 @@ The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
 charged particles. All the energy is deposited in the \ecal{}. In the dark blue
 header one can see that the missing energy is very small. The \eecal{} is
-pretty much identical with \sump{}. Both energies are almost the beam energy.
+pretty much identical with \pcharged{}. Both energies are almost the beam energy.
 
 Decays into muons have a different signature. The most prominent feature are
 the hits in the muon chambers, as one can see in Figure~\ref{fig:grope/muons}.
-The \sump{} is the beam energy, little energy is unaccounted for. This means
+The \pcharged{} is the beam energy, little energy is unaccounted for. This means
 that there are no neutrinos created in that decay. \eecal{} and \ehcal{} is
 small, this is due to the big mass of the muon (compared to electrons).
 
@@ -756,7 +756,7 @@ as their number of charged tracks is always rather large.
 
 While reviewing the Monte Carlo events in \textsc{grope}, we generate
 histograms with the various characteristics. We choose to write down
-\ncharged{}, \sump{}, \eecal{} and \ehcal{}. Those characteristics are also
+\ncharged{}, \pcharged{}, \eecal{} and \ehcal{}. Those characteristics are also
 available in the later analysis of larger datasets using \textsc{paw}.
 
 \subsection{Preliminary analysis}
@@ -765,10 +765,10 @@ Using some twenty points per event class, we obtain the histograms shown in
 Figure~\ref{fig:hist}. There one can see that some characteristics are well
 suited to cut the data. For instance in \ncharged, we see that hadronic decays
 have more than seven tracks, whereas the leptonic decays have less. In the
-histogram for \sump, we see that a cut at around \SI{80}{\giga\electronvolt}
-can separate tauons and muons. Another cut in the \ecal-energy at around
+histogram for \pcharged, we see that a cut at around \SI{80}{\giga\electronvolt}
+can separate tauons and muons. Another cut in \eecal{} at around
 \SI{75}{\giga\electronvolt} allows us to separate tauons and electrons. The
-energy deposited into the \hcal\ is not very helpful for cutting.
+energy deposited into the \hcal\, \eecal, is not very helpful for cutting.
 
 \input{../Snippets/monte-carlo-histograms}
 
@@ -811,7 +811,7 @@ cuts listed in Table~\ref{tab:cuts}.
         \cmidrule(l){2-5}
         Particle
         & \ncharged
-        & \sump/\si{\giga\electronvolt}
+        & \pcharged/\si{\giga\electronvolt}
         & \eecal/\si{\giga\electronvolt}
         & \ehcal/\si{\giga\electronvolt} \\
         \midrule
@@ -904,7 +904,7 @@ Table~\ref{tab:cuts2}.
         \cmidrule(l){2-6}
         Particle
         & \ncharged
-        & \sump/\si{\giga\electronvolt}
+        & \pcharged/\si{\giga\electronvolt}
         & \eecal/\si{\giga\electronvolt}
         & \ehcal/\si{\giga\electronvolt}
         & $\cos(\theta)$
