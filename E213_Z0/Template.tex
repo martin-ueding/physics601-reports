@@ -860,7 +860,7 @@ cuts listed in Table~\ref{tab:cuts}.
         \midrule
         Electrons & $< 4$ &  & $> 60$ &  \\
         Muons & $< 4$ & $> 75$ & $< 20$ &  \\
-        Taus & $< 7$ & $< 75$ & $\leq 75$ &  \\
+        Tauons & $< 7$ & $< 75$ & $\leq 75$ &  \\
         Hadrons & $> 7$ &  &  &  \\
         \bottomrule
     \end{tabular}
@@ -955,7 +955,7 @@ Table~\ref{tab:cuts2}.
         \midrule
         Electrons & $< 4$ &  & $> 60$ &  & $\num{-.9}\leq\dots\leq\num{.5}$ \\
         Muons & $< 4$ & $> 75$ & $< 20$ &  & $\num{-.9}\leq\dots\leq\num{.9}$ \\
-        Taus & $< 7$ & $< 75$ & $\leq 75$ &  &\\
+        Tauons & $< 7$ & $< 75$ & $\leq 75$ &  &\\
         Hadrons & $> 7$ &  &  &  & \\
         \bottomrule
     \end{tabular}
@@ -1092,14 +1092,11 @@ the legend, this is the interesting number.
 For the electrons, the Monte Carlo input vector is $\vec A = (94381, 0, 0,
 0)^\mathrm T$. Then we look at the output in the four histograms and find $\vec
 I = (20474, 1, 1013, 0)^\mathrm T$. From this, we can construct the first
-column
-in the matrix. Using the other filters, we can construct the whole matrix.
-Table~\ref{tab:matrix/} shows the matrix. It can be seen that it is mostly
-diagonal, just as we want it to be. The detection efficiency for the electrons
-is not very great. This comes from the severe cutting in $\cos(\theta) < 0.5$
-which discards a lot of events.
-
-% TODO Add a table with the matrix.
+column in the matrix. Using the other filters, we can construct the whole
+matrix. Table~\ref{tab:matrix} shows the matrix. It can be seen that it is
+mostly diagonal, just as we want it to be. The detection efficiency for the
+electrons is not very great. This comes from the severe cutting in
+$\cos(\theta) < 0.5$ which discards a lot of events.
 
 \begin{table}
     \centering
@@ -1110,7 +1107,7 @@ which discards a lot of events.
         {Detected as}
         & {Electrons}
         & {Muons}
-        & {Taus}
+        & {Tauons}
         & {Hadrons} \\
         \midrule
         %< for row in matrix >%
@@ -1165,7 +1162,7 @@ matrix elements come directly from the bootstrapping.
         {Actually are}
         & {Electrons}
         & {Muons}
-        & {Taus}
+        & {Tauons}
         & {Hadrons} \\
         \midrule
         %< for row in inverted >%
@@ -1192,11 +1189,19 @@ $t$-channel!
 
 Using the matrix $\mat D\inv$ now, the $t$-channel will come back, at least
 from the numbers. Therefore we will find later on that the cross sections of
-the scattering into electrons. Table~\label{tab:cross-sections} and
-Figure~\label{fig:cross-sections} clearly show this apparent violation of
-lepton universality. This is an overcompensation in our correction, we should
-not have computed the matrix elements with the $t$-channel cut in place. We do
-not have access to the machines running \textsc{paw} now, so we can just
+the scattering into electrons. Table~\ref{tab:cross-sections} and
+Figure~\ref{fig:cross-sections} clearly show this apparent violation of lepton
+universality.
+
+This is an overcompensation in our correction, we should have also cut the
+Monte Carlo data in the angle. The Monte Carlo data contains $t$-channel events
+as well, which we also do not want. By taking the ratio of filtered electrons
+and unfiltered Monte Carlo electrons, our acceptance ratio will correct the
+$t$-channel back in. We should actually have filtered the Monte Carlo with the
+same $\cos(\theta) \leq \num{0.5}$ cut in order to have a reduced number of
+false-negatives and therefore no overcompensation.
+
+We do not have access to the machines running \textsc{paw} now, so we can just
 explain why the results do not come out right.
 
 \section{Partial cross sections}
@@ -1228,7 +1233,7 @@ also used for resampling.
         {$\sqrt s / \si{\giga\electronvolt}$}
         & {Electrons}
         & {Muons}
-        & {Taus}
+        & {Tauons}
         & {Hadrons} \\
         \midrule
         %< for row in counts_table >%
@@ -1263,7 +1268,7 @@ we have overcompensated the correction for the electrons.
         {$\sqrt s / \si{\giga\electronvolt}$}
         & {Electrons}
         & {Muons}
-        & {Taus}
+        & {Tauons}
         & {Hadrons} \\
         \midrule
         %< for row in corrected_counts_table ->%
@@ -1352,7 +1357,7 @@ errors of luminosity, counts and matrix elements via the bootstrap method.
         {$\sqrt s / \si{\giga\electronvolt}$}
         & {Electrons}
         & {Muons}
-        & {Taus}
+        & {Tauons}
         & {Hadrons} \\
         \midrule
         %< for row in cross_sections_table >%

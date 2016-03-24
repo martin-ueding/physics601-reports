@@ -34,6 +34,7 @@ weak_mixing_angle = np.arcsin(np.sqrt(sin_sq_weak_mixing))
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 names = ['electron', 'muon', 'tau', 'hadron']
+display_names = ['Electrons', 'Muons', 'Tauons', 'Hadrons']
 
 energies = np.loadtxt('Data/energies.txt')
 
@@ -61,7 +62,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     :param np.array lum_val: Luminosity for the seven energies
     '''
     # Normalize the raw_matrix.
-    matrix = matrix.dot(np.diag(1/mc_sizes))
+    matrix = np.dot(matrix, np.diag(1/mc_sizes))
 
     inverted = np.linalg.inv(matrix)
 
@@ -97,9 +98,13 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         cross_sections.append(cross_section)
 
         # Fit the curve, add the fit parameters to the lists.
-        popt, pconv = op.curve_fit(lorentz, energies, cross_section)
+        popt, pconv = op.curve_fit(lorentz, energies, cross_section, p0=[91, 2, 10])
         masses.append(popt[0])
         widths.append(popt[1])
+
+        assert popt[0] > 0
+        assert popt[1] > 0
+        assert popt[2] > 0
 
         # Sample the fitted curve, add to the list.
         y = lorentz(x, *popt)
@@ -177,7 +182,7 @@ def bootstrap_driver(T):
 
     # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
-        [name.capitalize() for name in names],
+        display_names,
         siunitx(masses_val, masses_err),
         siunitx(widths_val, widths_err, error_digits=2),
     ))
@@ -198,13 +203,13 @@ def bootstrap_driver(T):
     matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_dist)
     T['matrix'] = []
     for i in range(4):
-        T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
+        T['matrix'].append([display_names[i]] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
 
     # Format inverted matrix for the template.
     inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_dist)
     T['inverted'] = []
     for i in range(4):
-        T['inverted'].append([names[i].capitalize()+'s'] +
+        T['inverted'].append([display_names[i]] +
                              list(map(number_padding,
                              siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
 
@@ -250,8 +255,8 @@ def visualize_matrix(matrix, name):
     im = ax.imshow(matrix, cmap='Greens', interpolation='nearest')
     ax.set_xticks([0, 1, 2, 3])
     ax.set_yticks([0, 1, 2, 3])
-    ax.set_xticklabels([r'{} $\to$'.format(name) for name in names], rotation=20)
-    ax.set_yticklabels([r'$\to$ {}'.format(name) for name in names])
+    ax.set_xticklabels([r'{} $\to$'.format(name) for name in display_names], rotation=20)
+    ax.set_yticklabels([r'$\to$ {}'.format(name) for name in display_names])
     fig.colorbar(im)
     fig.tight_layout()
     fig.savefig(figname('normalized_matrix'))
