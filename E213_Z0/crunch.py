@@ -79,6 +79,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     masses = []
     widths = []
     cross_sections = []
+    peaks = []
     y_list = []
 
     x = np.linspace(np.min(energies), np.max(energies), 200)
@@ -106,12 +107,15 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         assert popt[1] > 0
         assert popt[2] > 0
 
+        peak = lorentz(popt[0], *popt)
+        peaks.append(peak)
+
         # Sample the fitted curve, add to the list.
         y = lorentz(x, *popt)
         y_list.append(y)
 
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
-            matrix, inverted, readings
+            matrix, inverted, readings, peaks
 
 
 def bootstrap_driver(T):
@@ -164,7 +168,8 @@ def bootstrap_driver(T):
     # quantities. Each of the new variables created here is a list of R
     # bootstrap samples.
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
-            matrix_dist, inverted_dist, readings_dist = zip(*results)
+            matrix_dist, inverted_dist, readings_dist, peaks_dist \
+            = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
     # So take the first and throw the others out.
@@ -179,12 +184,14 @@ def bootstrap_driver(T):
     # masses-errors.
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
+    peaks_val, peaks_err = bootstrap.average_and_std_arrays(peaks_dist)
 
     # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
         display_names,
         siunitx(masses_val, masses_err),
-        siunitx(widths_val, widths_err, error_digits=2),
+        siunitx(widths_val, widths_err),
+        siunitx(peaks_val, peaks_err),
     ))
 
     # Format original counts for the template.
@@ -280,6 +287,7 @@ def figname(basename):
 
 def job_afb_analysis(T, interpolator):
     # TODO Remove interpolator, use direct energies.
+    # TODO Also bootstrap here.
     energies = np.loadtxt('Data/energies.txt')
     data = np.loadtxt('Data/afb.txt')
     negative = data[:, 0]

@@ -1381,11 +1381,12 @@ parameters, the mass and width, are shown in Table~\ref{tab:lorentz-fits}.
 
 \begin{table}
     \centering
-    \begin{tabular}{lSS}
+    \begin{tabular}{lSSS}
         \toprule
         Type
         & {$\MZ / \si{\giga\electronvolt}$}
-        & {$\Gamma_i / \si{\giga\electronvolt}$} \\
+        & {$\Gamma_\mathrm Z / \si{\giga\electronvolt}$}
+        & {$\sigma_\text{Peak} / \si{\nano\barn}$} \\
         \midrule
         %< for row in lorentz_fits_table >%
         << ' & '.join(row) >> \\
