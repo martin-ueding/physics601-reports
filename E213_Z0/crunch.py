@@ -171,7 +171,7 @@ def bootstrap_driver(T):
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
 
-    corr_val, corr_err = bootstrap.average_and_std_arrays(corr_list)
+    corr_val, corr_err = bootstrap.average_and_std_arrays(corr_dist)
     corr = []
     for i in range(7):
         corr.append([siunitx(energies[i])] + siunitx(corr_val[i, :], corr_err[i, :], allowed_hang=10))
