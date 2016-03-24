@@ -133,7 +133,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     missing_width = mean_width - np.sum(width_flavors)
     width_lepton = np.mean(width_flavors[0:3])
 
-    neutrino_families = missing_width / width_lepton
+    neutrino_families = missing_width / 0.1676
 
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
             matrix, inverted, readings, peaks_nb, width_electron, width_flavors, \
