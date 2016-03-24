@@ -4,6 +4,8 @@
 # Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The GNU Public License Version 2 (or later)
 
+# TODO Rename Tau to Tauon everywhere
+
 import argparse
 import itertools
 import json
@@ -107,18 +109,24 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
 
 
 def bootstrap_driver(T):
+    # Load all the input data from the files.
     lum_data = np.loadtxt('Data/luminosity.txt')
     lum_val = lum_data[:, 0]
     lum_err = lum_data[:, 3]
-
     radiative_hadrons = np.loadtxt('Data/radiative-hadrons.tsv')
     radiative_leptons = np.loadtxt('Data/radiative-leptons.tsv')
-
-    T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
-
     raw_matrix = np.loadtxt('Data/matrix.txt').T
     mc_sizes = np.loadtxt('Data/monte-carlo-sizes.txt')
     filtered = np.loadtxt('Data/filtered.txt')
+
+    # Some output into the template.
+    T['luminosities_table'] = list(zip(siunitx(energies), siunitx(lum_val, lum_err)))
+    T['radiative_cs_table'] = list(zip(
+        siunitx(energies),
+        siunitx(radiative_hadrons),
+        siunitx(radiative_leptons),
+    ))
+
 
     results = []
 

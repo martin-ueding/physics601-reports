@@ -1266,11 +1266,33 @@ results.
 \subsection{Cross sections}
 
 Using the relation between the counts and luminosity, we can compute the
-partial cross section for each of the channels. The results are shown in
-Table~\ref{tab:cross-sections}. Errors are the combined errors of luminosity,
-counts and matrix elements via the bootstrap method.
+partial cross section for each of the channels. The obtained cross sections
+need to be corrected by higher-order effects. Those are given to use as simple
+correction numbers, reproduced in Table~\ref{tab:radiative_cs_table}. The
+results are shown in Table~\ref{tab:cross-sections}. Errors are the combined
+errors of luminosity, counts and matrix elements via the bootstrap method.
 
-% TODO Radiation corrections.
+\begin{table}
+    \centering
+    \begin{tabular}{SSSSS}
+        \toprule
+        & \multicolumn{2}{c}{$\Delta\sigma / \si{\nano\barn}$} \\
+        \cmidrule(l){2-3}
+        {$\sqrt s / \si{\giga\electronvolt}$}
+        & {Hadrons}
+        & {Leptons} \\
+        \midrule
+        %< for row in radiative_cs_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Radiative corrections for the cross sections as given in Table~5.5 from
+        the manual.
+    }
+    \label{tab:radiative_cs_table}
+\end{table}
 
 \begin{table}
     \centering
@@ -1388,7 +1410,6 @@ electron channel is more than a few standard deviations off.
 % TODO
 
 \chapter{Conclusion}
-
 
 %< if True >%
 \begin{appendix}
