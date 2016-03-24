@@ -145,13 +145,31 @@ def bootstrap_driver(T):
 
         results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val, radiative_hadrons, radiative_leptons))
 
+    # The `results` is a list which contains one entry per bootstrap run. This
+    # is not particularly helpful as the different interesting quantities are
+    # only on the second index on the list. The first index of the `results`
+    # list is the bootstrap run index. Therefore we use the `zip(*x)` trick to
+    # exchange the two indices. The result will be a list of quantities which
+    # are themselves lists of the bootstrap samples. Then using Python tuple
+    # assignments, we can split that (now) outer list into different
+    # quantities. Each of the new variables created here is a list of R
+    # bootstrap samples.
+    x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
+            matrix_dist, inverse_dist, readings_dist = zip(*results)
 
-    x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list, readings_list = zip(*results)
+    # We only need one of the lists of the x-values as they are all the same.
+    # So take the first and throw the others out.
+    x = x_dist[0]
 
-    x = x_list[0]
-
-    masses_val, masses_err = bootstrap.average_and_std_arrays(masses)
-    widths_val, widths_err = bootstrap.average_and_std_arrays(widths)
+    # The masses and the widths that are given back from the `bootstrap_kernel`
+    # are a list of four elements (electrons, muons, tauons, hadrons) each. The
+    # variable `masses_dist` contains R copies of this four-list, one copy for
+    # each bootstrap sample. We now average along the bootstrap dimension, that
+    # is the outermost dimension. For each of the four masses, we take the
+    # average along the R copies. This will give us four masses and four
+    # masses-errors.
+    masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
+    widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
 
     corr_val, corr_err = bootstrap.average_and_std_arrays(corr_list)
     corr = []
