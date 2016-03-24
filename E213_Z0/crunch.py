@@ -100,19 +100,20 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
 
         # Fit the curve, add the fit parameters to the lists.
         # TODO Add a linear underground.
-        popt, pconv = op.curve_fit(lorentz, energies, cross_section, p0=[91, 2, 10])
+        popt, pconv = op.curve_fit(propagator, energies, cross_section, p0=[91, 2, 5000])
         masses.append(popt[0])
         widths.append(popt[1])
+
 
         assert popt[0] > 0
         assert popt[1] > 0
         assert popt[2] > 0
 
-        peak_nb = lorentz(popt[0], *popt)
+        peak_nb = propagator(popt[0], *popt)
         peaks_nb.append(peak_nb)
 
         # Sample the fitted curve, add to the list.
-        y = lorentz(x, *popt)
+        y = propagator(x, *popt)
         y_list.append(y)
 
     peaks_nb = np.array(peaks_nb)
@@ -302,8 +303,10 @@ def visualize_matrix(matrix, name):
     fig.savefig(figname('normalized_matrix'))
 
 
-def lorentz(x, mean, width, integral):
-    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+def propagator(x, mass, width, integral):
+    s = x**2
+    return integral * 12 * np.pi / mass**2 \
+            * s / ((s - mass**2)**2 + (s**2 * width**2/mass**2))
 
 
 def job_colors():
