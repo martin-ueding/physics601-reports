@@ -97,9 +97,13 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         cross_sections.append(cross_section)
 
         # Fit the curve, add the fit parameters to the lists.
-        popt, pconv = op.curve_fit(lorentz, energies, cross_section)
+        popt, pconv = op.curve_fit(lorentz, energies, cross_section, p0=[91, 2, 10])
         masses.append(popt[0])
         widths.append(popt[1])
+
+        assert popt[0] > 0
+        assert popt[1] > 0
+        assert popt[2] > 0
 
         # Sample the fitted curve, add to the list.
         y = lorentz(x, *popt)
