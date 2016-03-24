@@ -162,7 +162,7 @@ def bootstrap_driver(T):
     # Container for the results of each bootstrap run.
     results = []
 
-    for r in range(100):
+    for r in range(300):
         # Draw new numbers for the matrix.
         boot_matrix = redraw_count(raw_matrix)
 

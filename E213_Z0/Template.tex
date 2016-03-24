@@ -507,6 +507,7 @@ The Fermi coupling constant has the value \SI{<< fermi_coupling
 \end{table}
 
 \section{Partial widths}
+\label{sec:exercise-partial-widths}
 
 In the previous section, we have computed the decay widths for each kind of
 particle. Now we have to group the various particles into families and add
@@ -1370,22 +1371,22 @@ just do this ourselves.
 As we use a bootstrap scheme for error calculation, we perform the fit a couple
 hundred times with resampled input data. This gives us a set of hundreds of
 different fit parameters and also fit curves. For each interpolation value of
-$\sqrt s$ in the resulting Lorentz curve we take mean and standard deviation.
+$\sqrt s$ in the resulting curve we take mean and standard deviation.
 The result is shown as an error band for each fit curve.
 
-The bootstrap also gives us hundreds of fit parameters, we can therefore also
-take mean and standard deviation to obtain an realistic error estimate for the
-resulting fit parameters. Just taking the diagonal of the covariance matrix of
-a least-squares fit greatly underestimates the error in most cases.
+As the bootstrap gives us hundreds of fit parameters, we can take mean and
+standard deviation to obtain an realistic error estimate for the resulting fit
+parameters. Just taking the diagonal of the covariance matrix of a
+least-squares fit greatly underestimates the error in most cases.
 
 Additionally, we have the problem that we are limited to seven beam energies.
 This introduces another source of error that we control with a jackknife
 approach in the fitting. Instead of fitting all seven data points, we randomly
 leave one of them out and fit only the remaining six. This makes the fit still
 able to converge but simulates the effect that adding or removing another data
-point has.
-
-Our fit parameters, the mass and width of the Z-boson, are shown in
+point has. If a result changes when a single data point is removed, this should
+add to the uncertainty of the result. Our fit parameters, the mass and width of
+the Z-boson as well as the peak cross section, are shown in
 Table~\ref{tab:lorentz-fits}.
 
 \begin{table}
@@ -1416,21 +1417,7 @@ underestimated by an order of magnitude.
 
 % TODO Confidence level.
 
-\subsection{Lepton universality}
-
-Our partial cross sections at the peak are listed in
-Table~\ref{tab:lorentz-fits}. Lepton universality states that at high enough
-energy, which we have with $\sqrt s \simeq \MZ$, all charged leptons will be
-virtually massless and the weak isospin doublets behave exactly the same. This
-should manifest itself in exactly equal partial cross sections for the three
-lepton flavors.
-
-For the muons and tauons, the cross sections are well compatible with each
-other. For the electrons, it is a bit more than a factor two too large, the
-error cannot account for that. This originates in the wrong $t$-channel
-cutting.
-
-\subsection{Neutrino generations}
+\subsection{Partial decay widths}
 
 Using the relation
 \[
@@ -1452,11 +1439,10 @@ partial cross section of the electron is overestimated by our mistake in the
 cutting. Assuming the lepton universality actually holds, we can just
 substitute width into muons for the width into electrons. If we would not do
 this, we would end up with around 14 neutrino families. Therefore we work
-around the erroneous $\Gamma_\eup$ by substituting $\Gamma_\muup$.
-
-We also use our own values of $\MZ$ and $\Gamma_\mathrm Z$ that we obtain by
-averaging the fit results. This will make our result less accurate but more
-honest.
+around the erroneous $\Gamma_\eup$ by substituting $\Gamma_\muup$ for in that
+one equation. We also use our own values of $\MZ$ and $\Gamma_\mathrm Z$ that
+we obtain by averaging the fit results. This will make our result less accurate
+but more honest.
 
 With the decay width into electrons, we can compute the decay widths into other
 flavors using the similar expression
@@ -1468,6 +1454,55 @@ The resulting four decay widths are \SIlist{<< ';'.join(width_flavors_mev)
 >>}{\mega\electronvolt} for electrons, muons, tauons and hadrons, respectively.
 The decay width into muons has not changed as we have basically used that to
 compute the other widths.
+
+Our results are summed up in Table~\ref{tab:cross_section_comparison} which
+compares the values to the theoretical ones listed in
+Table~\ref{tab:decay_widths} and Section~\ref{sec:exercise-partial-widths}. We
+see that the decay widths into muons and tauons are quite near, only
+$\Gamma_\tauup$ has the theoretical value within one standard deviation. For
+the muons, we already need more than two standard values. As expected by now,
+$\Gamma_\eup$ is quite far off. A little surprising is that
+$\Gamma_\text{hadrons}$ is more than three standard deviations away from the
+expected value.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lSS}
+        \toprule
+        & \multicolumn{2}{c}{$\Gamma_f / \si{\mega\electronvolt}$} \\
+        \cmidrule(l){2-3}
+        {Channel}
+        & {Measurement}
+        & {Theory}
+        \\
+        \midrule
+        Electrons & << width_flavors_mev[0] >> & << gamma_electron >> \\
+        Muons & << width_flavors_mev[1] >> & << gamma_electron >> \\
+        Tauons & << width_flavors_mev[2] >> & << gamma_electron >> \\
+        Hadrons & << width_flavors_mev[3] >> & << hadronic_width >> \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Comparison of extracted and theoretical partial widths.
+    }
+    \label{tab:cross_section_comparison}
+\end{table}
+
+\subsection{Lepton universality}
+
+Our partial cross sections at the peak are listed in
+Table~\ref{tab:lorentz-fits}. Lepton universality states that at high enough
+energy, which we have with $\sqrt s \simeq \MZ$, all charged leptons will be
+virtually massless and the weak isospin doublets behave exactly the same. This
+should manifest itself in exactly equal partial cross sections for the three
+lepton flavors.
+
+For the muons and tauons, the cross sections are well compatible with each
+other. For the electrons, it is a bit more than a factor two too large, the
+error cannot account for that. This originates in the wrong $t$-channel
+cutting.
+
+\subsection{Neutrino generations}
 
 Subtracting the observed decay channels from the observed width of the Z-boson,
 we are missing a width of \SI{<< missing_width_mev >>}{\mega\electronvolt}. The
