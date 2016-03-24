@@ -105,7 +105,8 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         y = lorentz(x, *popt)
         y_list.append(y)
 
-    return x, masses, widths, np.array(cross_sections), y_list, corr.T, matrix, inverted, readings
+    return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
+            matrix, inverted, readings
 
 
 def bootstrap_driver(T):
@@ -127,7 +128,7 @@ def bootstrap_driver(T):
         siunitx(radiative_leptons),
     ))
 
-
+    # Container for the results of each bootstrap run.
     results = []
 
     for r in range(100):
@@ -143,7 +144,10 @@ def bootstrap_driver(T):
         # Draw new filtered readings.
         boot_readings = redraw_count(filtered)
 
-        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val, radiative_hadrons, radiative_leptons))
+        # Run the analysis on the resampled data and save the results.
+        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings,
+                                        boot_lum_val, radiative_hadrons,
+                                        radiative_leptons))
 
     # The `results` is a list which contains one entry per bootstrap run. This
     # is not particularly helpful as the different interesting quantities are
