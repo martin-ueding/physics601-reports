@@ -105,7 +105,8 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         y = lorentz(x, *popt)
         y_list.append(y)
 
-    return x, masses, widths, np.array(cross_sections), y_list, corr.T, matrix, inverted, readings
+    return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
+            matrix, inverted, readings
 
 
 def bootstrap_driver(T):
@@ -127,7 +128,7 @@ def bootstrap_driver(T):
         siunitx(radiative_leptons),
     ))
 
-
+    # Container for the results of each bootstrap run.
     results = []
 
     for r in range(100):
@@ -143,83 +144,88 @@ def bootstrap_driver(T):
         # Draw new filtered readings.
         boot_readings = redraw_count(filtered)
 
-        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings, boot_lum_val, radiative_hadrons, radiative_leptons))
+        # Run the analysis on the resampled data and save the results.
+        results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings,
+                                        boot_lum_val, radiative_hadrons,
+                                        radiative_leptons))
 
+    # The `results` is a list which contains one entry per bootstrap run. This
+    # is not particularly helpful as the different interesting quantities are
+    # only on the second index on the list. The first index of the `results`
+    # list is the bootstrap run index. Therefore we use the `zip(*x)` trick to
+    # exchange the two indices. The result will be a list of quantities which
+    # are themselves lists of the bootstrap samples. Then using Python tuple
+    # assignments, we can split that (now) outer list into different
+    # quantities. Each of the new variables created here is a list of R
+    # bootstrap samples.
+    x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
+            matrix_dist, inverted_dist, readings_dist = zip(*results)
 
-    x_list, masses, widths, cross_sections, y_list, corr_list, matrix_list, inverted_list, readings_list = zip(*results)
+    # We only need one of the lists of the x-values as they are all the same.
+    # So take the first and throw the others out.
+    x = x_dist[0]
 
-    x = x_list[0]
+    # The masses and the widths that are given back from the `bootstrap_kernel`
+    # are a list of four elements (electrons, muons, tauons, hadrons) each. The
+    # variable `masses_dist` contains R copies of this four-list, one copy for
+    # each bootstrap sample. We now average along the bootstrap dimension, that
+    # is the outermost dimension. For each of the four masses, we take the
+    # average along the R copies. This will give us four masses and four
+    # masses-errors.
+    masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
+    widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
 
-    masses_val, masses_err = bootstrap.average_and_std_arrays(masses)
-    widths_val, widths_err = bootstrap.average_and_std_arrays(widths)
-
-    corr_val, corr_err = bootstrap.average_and_std_arrays(corr_list)
-    corr = []
-    for i in range(7):
-        corr.append([siunitx(energies[i])] + siunitx(corr_val[i, :], corr_err[i, :], allowed_hang=10))
-    T['corrected_counts_table'] = list(corr)
-
-    val, err = bootstrap.average_and_std_arrays(readings_list)
-    readings = []
-    for i in range(7):
-        readings.append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
-    T['counts_table'] = list(readings)
-
-
-    y_lists = zip(*y_list)
-    cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections)
-    print('CS')
-    print(cs_val)
-    print(cs_err)
-
-    T['cross_sections_table'] = []
-    for i in range(7):
-        T['cross_sections_table'].append([siunitx(energies[i])] + siunitx(cs_val[:, i], cs_err[:, i]))
-
-
-    fig = pl.figure()
-
-    for i, name, y_list, color in zip(itertools.count(), names, y_lists, channel_colors):
-        ax = fig.add_subplot(2, 2, i+1)
-        y_val, y_err = bootstrap.average_and_std_arrays(y_list)
-        ax.errorbar(energies, cs_val[i, :], cs_err[i, :], color=color, linestyle='none', marker='+')
-        ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
-        ax.margins(0.05)
-
-        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
-                   np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
-        np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
-                   np.column_stack([
-                       np.concatenate((x, x[::-1])),
-                       np.concatenate((
-                           (y_val-y_err),
-                           (y_val+y_err)[::-1]
-                       ))
-                   ]))
-
-    fig.tight_layout()
-    fig.savefig(figname('test-band'))
-
-    print('Masses', siunitx(masses_val, masses_err))
-    print('Widths', siunitx(widths_val, widths_err, error_digits=2))
-
+    # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
         [name.capitalize() for name in names],
         siunitx(masses_val, masses_err),
         siunitx(widths_val, widths_err, error_digits=2),
     ))
 
-    matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_list)
+    # Format original counts for the template.
+    val, err = bootstrap.average_and_std_arrays(readings_dist)
+    T['counts_table'] = []
+    for i in range(7):
+        T['counts_table'].append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
+
+    # Format corrected counts for the template.
+    val, err = bootstrap.average_and_std_arrays(corr_dist)
+    T['corrected_counts_table'] = []
+    for i in range(7):
+        T['corrected_counts_table'].append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
+
+    # Format matrix for the template.
+    matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_dist)
     T['matrix'] = []
     for i in range(4):
         T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
 
-    inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_list)
+    # Format inverted matrix for the template.
+    inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_dist)
     T['inverted'] = []
     for i in range(4):
         T['inverted'].append([names[i].capitalize()+'s'] +
                              list(map(number_padding,
                              siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
+
+    # Format cross sections for the template.
+    cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections_dist)
+    T['cross_sections_table'] = []
+    for i in range(7):
+        T['cross_sections_table'].append([siunitx(energies[i])] + siunitx(cs_val[:, i], cs_err[:, i]))
+
+    # Build error band for pgfplots.
+    y_list_val, y_list_err = bootstrap.average_and_std_arrays(y_dist)
+    for i, name in zip(itertools.count(), names):
+        # Extract the y-values for the given decay type.
+        y_val = y_list_val[i, :]
+        y_err = y_list_err[i, :]
+
+        # Store the data for pgfplots.
+        np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
+                   np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
+        np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
+                   bootstrap.pgfplots_error_band(x, y_val, y_err))
 
 
 def number_padding(number):

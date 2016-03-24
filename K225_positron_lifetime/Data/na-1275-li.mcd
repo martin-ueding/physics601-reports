@@ -1,0 +1,49 @@
+REPORT-FILE from 03/23/2016 08:22:27.171  written 03/23/2016 08:23:34
+REALTIME: 50.435      
+TOTALSUM: 16933       
+ROISUM: 0           
+MAXVAL: 48          
+LIVETIME: 1.772       
+cmline0=03/23/2016 08:22:27.171 
+range=8192
+prena=0
+mcsmode=4
+roimin=558
+roimax=559
+rtpreset=60.000      
+ltpreset=1800.000    
+evpreset=20          
+swpreset=1           
+rampmode=0
+rampstart=1024
+rampstep=1
+rampbin=1
+ramplen=1024
+qdacuse=0
+qdac=2048
+dac1use=0
+dac1val=0
+impsel=f
+thrstart=1716
+thr1=1716
+thr2=1716
+thrclk=2482
+diguse=8
+digval=0
+cycles=128
+sequences=1
+mempart=0
+dwelltime=3
+dwellunit=0
+syncout=909
+autoinc=0 
+;datname=C:\Dokumente und Einstellungen\Praktikant\Desktop\P19_2016_Ueding_Lemmer\na-1275-li.mcd
+savedata=0 
+fmt=3 
+smoothpts=5 
+caluse=0 
+caloff=0.000000
+calfact=1.000000
+calfact2=0
+calfact3=0
+calunit=.txt

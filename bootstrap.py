@@ -12,6 +12,16 @@ import random
 import numpy as np
 
 
+def pgfplots_error_band(x, y_val, y_err):
+    return np.column_stack([
+        np.concatenate((x, x[::-1])),
+        np.concatenate((
+            (y_val-y_err),
+            (y_val+y_err)[::-1]
+        ))
+    ])
+
+
 def average_arrays(arrays):
     '''
     Computes the element wise average of a list of arrays.
