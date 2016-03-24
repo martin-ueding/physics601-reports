@@ -155,7 +155,7 @@ def bootstrap_driver(T):
     # quantities. Each of the new variables created here is a list of R
     # bootstrap samples.
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
-            matrix_dist, inverse_dist, readings_dist = zip(*results)
+            matrix_dist, inverted_dist, readings_dist = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
     # So take the first and throw the others out.
@@ -171,73 +171,51 @@ def bootstrap_driver(T):
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
 
-    corr_val, corr_err = bootstrap.average_and_std_arrays(corr_dist)
-    corr = []
+    # Format original counts for the template.
+    val, err = bootstrap.average_and_std_arrays(readings_dist)
+    T['counts_table'] = []
     for i in range(7):
-        corr.append([siunitx(energies[i])] + siunitx(corr_val[i, :], corr_err[i, :], allowed_hang=10))
-    T['corrected_counts_table'] = list(corr)
+        T['counts_table'].append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
 
-    val, err = bootstrap.average_and_std_arrays(readings_list)
-    readings = []
+    # Format corrected counts for the template.
+    val, err = bootstrap.average_and_std_arrays(corr_dist)
+    T['corrected_counts_table'] = []
     for i in range(7):
-        readings.append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
-    T['counts_table'] = list(readings)
+        T['corrected_counts_table'].append([siunitx(energies[i])] + siunitx(val[i, :], err[i, :], allowed_hang=10))
 
+    matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_dist)
+    T['matrix'] = []
+    for i in range(4):
+        T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
 
-    y_lists = zip(*y_list)
-    cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections)
-    print('CS')
-    print(cs_val)
-    print(cs_err)
+    inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_dist)
+    T['inverted'] = []
+    for i in range(4):
+        T['inverted'].append([names[i].capitalize()+'s'] +
+                             list(map(number_padding,
+                             siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
 
+    cs_val, cs_err = bootstrap.average_and_std_arrays(cross_sections_dist)
     T['cross_sections_table'] = []
     for i in range(7):
         T['cross_sections_table'].append([siunitx(energies[i])] + siunitx(cs_val[:, i], cs_err[:, i]))
 
+    y_list_val, y_list_err = bootstrap.average_and_std_arrays(y_dist)
 
-    fig = pl.figure()
-
-    for i, name, y_list, color in zip(itertools.count(), names, y_lists, channel_colors):
-        ax = fig.add_subplot(2, 2, i+1)
-        y_val, y_err = bootstrap.average_and_std_arrays(y_list)
-        ax.errorbar(energies, cs_val[i, :], cs_err[i, :], color=color, linestyle='none', marker='+')
-        ax.fill_between(x, y_val-y_err, y_val+y_err, color=color, alpha=0.3)
-        ax.margins(0.05)
+    for i, name in zip(itertools.count(), names):
+        y_val = y_list_val[i, :]
+        y_err = y_list_err[i, :]
 
         np.savetxt('_build/xy/cross_section-{}s.tsv'.format(name),
                    np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
         np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
-                   np.column_stack([
-                       np.concatenate((x, x[::-1])),
-                       np.concatenate((
-                           (y_val-y_err),
-                           (y_val+y_err)[::-1]
-                       ))
-                   ]))
-
-    fig.tight_layout()
-    fig.savefig(figname('test-band'))
-
-    print('Masses', siunitx(masses_val, masses_err))
-    print('Widths', siunitx(widths_val, widths_err, error_digits=2))
+                   bootstrap.pgfplots_error_band(x, y_val, y_err))
 
     T['lorentz_fits_table'] = list(zip(
         [name.capitalize() for name in names],
         siunitx(masses_val, masses_err),
         siunitx(widths_val, widths_err, error_digits=2),
     ))
-
-    matrix_val, matrix_err = bootstrap.average_and_std_arrays(matrix_list)
-    T['matrix'] = []
-    for i in range(4):
-        T['matrix'].append([names[i].capitalize()] + siunitx(matrix_val[i, :]*100, matrix_err[i, :]*100, allowed_hang=10))
-
-    inverted_val, inverted_err = bootstrap.average_and_std_arrays(inverted_list)
-    T['inverted'] = []
-    for i in range(4):
-        T['inverted'].append([names[i].capitalize()+'s'] +
-                             list(map(number_padding,
-                             siunitx(inverted_val[i, :], inverted_err[i, :], allowed_hang=10))))
 
 
 def number_padding(number):
