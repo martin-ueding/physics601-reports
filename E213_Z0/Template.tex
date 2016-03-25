@@ -556,6 +556,7 @@ The Fermi coupling constant has the value \SI{<< fermi_coupling
 \end{table}
 
 \section{Partial widths}
+\label{sec:exercise-partial-widths}
 
 In the previous section, we have computed the decay widths for each kind of
 particle. Now we have to group the various particles into families and add
@@ -746,16 +747,22 @@ Table~\ref{tab:nomenclature} for an overview.
 
 \begin{table}
     \centering
-    \begin{tabular}{lll}
+    \begin{tabular}{llll}
         \toprule
         \textsc{grope}
         & \textsc{paw}
-        & Our name \\
+        & Our name
+        & Description
+        \\
         \midrule
-        \texttt{Ctrk(N)} & \texttt{ncharged} & \ncharged\ \\
-        \texttt{Ctrk(Sump)} & \texttt{pcharged} & \pcharged\ \\
-        \texttt{Ecal(SumE)} & \texttt{e\_ecal} & \eecal\ \\
-        \texttt{Hcal(SumE)} & \texttt{e\_hcal} & \ehcal\ \\
+        \texttt{Ctrk(N)} & \texttt{ncharged} & \ncharged\ & Number of charged
+        tracks\\
+        \texttt{Ctrk(Sump)} & \texttt{pcharged} & \pcharged\ & Energy in
+        charged tracks \\
+        \texttt{Ecal(SumE)} & \texttt{e\_ecal} & \eecal\ & Energy in electric
+        calorimeter \\
+        \texttt{Hcal(SumE)} & \texttt{e\_hcal} & \ehcal\ & Energy in hadronic
+        calorimeter \\
         \bottomrule
     \end{tabular}
     \caption{%
@@ -775,11 +782,11 @@ The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
 charged particles. All the energy is deposited in the \ecal{}. In the dark blue
 header one can see that the missing energy is very small. The \eecal{} is
-pretty much identical with \sump{}. Both energies are almost the beam energy.
+pretty much identical with \pcharged{}. Both energies are almost the beam energy.
 
 Decays into muons have a different signature. The most prominent feature are
 the hits in the muon chambers, as one can see in Figure~\ref{fig:grope/muons}.
-The \sump{} is the beam energy, little energy is unaccounted for. This means
+The \pcharged{} is the beam energy, little energy is unaccounted for. This means
 that there are no neutrinos created in that decay. \eecal{} and \ehcal{} is
 small, this is due to the big mass of the muon (compared to electrons).
 
@@ -799,7 +806,7 @@ as their number of charged tracks is always rather large.
 
 While reviewing the Monte Carlo events in \textsc{grope}, we generate
 histograms with the various characteristics. We choose to write down
-\ncharged{}, \sump{}, \eecal{} and \ehcal{}. Those characteristics are also
+\ncharged{}, \pcharged{}, \eecal{} and \ehcal{}. Those characteristics are also
 available in the later analysis of larger datasets using \textsc{paw}.
 
 \subsection{Preliminary analysis}
@@ -808,10 +815,10 @@ Using some twenty points per event class, we obtain the histograms shown in
 Figure~\ref{fig:hist}. There one can see that some characteristics are well
 suited to cut the data. For instance in \ncharged, we see that hadronic decays
 have more than seven tracks, whereas the leptonic decays have less. In the
-histogram for \sump, we see that a cut at around \SI{80}{\giga\electronvolt}
-can separate tauons and muons. Another cut in the \ecal-energy at around
+histogram for \pcharged, we see that a cut at around \SI{80}{\giga\electronvolt}
+can separate tauons and muons. Another cut in \eecal{} at around
 \SI{75}{\giga\electronvolt} allows us to separate tauons and electrons. The
-energy deposited into the \hcal\ is not very helpful for cutting.
+energy deposited into the \hcal\, \eecal, is not very helpful for cutting.
 
 \input{../Snippets/monte-carlo-histograms}
 
@@ -854,7 +861,7 @@ cuts listed in Table~\ref{tab:cuts}.
         \cmidrule(l){2-5}
         Particle
         & \ncharged
-        & \sump/\si{\giga\electronvolt}
+        & \pcharged/\si{\giga\electronvolt}
         & \eecal/\si{\giga\electronvolt}
         & \ehcal/\si{\giga\electronvolt} \\
         \midrule
@@ -947,7 +954,7 @@ Table~\ref{tab:cuts2}.
         \cmidrule(l){2-6}
         Particle
         & \ncharged
-        & \sump/\si{\giga\electronvolt}
+        & \pcharged/\si{\giga\electronvolt}
         & \eecal/\si{\giga\electronvolt}
         & \ehcal/\si{\giga\electronvolt}
         & $\cos(\theta)$
@@ -1388,17 +1395,12 @@ function which we will turn to next.
         Partial cross sections for each type of final state. One can see that
         the muon and tauon cross sections are similar, as expected. As we
         incorrectly correct for a $t$-channel, the electron cross section is
-        too large. The hadronic cross section has to be $N_\text f N_\text c =
-        5 \cdot 3 = 15$ larger than the one in the single leptonic channels.
+        too large.
     }
     \label{fig:cross-sections}
 \end{figure}
 
 \input{../Snippets/cross-sections}
-
-\subsection{Lepton universality}
-
-% TODO
 
 \section{Decay widths}
 
@@ -1406,29 +1408,44 @@ From the energy dependence of the cross sections, we can compute the decay
 width and the rest mass of the $\mathrm Z^0$ gauge boson generated by the
 spontaneous symmetry breaking of the Higgs field. As the tree-level cross
 section contains the modulus squared of the propagator, the expected energy
-dependence is that of a Lorentz curve. Therefore we fit a Lorentz curve to the
-partial cross sections for each decay channel. Luckily it is not 1992 any more
-and we can just do this ourselves.
+dependence is similar to that of a Lorentz curve:
+\[
+    \sigma_f \propto \frac{1}{\MZ^2} \frac{s}{(s - \MZ^2)^2 + (s^2
+    \Gamma_\mathrm Z^2 / \MZ^2)} \,,
+\]
+taken from Equation~(3.12) in the manual. We fit a curve to the partial cross
+sections for each decay channel. Luckily it is not 1992 any more and we can
+just do this ourselves.
 
 As we use a bootstrap scheme for error calculation, we perform the fit a couple
 hundred times with resampled input data. This gives us a set of hundreds of
 different fit parameters and also fit curves. For each interpolation value of
-$\sqrt s$ in the resulting Lorentz curve we take mean and standard deviation.
+$\sqrt s$ in the resulting curve we take mean and standard deviation.
 The result is shown as an error band for each fit curve.
 
-The bootstrap also gives us hundreds of fit parameters, we can therefore also
-take mean and standard deviation to obtain an realistic error estimate for the
-resulting fit parameters. Just taking the diagonal of the covariance matrix of
-a least-squares fit greatly underestimates the error in most cases. Our fit
-parameters, the mass and width, are shown in Table~\ref{tab:lorentz-fits}.
+As the bootstrap gives us hundreds of fit parameters, we can take mean and
+standard deviation to obtain an realistic error estimate for the resulting fit
+parameters. Just taking the diagonal of the covariance matrix of a
+least-squares fit greatly underestimates the error in most cases.
+
+Additionally, we have the problem that we are limited to seven beam energies.
+This introduces another source of error that we control with a jackknife
+approach in the fitting. Instead of fitting all seven data points, we randomly
+leave one of them out and fit only the remaining six. This makes the fit still
+able to converge but simulates the effect that adding or removing another data
+point has. If a result changes when a single data point is removed, this should
+add to the uncertainty of the result. Our fit parameters, the mass and width of
+the Z-boson as well as the peak cross section, are shown in
+Table~\ref{tab:lorentz-fits}.
 
 \begin{table}
     \centering
-    \begin{tabular}{lSS}
+    \begin{tabular}{lSSS}
         \toprule
         Type
         & {$\MZ / \si{\giga\electronvolt}$}
-        & {$\Gamma_i / \si{\giga\electronvolt}$} \\
+        & {$\Gamma_\mathrm Z / \si{\giga\electronvolt}$}
+        & {$\sigma_f^\text{Peak} / \si{\nano\barn}$} \\
         \midrule
         %< for row in lorentz_fits_table >%
         << ' & '.join(row) >> \\
@@ -1436,26 +1453,114 @@ parameters, the mass and width, are shown in Table~\ref{tab:lorentz-fits}.
         \bottomrule
     \end{tabular}
     \caption{%
-        Fit parameters of the Lorentzian curves used in
-        Figure~\ref{fig:cross-sections} for the partial cross sections.
+        Fit parameters of the curves used in Figure~\ref{fig:cross-sections}
+        for the partial cross sections.
     }
     \label{tab:lorentz-fits}
 \end{table}
 
-We see that the error for the electron channel is very large. This originates
-in our severe restriction of the angle; only a fifth of the events are actually
-accepted. The error for the tauon channel is also rather large. In
-Figure~\ref{fig:cross-sections-zoom/tauons} one can see that fitting a
-Lorentz curve is actually quite brave, given the data.
-
-In all cases the mass very precise, most channels coincide very well, the
-electron channel is more than a few standard deviations off.
+As one can see in Figure~\ref{fig:cross-sections-zoom/tauons}, the three points
+in the low $\sqrt s$ area contribute a lot to the uncertainty of the fit. The
+jackknife method was dearly needed, as the error in width would have been
+underestimated by an order of magnitude.
 
 % TODO Confidence level.
 
-\section{Neutrino generations}
+\subsection{Partial decay widths}
 
-% TODO
+Using the relation
+\[
+    \sigma_f^\text{peak} = \frac{12\piup}{\MZ^2} \frac{\Gamma_\mathrm e
+    \Gamma_f}{\Gamma_\mathrm Z^2} \,
+\]
+given in the manual as (2.14), we can compute the partial decay widths for the
+individual flavors by solving for $\Gamma_\text e$ first and then for
+$\Gamma_f$. We compute the decay width of the electron via
+\[
+    \Gamma_\mathrm e = \MZ \Gamma_\mathrm Z
+    \sqrt{\frac{\sigma_\muup^\text{peak}}{12 \piup}}
+    = \SI{<< width_electron_mev >>}{\mega\electronvolt}
+    \,.
+\]
+Although the expression should use the peak cross section for the electron, we
+substitute the one for the muon. The rationale is simple: We know that the
+partial cross section of the electron is overestimated by our mistake in the
+cutting. Assuming the lepton universality actually holds, we can just
+substitute width into muons for the width into electrons. If we would not do
+this, we would end up with around 14 neutrino families. Therefore we work
+around the erroneous $\Gamma_\eup$ by substituting $\Gamma_\muup$ for in that
+one equation. We also use our own values of $\MZ$ and $\Gamma_\mathrm Z$ that
+we obtain by averaging the fit results. This will make our result less accurate
+but more honest.
+
+With the decay width into electrons, we can compute the decay widths into other
+flavors using the similar expression
+\[
+    \Gamma_f = \frac{\MZ^2 \Gamma_\mathrm Z^2}{\Gamma_\mathrm e}
+    \frac{\sigma_f^\text{peak}}{12 \piup} \,.
+\]
+The resulting four decay widths are \SIlist{<< ';'.join(width_flavors_mev)
+>>}{\mega\electronvolt} for electrons, muons, tauons and hadrons, respectively.
+The decay width into muons has not changed as we have basically used that to
+compute the other widths.
+
+Our results are summed up in Table~\ref{tab:cross_section_comparison} which
+compares the values to the theoretical ones listed in
+Table~\ref{tab:decay_widths} and Section~\ref{sec:exercise-partial-widths}. We
+see that the decay widths into muons and tauons are quite near, only
+$\Gamma_\tauup$ has the theoretical value within one standard deviation. For
+the muons, we already need more than two standard values. As expected by now,
+$\Gamma_\eup$ is quite far off. A little surprising is that
+$\Gamma_\text{hadrons}$ is more than three standard deviations away from the
+expected value.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lSS}
+        \toprule
+        & \multicolumn{2}{c}{$\Gamma_f / \si{\mega\electronvolt}$} \\
+        \cmidrule(l){2-3}
+        {Channel}
+        & {Measurement}
+        & {Theory}
+        \\
+        \midrule
+        Electrons & << width_flavors_mev[0] >> & << gamma_electron >> \\
+        Muons & << width_flavors_mev[1] >> & << gamma_electron >> \\
+        Tauons & << width_flavors_mev[2] >> & << gamma_electron >> \\
+        Hadrons & << width_flavors_mev[3] >> & << hadronic_width >> \\
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Comparison of extracted and theoretical partial widths.
+    }
+    \label{tab:cross_section_comparison}
+\end{table}
+
+\subsection{Lepton universality}
+
+Our partial cross sections at the peak are listed in
+Table~\ref{tab:lorentz-fits}. Lepton universality states that at high enough
+energy, which we have with $\sqrt s \simeq \MZ$, all charged leptons will be
+virtually massless and the weak isospin doublets behave exactly the same. This
+should manifest itself in exactly equal partial cross sections for the three
+lepton flavors.
+
+For the muons and tauons, the cross sections are well compatible with each
+other. For the electrons, it is a bit more than a factor two too large, the
+error cannot account for that. This originates in the wrong $t$-channel
+cutting.
+
+\subsection{Neutrino generations}
+
+Subtracting the observed decay channels from the observed width of the Z-boson,
+we are missing a width of \SI{<< missing_width_mev >>}{\mega\electronvolt}. The
+width of the neutrinos is $\Gamma_\nuup = \SI{167.6}{\mega\electronvolt}$
+(taken from Table~2.1 from the manual). The quotient gives us the number of
+light neutrino families, \num{<< neutrino_families >>}. This number just a bit
+more than a standard deviation away from the expected value of 3. The error is
+quite large, but that is expected from the various uncertainties going into
+this quantity.
 
 \chapter{Discussion}
 

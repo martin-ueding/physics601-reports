@@ -79,6 +79,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     masses = []
     widths = []
     cross_sections = []
+    peaks_nb = []
     y_list = []
 
     x = np.linspace(np.min(energies), np.max(energies), 200)
@@ -97,8 +98,14 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         # sections.
         cross_sections.append(cross_section)
 
+        leave_out = random.randint(0, len(energies) - 1)
+
+        energies_fit = np.delete(energies, leave_out)
+        cross_section_fit = np.delete(cross_section, leave_out)
+
         # Fit the curve, add the fit parameters to the lists.
-        popt, pconv = op.curve_fit(lorentz, energies, cross_section, p0=[91, 2, 10])
+        # TODO Add a linear underground.
+        popt, pconv = op.curve_fit(propagator, energies_fit, cross_section_fit, p0=[91, 2, 5000])
         masses.append(popt[0])
         widths.append(popt[1])
 
@@ -106,12 +113,31 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         assert popt[1] > 0
         assert popt[2] > 0
 
+        peak_nb = propagator(popt[0], *popt)
+        peaks_nb.append(peak_nb)
+
         # Sample the fitted curve, add to the list.
-        y = lorentz(x, *popt)
+        y = propagator(x, *popt)
         y_list.append(y)
 
+    peaks_nb = np.array(peaks_nb)
+    peaks_gev = peaks_nb * 2.58e-6
+
+    mean_mass = np.mean(masses)
+    mean_width = np.mean(widths)
+
+    width_electron = mean_mass * mean_width * np.sqrt(peaks_gev[1] / (12*np.pi))
+    width_flavors = mean_width**2 * mean_mass**2 / width_electron \
+            * peaks_gev / (12 * np.pi)
+
+    missing_width = mean_width - np.sum(width_flavors)
+    width_lepton = np.mean(width_flavors[0:3])
+
+    neutrino_families = missing_width / 0.1676
+
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
-            matrix, inverted, readings
+            matrix, inverted, readings, peaks_nb, width_electron, width_flavors, \
+            missing_width, width_lepton, neutrino_families
 
 
 def bootstrap_driver(T):
@@ -136,7 +162,7 @@ def bootstrap_driver(T):
     # Container for the results of each bootstrap run.
     results = []
 
-    for r in range(100):
+    for r in range(300):
         # Draw new numbers for the matrix.
         boot_matrix = redraw_count(raw_matrix)
 
@@ -164,7 +190,10 @@ def bootstrap_driver(T):
     # quantities. Each of the new variables created here is a list of R
     # bootstrap samples.
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
-            matrix_dist, inverted_dist, readings_dist = zip(*results)
+            matrix_dist, inverted_dist, readings_dist, peaks_dist, \
+            width_electron_dist, width_flavors_dist, missing_width_dist, \
+            width_lepton_dist, neutrino_families_dist \
+            = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
     # So take the first and throw the others out.
@@ -179,13 +208,29 @@ def bootstrap_driver(T):
     # masses-errors.
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
+    peaks_val, peaks_err = bootstrap.average_and_std_arrays(peaks_dist)
 
     # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
         display_names,
         siunitx(masses_val, masses_err),
-        siunitx(widths_val, widths_err, error_digits=2),
+        siunitx(widths_val, widths_err),
+        siunitx(peaks_val, peaks_err),
     ))
+
+    width_electron_val, width_electron_err = bootstrap.average_and_std_arrays(width_electron_dist)
+    width_flavors_val, width_flavors_err = bootstrap.average_and_std_arrays(width_flavors_dist)
+
+    T['width_electron_mev'] = siunitx(width_electron_val*1000, width_electron_err*1000)
+    T['width_flavors_mev'] = siunitx(width_flavors_val*1000, width_flavors_err*1000)
+
+    missing_width_val, missing_width_err = bootstrap.average_and_std_arrays(missing_width_dist)
+    width_lepton_val, width_lepton_err = bootstrap.average_and_std_arrays(width_lepton_dist)
+    neutrino_families_val, neutrino_families_err = bootstrap.average_and_std_arrays(neutrino_families_dist)
+
+    T['missing_width_mev'] = siunitx(missing_width_val*1000, missing_width_err*1000)
+    T['width_lepton_mev'] = siunitx(width_lepton_val*1000, width_lepton_err*1000)
+    T['neutrino_families'] = siunitx(neutrino_families_val, neutrino_families_err)
 
     # Format original counts for the template.
     val, err = bootstrap.average_and_std_arrays(readings_dist)
@@ -262,8 +307,10 @@ def visualize_matrix(matrix, name):
     fig.savefig(figname('normalized_matrix'))
 
 
-def lorentz(x, mean, width, integral):
-    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+def propagator(x, mass, width, integral):
+    s = x**2
+    return integral * 12 * np.pi / mass**2 \
+            * s / ((s - mass**2)**2 + (s**2 * width**2/mass**2))
 
 
 def job_colors():
@@ -280,6 +327,7 @@ def figname(basename):
 
 def job_afb_analysis(T, interpolator):
     # TODO Remove interpolator, use direct energies.
+    # TODO Also bootstrap here.
     energies = np.loadtxt('Data/energies.txt')
     data = np.loadtxt('Data/afb.txt')
     negative = data[:, 0]
