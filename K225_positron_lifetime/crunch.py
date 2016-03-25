@@ -42,7 +42,7 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
-def bootstrap_time(T, show_gauss=False, show_lin=False):
+def bootstrap_time(T, show_gauss=False, show_lin=True):
     time = []
     channel_val = []
     channel_err = []
@@ -59,12 +59,12 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
          # - fit gaussian distribution to drawn data
          # - add mean to array
         mean = []
-        for a in range(100):
+        for a in range(10):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
 
-            if show:
+            if show_gauss:
                 x = np.linspace(0, 2000, 1000)
                 y = gauss(x, *popt)
                 pl.plot(channel[:2000], counts[:2000])
@@ -75,7 +75,6 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # find average and standard deviation in mean-array
         mean_val, mean_err = bootstrap.average_and_std_arrays(mean)
 
-        print(mean_val, '+-', mean_err)
 
         # write result into new channel arrays
         channel_val.append(mean_val)
@@ -84,6 +83,19 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
+        print(time)
+        print(channel_val)
+
+
+#    popt, pconv = op.curve_fit(linear, channel_val, time, p0=[2, 1])
+    a, b, r, p, std = scipy.stats.linregress(channel_val, time)
+    if show_lin:
+        x = np.linspace(0, 4000, 1000)
+        y = linear(x, a, b)
+        pl.plot(channel_val, time)
+        pl.plot(x, y)
+        pl.show()
+        pl.clf()
     
 
 
