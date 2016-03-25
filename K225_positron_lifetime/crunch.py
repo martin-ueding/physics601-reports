@@ -31,6 +31,9 @@ def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
+def linear(x, a, b):
+    return a * x + b
+
 
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
@@ -43,6 +46,7 @@ def bootstrap_time(T, show=False):
     time = []
     channel_val = []
     channel_err = []
+
     for i in range(1,7):
         print(i)
         time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
@@ -50,7 +54,7 @@ def bootstrap_time(T, show=False):
         counts_time = time_raw[:,1]
         
         time_mean = []
-        for a in range(3):
+        for a in range(100):
             boot_time = redraw_count(counts_time)
             popt, pconv = op.curve_fit(gauss, channel_time, boot_time, p0=[400+i*600, 200, 100])
             time_mean.append(popt[0])
@@ -68,9 +72,9 @@ def bootstrap_time(T, show=False):
         time.append((i-1)*4)
         channel_val.append(time_val)
         channel_err.append(time_err)
-    print(time)
-    print(channel_val)
-    print(channel_err)
+
+    
+
 
 
 def redraw_count(a):
