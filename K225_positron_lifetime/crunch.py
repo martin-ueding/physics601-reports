@@ -43,7 +43,7 @@ def bootstrap_time(T, show=False):
     time = []
     channel_val = []
     channel_err = []
-    for i in range(1,6):
+    for i in range(1,7):
         print(i)
         time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
         channel_time = time_raw[:,0]
@@ -70,7 +70,7 @@ def bootstrap_time(T, show=False):
         channel_err.append(time_err)
     print(time)
     print(channel_val)
-    print(channel_err))
+    print(channel_err)
 
 
 def redraw_count(a):
