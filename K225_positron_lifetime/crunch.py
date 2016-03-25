@@ -87,12 +87,12 @@ def bootstrap_time(T, show_gauss=False, show_lin=True):
         print(channel_val)
 
 
-#    popt, pconv = op.curve_fit(linear, channel_val, time, p0=[2, 1])
-    a, b, r, p, std = scipy.stats.linregress(channel_val, time)
+    popt, pconv = op.curve_fit(linear, channel_val, time)
+ #   a, b, r, p, std = scipy.stats.linregress(channel_val, time)
     if show_lin:
         x = np.linspace(0, 4000, 1000)
-        y = linear(x, a, b)
-        pl.plot(channel_val, time)
+        y = linear(x, *popt)
+        pl.plot(channel_val, time, linestyle="none", marker="o")
         pl.plot(x, y)
         pl.show()
         pl.clf()
