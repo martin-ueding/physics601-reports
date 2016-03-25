@@ -42,36 +42,47 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
-def bootstrap_time(T, show=False):
+def bootstrap_time(T, show_gauss=False, show_lin=False):
     time = []
     channel_val = []
     channel_err = []
 
+    # go through all six prompt-files
     for i in range(1,7):
         print(i)
         time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
-        channel_time = time_raw[:,0]
-        counts_time = time_raw[:,1]
+        channel = time_raw[:,0]
+        counts = time_raw[:,1]
         
-        time_mean = []
+         # bootstrap:
+         # - draw new counts from gaussian distribution with width of 'sqrt(N)'
+         # - fit gaussian distribution to drawn data
+         # - add mean to array
+        mean = []
         for a in range(100):
-            boot_time = redraw_count(counts_time)
-            popt, pconv = op.curve_fit(gauss, channel_time, boot_time, p0=[400+i*600, 200, 100])
-            time_mean.append(popt[0])
+            boot_counts = redraw_count(counts)
+            popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
+            mean.append(popt[0])
 
             if show:
                 x = np.linspace(0, 2000, 1000)
                 y = gauss(x, *popt)
-                pl.plot(channel_time[:2000], counts_time[:2000])
+                pl.plot(channel[:2000], counts[:2000])
                 pl.plot(x, y)
                 pl.show()
                 pl.clf()
         
-        time_val, time_err = bootstrap.average_and_std_arrays(time_mean)
-        print(time_val, '+-', time_err)
+        # find average and standard deviation in mean-array
+        mean_val, mean_err = bootstrap.average_and_std_arrays(mean)
+
+        print(mean_val, '+-', mean_err)
+
+        # write result into new channel arrays
+        channel_val.append(mean_val)
+        channel_err.append(mean_err)
+
+        # write real time for gauging
         time.append((i-1)*4)
-        channel_val.append(time_val)
-        channel_err.append(time_err)
 
     
 
