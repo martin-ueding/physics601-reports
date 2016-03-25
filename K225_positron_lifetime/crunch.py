@@ -7,6 +7,7 @@
 import argparse
 import json
 import os
+import random
 import sys
 
 import matplotlib.pyplot as pl
@@ -26,6 +27,10 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
 
+def gauss(x, mean, sigma, a):
+    return a / (np.sqrt(2 * np.pi) * sigma) \
+            * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
+
 
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
@@ -34,7 +39,47 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
+def bootstrap_time(T, show=False):
+    time = []
+    channel_val = []
+    channel_err = []
+    for i in range(1,6):
+        print(i)
+        time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
+        channel_time = time_raw[:,0]
+        counts_time = time_raw[:,1]
+        
+        time_mean = []
+        for a in range(3):
+            boot_time = redraw_count(counts_time)
+            popt, pconv = op.curve_fit(gauss, channel_time, boot_time, p0=[400+i*600, 200, 100])
+            time_mean.append(popt[0])
 
+            if show:
+                x = np.linspace(0, 2000, 1000)
+                y = gauss(x, *popt)
+                pl.plot(channel_time[:2000], counts_time[:2000])
+                pl.plot(x, y)
+                pl.show()
+                pl.clf()
+        
+        time_val, time_err = bootstrap.average_and_std_arrays(time_mean)
+        print(time_val, '+-', time_err)
+        time.append((i-1)*4)
+        channel_val.append(time_val)
+        channel_err.append(time_err)
+    print(time)
+    print(channel_val)
+    print(channel_err))
+
+
+def redraw_count(a):
+    '''
+    Takes a ``np.array`` with counts and re-draws the counts from the implicit
+    Gaussian distribution with width ``sqrt(N)``.
+    '''
+    out = [random.gauss(x, np.sqrt(x)) for x in a]
+    return np.array(out).reshape(a.shape)
 
 
 def test_keys(T):
@@ -65,6 +110,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
+
+    bootstrap_time(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
