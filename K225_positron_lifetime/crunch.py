@@ -42,7 +42,7 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
-def bootstrap_time(T, show_gauss=False, show_lin=True):
+def bootstrap_time(T, show_gauss=False, show_lin=False):
     time = []
     channel_val = []
     channel_err = []
@@ -83,12 +83,10 @@ def bootstrap_time(T, show_gauss=False, show_lin=True):
         # write real time for gauging
         time.append((i-1)*4)
 
-        print(time)
-        print(channel_val)
-
+        channel_val = np.array(channel_val)
+        channel_err = np.array(channel_err)
 
     popt, pconv = op.curve_fit(linear, channel_val, time)
- #   a, b, r, p, std = scipy.stats.linregress(channel_val, time)
     if show_lin:
         x = np.linspace(0, 4000, 1000)
         y = linear(x, *popt)
