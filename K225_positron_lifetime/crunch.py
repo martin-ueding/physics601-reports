@@ -49,7 +49,6 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
 
     # go through all six prompt-files
     for i in range(1,7):
-        print(i)
         time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
         channel = time_raw[:,0]
         counts = time_raw[:,1]
@@ -59,7 +58,7 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
          # - fit gaussian distribution to drawn data
          # - add mean to array
         mean = []
-        for a in range(10):
+        for a in range(2):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
@@ -83,18 +82,41 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
-        channel_val = np.array(channel_val)
-        channel_err = np.array(channel_err)
+    channel_val = np.array(channel_val)
+    channel_err = np.array(channel_err)
+    time = np.array(time)
+        
+    slope = []
+    intercept = []
+    for i in range(len(channel_val)):
+        channel_jackknife = np.delete(channel_val, i)
+        time_jackknife = np.delete(time, i)
+        
+        popt, pconv = op.curve_fit(linear, channel_jackknife, time_jackknife)
+        
+        slope.append(popt[0])
+        intercept.append(popt[1])
 
-    popt, pconv = op.curve_fit(linear, channel_val, time)
-    if show_lin:
-        x = np.linspace(0, 4000, 1000)
-        y = linear(x, *popt)
-        pl.plot(channel_val, time, linestyle="none", marker="o")
-        pl.plot(x, y)
-        pl.show()
-        pl.clf()
+        if show_lin:
+            x = np.linspace(0, 4000, 1000)
+            y = linear(x, *popt)
+            pl.plot(channel_val, time, linestyle="none", marker="o")
+            pl.plot(x, y)
+            pl.show()
+            pl.clf()
+
+    slope_val, slope_err = bootstrap.average_and_std_arrays(slope)
+    intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept)
+
+    print(slope_val +- slope_err)
+    print(intercept_val +- intercept_err)
     
+    x = np.linspace(0, 4000, 1000)
+    y = linear(x, slope_val, intercept_val)
+    pl.plot(channel_val, time, linestyle="none", marker="o")
+    pl.plot(x, y)
+    pl.show()
+    pl.clf()
 
 
 
