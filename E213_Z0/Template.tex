@@ -972,6 +972,70 @@ Table~\ref{tab:cuts2}.
     \label{tab:cuts2}
 \end{table}
 
+\section{Bootstrap error estimation}
+
+The default method for error estimation is the \emph{Gaussian error
+propagation}. This works by applying $\Deltaup f(x) = f'(x) \cdot \Deltaup x$
+for every transformation used. The implicit assumptions used here are that
+errors are both small and Gaussian throughout the analysis. Especially if one
+has a lot of analysis steps, the propagated error might be too large or small.
+
+Besides being tedious, this scheme also does not provide any help when doing
+fits. Methods like the \texttt{scipy.optimize.curve\_fit}, which we use here,
+will give a covariance matrix. Taking the square root of the diagonal usually
+gives a sufficient error estimate if the error are uncorrelated, which is often
+the case. Although the function can perform an error-weighted fit, it does not
+incorporate the uncertainty of the input data into the error of the fit
+parameters (at least in older version). Still, uncertainties in categorical
+variable (usually $x$) are not included in this function.
+
+A method to alleviate all those problems is the \emph{bootstrap} method. It is
+an intrinsically numerical and statistical procedure. It is a \enquote{meta
+analysis of the data itself} in a sense. Instead of running our analysis once
+with the original data, we also run it a couple hundred times with slightly
+different datasets. This can be the same experiment conducted a couple more
+times. All the input values will be slightly different according to their
+statistical uncertainty. Running the analysis on all the different inputs, one
+obtains a distribution of final results. Taking the standard deviation of this
+distribution will be a robust estimation of the statistical error on the final
+results.
+
+As one does not have to compute partial derivatives with respect to all input
+parameters, this method is very general and can be used for every step in the
+analysis, even curve fitting.
+
+Here we do not have the luxury of multiple datasets. As the detection of
+particles essentially is a counting experiment, we assume that a value $N$ is
+associated with a standard deviation of $\sqrt N$. We only have one data point,
+so we cannot do a bootstrap right away. Therefore we draw more data points from
+a Gaussian distribution centered on $N$ with width $\sqrt N$. The values that
+we get should roughly be the same we would have gotten when performing the
+analysis with another data set.
+
+This method sounds outrageous, we just pull more data \enquote{out of the hat}
+by doing this resampling. Gaussian error propagation does the same thing,
+really, just analytically. Therefore we are performing the same procedure, just
+with numerical methods and less assumptions.
+
+Another aspect that one should cover in curve fitting is the dependence of the
+result on the number of data points used. In an ideal case we can remove any of
+the points and the fit would still give the same result. Later we will have
+fits with seven data points and see that removing any of the points will
+drastically alter the curve. In order to obtain this effect, we do a
+\emph{Jackknife} in first order for the fits as well. Instead of fitting with
+all seven points, we randomly remove one of the points in each run of the fit.
+As we perform hundreds of bootstrap samples, the mean value will not be altered
+much. The standard deviation of the fit parameters will increase, just what we
+want for fragile fits.
+
+Usually, only one fit curve is given. The bootstrap method will also give us a
+distribution of fit curves which we plot as a band of curves. Correlation
+between the fit parameters will become directly visible.
+
+Gaussian error propagation assumes that errors are symmetric around the mean
+value. In realistic examples, this might not be the case. We can obtain
+asymmetric errors using the percentiles of the bootstrapped distribution.
+
 \section{Muon forward--backward asymmetry}
 
 The muon forward--backward asymmetry is a quantity that we want to extract from
@@ -1186,32 +1250,15 @@ $\cos(\theta) < 0.5$ which discards a lot of events.
     \label{tab:matrix}
 \end{table}
 
-The error calculation is performed using resampling pseudo-bootstrap. As the
-detection of particles essentially is a counting experiment, we assume that a
-value $N$ is associated with a standard deviation of $\sqrt N$. We only have
-one data point, so we cannot do a bootstrap right away. Therefore we draw more
-data points from a Gaussian distribution centered on $N$ with width $\sqrt N$.
-The values that we get should roughly be the same we would have gotten when
-performing the analysis with another data set.
-
-Our input data is the number of events that were matched to a given channel,
-this gives us one matrix. We resample this matrix a couple hundred times in
-order to get some statistic. Taking the mean and standard deviation of each
-matrix element along the bootstrap dimension, we obtain the same values $N$
-with an error estimate of $\sqrt N$, of course.
-
-Using this resampled sets, we can perform the full analysis a couple hundred
-times. Taking the mean and standard deviation of the end results will give us
-the value and error estimate for any of our final results. This frees us from
-Gaussian error propagation and actually uses \emph{less} assumptions compared
-to the error propagation.
+The errors given in the matrix are the assumed $\sqrt N$ standard deviation
+from a counting experiment.
 
 \subsection{Inverting the matrix}
 
-In order to use this detection matrix~$\mat E$ as a correction, we need to
-invert the matrix. As it is almost diagonal, this will be numerically stable.
-The inverted matrix is shown in Table~\ref{tab:inverted}. The errors for the
-matrix elements come directly from the bootstrapping.
+We need to invert the matrix in order to use this detection matrix~$\mat E$ as
+a correction. This will be numerically stable as it is almost diagonal. The
+inverted matrix is shown in Table~\ref{tab:inverted}. The errors for the matrix
+elements come directly from the bootstrapping.
 
 \begin{table}
     \centering
@@ -1306,8 +1353,8 @@ errors are also used for resampling.
     \label{tab:counts}
 \end{table}
 
-Those counts are just the counts which are left after applying the cuts. As
-argued in regarding the detection efficiency (c.f.\
+The counts are just the ones left after applying the cuts. As argued in
+regarding the detection efficiency (c.f.\
 Section~\ref{sec:detection-efficiency}), those counts include some number of
 false-positives (underground) and false-negatives (inefficiency). Therefore we
 need to correct for that with the inverse matrix derived above.
