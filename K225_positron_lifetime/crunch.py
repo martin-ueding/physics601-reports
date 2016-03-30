@@ -52,28 +52,35 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
         channel = time_raw[:,0]
         counts = time_raw[:,1]
+        if i==1:
+            counts_tot = counts
+        elif i<6:
+            counts_tot += counts
         
          # bootstrap:
          # - draw new counts from gaussian distribution with width of 'sqrt(N)'
          # - fit gaussian distribution to drawn data
          # - add mean to array
         mean = []
+        width = []
+        amplitude = []
         for a in range(2):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
+            width.append(popt[1])
+            amplitude.append(popt[2])
 
-            if show_gauss:
-                x = np.linspace(0, 2000, 1000)
-                y = gauss(x, *popt)
-                pl.plot(channel[:2000], counts[:2000])
-                pl.plot(x, y)
-                pl.show()
-                pl.clf()
-        
-        # find average and standard deviation in mean-array
+        # find average and standard deviation in arrays
         mean_val, mean_err = bootstrap.average_and_std_arrays(mean)
+        width_val, width_err = bootstrap.average_and_std_arrays(width)
+        amplitude_val, amplitude_err = bootstrap.average_and_std_arrays(amplitude)
 
+        # create files for prompt curve fits
+        x = np.linspace(mean_val-200, mean_val+200, 100)
+        y = gauss(x, mean_val, width_val, amplitude_val)
+
+        np.savetxt('_build/xy/prompt-{}-fit.txt'.format(i), np.column_stack([x, y]))
 
         # write result into new channel arrays
         channel_val.append(mean_val)
@@ -82,10 +89,21 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
+    
+    # write files for prompt curve plotting
+    np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
+    np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3500:4500], counts[3500:4500], np.sqrt(counts[3500:4500])))
+
+    # convert lists to arrays
     channel_val = np.array(channel_val)
     channel_err = np.array(channel_err)
     time = np.array(time)
-        
+
+    T['time_gauge_param'] = list(zip(*[
+        map(str, time),
+        siunitx(channel_val, channel_err)
+    ]))
+
     slope = []
     intercept = []
     for i in range(len(channel_val)):
@@ -108,17 +126,17 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
     slope_val, slope_err = bootstrap.average_and_std_arrays(slope)
     intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept)
 
-    print(slope_val +- slope_err)
-    print(intercept_val +- intercept_err)
-    
-    x = np.linspace(0, 4000, 1000)
+    # files for fit and plot of time gauge 
+    x = np.linspace(0, 8000, 100)
     y = linear(x, slope_val, intercept_val)
-    pl.plot(channel_val, time, linestyle="none", marker="o")
-    pl.plot(x, y)
-    pl.show()
-    pl.clf()
 
+    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val, channel_err, time]))
+    np.savetxt('_build/xy/time_gauge_fit.txt', np.column_stack([x,y]))
+        
 
+    T['time_gauge_slope'] = siunitx(slope_val, slope_err)
+    T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
+    
 
 def redraw_count(a):
     '''
