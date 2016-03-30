@@ -368,7 +368,7 @@ def job_afb_analysis(T):
     counts, bins = np.histogram(sin_sq_filt)
     counts = np.array(list(counts) + [counts[-1]])
     print(bins.shape, counts.shape)
-    np.savetxt('_build/xy/sin_sq_filt_hist.tsv', np.column_stack([bins, counts]))
+    np.savetxt('_build/xy/sin_sq_hist.tsv', np.column_stack([bins, counts]))
 
     counts, bins = np.histogram([x[3] for x in afb_corr_dist])
     counts = np.array(list(counts) + [counts[-1]])

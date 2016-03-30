@@ -5,11 +5,10 @@
             bar/.style={
                 ybar interval,
             },
-            xlabel={$A_\text{FB}^\text{peak}$},
+            xlabel={$\sin(\theta_\mathrm w)^2$},
             ylabel={Bootstrap samples},
+            yticklabel pos=right,
         ]
-
-        \addplot[bar, draw] table {../xy/afb_hist.tsv};
-        \addplot[bar, draw, fill=black!30] table {../xy/afb_filt_hist.tsv};
+        \addplot[bar, draw, fill=black!30] table {../xy/sin_sq_hist.tsv};
     \end{axis}
 \end{tikzpicture}
