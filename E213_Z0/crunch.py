@@ -106,7 +106,6 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         cross_section_fit = np.delete(cross_section, leave_out)
 
         # Fit the curve, add the fit parameters to the lists.
-        # TODO Add a linear underground.
         popt, pconv = op.curve_fit(propagator, energies_fit, cross_section_fit, p0=[91, 2, 5000])
         masses.append(popt[0])
         widths.append(popt[1])
