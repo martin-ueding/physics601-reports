@@ -137,7 +137,7 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
     np.savetxt('_build/xy/time_gauge_fit.txt', np.column_stack([x,y]))
         
 
-    T['time_gauge_slope'] = siunitx(slope_val, slope_err)
+    T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
     T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
 
     # time resolution
