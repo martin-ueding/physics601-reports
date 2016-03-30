@@ -342,6 +342,7 @@ def job_afb_analysis(T):
 
     # TODO Extract sin_sq.
 
+
 def afb_kernel(positive, negative, corrections):
     afb_val = (positive - negative) / (positive + negative)
 
