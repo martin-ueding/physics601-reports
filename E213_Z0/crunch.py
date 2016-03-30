@@ -458,11 +458,12 @@ def job_grope(T, show=False):
         np.savetxt('_build/xy/hist-hcal_sume-'+file_+'.tsv',
                    np.column_stack([edges, hist_extended]))
 
-        # TODO Better angle.
         ax_3d.scatter(
             ctrk_n,
             #hcal_sume,
             ctrk_sump, ecal_sume, marker="o", color=color, label=file_, s=80)
+
+        ax_3d.view_init(-30, 60)
 
     ax_n.set_xscale('log')
     ax_n.set_xlabel('Ctrk(N)')
