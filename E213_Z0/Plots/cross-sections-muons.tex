@@ -27,6 +27,7 @@
         ] table[y error index=2] {../xy/cross_section-muons.tsv};
 
         \addplot [band, fill=muons] table {../xy/cross_section-muons-band.tsv} \closedcycle;
+        \addplot [muons] table {../xy/cross_section-muons-fit.tsv};
 
     \end{axis}
 \end{tikzpicture}

@@ -277,6 +277,8 @@ def bootstrap_driver(T):
                    np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
         np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
+        np.savetxt('_build/xy/cross_section-{}s-fit.tsv'.format(name),
+                   np.column_stack((x, y_val)))
 
 
 def number_padding(number):

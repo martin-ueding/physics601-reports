@@ -49,6 +49,11 @@
         \addplot [band, fill=taus] table {../xy/cross_section-taus-band.tsv} \closedcycle;
         \addplot [band, fill=hadrons] table {../xy/cross_section-hadrons-band.tsv} \closedcycle;
 
+        \addplot [electrons] table {../xy/cross_section-electrons-fit.tsv};
+        \addplot [muons] table {../xy/cross_section-muons-fit.tsv};
+        \addplot [taus] table {../xy/cross_section-taus-fit.tsv};
+        \addplot [hadrons] table {../xy/cross_section-hadrons-fit.tsv};
+
 
     \end{axis}
 \end{tikzpicture}
