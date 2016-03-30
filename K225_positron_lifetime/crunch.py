@@ -34,6 +34,16 @@ def gauss(x, mean, sigma, a):
 def linear(x, a, b):
     return a * x + b
 
+def prepare_for_pgf(file, lower=0, upper=8000, error=False):
+    data = np.loadtxt('Data/{}.txt'.format(file))
+    channel = data[:,0]
+    counts = data[:,1]
+
+    if error:
+        np.savetxt('_build/xy/{}.txt'.format(file), bootstrap.pgfplots_error_band(channel[lower:upper], counts_tot[lower:upper], np.sqrt(counts_tot[lower:upper])))
+    else:
+        np.savetxt('_build/xy/{}.txt'.format(file), channel[lower:upper], counts_tot[lower:upper])
+
 
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
