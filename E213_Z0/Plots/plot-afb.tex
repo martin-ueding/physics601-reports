@@ -10,20 +10,11 @@
 
         \addplot[
             black,
-            mark=o,
-            only marks,
-            %error bars/y dir=both,
-            %error bars/y explicit,
-        ] table[y error index=2] {../xy/afb.tsv};
-        \addlegendentry{Without corrections}
-
-        \addplot[
-            black,
             mark=*,
             only marks,
             error bars/y dir=both,
             error bars/y explicit,
-        ] table[y error index=2] {../xy/afb_corr.tsv};
+        ] table[y error index=2] {../xy/afb.tsv};
         \addlegendentry{With corrections}
 
         \addplot[

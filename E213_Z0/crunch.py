@@ -26,6 +26,8 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 
+SAMPLES = 200
+
 fermi_coupling = 1.6637e-11 # MeV^{-2}
 mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
@@ -162,9 +164,9 @@ def bootstrap_driver(T):
     # Container for the results of each bootstrap run.
     results = []
 
-    for r in range(300):
+    for r in range(SAMPLES):
         # Draw new numbers for the matrix.
-        boot_matrix = redraw_count(raw_matrix)
+        boot_matrix = bootstrap.redraw_count(raw_matrix)
 
         # Draw new luminosities.
         boot_lum_val = np.array([
@@ -173,7 +175,7 @@ def bootstrap_driver(T):
             in zip(lum_val, lum_err)])
 
         # Draw new filtered readings.
-        boot_readings = redraw_count(filtered)
+        boot_readings = bootstrap.redraw_count(filtered)
 
         # Run the analysis on the resampled data and save the results.
         results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings,
@@ -285,15 +287,6 @@ def number_padding(number):
         return r'$\phantom{-}\num{'+number+'}$'
 
 
-def redraw_count(a):
-    '''
-    Takes a ``np.array`` with counts and re-draws the counts from the implicit
-    Gaussian distribution with width ``sqrt(N)``.
-    '''
-    out = [random.gauss(x, np.sqrt(x)) for x in a]
-    return np.array(out).reshape(a.shape)
-
-
 def visualize_matrix(matrix, name):
     fig = pl.figure(figsize=default_figsize)
     ax = fig.add_subplot(1, 1, 1)
@@ -325,33 +318,38 @@ def figname(basename):
     return '_build/to_crop/mpl-{}.pdf'.format(basename)
 
 
-def job_afb_analysis(T, interpolator):
-    # TODO Remove interpolator, use direct energies.
-    # TODO Also bootstrap here.
+def job_afb_analysis(T):
+    data = np.loadtxt('Data/radiative_corrections.tsv')
+    corrections = data[:, 1]
+
     energies = np.loadtxt('Data/energies.txt')
     data = np.loadtxt('Data/afb.txt')
     negative = data[:, 0]
     positive = data[:, 1]
 
-    fig = pl.figure(figsize=default_figsize)
-    ax = fig.add_subplot(1, 1, 1)
-    ax.plot(energies, negative)
-    ax.plot(energies, positive)
-    fig.savefig(figname('afb_raw'))
+    results = []
+    for i in range(SAMPLES):
+        positive_boot = bootstrap.redraw_count(positive)
+        negative_boot = bootstrap.redraw_count(negative)
 
-    afb_val = (positive - negative) / (positive + negative)
-    afb_err = np.sqrt(
-        (2 * negative / (positive + negative)**2 * np.sqrt(positive))**2
-        + (2 * positive / (positive + negative)**2 * np.sqrt(negative))**2
-    )
+        results.append(afb_kernel(positive_boot, negative_boot, corrections))
+
+    afb_corr_dist, ignored = zip(*results)
+
+    afb_val, afb_err = bootstrap.average_and_std_arrays(afb_corr_dist)
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
-    afb_corr_val = afb_val + interpolator(energies)
-
-    np.savetxt('_build/xy/afb_corr.tsv', np.column_stack([energies, afb_corr_val, afb_err]))
-
     # TODO Extract sin_sq.
+
+def afb_kernel(positive, negative, corrections):
+    afb_val = (positive - negative) / (positive + negative)
+
+    afb_corr_val = afb_val + corrections
+
+
+    return afb_corr_val, 0
+
 
 def job_grope(T, show=False):
     files = ['electrons',
@@ -559,36 +557,6 @@ def job_asymetry(T):
     np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
 
 
-def job_radiative_correction(T):
-    data = np.loadtxt('Data/radiative_corrections.tsv')
-    sqrt_mandelstam_s = data[:, 0]
-    correction = data[:, 1]
-
-    pl.clf()
-    pl.plot(sqrt_mandelstam_s, correction)
-
-    sqrt_mandelstam_s[0] -= 1e-2
-    sqrt_mandelstam_s[-1] += 1e-2
-
-    interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
-
-    x = np.linspace(np.min(sqrt_mandelstam_s), np.max(sqrt_mandelstam_s))
-    y = interpolator(x)
-
-    pl.plot(x, y)
-
-    pl.savefig(figname('radiative'))
-
-    np.savetxt('_build/xy/radiative_data.tsv', np.column_stack([
-        sqrt_mandelstam_s, correction
-    ]))
-    np.savetxt('_build/xy/radiative_interpolated.tsv', np.column_stack([
-        x, y,
-    ]))
-
-    return interpolator
-
-
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -618,12 +586,10 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    interpolator = job_radiative_correction(T)
-
     bootstrap_driver(T)
     job_decay_widths(T)
     job_colors()
-    job_afb_analysis(T, interpolator)
+    job_afb_analysis(T)
     job_grope(T, options.show)
     job_angular_dependence(T)
     job_asymetry(T)
