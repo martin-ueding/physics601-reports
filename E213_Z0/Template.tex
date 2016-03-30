@@ -1012,8 +1012,9 @@ the combined effect of all those corrections as a table of shift for
 $A_\text{FB}$. For each beam energy, we add the correction and obtain a final
 value for $A_\text{FB}$. The resulting asymmetry for the different beam
 energies is shown in Figure~\ref{fig:plot-afb}. Error estimation is done by
-assuming an error of $\sqrt{N}$ for all the counts and using Gaussian error
-propagation for the final result.
+assuming an error of $\sqrt{N}$ for all the counts and using resampling
+bootstrap for the final result. This method is explained in detail in the next
+section.
 
 \begin{figure}
     \centering
