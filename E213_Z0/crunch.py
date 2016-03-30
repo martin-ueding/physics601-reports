@@ -340,7 +340,8 @@ def job_afb_analysis(T):
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
-    # TODO Extract sin_sq.
+    # TODO Extract sin_sq. Perhaps this is possible with the central data point
+    # and (2.21) from the manual.
 
 
 def afb_kernel(positive, negative, corrections):
