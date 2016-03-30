@@ -89,10 +89,13 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
+    T['width_6'] = siunitx(width_val , width_err)
+    FWHM_val , FWHM_err =  2*np.sqrt(2*np.log(2))*width_val , 2*np.sqrt(2*np.log(2))*width_err
+    T['FWHM_6'] = siunitx(FWHM_val , FWHM_err)
     
     # write files for prompt curve plotting
     np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
-    np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3500:4500], counts[3500:4500], np.sqrt(counts[3500:4500])))
+    np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
 
     # convert lists to arrays
     channel_val = np.array(channel_val)
@@ -136,7 +139,13 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
 
     T['time_gauge_slope'] = siunitx(slope_val, slope_err)
     T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
-    
+
+    # time resolution
+
+    time_res = FWHM_val * slope_val
+    time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
+    T['time_resolution'] = siunitx(time_res , time_res_err)
+
 
 def redraw_count(a):
     '''

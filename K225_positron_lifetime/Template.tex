@@ -120,7 +120,14 @@ SCA coincidence already checked.
 
 TAC+coincidence has very nice overlap.
 
-Use coincidence as MCA-gate and TAC as MCA input, we take prompt curves.
+For a time calibration of our \textsc{mca} we use the coincidence unit as
+\textsc{mca}-gate and the \textsc{tac} as input, to take six prompt curves.
+Between the measurements another \SI{4}{\nano\second}-delay is interposed. For
+the first five prompt curves an acquisition time of about \SI{2}{\minute} is
+used.  Together with their fitted Gauss-curves they are shown in
+Figure~\ref{fig:prompts_short}. The sixth prompt curve and its fit is shown in
+Figure~\ref{fig:prompts_long}. To get a good estimation of the time resolution
+the acquisition time is \SI{20}{\minute}.
 
 \begin{figure}
 \centering
@@ -140,10 +147,35 @@ Use coincidence as MCA-gate and TAC as MCA input, we take prompt curves.
                 resolution estimation. Acquisition time is approximately
                 \SI{20}{\minute}.
         }
-        \label{fig:prompts_short}
+        \label{fig:prompts_long}
 \end{figure}
 
-Long measurement with most delay.
+From the fitted functions we get the mean channel to every delay time. The
+results are in Table~\ref{tab:time_gauge_param}.
+
+\begin{table}
+        \centering
+        \begin{tabular}{SS}
+                \toprule
+                {delay time/\si{\nano\second}}
+                & {mean channel number} \\
+                \midrule
+                %< for row in time_gauge_param >%
+                << ' & '.join(row) >> \\
+                %< endfor >%
+                \bottomrule
+        \end{tabular}
+        \caption{%
+                Mean channel number of Gauss fit width corresponding delay
+                times.
+        }
+        \label{tab:time_gauge_param}
+\end{table}
+        
+
+The last prompt curve has a standard deviation of \num{<< width_6 >>}. From
+this we get $\textsc{fwhm} = \num{<< FWHM_6 >>}$. With the slope of the time
+calibration fit we get a resolution of \SI{<< time_resolution >>}{\nano\second}.
 
 \section{Adjusting SCA windows}
 
