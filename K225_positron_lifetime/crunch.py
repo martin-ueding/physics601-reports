@@ -42,7 +42,7 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
-def bootstrap_time(T, show_gauss=False, show_lin=False):
+def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
     channel_val = []
     channel_err = []
@@ -89,10 +89,6 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
-    T['width_6'] = siunitx(width_val , width_err)
-    FWHM_val , FWHM_err =  2*np.sqrt(2*np.log(2))*width_val , 2*np.sqrt(2*np.log(2))*width_err
-    T['FWHM_6'] = siunitx(FWHM_val , FWHM_err)
-    
     # write files for prompt curve plotting
     np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
     np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
@@ -107,6 +103,7 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         siunitx(channel_val, channel_err)
     ]))
 
+    # linear fit with delete-1-jackknife
     slope = []
     intercept = []
     for i in range(len(channel_val)):
@@ -142,6 +139,11 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
 
     # time resolution
 
+    T['width_6'] = siunitx(width_val , width_err)
+    FWHM_val = 2*np.sqrt(2*np.log(2)) * width_val 
+    FWHM_err = 2*np.sqrt(2*np.log(2)) * width_err 
+    T['FWHM_6'] = siunitx(FWHM_val , FWHM_err)
+    
     time_res = FWHM_val * slope_val
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
@@ -185,7 +187,7 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    bootstrap_time(T)
+    time_gauge(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
