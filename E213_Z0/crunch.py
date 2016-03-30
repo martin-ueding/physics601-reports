@@ -26,7 +26,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 
-SAMPLES = 200
+SAMPLES = 300
 
 fermi_coupling = 1.6637e-11 # MeV^{-2}
 mass_z = 91182 # MeV
@@ -332,9 +332,15 @@ def job_afb_analysis(T):
         positive_boot = bootstrap.redraw_count(positive)
         negative_boot = bootstrap.redraw_count(negative)
 
-        results.append(afb_kernel(positive_boot, negative_boot, corrections))
+        result = afb_kernel(positive_boot, negative_boot, corrections)
+        if result is not None:
+            results.append(result)
 
     afb_corr_dist, sin_sq_dist = zip(*results)
+
+    sin_sq_dist = [x for x in sin_sq_dist if not np.isnan(x)]
+
+    T['sin_sq_bootstrap_acceptance'] = siunitx((1 - len(sin_sq_dist) / len(afb_corr_dist)) * 100)
 
     afb_val, afb_err = bootstrap.average_and_std_arrays(afb_corr_dist)
     sin_sq_val, sin_sq_err = bootstrap.average_and_std_arrays(sin_sq_dist)
@@ -352,7 +358,7 @@ def afb_kernel(positive, negative, corrections):
     afb_corr = afb + corrections
 
     afb_peak = afb_corr[3]
-    print(afb_peak)
+
     v_a = np.sqrt(afb_peak / 3)
     sin_sq = (1 - v_a) / 4
 

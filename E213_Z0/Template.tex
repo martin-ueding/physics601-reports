@@ -1035,8 +1035,23 @@ various beam energies used. Our results do not imply this exact trend (i.e.\
 almost constant) of the asymmetry. However, as the errors are quite large, our
 measurements are still consistent with it.
 
-Using the value at the peak (fourth data point), we obtain $\sin(\theta_\mathrm
-w)^2 = \num{<< sin_sq_afb >>}$.
+At the peak, the relation
+\[
+    A_\text{FB}^\text{peak} \simeq 3 \del{\frac{v_\mathrm l}{a_\mathrm l}}
+    \qquad\text{and}\qquad
+    \frac{v_\mathrm l}{a_\mathrm l} = 1 - 4 \sin(\theta_\mathrm w)^2
+\]
+holds for leptons. Taken from the manual, Equation~(2.21). Using the asymmetry
+value at the peak (fourth data point), we obtain $\sin(\theta_\mathrm w)^2 =
+\num{<< sin_sq_afb >>}$ from
+\[
+    \sin(\theta_\mathrm w)^2 = \frac{1 - \sqrt{A_\text{FB}^\text{peak} / 3}4
+        \,.
+\]
+
+. Due to the square root in the , the bootstrap sampling can
+encounter  \SI{<<
+sin_sq_bootstrap_acceptance >>}{\percent}.
 
 \section{Detection efficiency}
 \label{sec:detection-efficiency}
