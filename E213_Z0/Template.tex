@@ -1522,11 +1522,6 @@ different fit parameters and also fit curves. For each interpolation value of
 $\sqrt s$ in the resulting curve we take mean and standard deviation.
 The result is shown as an error band for each fit curve.
 
-As the bootstrap gives us hundreds of fit parameters, we can take mean and
-standard deviation to obtain an realistic error estimate for the resulting fit
-parameters. Just taking the diagonal of the covariance matrix of a
-least-squares fit greatly underestimates the error in most cases.
-
 Additionally, we have the problem that we are limited to seven beam energies.
 This introduces another source of error that we control with a jackknife
 approach in the fitting. Instead of fitting all seven data points, we randomly
