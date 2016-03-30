@@ -50,7 +50,7 @@ channel_colors = [
 pp = pprint.PrettyPrinter()
 
 def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
-                     radiative_leptons):
+                     radiative_leptons, jackknife=True):
     '''
     Core of the analysis.
 
@@ -83,6 +83,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     cross_sections = []
     peaks_nb = []
     y_list = []
+    popts = []
 
     x = np.linspace(np.min(energies), np.max(energies), 200)
 
@@ -100,10 +101,13 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         # sections.
         cross_sections.append(cross_section)
 
-        leave_out = random.randint(0, len(energies) - 1)
-
-        energies_fit = np.delete(energies, leave_out)
-        cross_section_fit = np.delete(cross_section, leave_out)
+        if jackknife:
+            leave_out = random.randint(0, len(energies) - 1)
+            energies_fit = np.delete(energies, leave_out)
+            cross_section_fit = np.delete(cross_section, leave_out)
+        else:
+            energies_fit = energies
+            cross_section_fit = cross_section
 
         # Fit the curve, add the fit parameters to the lists.
         popt, pconv = op.curve_fit(propagator, energies_fit, cross_section_fit, p0=[91, 2, 5000])
@@ -120,6 +124,8 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         # Sample the fitted curve, add to the list.
         y = propagator(x, *popt)
         y_list.append(y)
+
+        popts.append(popt)
 
     peaks_nb = np.array(peaks_nb)
     peaks_gev = peaks_nb * 2.58e-6
@@ -138,7 +144,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
 
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
             matrix, inverted, readings, peaks_nb, width_electron, width_flavors, \
-            missing_width, width_lepton, neutrino_families
+            missing_width, width_lepton, neutrino_families, popts
 
 
 def bootstrap_driver(T):
@@ -193,7 +199,7 @@ def bootstrap_driver(T):
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
             matrix_dist, inverted_dist, readings_dist, peaks_dist, \
             width_electron_dist, width_flavors_dist, missing_width_dist, \
-            width_lepton_dist, neutrino_families_dist \
+            width_lepton_dist, neutrino_families_dist, popts_dist \
             = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
@@ -280,6 +286,28 @@ def bootstrap_driver(T):
         np.savetxt('_build/xy/cross_section-{}s-fit.tsv'.format(name),
                    np.column_stack((x, y_val)))
 
+    popts_val, popts_err = bootstrap.average_and_std_arrays(popts_dist)
+    T['chi_sq'] = []
+    T['chi_sq_red'] = []
+    T['p'] = []
+    for i in range(4):
+        residuals = cs_val[i, :] - propagator(energies, *popts_val[i, :])
+        chi_sq = np.sum((residuals / cs_err[i, :])**2)
+        dof = len(residuals) - 1 - len(popts_val[i, :])
+        p = 1 - scipy.stats.chi2.cdf(chi_sq, dof)
+
+        print('chi_sq', chi_sq, chi_sq/dof, p)
+        T['chi_sq'].append(siunitx(chi_sq))
+        T['chi_sq_red'].append(siunitx(chi_sq/dof))
+        T['p'].append(siunitx(p))
+
+    T['confidence_table'] = list(zip(
+        display_names,
+        T['chi_sq'],
+        T['chi_sq_red'],
+        T['p'],
+    ))
+
 
 def number_padding(number):
     if number[0] == '-':
@@ -344,9 +372,6 @@ def job_afb_analysis(T):
         for x, y in zip(afb_corr_dist, sin_sq_dist)
         if not np.isnan(y)
     ])
-
-    for x, y in zip(afb_corr_dist, sin_sq_dist):
-        print(x, y)
 
     print('afb:', len(afb_corr_dist), len(afb_filt))
 

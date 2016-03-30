@@ -1560,6 +1560,26 @@ underestimated by an order of magnitude.
 
 % TODO Confidence level.
 
+\begin{table}
+    \centering
+    \begin{tabular}{lSSS}
+        \toprule
+        Type
+        & {$\chi^2$}
+        & {$\chi^2 / \text{dof}$}
+        & {$p$} \\
+        \midrule
+        %< for row in confidence_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Confidence for fits.
+    }
+    \label{tab:confidence}
+\end{table}
+
 \subsection{Partial decay widths}
 
 Using the relation
