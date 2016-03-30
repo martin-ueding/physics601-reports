@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=0.5\linewidth,
+            height=0.3\linewidth,
+            bar/.style={
+                ybar interval,
+            },
+            xlabel={$A_\text{FB}^\text{peak}$},
+            ylabel={Bootstrap samples},
+        ]
+
+        \addplot[bar, draw] table {../xy/afb_hist.tsv};
+        \addplot[bar, draw, fill=black!30] table {../xy/afb_filt_hist.tsv};
+    \end{axis}
+\end{tikzpicture}

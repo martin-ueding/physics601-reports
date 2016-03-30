@@ -338,12 +338,27 @@ def job_afb_analysis(T):
 
     afb_corr_dist, sin_sq_dist = zip(*results)
 
-    sin_sq_dist = [x for x in sin_sq_dist if not np.isnan(x)]
+    afb_filt, sin_sq_filt = zip(*[
+        (x[3], y)
+        for x, y in zip(afb_corr_dist, sin_sq_dist)
+        if not np.isnan(y)
+    ])
 
-    T['sin_sq_bootstrap_acceptance'] = siunitx((1 - len(sin_sq_dist) / len(afb_corr_dist)) * 100)
+    for x, y in zip(afb_corr_dist, sin_sq_dist):
+        print(x, y)
+
+    print('afb:', len(afb_corr_dist), len(afb_filt))
+
+    T['sin_sq_bootstrap_acceptance'] = siunitx((1 - len(sin_sq_filt) / len(sin_sq_dist)) * 100)
 
     afb_val, afb_err = bootstrap.average_and_std_arrays(afb_corr_dist)
-    sin_sq_val, sin_sq_err = bootstrap.average_and_std_arrays(sin_sq_dist)
+    sin_sq_val, sin_sq_err = bootstrap.average_and_std_arrays(sin_sq_filt)
+
+    afb_val, sin_sq_val = afb_kernel(positive, negative, corrections)
+
+    sin_sq_up, sin_sq_down = bootstrap.percentile_arrays(sin_sq_filt, sin_sq_val)
+
+    print('sin_sq:', sin_sq_val, sin_sq_err, sin_sq_up, sin_sq_down)
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
@@ -351,6 +366,23 @@ def job_afb_analysis(T):
     # and (2.21) from the manual.
 
     T['sin_sq_afb'] = siunitx(sin_sq_val, sin_sq_err)
+
+    T['sin_sq_afb_asym'] = '{:.3f}^{{+{:.3f}}}_{{-{:.3f}}}'.format(sin_sq_val, sin_sq_up, sin_sq_down)
+
+    counts, bins = np.histogram(sin_sq_filt)
+    counts = np.array(list(counts) + [counts[-1]])
+    print(bins.shape, counts.shape)
+    np.savetxt('_build/xy/sin_sq_filt_hist.tsv', np.column_stack([bins, counts]))
+
+    counts, bins = np.histogram([x[3] for x in afb_corr_dist])
+    counts = np.array(list(counts) + [counts[-1]])
+    print(bins.shape, counts.shape)
+    np.savetxt('_build/xy/afb_hist.tsv', np.column_stack([bins, counts]))
+
+    counts, bins = np.histogram(afb_filt, bins=bins)
+    counts = np.array(list(counts) + [counts[-1]])
+    print(bins.shape, counts.shape)
+    np.savetxt('_build/xy/afb_filt_hist.tsv', np.column_stack([bins, counts]))
 
 
 def afb_kernel(positive, negative, corrections):

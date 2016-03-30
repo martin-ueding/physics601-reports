@@ -1045,13 +1045,47 @@ holds for leptons. Taken from the manual, Equation~(2.21). Using the asymmetry
 value at the peak (fourth data point), we obtain $\sin(\theta_\mathrm w)^2 =
 \num{<< sin_sq_afb >>}$ from
 \[
-    \sin(\theta_\mathrm w)^2 = \frac{1 - \sqrt{A_\text{FB}^\text{peak} / 3}4
-        \,.
+    \sin(\theta_\mathrm w)^2 = \frac{1 - \sqrt{A_\text{FB}^\text{peak} / 3}}4
+    \,.
 \]
+Due to the square root in the used relation, the bootstrap sampling can
+encounter illegal values which we just drop. The ratio of ignored values is
+\SI{<< sin_sq_bootstrap_acceptance >>}{\percent}, which is quite high. All
+values that are used are shown in Figure~\ref{fig:afb-boot-hist}. Although this
+seems bad, this only affected the error estimation. The distribution of
+resulting $\sin(\theta_\mathrm w)^2$ values is shown in
+Figure~\ref{fig:sin_sq-boot-hist}. One can see that is it rather symmetric but
+not centered around the value we obtain by computing with the actual input (not
+resampled). Therefore we conclude that we actually have a significant
+asymmetric error, namely
+$\sin(\theta_\mathrm w)^2 = << sin_sq_afb_asym >>$.
 
-. Due to the square root in the , the bootstrap sampling can
-encounter  \SI{<<
-sin_sq_bootstrap_acceptance >>}{\percent}.
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics{afb-filt-boot-hist}
+        \caption{%
+            Asymmetry values. Only the positive ones are actually taken, those
+            are marked in gray.
+        }
+        \label{fig:afb-boot-hist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics{afb-boot-hist}
+        \caption{%
+            Weak mixing angle. The shape is quite symmetric but not centered
+            around actual value.
+        }
+        \label{fig:sin_sq-boot-hist}
+    \end{subfigure}
+    \caption{%
+        Histograms of the distributions used in the bootstrap error estimation.
+    }
+    \label{fig:boot-hist}
+\end{figure}
 
 \section{Detection efficiency}
 \label{sec:detection-efficiency}
@@ -1599,7 +1633,10 @@ this quantity.
 
 \chapter{Conclusion}
 
-%< if True >%
+$\sin(\theta_\mathrm w)^2 = << sin_sq_afb_asym >>$.
+
+\num{<< neutrino_families >>}
+
 \begin{appendix}
 
     \chapter{PAW Histograms}
@@ -1615,7 +1652,6 @@ this quantity.
     \input{../Snippets/matrix-electrons}
 
 \end{appendix}
-%< endif >%
 
 \end{document}
 

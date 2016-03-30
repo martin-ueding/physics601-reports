@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# Copyright © 2012-2013 Martin Ueding <dev@martin-ueding.de>
+# Copyright © 2012-2013, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The MIT License
 
 '''
@@ -18,7 +18,9 @@ It will check the following:
 
 import math
 
+
 __docformat__ = "restructuredtext en"
+
 
 class Quantity(object):
     def __init__(self, value, error=None, digits=3, error_digits=1, allowed_hang=3):
@@ -75,6 +77,7 @@ class Quantity(object):
             else:
                 return "{} +- {} e{}".format(self.value_mantissa, self.error_mantissa, self.exponent)
 
+
 def siunitx(value, error=None, **kwargs):
     '''
     Convenience function for generating output for the LaTeX siunitx package.
@@ -95,41 +98,3 @@ def siunitx(value, error=None, **kwargs):
     else:
         q = Quantity(value, error, **kwargs)
         return q.to_siunitx()
-
-def format(value, error=None, unit=None, lit=None, latex=False):
-    """
-    Formats the given value and error in a human readable form. If an error is
-    supplied, it will calculate the relative error. If a literature value is
-    given, the deviation from the canonical value is calculated and the error
-    is given as a ratio and in the number of standard deviations.
-
-    :param value: Value itself
-    :type value: float
-    :param error: Error of the value
-    :type error: None or float
-    :param unit: Physical unit
-    :type unit: None or str
-    :param lit: Canonical value
-    :type lit: None or float
-    :return: Formatted output
-    :rtype: str
-    """
-
-    parts = []
-
-    if unit is not None:
-        parts.append(unit)
-
-    if error is not None:
-        parts.append("({:.0%})".format(error/value))
-
-    if lit is not None:
-        lit_parts = []
-        lit_parts.append("{:+.0%}".format((value-lit)/lit))
-        if error is not None:
-            lit_parts.append("{:+.1f}σ".format((value-lit)/error))
-        parts.append("[" + ", ".join(lit_parts) + "]")
-
-    return ' '.join(parts)
-
-# vim: spell
