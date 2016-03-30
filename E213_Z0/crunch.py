@@ -334,23 +334,29 @@ def job_afb_analysis(T):
 
         results.append(afb_kernel(positive_boot, negative_boot, corrections))
 
-    afb_corr_dist, ignored = zip(*results)
+    afb_corr_dist, sin_sq_dist = zip(*results)
 
     afb_val, afb_err = bootstrap.average_and_std_arrays(afb_corr_dist)
+    sin_sq_val, sin_sq_err = bootstrap.average_and_std_arrays(sin_sq_dist)
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
     # TODO Extract sin_sq. Perhaps this is possible with the central data point
     # and (2.21) from the manual.
 
+    T['sin_sq_afb'] = siunitx(sin_sq_val, sin_sq_err)
+
 
 def afb_kernel(positive, negative, corrections):
-    afb_val = (positive - negative) / (positive + negative)
+    afb = (positive - negative) / (positive + negative)
+    afb_corr = afb + corrections
 
-    afb_corr_val = afb_val + corrections
+    afb_peak = afb_corr[3]
+    print(afb_peak)
+    v_a = np.sqrt(afb_peak / 3)
+    sin_sq = (1 - v_a) / 4
 
-
-    return afb_corr_val, 0
+    return afb_corr, sin_sq
 
 
 def job_grope(T, show=False):
