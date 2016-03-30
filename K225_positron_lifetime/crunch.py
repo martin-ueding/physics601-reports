@@ -130,10 +130,10 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
     intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept)
 
     # files for fit and plot of time gauge 
-    x = np.linspace(0, 8000, 100)
+    x = np.linspace(750, 4000, 100)
     y = linear(x, slope_val, intercept_val)
 
-    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val, channel_err, time]))
+    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val,time , channel_err]))
     np.savetxt('_build/xy/time_gauge_fit.txt', np.column_stack([x,y]))
         
 
