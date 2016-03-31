@@ -101,10 +101,9 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
     else:
         np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:upper], counts[lower:upper]]))
 
-    if show:
-        pl.plot(channel, counts, linestyle="none", marker="o")
-        pl.show()
-        pl.clf()
+    pl.plot(channel, counts, linestyle="none", marker="o")
+    pl.savefig('_build/mpl-channel-counts-filename.pdf'.format(filename))
+    pl.clf()
 
 
 def prepare_files(T):
@@ -198,13 +197,12 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         slope.append(popt[0])
         intercept.append(popt[1])
 
-        if show_lin:
-            x = np.linspace(0, 4000, 1000)
-            y = linear(x, *popt)
-            pl.plot(channel_val, time, linestyle="none", marker="o")
-            pl.plot(x, y)
-            pl.show()
-            pl.clf()
+        x = np.linspace(0, 4000, 1000)
+        y = linear(x, *popt)
+        pl.plot(channel_val, time, linestyle="none", marker="o")
+        pl.plot(x, y)
+        pl.savefig('_build/mpl-jackknife-{}.pdf'.format(i))
+        pl.clf()
 
     slope_val, slope_err = bootstrap.average_and_std_arrays(slope)
     intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept)
@@ -281,7 +279,7 @@ def lifetime_spectra(T):
 
     pl.plot(channel, counts, linestyle="none", marker="o")
     pl.plot(x, y)
-    pl.show()
+    pl.savefig('_build/mpl-channel-counts.pdf')
     pl.clf()
 
 
