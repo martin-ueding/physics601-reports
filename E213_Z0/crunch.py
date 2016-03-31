@@ -82,6 +82,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     widths = []
     cross_sections = []
     peaks_nb = []
+    brs = []
     y_list = []
     popts = []
 
@@ -127,6 +128,8 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
 
         popts.append(popt)
 
+    brs = peaks_nb[3] / np.array(peaks_nb)
+
     peaks_nb = np.array(peaks_nb)
     peaks_gev = peaks_nb * 2.58e-6
 
@@ -143,8 +146,9 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     neutrino_families = missing_width / 0.1676
 
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
-            matrix, inverted, readings, peaks_nb, width_electron, width_flavors, \
-            missing_width, width_lepton, neutrino_families, popts
+            matrix, inverted, readings, peaks_nb, brs, width_electron, \
+            width_flavors, missing_width, width_lepton, neutrino_families, \
+            popts
 
 
 def bootstrap_driver(T):
@@ -197,7 +201,7 @@ def bootstrap_driver(T):
     # quantities. Each of the new variables created here is a list of R
     # bootstrap samples.
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
-            matrix_dist, inverted_dist, readings_dist, peaks_dist, \
+            matrix_dist, inverted_dist, readings_dist, peaks_dist, brs_dist, \
             width_electron_dist, width_flavors_dist, missing_width_dist, \
             width_lepton_dist, neutrino_families_dist, popts_dist \
             = zip(*results)
@@ -216,6 +220,9 @@ def bootstrap_driver(T):
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
     peaks_val, peaks_err = bootstrap.average_and_std_arrays(peaks_dist)
+    brs_val, brs_err = bootstrap.average_and_std_arrays(brs_dist)
+
+    T['brs'] = siunitx(brs_val[0:3], brs_err[0:3])
 
     # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
@@ -632,6 +639,13 @@ def job_asymetry(T):
     np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
 
 
+def job_br_theory(T):
+    width_hadron = 2*299 + 3*378
+    width_lepton = 83.8
+
+    T['br_theory'] = siunitx(width_hadron / width_lepton)
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -667,6 +681,7 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
+    job_br_theory(T)
     bootstrap_driver(T)
     job_decay_widths(T)
     job_colors()
