@@ -76,7 +76,10 @@ def linear(x, a, b):
     return a * x + b
 
 
-def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
+def prepare_for_pgf(filename, lower=0, upper=8000, error=False):
+    '''
+    Converts raw data for use with pgfplots, reduces data.
+    '''
     data = np.loadtxt('Data/{}.txt'.format(filename))
     channel = data[:,0]
     counts = data[:,1]
@@ -99,21 +102,13 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
 
 
 def prepare_files(T):
-    prepare_for_pgf('lyso-li', error=True, show=False)
-    prepare_for_pgf('lyso-re', error=True, show=False)
-    prepare_for_pgf('na-li', error=True, show=False)
-    prepare_for_pgf('na-re', error=True, show=False)
-    prepare_for_pgf('na-511-re', show=False)
-    prepare_for_pgf('na-511-li', show=False)
-    prepare_for_pgf('na-1275-li', show=False)
-
-
-def job_colors():
-    colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
-
-    with open('_build/colors.tex', 'w') as f:
-        for name, color in zip(names, colors):
-            f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
+    prepare_for_pgf('lyso-li', error=True)
+    prepare_for_pgf('lyso-re', error=True)
+    prepare_for_pgf('na-li', error=True)
+    prepare_for_pgf('na-re', error=True)
+    prepare_for_pgf('na-511-re')
+    prepare_for_pgf('na-511-li')
+    prepare_for_pgf('na-1275-li')
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):
