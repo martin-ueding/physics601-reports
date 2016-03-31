@@ -25,12 +25,13 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 
-default_figsize = (15.1 / 2.54, 8.3 / 2.54)
-
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
 
 def dandify_plot():
+    '''
+    Common operations to make matplotlib plots look nicer.
+    '''
     pl.grid(True)
     pl.margins(0.05)
     pl.tight_layout()
