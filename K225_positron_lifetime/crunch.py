@@ -25,6 +25,7 @@ from unitprint2 import siunitx
 import bootstrap
 
 import spectrum
+import time_gauge
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
@@ -111,7 +112,7 @@ def prepare_files(T):
     prepare_for_pgf('na-1275-li')
 
 
-def time_gauge(T, show_gauss=False, show_lin=False):
+def job_time_gauge(T, show_gauss=False, show_lin=False):
     time = []
     channel_val = []
     channel_err = []
@@ -121,10 +122,6 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
         channel = time_raw[:,0]
         counts = time_raw[:,1]
-        if i==1:
-            counts_tot = counts
-        elif i<6:
-            counts_tot += counts
         
          # bootstrap:
          # - draw new counts from gaussian distribution with width of 'sqrt(N)'
@@ -158,9 +155,6 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
-    # write files for prompt curve plotting
-    np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
-    np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
 
     # convert lists to arrays
     channel_val = np.array(channel_val)
@@ -310,8 +304,10 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
+    time_gauge.job_time_gauge(T)
+
     prepare_files(T)
-    time_gauge(T)
+    job_time_gauge(T)
     lifetime_spectra(T)
 
     test_keys(T)
