@@ -44,6 +44,8 @@ def job_time_gauge(T):
 
     _time_resolution(T, width_val[-1], width_err[-1], slope_val, slope_err)
 
+    return slope_val
+
 
 def _time_resolution(T, width_val, width_err, slope_val, slope_err):
     T['width_6'] = siunitx(width_val, width_err)

@@ -26,7 +26,6 @@ import bootstrap
 import spectrum
 import time_gauge
 
-TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
 
 def dandify_plot():
@@ -36,31 +35,6 @@ def dandify_plot():
     pl.grid(True)
     pl.margins(0.05)
     pl.tight_layout()
-
-
-def get_temp(filename):
-    '''
-    Retrieves the temperatures stored in the filename itself.
-
-    :param str filename: Filename or full path
-    :returns tuple(str): Tuple with upper and lower temperature.
-
-    >>> get_temp('in-102,5-104,2C.txt')
-    (102.5, 104.2)
-    >>> get_temp('in-102-104,2C.txt')
-    (102.0, 104.2)
-    >>> get_temp('in-102,5-104C.txt')
-    (102.5, 104.0)
-    '''
-    basename = os.path.basename(filename)
-    m = TEMP_PATTERN.match(basename)
-    if m:
-        first = float(m.group(1).replace(',', '.'))
-        second = float(m.group(2).replace(',', '.'))
-
-        return (first, second)
-
-    return None
 
 
 def prepare_for_pgf(filename, lower=0, upper=8000, error=False):
@@ -137,9 +111,9 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    spectrum.job_lifetime_spectra(T)
-    prepare_files(T)
-    time_gauge.job_time_gauge(T)
+    slope_val = time_gauge.job_time_gauge(T)
+    spectrum.job_lifetime_spectra(T, slope_val)
+    #prepare_files(T)
 
 
     test_keys(T)
