@@ -657,6 +657,10 @@ def test_keys(T):
 def main():
     T = {}
 
+    # We use bootstrap and obtain different results every single time. This is
+    # bad, therefore we fix the seed here.
+    random.seed(0)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
