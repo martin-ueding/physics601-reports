@@ -47,6 +47,9 @@ to_crop_out = $(to_crop_in:$(build)/to_crop/%=$(build)/%)
 all: show-distribution $(out)
 
 test:
+	env PYTHONPATH=$$PYTHONPATH:.. python3 -m doctest crunch.py
+
+test-vars:
 	@echo "$(on)to_crop_in$(off)"
 	@echo $(to_crop_in)
 	@echo "$(on)to_crop_out$(off)"
