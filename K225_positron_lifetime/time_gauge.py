@@ -9,6 +9,7 @@ import itertools
 import numpy as np
 import scipy.optimize as op
 
+from unitprint2 import siunitx
 import bootstrap
 
 import models
@@ -22,8 +23,53 @@ def job_time_gauge(T):
     _write_total_counts(channels, all_counts)
     _write_long_term(channels, all_counts[-1])
 
+    results = []
     for idx, counts in zip(itertools.count(1), all_counts):
-        _fit_prompt(channels, counts, idx)
+        results.append(_fit_prompt(channels, counts, idx))
+    time, channel_val, channel_err = zip(*results)
+
+    channel_val = np.array(channel_val)
+    channel_err = np.array(channel_err)
+    time = np.array(time)
+
+    T['time_gauge_param'] = list(zip(
+        siunitx(time),
+        siunitx(channel_val, channel_err)
+    ))
+
+    _get_slope_and_intercept(time, channel_val, channel_err)
+
+
+def _get_slope_and_intercept(time, channel_val, channel_err):
+    slope_dist = []
+    intercept_dist = []
+    y_dist = []
+
+    x = np.linspace(np.min(channel_val), np.max(channel_val), 100)
+
+    for i in range(len(channel_val)):
+        channel_jackknife = np.delete(channel_val, i)
+        time_jackknife = np.delete(time, i)
+        
+        popt, pconv = op.curve_fit(models.linear, channel_jackknife, time_jackknife)
+        
+        slope_dist.append(popt[0])
+        intercept_dist.append(popt[1])
+
+        y = models.linear(x, *popt)
+        y_dist.append(y)
+
+    slope_val, slope_err = bootstrap.average_and_std_arrays(slope_dist)
+    intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept_dist)
+    y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+
+    np.savetxt('_build/xy/time-gauge-fit.tsv',
+               np.column_stack((x, y_val)))
+    np.savetxt('_build/xy/time-gauge-band.tsv',
+               bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+
+    return slope_val, slope_err, intercept_val, intercept_err
 
 
 def _get_raw_data():

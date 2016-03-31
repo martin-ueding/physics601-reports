@@ -102,79 +102,9 @@ def prepare_files(T):
 
 
 def job_time_gauge(T, show_gauss=False, show_lin=False):
-    time = []
-    channel_val = []
-    channel_err = []
 
-    # go through all six prompt-files
-    for i in range(1,7):
-        time_raw = np.loadtxt('Data/prompt-{}.txt'.format(i))
-        channel = time_raw[:,0]
-        counts = time_raw[:,1]
-        
-         # bootstrap:
-         # - draw new counts from gaussian distribution with width of 'sqrt(N)'
-         # - fit gaussian distribution to drawn data
-         # - add mean to array
-        mean = []
-        width = []
-        amplitude = []
-        for a in range(2):
-            mean.append(popt[0])
-            width.append(popt[1])
-            amplitude.append(popt[2])
-
-        # find average and standard deviation in arrays
-        mean_val, mean_err = bootstrap.average_and_std_arrays(mean)
-        width_val, width_err = bootstrap.average_and_std_arrays(width)
-        amplitude_val, amplitude_err = bootstrap.average_and_std_arrays(amplitude)
-
-        # create files for prompt curve fits
-        x = np.linspace(mean_val-200, mean_val+200, 100)
-        y = gauss(x, mean_val, width_val, amplitude_val)
-
-        np.savetxt('_build/xy/prompt-{}-fit.txt'.format(i), np.column_stack([x, y]))
-
-        # write result into new channel arrays
-        channel_val.append(mean_val)
-        channel_err.append(mean_err)
-
-        # write real time for gauging
-        time.append((i-1)*4)
-
-
-    # convert lists to arrays
-    channel_val = np.array(channel_val)
-    channel_err = np.array(channel_err)
-    time = np.array(time)
-
-    T['time_gauge_param'] = list(zip(*[
-        map(str, time),
-        siunitx(channel_val, channel_err)
-    ]))
 
     # linear fit with delete-1-jackknife
-    slope = []
-    intercept = []
-    for i in range(len(channel_val)):
-        channel_jackknife = np.delete(channel_val, i)
-        time_jackknife = np.delete(time, i)
-        
-        popt, pconv = op.curve_fit(linear, channel_jackknife, time_jackknife)
-        
-        slope.append(popt[0])
-        intercept.append(popt[1])
-
-        x = np.linspace(0, 4000, 1000)
-        y = linear(x, *popt)
-        pl.plot(channel_val, time, linestyle="none", marker="o")
-        pl.plot(x, y)
-        dandify_plot()
-        pl.savefig('_build/mpl-jackknife-{}.pdf'.format(i))
-        pl.clf()
-
-    slope_val, slope_err = bootstrap.average_and_std_arrays(slope)
-    intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept)
 
     # files for fit and plot of time gauge 
     x = np.linspace(750, 4000, 100)
