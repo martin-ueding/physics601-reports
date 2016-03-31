@@ -19,11 +19,12 @@ import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
 import scipy.stats
-import scipy.special as sp
 import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
 import bootstrap
+
+import spectrum
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
@@ -69,16 +70,6 @@ def lorentz(x, mean, width, integral):
 def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
-
-
-def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
-    return A_0/(2*tau_0) * np.exp((width**2-2*tau_0*(t-mean))/(2*tau_0**2)) \
-            * (sp.erf((width**2+tau_0*mean)/(np.sqrt(2)*width*tau_0)) \
-            + sp.erf((tau_0*(t-mean)-width**2)/(np.sqrt(2)*width*tau_0))) \
-            + A_t/(2*tau_t) * np.exp((width**2-2*tau_t*(t-mean))/(2*tau_t**2)) \
-            * (sp.erf((width**2+tau_t*mean)/(np.sqrt(2)*width*tau_t)) \
-            + sp.erf((tau_t*(t-mean)-width**2)/(np.sqrt(2)*width*tau_t))) \
-            + BG
 
 
 def linear(x, a, b):
@@ -257,7 +248,7 @@ def lifetime_spectra(T):
 
         for a in range(2):
             boot_counts = redraw_count(counts)
-            popt, pconv = op.curve_fit(lifetime_spectrum, channel, boot_counts, p0=[
+            popt, pconv = op.curve_fit(spectrum.lifetime_spectrum, channel, boot_counts, p0=[
                 1600,
                 45,
                 180,
@@ -284,7 +275,7 @@ def lifetime_spectra(T):
 
 
     x = np.linspace(1000, 3000, 500)
-    y = lifetime_spectrum(x, mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val)
+    y = spectrum.lifetime_spectrum(x, mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val)
 
     pl.plot(channel, counts, linestyle="none", marker="o")
     pl.plot(x, y)
