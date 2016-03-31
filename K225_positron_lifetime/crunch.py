@@ -10,6 +10,7 @@ import os
 import random
 import re
 import sys
+import glob
 
 import matplotlib.pyplot as pl
 import numpy as np
@@ -18,6 +19,7 @@ import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
 import scipy.stats
+import scipy.special as sp
 import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
@@ -58,11 +60,20 @@ def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
+def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
+    return A_0/(2*tau_0) * np.exp((width**2-2*tau_0*(t-mean))/(2*tau_0**2)) \
+            * (sp.erf((width**2+tau_0*mean)/(np.sqrt(2)*width*tau_0)) \
+            + sp.erf((tau_0*(t-mean)-width**2)/(np.sqrt(2)*width*tau_0))) \
+            + A_t/(2*tau_t) * np.exp((width**2-2*tau_t*(t-mean))/(2*tau_t**2)) \
+            * (sp.erf((width**2+tau_t*mean)/(np.sqrt(2)*width*tau_t)) \
+            + sp.erf((tau_t*(t-mean)-width**2)/(np.sqrt(2)*width*tau_t))) \
+            + BG
+
 def linear(x, a, b):
     return a * x + b
 
-def prepare_for_pgf(file, lower=0, upper=8000, error=False, show=False):
-    data = np.loadtxt('Data/{}.txt'.format(file))
+def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
+    data = np.loadtxt('Data/{}.txt'.format(filename))
     channel = data[:,0]
     counts = data[:,1]
 
@@ -80,9 +91,9 @@ def prepare_for_pgf(file, lower=0, upper=8000, error=False, show=False):
     counts = np.delete(counts, delete)
 
     if error:
-        np.savetxt('_build/xy/{}.txt'.format(file), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
+        np.savetxt('_build/xy/{}.txt'.format(filename), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
     else:
-        np.savetxt('_build/xy/{}.txt'.format(file), np.column_stack([channel[lower:upper], counts[lower:upper]]))
+        np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:upper], counts[lower:upper]]))
 
     if show:
         pl.plot(channel, counts, linestyle="none", marker="o")
@@ -211,6 +222,18 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
 
+def lifetime_spectra(T):
+    files = glob.glob('Data/in-*.txt')
+
+    for i in range(len(files)):
+        data = np.loadtxt(files[i])
+        channel = data[:,0]
+        counts = data[:,1]
+
+    pl.plot(channel, counts, linestyle="none", marker="o")
+    pl.show()
+    pl.clf()
+
 
 def redraw_count(a):
     '''
@@ -250,8 +273,9 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    time_gauge(T)
     prepare_files(T)
+    time_gauge(T)
+    lifetime_spectra(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
