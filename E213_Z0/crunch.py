@@ -657,6 +657,8 @@ def test_keys(T):
 def main():
     T = {}
 
+    T['sin_sq_weak_mixing'] = siunitx(sin_sq_weak_mixing)
+
     # We use bootstrap and obtain different results every single time. This is
     # bad, therefore we fix the seed here.
     random.seed(0)
