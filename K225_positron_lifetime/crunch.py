@@ -80,9 +80,7 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
     data = np.loadtxt('Data/{}.txt'.format(filename))
     channel = data[:,0]
     counts = data[:,1]
-
     step = 10
-
     channel_sel = channel[lower:upper:step]
     counts_sel = counts[lower:upper:step]
 
@@ -92,7 +90,6 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
                                                 np.sqrt(counts_sel))
     else:
         to_save = np.column_stack([channel_sel, counts_sel])
-
     np.savetxt('_build/xy/{}.txt'.format(filename), to_save)
 
     pl.plot(channel, counts, linestyle="none", marker="o")
