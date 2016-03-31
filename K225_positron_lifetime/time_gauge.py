@@ -32,7 +32,7 @@ def job_time_gauge(T):
     channel_val = np.array(channel_val)
     channel_err = np.array(channel_err)
 
-    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val,time , channel_err]))
+    np.savetxt('_build/xy/time-gauge-data.tsv', np.column_stack([channel_val,time , channel_err]))
     T['time_gauge_param'] = list(zip(
         siunitx(time),
         siunitx(channel_val, channel_err)
@@ -71,7 +71,6 @@ def _get_slope_and_intercept(time, channel_val, channel_err):
                np.column_stack((x, y_val)))
     np.savetxt('_build/xy/time-gauge-band.tsv',
                bootstrap.pgfplots_error_band(x, y_val, y_err))
-
 
     return slope_val, slope_err, intercept_val, intercept_err
 
