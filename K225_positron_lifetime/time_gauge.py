@@ -78,7 +78,7 @@ def _fit_prompt(channels, counts, idx):
     lower = int(mean_val - 3 * width_val)
     upper = int(mean_val + 3 * width_val)
     np.savetxt('_build/xy/prompt-{}-fit.txt'.format(i),
-               np.column_stack((x, y_val)))
+               np.column_stack((x[lower:upper], y_val[lower:upper])))
     np.savetxt('_build/xy/prompt-{}-band.txt'.format(i),
                bootstrap.pgfplots_error_band(x[lower:upper],
                                              y_val[lower:upper],
