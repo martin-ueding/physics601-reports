@@ -34,16 +34,42 @@ def gauss(x, mean, sigma, a):
 def linear(x, a, b):
     return a * x + b
 
-def prepare_for_pgf(file, lower=0, upper=8000, error=False):
+def prepare_for_pgf(file, lower=0, upper=8000, error=False, show=False):
     data = np.loadtxt('Data/{}.txt'.format(file))
     channel = data[:,0]
     counts = data[:,1]
 
-    if error:
-        np.savetxt('_build/xy/{}.txt'.format(file), bootstrap.pgfplots_error_band(channel[lower:upper], counts_tot[lower:upper], np.sqrt(counts_tot[lower:upper])))
-    else:
-        np.savetxt('_build/xy/{}.txt'.format(file), channel[lower:upper], counts_tot[lower:upper])
+    sieve_factor = 10
+    lower //= sieve_factor
+    upper //= sieve_factor
+    delete = []
+    for i in range(len(channel)):
+        if i%sieve_factor == 0:
+            continue
+        else:
+            delete.append(i)
+    delete = np.array(delete)
+    channel = np.delete(channel, delete)
+    counts = np.delete(counts, delete)
 
+    if error:
+        np.savetxt('_build/xy/{}.txt'.format(file), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
+    else:
+        np.savetxt('_build/xy/{}.txt'.format(file), np.column_stack([channel[lower:upper], counts[lower:upper]]))
+
+    if show:
+        pl.plot(channel, counts, linestyle="none", marker="o")
+        pl.show()
+        pl.clf()
+
+def prepare_files(T):
+    prepare_for_pgf('lyso-li', error=True, show=False)
+    prepare_for_pgf('lyso-re', error=True, show=False)
+    prepare_for_pgf('na-li', error=True, show=False)
+    prepare_for_pgf('na-re', error=True, show=False)
+    prepare_for_pgf('na-511-re', show=False)
+    prepare_for_pgf('na-511-li', show=False)
+    prepare_for_pgf('na-1275-li', show=False)
 
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
@@ -198,6 +224,7 @@ def main():
     options = parser.parse_args()
 
     time_gauge(T)
+    prepare_files(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
