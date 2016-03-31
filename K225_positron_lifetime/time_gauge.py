@@ -10,6 +10,7 @@ import bootstrap
 
 def job_time_gauge(T):
     channels, all_counts = _get_raw_data()
+
     _write_total_counts(channels, all_counts)
     _write_long_term(channels, all_counts[-1])
 
