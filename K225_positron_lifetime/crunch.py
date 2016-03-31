@@ -72,8 +72,8 @@ def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
 def linear(x, a, b):
     return a * x + b
 
-def prepare_for_pgf(file, lower=0, upper=8000, error=False, show=False):
-    data = np.loadtxt('Data/{}.txt'.format(file))
+def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
+    data = np.loadtxt('Data/{}.txt'.format(filename))
     channel = data[:,0]
     counts = data[:,1]
 
@@ -91,9 +91,9 @@ def prepare_for_pgf(file, lower=0, upper=8000, error=False, show=False):
     counts = np.delete(counts, delete)
 
     if error:
-        np.savetxt('_build/xy/{}.txt'.format(file), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
+        np.savetxt('_build/xy/{}.txt'.format(filename), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
     else:
-        np.savetxt('_build/xy/{}.txt'.format(file), np.column_stack([channel[lower:upper], counts[lower:upper]]))
+        np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:upper], counts[lower:upper]]))
 
     if show:
         pl.plot(channel, counts, linestyle="none", marker="o")
