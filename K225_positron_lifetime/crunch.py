@@ -95,13 +95,13 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
     counts = np.delete(counts, delete)
 
     if error:
-        np.savetxt('_build/xy/{}.txt'.format(filename),
-                   bootstrap.pgfplots_error_band(channel[lower:upper],
-                                                 counts[lower:upper],
-                                                 np.sqrt(counts[lower:upper])))
+        to_save = bootstrap.pgfplots_error_band(channel[lower:upper],
+                                                counts[lower:upper],
+                                                np.sqrt(counts[lower:upper]))
     else:
-        np.savetxt('_build/xy/{}.txt'.format(filename),
-                   np.column_stack([channel[lower:upper], counts[lower:upper]]))
+        to_save = np.column_stack([channel[lower:upper], counts[lower:upper]])
+
+    np.savetxt('_build/xy/{}.txt'.format(filename), to_save)
 
     pl.plot(channel, counts, linestyle="none", marker="o")
     dandify_plot()
