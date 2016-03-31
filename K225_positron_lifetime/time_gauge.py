@@ -4,13 +4,16 @@
 Time gauge.
 '''
 
+import itertools
+
 import numpy as np
+import scipy.optimize as op
 
 import bootstrap
 
 import models
 
-SAMPLES = 300
+SAMPLES = 10
 
 
 def job_time_gauge(T):
@@ -18,6 +21,9 @@ def job_time_gauge(T):
 
     _write_total_counts(channels, all_counts)
     _write_long_term(channels, all_counts[-1])
+
+    for idx, counts in zip(itertools.count(1), all_counts):
+        _fit_prompt(channels, counts, idx)
 
 
 def _get_raw_data():
@@ -27,7 +33,7 @@ def _get_raw_data():
     '''
     all_counts = []
 
-    for i in range(1,7):
+    for i in range(1, 7):
         data = np.loadtxt('Data/prompt-{}.txt'.format(i))
         channels = data[:,0]
         counts = data[:,1]
@@ -50,49 +56,51 @@ def _write_total_counts(channels, all_counts):
                                                  counts_tot[500:3500],
                                                  np.sqrt(counts_tot[500:3500]))
 
-    np.savetxt('_build/xy/prompts-short.txt', error_band_1)
+    np.savetxt('_build/xy/prompts-short.tsv', error_band_1)
 
 
 def _write_long_term(channels, counts):
     error_band_2 = bootstrap.pgfplots_error_band(channels[3600:4200],
                                                  counts[3600:4200],
                                                  np.sqrt(counts[3600:4200]))
-    np.savetxt('_build/xy/prompts-long.txt', error_band_2)
+    np.savetxt('_build/xy/prompts-long.tsv', error_band_2)
 
 
 def _fit_prompt(channels, counts, idx):
     results = []
-    x = np.linspace(0, 8000, 8000)
+    x = np.linspace(0, 8000, 4000)
     for sample in range(SAMPLES):
-        boot_counts = redraw_count(counts)
+        boot_counts = bootstrap.redraw_count(counts)
         results.append(_fit_prompt_kernel(channels, boot_counts, idx, x))
     
-    (mean_dist, width_dist, amp_dist), y_dist = zip(*results)
+    popt_dist, y_dist = zip(*results)
 
-    mean_val, mean_err = bootstrap.average_and_std_arrays(mean_dist)
-    width_val, width_err = bootstrap.average_and_std_arrays(width_dist)
-    amplitude_val, amplitude_err = bootstrap.average_and_std_arrays(amplitude_dist)
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    mean_val, width_val, amplitude_val = popt_val
+    mean_err, width_err, amplitude_err = popt_err
+
     y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
 
     # Create files for prompt curve fits.
-    lower = int(mean_val - 3 * width_val)
-    upper = int(mean_val + 3 * width_val)
-    np.savetxt('_build/xy/prompt-{}-fit.txt'.format(i),
-               np.column_stack((x[lower:upper], y_val[lower:upper])))
-    np.savetxt('_build/xy/prompt-{}-band.txt'.format(i),
-               bootstrap.pgfplots_error_band(x[lower:upper],
-                                             y_val[lower:upper],
-                                             y_err[lower:upper]))
+    sel = ((mean_val - 4 * width_val) < x) & (x < (mean_val + 4 * width_val))
+    np.savetxt('_build/xy/prompt-{}-fit.tsv'.format(idx),
+               np.column_stack((x[sel], y_val[sel])))
+    np.savetxt('_build/xy/prompt-{}-band.tsv'.format(idx),
+               bootstrap.pgfplots_error_band(x[sel],
+                                             y_val[sel],
+                                             y_err[sel]))
 
-    time = (i - 1) * 4
+    print(popt_val)
 
-    return time, channel_val, channel_err
+    time = (idx - 1) * 4
+
+    return time, mean_val, mean_err
 
 
 def _fit_prompt_kernel(channels, counts, idx, x):
-    p0 = [400 + i * 600, 200, 100]
+    p0 = [400 + idx * 600, 45, 15000]
     popt, pconv = op.curve_fit(models.gauss, channels, counts, p0=p0)
 
-    y = models.gauss(x, mean_val, width_val, amplitude_val)
+    y = models.gauss(x, *popt)
 
     return popt, y
