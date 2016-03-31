@@ -8,6 +8,7 @@ import argparse
 import json
 import os
 import random
+import re
 import sys
 
 import matplotlib.pyplot as pl
@@ -24,6 +25,32 @@ from unitprint2 import siunitx
 import bootstrap
 
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
+
+TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
+
+def get_temp(filename):
+    '''
+    Retrieves the temperatures stored in the filename itself.
+
+    :param str filename: Filename or full path
+    :returns tuple(str): Tuple with upper and lower temperature.
+
+    >>> get_temp('in-102,5-104,2C.txt')
+    (102.5, 104.2)
+    >>> get_temp('in-102-104,2C.txt')
+    (102.0, 104.2)
+    >>> get_temp('in-102,5-104C.txt')
+    (102.5, 104.0)
+    '''
+    basename = os.path.basename(filename)
+    m = TEMP_PATTERN.match(basename)
+    if m:
+        first = float(m.group(1).replace(',', '.'))
+        second = float(m.group(2).replace(',', '.'))
+
+        return (first, second)
+
+    return None
 
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
