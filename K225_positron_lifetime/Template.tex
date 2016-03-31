@@ -119,9 +119,77 @@ SCA coincidence already checked.
 
 TAC+coincidence has very nice overlap.
 
-Use coincidence as MCA-gate and TAC as MCA input, we take prompt curves.
+For a time calibration of our \textsc{mca} we use the coincidence unit as
+\textsc{mca}-gate and the \textsc{tac} as input, to take six prompt curves.
+Between the measurements another \SI{4}{\nano\second}-delay is interposed. For
+the first five prompt curves an acquisition time of about \SI{2}{\minute} is
+used.  Together with their fitted Gauss-curves they are shown in
+Figure~\ref{fig:prompts_short}. The sixth prompt curve and its fit is shown in
+Figure~\ref{fig:prompts_long}. To get a good estimation of the time resolution
+the acquisition time is \SI{20}{\minute}.
 
-Long measurement with most delay.
+\begin{figure}
+\centering
+        \includegraphics{prompts_short}
+        \caption{%
+                Prompt curves for time calibration. Acquisition time for every
+                curve is approximately \SI{2}{\minute}.
+        }
+        \label{fig:prompts_short}
+\end{figure}
+        
+\begin{figure}
+\centering
+        \includegraphics{prompts_long}
+        \caption{%
+                Additional prompt curve for time calibration and time
+                resolution estimation. Acquisition time is approximately
+                \SI{20}{\minute}.
+        }
+        \label{fig:prompts_long}
+\end{figure}
+
+From the fitted functions we get the mean channel to every delay time. The
+results are in Table~\ref{tab:time_gauge_param}. If one plots delay time
+against channel number (see Fig.~\ref{fig:time_gauge}) one gets a linear
+correlation. Because we don't need absolute time values, just time differences,
+only the slope of the fit is of interest for us, which is \SI{<<
+time_gauge_slope >>}{\milli\second}.
+
+\begin{table}
+        \centering
+        \begin{tabular}{SS}
+                \toprule
+                {delay time/\si{\nano\second}}
+                & {mean channel number} \\
+                \midrule
+                %< for row in time_gauge_param >%
+                << ' & '.join(row) >> \\
+                %< endfor >%
+                \bottomrule
+        \end{tabular}
+        \caption{%
+                Mean channel number of Gauss fit width corresponding delay
+                times.
+        }
+        \label{tab:time_gauge_param}
+\end{table}
+
+\begin{figure}
+        \centering
+        \includegraphics{time_gauge}
+        \caption{%
+                Time calibration of \textsc{mca}-channels. The error bars for
+                the channel number are so small, they hide behind the
+                markers.
+        }
+        \label{fig:time_gauge}
+\end{figure}
+        
+
+The last prompt curve has a standard deviation of \num{<< width_6 >>}. From
+this we get $\textsc{fwhm} = \num{<< FWHM_6 >>}$. With the slope of the time
+calibration fit we get a resolution of \SI{<< time_resolution >>}{\nano\second}.
 
 \section{Adjusting SCA windows}
 
