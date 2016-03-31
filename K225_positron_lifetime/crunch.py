@@ -131,6 +131,7 @@ def test_keys(T):
 
 def main():
     T = {}
+    random.seed(1)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--show', action='store_true')

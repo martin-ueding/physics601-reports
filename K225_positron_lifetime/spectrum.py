@@ -20,7 +20,7 @@ def job_lifetime_spectra(T):
 
     x = np.linspace(1000, 3000, 500)
 
-    for i, file_ in zip(itertools.count(), files):
+    for i, file_ in zip(itertools.count(), files[:2]):
         print('Working on lifetime spectrum', file_)
 
         data = np.loadtxt(file_)
