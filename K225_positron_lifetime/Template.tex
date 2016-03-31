@@ -111,7 +111,7 @@ $6^+$ state of ${}^{176}\text{Hf}$.
                 \caption{%
                         Right detector.
                 }
-                \label{fig:lyso-li}
+                \label{fig:lyso-re}
         \end{subfigure}
         \caption{%
                 Intrinsic energy spectrum of the \textsc{lyso} detector.
@@ -127,13 +127,42 @@ from the annihilation as well as a \SI{1275}{\kilo\electronvolt} line from the
 excited neon.
 
 We adjust the gain of the amplifiers such that the sodium spectrum fill the
-8192 channels of the MCA\@. The maximum window width of the SCA is not
-sufficient to let everything through. Also the upper bound for the SCA is below
-the last channel of the MCA\@. Therefore we cannot set the amplifier as high as
-we would like to. For the spectrum, we adjust the lower bound such that the
-window covers the two lines we are interested.
+8192 channels of the \textsc{mca}. The maximum window width of the \textsc{sca}
+is not sufficient to let everything through. Also the upper bound for the
+\textsc{sca} is below the last channel of the \textsc{mca}. Therefore we cannot
+set the amplifier as high as we would like to. For the spectrum, we adjust the
+lower bound such that the window covers the two lines we are interested. The
+spectra of the left and the right detector are shown in
+Figure~\ref{fig:natrium}.
 
-We check the coincidence of both SCA signals.
+\begin{figure}
+        \centering
+        \begin{subfigure}[c]{.49\linewidth}
+                \centering
+                \includegraphics{na-li}
+                \caption{%
+                        Left detector.
+                }
+                \label{fig:na-li}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[c]{.49\linewidth}
+                \centering
+                \includegraphics{na-re}
+                \caption{%
+                        Right detector.
+                }
+                \label{fig:na-re}
+        \end{subfigure}
+        \caption{%
+                Spectrum of ${}^{22}\text{Na}$. The lines of the detector
+                material are also visible.
+        }
+        \label{fig:natrium}
+\end{figure}
+
+
+We check the coincidence of both \textsc{sca} signals.
 
 \section{Fast circuit setup}
 
