@@ -33,6 +33,7 @@ def job_lifetime_spectra(T, slope_val):
         data = np.loadtxt(file_)
         channel = data[:, 0]
         counts = data[:, 1]
+        counts_err = np.sqrt(counts)
 
         time = channel * slope_val
 
@@ -44,7 +45,7 @@ def job_lifetime_spectra(T, slope_val):
         results = []
         for a in range(conf.SAMPLES):
             boot_counts = bootstrap.redraw_count(counts)
-            results.append(_lifetime_kernel(time, boot_counts, x))
+            results.append(_lifetime_kernel(time, boot_counts, counts_err, x))
         popt_dist, y_dist = zip(*results)
 
         popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
@@ -62,8 +63,8 @@ def job_lifetime_spectra(T, slope_val):
 
 
 
-def _lifetime_kernel(time, counts, x):
-    popt, pconv = op.curve_fit(models.lifetime_spectrum, time, counts)
+def _lifetime_kernel(time, counts, counts_err, x):
+    popt, pconv = op.curve_fit(models.lifetime_spectrum, time, counts, sigma=counts_err, p0=p0)
     y = models.lifetime_spectrum(x, *popt)
     return popt, y
 
