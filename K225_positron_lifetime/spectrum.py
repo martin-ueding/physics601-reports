@@ -35,12 +35,14 @@ def job_lifetime_spectra(T, slope_val):
         counts = data[:, 1]
         counts_err = np.sqrt(counts)
 
+        counts_err[counts_err == 0] = 1
+
         time = channel * slope_val
 
         np.savetxt('_build/xy/lifetime-{:04d}-data.tsv'.format(int(temp_lower*10)),
                    np.column_stack((time, counts)))
 
-        x = np.linspace(np.min(time), np.max(time), 500)
+        x = np.linspace(7, 20, 500)
 
         results = []
         for a in range(conf.SAMPLES):
