@@ -81,25 +81,17 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
     channel = data[:,0]
     counts = data[:,1]
 
-    sieve_factor = 10
-    lower //= sieve_factor
-    upper //= sieve_factor
-    delete = []
-    for i in range(len(channel)):
-        if i%sieve_factor == 0:
-            continue
-        else:
-            delete.append(i)
-    delete = np.array(delete)
-    channel = np.delete(channel, delete)
-    counts = np.delete(counts, delete)
+    step = 10
+
+    channel_sel = channel[lower:upper:step]
+    counts_sel = counts[lower:upper:step]
 
     if error:
-        to_save = bootstrap.pgfplots_error_band(channel[lower:upper],
-                                                counts[lower:upper],
-                                                np.sqrt(counts[lower:upper]))
+        to_save = bootstrap.pgfplots_error_band(channel_sel,
+                                                counts_sel,
+                                                np.sqrt(counts_sel))
     else:
-        to_save = np.column_stack([channel[lower:upper], counts[lower:upper]])
+        to_save = np.column_stack([channel_sel, counts_sel])
 
     np.savetxt('_build/xy/{}.txt'.format(filename), to_save)
 
