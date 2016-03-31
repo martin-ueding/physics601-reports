@@ -102,27 +102,10 @@ def prepare_files(T):
 
 
 def job_time_gauge(T, show_gauss=False, show_lin=False):
-
-
-    # linear fit with delete-1-jackknife
-
-    # files for fit and plot of time gauge 
-    x = np.linspace(750, 4000, 100)
-    y = linear(x, slope_val, intercept_val)
-
-    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val,time , channel_err]))
-    np.savetxt('_build/xy/time_gauge_fit.txt', np.column_stack([x,y]))
-        
-
-    T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
-    T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
-
-    # time resolution
-
-    T['width_6'] = siunitx(width_val , width_err)
+    T['width_6'] = siunitx(width_val, width_err)
     FWHM_val = 2*np.sqrt(2*np.log(2)) * width_val 
     FWHM_err = 2*np.sqrt(2*np.log(2)) * width_err 
-    T['FWHM_6'] = siunitx(FWHM_val , FWHM_err)
+    T['FWHM_6'] = siunitx(FWHM_val, FWHM_err)
     
     time_res = FWHM_val * slope_val
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)

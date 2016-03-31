@@ -28,16 +28,20 @@ def job_time_gauge(T):
         results.append(_fit_prompt(channels, counts, idx))
     time, channel_val, channel_err = zip(*results)
 
+    time = np.array(time)
     channel_val = np.array(channel_val)
     channel_err = np.array(channel_err)
-    time = np.array(time)
 
+    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val,time , channel_err]))
     T['time_gauge_param'] = list(zip(
         siunitx(time),
         siunitx(channel_val, channel_err)
     ))
 
-    _get_slope_and_intercept(time, channel_val, channel_err)
+    slope_val, slope_err, intercept_val, intercept_err = _get_slope_and_intercept(time, channel_val, channel_err)
+
+    T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
+    T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
 
 
 def _get_slope_and_intercept(time, channel_val, channel_err):
@@ -50,9 +54,9 @@ def _get_slope_and_intercept(time, channel_val, channel_err):
     for i in range(len(channel_val)):
         channel_jackknife = np.delete(channel_val, i)
         time_jackknife = np.delete(time, i)
-        
+
         popt, pconv = op.curve_fit(models.linear, channel_jackknife, time_jackknife)
-        
+
         slope_dist.append(popt[0])
         intercept_dist.append(popt[1])
 
@@ -118,7 +122,7 @@ def _fit_prompt(channels, counts, idx):
     for sample in range(SAMPLES):
         boot_counts = bootstrap.redraw_count(counts)
         results.append(_fit_prompt_kernel(channels, boot_counts, idx, x))
-    
+
     popt_dist, y_dist = zip(*results)
 
     popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
