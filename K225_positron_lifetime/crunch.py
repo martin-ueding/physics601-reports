@@ -34,6 +34,42 @@ def gauss(x, mean, sigma, a):
 def linear(x, a, b):
     return a * x + b
 
+def prepare_for_pgf(file, lower=0, upper=8000, error=False, show=False):
+    data = np.loadtxt('Data/{}.txt'.format(file))
+    channel = data[:,0]
+    counts = data[:,1]
+
+    sieve_factor = 10
+    lower //= sieve_factor
+    upper //= sieve_factor
+    delete = []
+    for i in range(len(channel)):
+        if i%sieve_factor == 0:
+            continue
+        else:
+            delete.append(i)
+    delete = np.array(delete)
+    channel = np.delete(channel, delete)
+    counts = np.delete(counts, delete)
+
+    if error:
+        np.savetxt('_build/xy/{}.txt'.format(file), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
+    else:
+        np.savetxt('_build/xy/{}.txt'.format(file), np.column_stack([channel[lower:upper], counts[lower:upper]]))
+
+    if show:
+        pl.plot(channel, counts, linestyle="none", marker="o")
+        pl.show()
+        pl.clf()
+
+def prepare_files(T):
+    prepare_for_pgf('lyso-li', error=True, show=False)
+    prepare_for_pgf('lyso-re', error=True, show=False)
+    prepare_for_pgf('na-li', error=True, show=False)
+    prepare_for_pgf('na-re', error=True, show=False)
+    prepare_for_pgf('na-511-re', show=False)
+    prepare_for_pgf('na-511-li', show=False)
+    prepare_for_pgf('na-1275-li', show=False)
 
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
@@ -42,7 +78,7 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
-def bootstrap_time(T, show_gauss=False, show_lin=False):
+def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
     channel_val = []
     channel_err = []
@@ -89,10 +125,6 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         # write real time for gauging
         time.append((i-1)*4)
 
-    T['width_6'] = siunitx(width_val , width_err)
-    FWHM_val , FWHM_err =  2*np.sqrt(2*np.log(2))*width_val , 2*np.sqrt(2*np.log(2))*width_err
-    T['FWHM_6'] = siunitx(FWHM_val , FWHM_err)
-    
     # write files for prompt curve plotting
     np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
     np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
@@ -107,6 +139,7 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
         siunitx(channel_val, channel_err)
     ]))
 
+    # linear fit with delete-1-jackknife
     slope = []
     intercept = []
     for i in range(len(channel_val)):
@@ -142,6 +175,11 @@ def bootstrap_time(T, show_gauss=False, show_lin=False):
 
     # time resolution
 
+    T['width_6'] = siunitx(width_val , width_err)
+    FWHM_val = 2*np.sqrt(2*np.log(2)) * width_val 
+    FWHM_err = 2*np.sqrt(2*np.log(2)) * width_err 
+    T['FWHM_6'] = siunitx(FWHM_val , FWHM_err)
+    
     time_res = FWHM_val * slope_val
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
@@ -185,7 +223,8 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    bootstrap_time(T)
+    time_gauge(T)
+    prepare_files(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
