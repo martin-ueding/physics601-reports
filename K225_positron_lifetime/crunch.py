@@ -64,8 +64,6 @@ def get_temp(filename):
     return None
 
 
-
-
 def prepare_for_pgf(filename, lower=0, upper=8000, error=False):
     '''
     Converts raw data for use with pgfplots, reduces data.
