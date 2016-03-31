@@ -17,6 +17,7 @@ import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
 import scipy.stats
+import scipy.special as sp
 import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
@@ -30,6 +31,15 @@ def lorentz(x, mean, width, integral):
 def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
+
+def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
+    return A_0/(2*tau_0) * np.exp((width**2-2*tau_0*(t-mean))/(2*tau_0**2)) \
+            * (sp.erf((width**2+tau_0*mean)/(np.sqrt(2)*width*tau_0)) \
+            + sp.erf((tau_0*(t-mean)-width**2)/(np.sqrt(2)*width*tau_0))) \
+            + A_t/(2*tau_t) * np.exp((width**2-2*tau_t*(t-mean))/(2*tau_t**2)) \
+            * (sp.erf((width**2+tau_t*mean)/(np.sqrt(2)*width*tau_t)) \
+            + sp.erf((tau_t*(t-mean)-width**2)/(np.sqrt(2)*width*tau_t))) \
+            + BG
 
 def linear(x, a, b):
     return a * x + b
@@ -184,6 +194,8 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
 
+def lifetime_spectra(T):
+    
 
 def redraw_count(a):
     '''
@@ -223,8 +235,9 @@ def main():
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    time_gauge(T)
     prepare_files(T)
+    time_gauge(T)
+    lifetime_spectra(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
