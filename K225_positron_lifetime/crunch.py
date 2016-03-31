@@ -29,6 +29,7 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
+
 def get_temp(filename):
     '''
     Retrieves the temperatures stored in the filename itself.
@@ -53,12 +54,15 @@ def get_temp(filename):
 
     return None
 
+
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+
 
 def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
+
 
 def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
     return A_0/(2*tau_0) * np.exp((width**2-2*tau_0*(t-mean))/(2*tau_0**2)) \
@@ -69,8 +73,10 @@ def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
             + sp.erf((tau_t*(t-mean)-width**2)/(np.sqrt(2)*width*tau_t))) \
             + BG
 
+
 def linear(x, a, b):
     return a * x + b
+
 
 def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
     data = np.loadtxt('Data/{}.txt'.format(filename))
@@ -100,6 +106,7 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
         pl.show()
         pl.clf()
 
+
 def prepare_files(T):
     prepare_for_pgf('lyso-li', error=True, show=False)
     prepare_for_pgf('lyso-re', error=True, show=False)
@@ -109,12 +116,14 @@ def prepare_files(T):
     prepare_for_pgf('na-511-li', show=False)
     prepare_for_pgf('na-1275-li', show=False)
 
+
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
 
     with open('_build/colors.tex', 'w') as f:
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
+
 
 def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
@@ -222,6 +231,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
 
+
 def lifetime_spectra(T):
     files = glob.glob('Data/in-*.txt')
 
@@ -320,6 +330,7 @@ def main():
     test_keys(T)
     with open('_build/template.js', 'w') as f:
         json.dump(dict(T), f, indent=4, sort_keys=True)
+
 
 if __name__ == "__main__":
     main()
