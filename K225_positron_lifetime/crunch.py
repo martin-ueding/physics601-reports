@@ -294,8 +294,8 @@ def main():
     time_gauge.job_time_gauge(T)
 
     prepare_files(T)
-    job_time_gauge(T)
-    lifetime_spectra(T)
+    #job_time_gauge(T)
+    #lifetime_spectra(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:

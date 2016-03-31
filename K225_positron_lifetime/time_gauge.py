@@ -44,7 +44,7 @@ def _write_total_counts(channels, all_counts):
     '''
     Write files for prompt curve plotting.
     '''
-    total_counts = _get_total_counts(all_counts)
+    counts_tot = _get_total_counts(all_counts)
 
     error_band_1 = bootstrap.pgfplots_error_band(channels[500:3500],
                                                  counts_tot[500:3500],
@@ -54,10 +54,10 @@ def _write_total_counts(channels, all_counts):
 
 
 def _write_long_term(channels, counts):
-    np.savetxt('_build/xy/prompts-long.txt', error_band_2)
     error_band_2 = bootstrap.pgfplots_error_band(channels[3600:4200],
                                                  counts[3600:4200],
                                                  np.sqrt(counts[3600:4200]))
+    np.savetxt('_build/xy/prompts-long.txt', error_band_2)
 
 
 def _fit_prompt(channels, counts, idx):
