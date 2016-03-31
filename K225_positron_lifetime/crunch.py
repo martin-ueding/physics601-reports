@@ -101,17 +101,6 @@ def prepare_files(T):
     prepare_for_pgf('na-1275-li')
 
 
-def job_time_gauge(T, show_gauss=False, show_lin=False):
-    T['width_6'] = siunitx(width_val, width_err)
-    FWHM_val = 2*np.sqrt(2*np.log(2)) * width_val 
-    FWHM_err = 2*np.sqrt(2*np.log(2)) * width_err 
-    T['FWHM_6'] = siunitx(FWHM_val, FWHM_err)
-    
-    time_res = FWHM_val * slope_val
-    time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
-    T['time_resolution'] = siunitx(time_res , time_res_err)
-
-
 def lifetime_spectra(T):
     files = glob.glob('Data/in-*.txt')
 

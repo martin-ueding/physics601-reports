@@ -26,7 +26,7 @@ def job_time_gauge(T):
     results = []
     for idx, counts in zip(itertools.count(1), all_counts):
         results.append(_fit_prompt(channels, counts, idx))
-    time, channel_val, channel_err = zip(*results)
+    time, channel_val, channel_err, width_val, width_err = zip(*results)
 
     time = np.array(time)
     channel_val = np.array(channel_val)
@@ -42,6 +42,19 @@ def job_time_gauge(T):
 
     T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
     T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
+
+    _time_resolution(T, width_val[-1], width_err[-1], slope_val, slope_err)
+
+
+def _time_resolution(T, width_val, width_err, slope_val, slope_err):
+    T['width_6'] = siunitx(width_val, width_err)
+    FWHM_val = 2*np.sqrt(2*np.log(2)) * width_val
+    FWHM_err = 2*np.sqrt(2*np.log(2)) * width_err
+    T['FWHM_6'] = siunitx(FWHM_val, FWHM_err)
+
+    time_res = FWHM_val * slope_val
+    time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
+    T['time_resolution'] = siunitx(time_res , time_res_err)
 
 
 def _get_slope_and_intercept(time, channel_val, channel_err):
@@ -143,7 +156,7 @@ def _fit_prompt(channels, counts, idx):
 
     time = (idx - 1) * 4
 
-    return time, mean_val, mean_err
+    return time, mean_val, mean_err, width_val, width_err
 
 
 def _fit_prompt_kernel(channels, counts, idx, x):
