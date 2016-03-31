@@ -10,6 +10,7 @@ import os
 import random
 import re
 import sys
+import glob
 
 import matplotlib.pyplot as pl
 import numpy as np
@@ -222,7 +223,17 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     T['time_resolution'] = siunitx(time_res , time_res_err)
 
 def lifetime_spectra(T):
-    
+    files = glob.glob('Data/in-*.txt')
+
+    for i in range(len(files)):
+        data = np.loadtxt(files[i])
+        channel = data[:,0]
+        counts = data[:,1]
+
+    pl.plot(channel, counts, linestyle="none", marker="o")
+    pl.show()
+    pl.clf()
+
 
 def redraw_count(a):
     '''
