@@ -1081,11 +1081,27 @@ Our analysis to this point is based on the tree level formalism. Higher order
 corrections are needed in every QFT for more accurate result. Here we are given
 the combined effect of all those corrections as a table of shift for
 $A_\text{FB}$. For each beam energy, we add the correction and obtain a final
-value for $A_\text{FB}$. The resulting asymmetry for the different beam
-energies is shown in Figure~\ref{fig:plot-afb}. Error estimation is done by
-assuming an error of $\sqrt{N}$ for all the counts and using resampling
-bootstrap for the final result. This method is explained in detail in the next
-section.
+value for $A_\text{FB}$. The resulting asymmetries for the different beam
+energies are shown in  Table~\ref{tab:afb} and Figure~\ref{fig:plot-afb}. Error
+estimation is done by assuming an error of $\sqrt{N}$ for all the counts and
+using resampling bootstrap for the final result.
+
+\begin{table}
+    \centering
+    \begin{tabular}{SS}
+        \toprule
+        {$\sqrt s$} & {$A_\mathrm{FB}$} \\
+        \midrule
+        %< for row in afb_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Forward--backward asymmetry in the muon events.
+    }
+    \label{tab:afb}
+\end{table}
 
 \begin{figure}
     \centering
@@ -1105,6 +1121,8 @@ expectation value with the physical value of $\sin(\theta_\text w)^2$ for the
 various beam energies used. Our results do not imply this exact trend (i.e.\
 almost constant) of the asymmetry. However, as the errors are quite large, our
 measurements are still consistent with it.
+
+\subsection{Weak mixing angle}
 
 At the peak, the relation
 \[
@@ -1128,8 +1146,7 @@ resulting $\sin(\theta_\mathrm w)^2$ values is shown in
 Figure~\ref{fig:sin_sq-boot-hist}. One can see that is it rather symmetric but
 not centered around the value we obtain by computing with the actual input (not
 resampled). Therefore we conclude that we actually have a significant
-asymmetric error, namely
-$\sin(\theta_\mathrm w)^2 = << sin_sq_afb_asym >>$.
+asymmetric error, namely $\sin(\theta_\mathrm w)^2 = << sin_sq_afb_asym >>$.
 
 \begin{figure}
     \centering

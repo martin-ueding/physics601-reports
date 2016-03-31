@@ -388,6 +388,11 @@ def job_afb_analysis(T):
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
+    T['afb_table'] = list(zip(
+        siunitx(energies),
+        siunitx(afb_val, afb_err),
+    ))
+
     T['sin_sq_afb'] = siunitx(sin_sq_val, sin_sq_err)
 
     T['sin_sq_afb_asym'] = '{:.3f}^{{+{:.3f}}}_{{-{:.3f}}}'.format(sin_sq_val, sin_sq_up, sin_sq_down)

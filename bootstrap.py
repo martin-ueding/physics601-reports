@@ -61,6 +61,8 @@ def percentile_arrays(arrays, value=None, interval=68.3):
     r_up = 50 + interval/2
     r_down = 50 - interval/2
 
+    print('Percentiles:', r_up, r_down)
+
     p_up = np.percentile(arrays, r_up, axis=0)
     p_down = np.percentile(arrays, r_down, axis=0)
 
