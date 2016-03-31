@@ -68,7 +68,7 @@ def _write_long_term(channels, counts):
 
 def _fit_prompt(channels, counts, idx):
     results = []
-    x = np.linspace(0, 8000, 4000)
+    x = np.linspace(0, 8000, 3000)
     for sample in range(SAMPLES):
         boot_counts = bootstrap.redraw_count(counts)
         results.append(_fit_prompt_kernel(channels, boot_counts, idx, x))

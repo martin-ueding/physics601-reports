@@ -7,32 +7,22 @@
                 grid=major,
                 band/.style={
                         draw=none,
-                        opacity=0.7,
+                        opacity=0.5,
+                        fill=red,
                 },
         ]
-        \addplot[
-                band, 
-                fill=blue, 
-        ] table {../xy/prompts-short.txt} \closedcycle;
-        \addplot[
-                black,
-        ] table {../xy/prompt-1-fit.txt};
-                
-        \addplot[
-                black,
-        ] table {../xy/prompt-2-fit.txt};
+        \addplot[black!50] table {../xy/prompts-short.tsv};
 
-        \addplot[
-                black,
-        ] table {../xy/prompt-3-fit.txt};
-
-        \addplot[
-                black,
-        ] table {../xy/prompt-4-fit.txt};
-
-        \addplot[
-                black,
-        ] table {../xy/prompt-5-fit.txt};
+        \addplot[band] table {../xy/prompt-1-band.tsv} \closedcycle;
+        \addplot[band] table {../xy/prompt-2-band.tsv} \closedcycle;
+        \addplot[band] table {../xy/prompt-3-band.tsv} \closedcycle;
+        \addplot[band] table {../xy/prompt-4-band.tsv} \closedcycle;
+        \addplot[band] table {../xy/prompt-5-band.tsv} \closedcycle;
+        \addplot[red] table {../xy/prompt-1-fit.tsv};
+        \addplot[red] table {../xy/prompt-2-fit.tsv};
+        \addplot[red] table {../xy/prompt-3-fit.tsv};
+        \addplot[red] table {../xy/prompt-4-fit.tsv};
+        \addplot[red] table {../xy/prompt-5-fit.tsv};
 
     \end{axis}
 \end{tikzpicture}
