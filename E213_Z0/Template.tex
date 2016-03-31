@@ -92,7 +92,7 @@ from three quarks.
 
 The leptons are three generations of particles. In every
 generation one can find one charged particle with $q = -e$. These are the
-electron $\mathrm e^-$, the muon $\muup^-$ and the tau $\tauup^-$. To each
+electron $\mathrm e^-$, the muon $\muup^-$ and the tauon $\tauup^-$. To each
 one of them there belongs a very light uncharged neutrino
 $\nuup_{\mathrm{e}/\muup/\tauup}$.
 
@@ -155,15 +155,15 @@ decay.
 
 \subsection{Leptonic decay}
 
-The leptonic decay products, $\mathrm e^+ + \mathrm e^-$, $\muup^+ + \muup^-$
-and $\tauup^+ + \tauup^-$ behave similar in the beginning. They fly apart
-colinear in opposite directions. Because of their high mass the taus decay
+The leptonic decay products, $\mathrm e^+ \mathrm e^-$, $\muup^+ \muup^-$
+and $\tauup^+ \tauup^-$ behave similar in the beginning. They fly apart
+collinear in opposite directions. Because of their high mass the tauons decay
 very quickly through different decay channels listed in
-Tabular~\ref{tab:tauon_decay}. Because of the great number of neutrinos for
-this decay the missing total energy is characteristic. Also up to 6 charged
-tracks can be observed.
+Table~\ref{tab:tauon_decay}. Because of the great number of neutrinos for this
+decay the missing total energy is characteristic. Also up to six charged tracks
+can be observed.
 
-\begin{table}[htbp]
+\begin{table}
     \centering
     \begin{tabular}{lSc}
         \toprule
@@ -184,7 +184,7 @@ tracks can be observed.
     \label{tab:tauon_decay}
 \end{table}
 
-The muons are lighter than the taus, so they won't decay fast. Hence there
+The muons are lighter than the tauons, so they won't decay fast. Hence there
 will be only two charged tracks. Since they are still heavier than electrons
 they interact only very little with matter so they only lose a small amount of
 energy in the detector. 
@@ -195,7 +195,7 @@ electron positron pair the number of charged tracks doesn't have to be exactly
 two.
 
 The pair production (s-channel) isn't the only way to get an electron positron
-pair. Elastic $\mathrm e^+ + \mathrm e^-$ scattering, so called Bhabha
+pair. Elastic $\mathrm e^+ \mathrm e^-$ scattering, so called Bhabha
 scattering or t-channel scattering, is for small scattering angles the
 dominant process and has to be calculated out to get only decay products of
 $\mathrm Z^0$.
@@ -811,6 +811,12 @@ available in the later analysis of larger datasets using \textsc{paw}.
 
 \subsection{Preliminary analysis}
 
+We will use the following color scheme throughout this report:
+Electrons~\includegraphics{legend-electron},
+Muons~\includegraphics{legend-muon},
+Tauons~\includegraphics{legend-tauon} and
+Hadrons~\includegraphics{legend-hadron}.
+
 Using some twenty points per event class, we obtain the histograms shown in
 Figure~\ref{fig:hist}. There one can see that some characteristics are well
 suited to cut the data. For instance in \ncharged, we see that hadronic decays
@@ -972,6 +978,71 @@ Table~\ref{tab:cuts2}.
     \label{tab:cuts2}
 \end{table}
 
+\section{Bootstrap error estimation}
+
+The default method for error estimation is the \emph{Gaussian error
+propagation}. This works by applying $[\Deltaup f](x) = |f'(x)| \cdot \Deltaup
+x$ for every transformation used. The implicit assumptions used here are that
+errors are both small and Gaussian throughout the analysis. Especially if one
+has a lot of analysis steps, the propagated error might be too large or small.
+
+Besides being tedious, this scheme also does not provide any help when doing
+fits. Methods like the \texttt{scipy.optimize.curve\_fit}, which we use here,
+will give a covariance matrix. Taking the square root of the diagonal usually
+gives a sufficient error estimate if the error are uncorrelated, which is often
+the case. Although the function can perform an error-weighted fit, it does not
+incorporate the uncertainty of the input data into the error of the fit
+parameters (at least in older version). Still, uncertainties in categorical
+variable (usually $x$) are not included in this function.
+
+A method to alleviate all those problems is the \emph{bootstrap} method. It is
+an intrinsically numerical and statistical procedure. It is a \enquote{meta
+analysis of the data itself} in a sense. Instead of running our analysis once
+with the original data, we also run it a couple hundred times with slightly
+different datasets. This can be the same experiment conducted a couple more
+times. All the input values will be slightly different according to their
+statistical uncertainty. Running the analysis on all the different inputs, one
+obtains a distribution of final results. Taking the standard deviation of this
+distribution will be a robust estimation of the statistical error on the final
+results.
+
+As one does not have to compute partial derivatives with respect to all input
+parameters, this method is very general and can be used for every step in the
+analysis, even curve fitting.
+
+Here we do not have the luxury of multiple datasets. As the detection of
+particles essentially is a counting experiment, we assume that a value $N$ is
+associated with a standard deviation of $\sqrt N$. We only have one data point,
+so we cannot do a bootstrap right away. Therefore we draw more data points from
+a Gaussian distribution centered on $N$ with width $\sqrt N$. The values that
+we get should roughly be the same we would have gotten when performing the
+analysis with another data set.
+
+This method sounds outrageous, we just pull more data \enquote{out of the hat}
+by doing this resampling. Gaussian error propagation does the same thing,
+really, just analytically. Therefore we are performing the same procedure, just
+with numerical methods and less assumptions.
+
+Another aspect that one should cover in curve fitting is the dependence of the
+result on the number of data points used. In an ideal case we can remove any of
+the points and the fit would still give the same result. Later we will have
+fits with seven data points and see that removing any of the points will
+drastically alter the curve. In order to obtain this effect, we do a
+\emph{Jackknife} in first order for the fits as well. Instead of fitting with
+all seven points, we randomly remove one of the points in each run of the fit.
+As we perform hundreds of bootstrap samples, the mean value will not be altered
+much. The standard deviation of the fit parameters will increase, just what we
+want for fragile fits. We will see this at the cross sections later on.
+
+Usually, only one fit curve is given. The bootstrap method will also give us a
+distribution of fit curves which we plot as a band of curves. Correlation
+between the fit parameters will become directly visible.
+
+Gaussian error propagation assumes that errors are symmetric around the mean
+value. In realistic examples, this might not be the case. We can obtain
+asymmetric errors using the percentiles of the bootstrapped distribution. This
+will be seen in the forward--backward asymmetry.
+
 \section{Muon forward--backward asymmetry}
 
 The muon forward--backward asymmetry is a quantity that we want to extract from
@@ -1010,19 +1081,34 @@ Our analysis to this point is based on the tree level formalism. Higher order
 corrections are needed in every QFT for more accurate result. Here we are given
 the combined effect of all those corrections as a table of shift for
 $A_\text{FB}$. For each beam energy, we add the correction and obtain a final
-value for $A_\text{FB}$. The resulting asymmetry for the different beam
-energies is shown in Figure~\ref{fig:plot-afb}. Error estimation is done by
-assuming an error of $\sqrt{N}$ for all the counts and using Gaussian error
-propagation for the final result.
+value for $A_\text{FB}$. The resulting asymmetries for the different beam
+energies are shown in  Table~\ref{tab:afb} and Figure~\ref{fig:plot-afb}. Error
+estimation is done by assuming an error of $\sqrt{N}$ for all the counts and
+using resampling bootstrap for the final result.
+
+\begin{table}
+    \centering
+    \begin{tabular}{SS}
+        \toprule
+        {$\sqrt s$} & {$A_\mathrm{FB}$} \\
+        \midrule
+        %< for row in afb_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Forward--backward asymmetry in the muon events.
+    }
+    \label{tab:afb}
+\end{table}
 
 \begin{figure}
     \centering
     \includegraphics{plot-afb}
     \caption{%
-        Forward--backward asymmetry in the muon events. Shown are both
-        uncorrected and corrected values for $A_\text{FB}$. Both values have
-        the same error, therefore we only show the error bar for the corrected
-        values.
+        Forward--backward asymmetry in the muon events. Shown are corrected
+        values for $A_\text{FB}$.
     }
     \label{fig:plot-afb}
 \end{figure}
@@ -1033,6 +1119,59 @@ expectation value with the physical value of $\sin(\theta_\text w)^2$ for the
 various beam energies used. Our results do not imply this exact trend (i.e.\
 almost constant) of the asymmetry. However, as the errors are quite large, our
 measurements are still consistent with it.
+
+\subsection{Weak mixing angle}
+
+At the peak, the relation
+\[
+    A_\text{FB}^\text{peak} \simeq 3 \del{\frac{v_\mathrm l}{a_\mathrm l}}
+    \qquad\text{and}\qquad
+    \frac{v_\mathrm l}{a_\mathrm l} = 1 - 4 \sin(\theta_\mathrm w)^2
+\]
+holds for leptons. Taken from the manual, Equation~(2.21). Using the asymmetry
+value at the peak (fourth data point), we obtain $\sin(\theta_\mathrm w)^2 =
+\num{<< sin_sq_afb >>}$ from
+\[
+    \sin(\theta_\mathrm w)^2 = \frac{1 - \sqrt{A_\text{FB}^\text{peak} / 3}}4
+    \,.
+\]
+Due to the square root in the used relation, the bootstrap sampling can
+encounter illegal values which we just drop. The ratio of ignored values is
+\SI{<< sin_sq_bootstrap_acceptance >>}{\percent}, which is quite high. All
+values that are used are shown in Figure~\ref{fig:afb-boot-hist}. Although this
+seems bad, this only affected the error estimation. The distribution of
+resulting $\sin(\theta_\mathrm w)^2$ values is shown in
+Figure~\ref{fig:sin_sq-boot-hist}. One can see that is it rather symmetric but
+not centered around the value we obtain by computing with the actual input (not
+resampled). Therefore we conclude that we actually have a significant
+asymmetric error, namely $\sin(\theta_\mathrm w)^2 = << sin_sq_afb_asym >>$.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics{afb-boot-hist}
+        \caption{%
+            Asymmetry values. Only the positive ones are actually taken, those
+            are marked in gray.
+        }
+        \label{fig:afb-boot-hist}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics{sin_sq-boot-hist}
+        \caption{%
+            Weak mixing angle. The shape is quite symmetric but not centered
+            around actual value.
+        }
+        \label{fig:sin_sq-boot-hist}
+    \end{subfigure}
+    \caption{%
+        Histograms of the distributions used in the bootstrap error estimation.
+    }
+    \label{fig:boot-hist}
+\end{figure}
 
 \section{Detection efficiency}
 \label{sec:detection-efficiency}
@@ -1133,32 +1272,15 @@ $\cos(\theta) < 0.5$ which discards a lot of events.
     \label{tab:matrix}
 \end{table}
 
-The error calculation is performed using resampling pseudo-bootstrap. As the
-detection of particles essentially is a counting experiment, we assume that a
-value $N$ is associated with a standard deviation of $\sqrt N$. We only have
-one data point, so we cannot do a bootstrap right away. Therefore we draw more
-data points from a Gaussian distribution centered on $N$ with width $\sqrt N$.
-The values that we get should roughly be the same we would have gotten when
-performing the analysis with another data set.
-
-Our input data is the number of events that were matched to a given channel,
-this gives us one matrix. We resample this matrix a couple hundred times in
-order to get some statistic. Taking the mean and standard deviation of each
-matrix element along the bootstrap dimension, we obtain the same values $N$
-with an error estimate of $\sqrt N$, of course.
-
-Using this resampled sets, we can perform the full analysis a couple hundred
-times. Taking the mean and standard deviation of the end results will give us
-the value and error estimate for any of our final results. This frees us from
-Gaussian error propagation and actually uses \emph{less} assumptions compared
-to the error propagation.
+The errors given in the matrix are the assumed $\sqrt N$ standard deviation
+from a counting experiment.
 
 \subsection{Inverting the matrix}
 
-In order to use this detection matrix~$\mat E$ as a correction, we need to
-invert the matrix. As it is almost diagonal, this will be numerically stable.
-The inverted matrix is shown in Table~\ref{tab:inverted}. The errors for the
-matrix elements come directly from the bootstrapping.
+We need to invert the matrix in order to use this detection matrix~$\mat E$ as
+a correction. This will be numerically stable as it is almost diagonal. The
+inverted matrix is shown in Table~\ref{tab:inverted}. The errors for the matrix
+elements come directly from the bootstrapping.
 
 \begin{table}
     \centering
@@ -1183,6 +1305,8 @@ matrix elements come directly from the bootstrapping.
     \label{tab:inverted}
 \end{table}
 
+\subsection{Conceptual mistake}
+
 There is one mistake that we did in the derivation of the matrix, and we cannot
 recover from this after the fact. The matrix was set up using the final cuts,
 which also means that we only allow $\cos(\theta) \leq \num{0.5}$ in the
@@ -1206,10 +1330,10 @@ as well, which we also do not want. By taking the ratio of filtered electrons
 and unfiltered Monte Carlo electrons, our acceptance ratio will correct the
 $t$-channel back in. We should actually have filtered the Monte Carlo with the
 same $\cos(\theta) \leq \num{0.5}$ cut in order to have a reduced number of
-false-negatives and therefore no overcompensation.
-
-We do not have access to the machines running \textsc{paw} now, so we can just
-explain why the results do not come out right.
+false-negatives and therefore no overcompensation. We do not have access to the
+machines running \textsc{paw} now, so we can just explain why the results do
+not come out right and use the values for the muons as an replacement,
+\emph{assuming} that lepton universality does hold.
 
 \section{Partial cross sections}
 
@@ -1225,11 +1349,10 @@ nt/plot daten1.ncharged $2.and.$13
 pict/print filtered-daten1-as-muon-energy3.ps
 \end{lstlisting}
 
-The full code listing can be found in Section~\ref{data-cuts.kumac}. We look at
-the generated histograms and extract the number of events from each histogram.
-The results are collected in Table~\ref{tab:counts}. Shown are the errors which
-we assume to be $\sqrt{N}$ as this is a counting experiment. Those errors are
-also used for resampling.
+We look at the generated histograms and extract the number of events from each
+histogram. The results are collected in Table~\ref{tab:counts}. Shown are the
+errors which we assume to be $\sqrt{N}$ as this is a counting experiment. Those
+errors are also used for resampling.
 
 \begin{table}
     \centering
@@ -1254,8 +1377,8 @@ also used for resampling.
     \label{tab:counts}
 \end{table}
 
-Those counts are just the counts which are left after applying the cuts. As
-argued in regarding the detection efficiency (c.f.\
+The counts are just the ones left after applying the cuts. As argued in
+regarding the detection efficiency (c.f.\
 Section~\ref{sec:detection-efficiency}), those counts include some number of
 false-positives (underground) and false-negatives (inefficiency). Therefore we
 need to correct for that with the inverse matrix derived above.
@@ -1404,29 +1527,26 @@ function which we will turn to next.
 
 \section{Decay widths}
 
+\subsection{Curve fitting}
+
 From the energy dependence of the cross sections, we can compute the decay
 width and the rest mass of the $\mathrm Z^0$ gauge boson generated by the
 spontaneous symmetry breaking of the Higgs field. As the tree-level cross
 section contains the modulus squared of the propagator, the expected energy
-dependence is similar to that of a Lorentz curve:
+dependence is similar to that of a Lorentz curve,
 \[
     \sigma_f \propto \frac{1}{\MZ^2} \frac{s}{(s - \MZ^2)^2 + (s^2
     \Gamma_\mathrm Z^2 / \MZ^2)} \,,
 \]
 taken from Equation~(3.12) in the manual. We fit a curve to the partial cross
 sections for each decay channel. Luckily it is not 1992 any more and we can
-just do this ourselves.
+just do this ourselves at home.
 
 As we use a bootstrap scheme for error calculation, we perform the fit a couple
 hundred times with resampled input data. This gives us a set of hundreds of
 different fit parameters and also fit curves. For each interpolation value of
 $\sqrt s$ in the resulting curve we take mean and standard deviation.
 The result is shown as an error band for each fit curve.
-
-As the bootstrap gives us hundreds of fit parameters, we can take mean and
-standard deviation to obtain an realistic error estimate for the resulting fit
-parameters. Just taking the diagonal of the covariance matrix of a
-least-squares fit greatly underestimates the error in most cases.
 
 Additionally, we have the problem that we are limited to seven beam energies.
 This introduces another source of error that we control with a jackknife
@@ -1464,7 +1584,90 @@ in the low $\sqrt s$ area contribute a lot to the uncertainty of the fit. The
 jackknife method was dearly needed, as the error in width would have been
 underestimated by an order of magnitude.
 
-% TODO Confidence level.
+\subsection{Ratios of cross sections}
+
+The cross sections are proportional decay widths and proportional to branching
+ratios. From the ratios of cross sections we can derive the ratios of branching
+ratios. The decays withs are also proportional to the other quantities,
+therefore we can use the theoretical decay widths to compute the expected
+ratios.
+
+From the manual we obtain the theoretical hadronic width of
+\SI{1732}{\mega\electronvolt}. The leptonic width should be
+\SI{83.8}{\mega\electronvolt}. Therefore we expect a ratio between the hadron
+and each leptonic channel to be \num{<< br_theory >>}.
+
+Using the values given in Table~\ref{tab:lorentz-fits}, we obtain a value of
+\numlist{<< ';'.join(brs) >>} for electrons, muons and tauons, respectively.
+The values for muons and tauons is in agreement with theory. The one for the
+electrons is too small, which comes from the wrong analysis of the $t$-channel.
+
+\subsection{Confidence level}
+
+Least-squares fitting is the maximization of the likelihood function.
+The minimization of the $\chi^2$ quantity with respect to the fit
+parameter vector $\vec \lambda$ is an equivalent problem. The $\chi^2$ is
+computed with a model $f$ and parameters $\vec\lambda$ from observations
+$\{x_i\}$ using
+\[
+    \chi^2 = \sum_i \del{\frac{x_i - f(x_i, \vec\lambda)}{\sigma_i}}^2 \,.
+\]
+The fitting algorithm has already found the parameters $\vec\lambda$ (including
+mass and width) for us. Now we need to compute the $\chi^2$ from this. The four
+decay channels have a $\chi^2$ each of \numlist{<< ';'.join(chi_sq) >>}.
+
+This value without the degrees of freedom is rather worthless. Therefore we
+look at the \enquote{reduced $\chi^2$} which is $\chi^2/\text{dof}$. This
+quantity pictorially is the average distance of the points to the curve
+measured in the individual standard deviations. A value of 1 to 1.5 means that
+on average, the points tangent the line with the error bar. This means that the
+errors are not too large or small, the model fits. If the value is way smaller
+than 1, the errors have been overestimated. If the value is larger than 1.5,
+the model does not fit; points lie very far away from the curve.
+
+Here we have seven beam energies and three model parameters, this gives
+$\text{dof} = 7 - 1 - 3 = 3$. The reduced $\chi^2$ are then \numlist{<<
+';'.join(chi_sq_red) >>}. Most values are quite large.
+
+The so-called $p$-value gives the probability that the underlying model would
+produce this data or a more extreme variant of this. Therefore we want a high
+$p$-value, saying that the values that we have are quite normal for this model.
+A common lower bound is 0.05, everything below that will reject the model.
+
+The $p$-value is computed from the $\chi^2$ cumulative density function which
+is implemented as \texttt{scipy.stats.chi2.cdf}. Inserting our values for
+$\chi^2$ and $\text{dof}$, we obtain the $p$-values \numlist{<< ';'.join(p)
+>>}.
+
+All values are collected in Table~\ref{tab:confidence}. From the $p$-value we
+must conclude that the Breit-Wigner prescription alone is not a good
+description of the decays into muons and tauons when using the 0.05 threshold.
+For the tauons, Figure~\ref{fig:cross-sections-zoom/tauons} clearly shows that
+a couple lie way off the curve. This does give a large $\chi^2$ and therefore
+small $p$-value. It is not that bad for the muons, we have $p = \num{<< p[1]
+>>}$ which is not \emph{that} far away from \num{0.05}. Looking at
+Figure~\ref{fig:cross-sections-zoom/muons}, one can see that the deviations are
+larger than in the electron and hadron channel.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lSSS}
+        \toprule
+        Type
+        & {$\chi^2$}
+        & {$\chi^2 / \text{dof}$}
+        & {$p$} \\
+        \midrule
+        %< for row in confidence_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Confidence for fits.
+    }
+    \label{tab:confidence}
+\end{table}
 
 \subsection{Partial decay widths}
 
@@ -1564,6 +1767,15 @@ this quantity.
 
 \chapter{Discussion}
 
+\section{Results}
+
+We were able to determine the weak mixing angle to $\sin(\theta_\mathrm w)^2 =
+<< sin_sq_afb_asym >>$. The literature value is \num{<< sin_sq_weak_mixing >>}
+and lies very well within our uncertainty.
+
+Our analysis leads to \num{<< neutrino_families >>} neutrino families. The
+current value is 3, this also lies nicely within the uncertainty.
+
 \section{Implicit assumptions}
 
 % TODO
@@ -1579,9 +1791,9 @@ this quantity.
         have to assume that the errors are small at any point.
 \end{itemize}
 
-\chapter{Conclusion}
+\section{Conclusion}
 
-%< if True >%
+
 \begin{appendix}
 
     \chapter{PAW Histograms}
@@ -1596,50 +1808,7 @@ this quantity.
     
     \input{../Snippets/matrix-electrons}
 
-    \chapter{PAW scripts}
-
-    \section{main.kumac}
-    \label{main.kumac}
-
-    \lstinputlisting{../Listings/main.kumac}
-
-    \section{cuts.kumac}
-    \label{cuts.kumac}
-
-    \lstinputlisting{../Listings/cuts.kumac}
-
-    \section{elep-hist.kumac}
-    \label{elep-hist.kumac}
-
-    \lstinputlisting{../Listings/elep-hist.kumac}
-
-    \section{angle.kumac}
-    \label{angle.kumac}
-
-    \lstinputlisting{../Listings/angle.kumac}
-
-    \section{afb.kumac}
-    \label{afb.kumac}
-
-    \lstinputlisting{../Listings/afb.kumac}
-
-    \section{raw-histograms.kumac}
-    \label{raw-histograms.kumac}
-
-    \lstinputlisting{../Listings/raw-histograms.kumac}
-
-    \section{matrix.kumac}
-    \label{matrix.kumac}
-
-    \lstinputlisting{../Listings/matrix.kumac}
-
-    \section{data-cuts.kumac}
-    \label{data-cuts.kumac}
-
-    \lstinputlisting{../Listings/data-cuts.kumac}
-
 \end{appendix}
-%< endif >%
 
 \end{document}
 

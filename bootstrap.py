@@ -12,6 +12,15 @@ import random
 import numpy as np
 
 
+def redraw_count(a):
+    '''
+    Takes a ``np.array`` with counts and re-draws the counts from the implicit
+    Gaussian distribution with width ``sqrt(N)``.
+    '''
+    out = [random.gauss(x, np.sqrt(x)) for x in a]
+    return np.array(out).reshape(a.shape)
+
+
 def pgfplots_error_band(x, y_val, y_err):
     return np.column_stack([
         np.concatenate((x, x[::-1])),
@@ -35,7 +44,8 @@ def average_arrays(arrays):
 
 def average_and_std_arrays(arrays):
     '''
-    Computes the element wise average of a list of arrays.
+    Computes the element wise average and standard deviation of a list of
+    arrays.
     '''
     total = np.array(arrays)
     
@@ -43,6 +53,37 @@ def average_and_std_arrays(arrays):
     err = np.std(total, axis=0)
 
     return val, err
+
+
+def percentile_arrays(arrays, value=None, interval=68.3):
+    total = np.array(arrays)
+
+    r_up = 50 + interval/2
+    r_down = 50 - interval/2
+
+    print('Percentiles:', r_up, r_down)
+
+    p_up = np.percentile(arrays, r_up, axis=0)
+    p_down = np.percentile(arrays, r_down, axis=0)
+
+    if value is None:
+        value = np.median(arrays, axis=0)
+
+    e_up = p_up - value 
+    e_down = value - p_down
+
+    return e_up, e_down
+
+
+def std_arrays(arrays):
+    '''
+    Computes the element wise standard deviation of a list of arrays.
+    '''
+    total = np.array(arrays)
+    
+    err = np.std(total, axis=0)
+
+    return err
 
 
 def bootstrap_and_transform(transform, sets, sample_count=250, seed=None):

@@ -26,6 +26,8 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 
+SAMPLES = 300
+
 fermi_coupling = 1.6637e-11 # MeV^{-2}
 mass_z = 91182 # MeV
 sin_sq_weak_mixing = 0.2312
@@ -48,7 +50,7 @@ channel_colors = [
 pp = pprint.PrettyPrinter()
 
 def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
-                     radiative_leptons):
+                     radiative_leptons, jackknife=True):
     '''
     Core of the analysis.
 
@@ -80,7 +82,9 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     widths = []
     cross_sections = []
     peaks_nb = []
+    brs = []
     y_list = []
+    popts = []
 
     x = np.linspace(np.min(energies), np.max(energies), 200)
 
@@ -98,13 +102,15 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         # sections.
         cross_sections.append(cross_section)
 
-        leave_out = random.randint(0, len(energies) - 1)
-
-        energies_fit = np.delete(energies, leave_out)
-        cross_section_fit = np.delete(cross_section, leave_out)
+        if jackknife:
+            leave_out = random.randint(0, len(energies) - 1)
+            energies_fit = np.delete(energies, leave_out)
+            cross_section_fit = np.delete(cross_section, leave_out)
+        else:
+            energies_fit = energies
+            cross_section_fit = cross_section
 
         # Fit the curve, add the fit parameters to the lists.
-        # TODO Add a linear underground.
         popt, pconv = op.curve_fit(propagator, energies_fit, cross_section_fit, p0=[91, 2, 5000])
         masses.append(popt[0])
         widths.append(popt[1])
@@ -119,6 +125,10 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
         # Sample the fitted curve, add to the list.
         y = propagator(x, *popt)
         y_list.append(y)
+
+        popts.append(popt)
+
+    brs = peaks_nb[3] / np.array(peaks_nb)
 
     peaks_nb = np.array(peaks_nb)
     peaks_gev = peaks_nb * 2.58e-6
@@ -136,8 +146,9 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     neutrino_families = missing_width / 0.1676
 
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
-            matrix, inverted, readings, peaks_nb, width_electron, width_flavors, \
-            missing_width, width_lepton, neutrino_families
+            matrix, inverted, readings, peaks_nb, brs, width_electron, \
+            width_flavors, missing_width, width_lepton, neutrino_families, \
+            popts
 
 
 def bootstrap_driver(T):
@@ -162,9 +173,9 @@ def bootstrap_driver(T):
     # Container for the results of each bootstrap run.
     results = []
 
-    for r in range(300):
+    for r in range(SAMPLES):
         # Draw new numbers for the matrix.
-        boot_matrix = redraw_count(raw_matrix)
+        boot_matrix = bootstrap.redraw_count(raw_matrix)
 
         # Draw new luminosities.
         boot_lum_val = np.array([
@@ -173,7 +184,7 @@ def bootstrap_driver(T):
             in zip(lum_val, lum_err)])
 
         # Draw new filtered readings.
-        boot_readings = redraw_count(filtered)
+        boot_readings = bootstrap.redraw_count(filtered)
 
         # Run the analysis on the resampled data and save the results.
         results.append(bootstrap_kernel(mc_sizes, boot_matrix, boot_readings,
@@ -190,9 +201,9 @@ def bootstrap_driver(T):
     # quantities. Each of the new variables created here is a list of R
     # bootstrap samples.
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
-            matrix_dist, inverted_dist, readings_dist, peaks_dist, \
+            matrix_dist, inverted_dist, readings_dist, peaks_dist, brs_dist, \
             width_electron_dist, width_flavors_dist, missing_width_dist, \
-            width_lepton_dist, neutrino_families_dist \
+            width_lepton_dist, neutrino_families_dist, popts_dist \
             = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
@@ -209,6 +220,9 @@ def bootstrap_driver(T):
     masses_val, masses_err = bootstrap.average_and_std_arrays(masses_dist)
     widths_val, widths_err = bootstrap.average_and_std_arrays(widths_dist)
     peaks_val, peaks_err = bootstrap.average_and_std_arrays(peaks_dist)
+    brs_val, brs_err = bootstrap.average_and_std_arrays(brs_dist)
+
+    T['brs'] = siunitx(brs_val[0:3], brs_err[0:3])
 
     # Format masses and widths for the template.
     T['lorentz_fits_table'] = list(zip(
@@ -276,6 +290,30 @@ def bootstrap_driver(T):
                    np.column_stack([energies, cs_val[i, :], cs_err[i, :]]))
         np.savetxt('_build/xy/cross_section-{}s-band.tsv'.format(name),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
+        np.savetxt('_build/xy/cross_section-{}s-fit.tsv'.format(name),
+                   np.column_stack((x, y_val)))
+
+    popts_val, popts_err = bootstrap.average_and_std_arrays(popts_dist)
+    T['chi_sq'] = []
+    T['chi_sq_red'] = []
+    T['p'] = []
+    for i in range(4):
+        residuals = cs_val[i, :] - propagator(energies, *popts_val[i, :])
+        chi_sq = np.sum((residuals / cs_err[i, :])**2)
+        dof = len(residuals) - 1 - len(popts_val[i, :])
+        p = 1 - scipy.stats.chi2.cdf(chi_sq, dof)
+
+        print('chi_sq', chi_sq, chi_sq/dof, p)
+        T['chi_sq'].append(siunitx(chi_sq))
+        T['chi_sq_red'].append(siunitx(chi_sq/dof))
+        T['p'].append(siunitx(p))
+
+    T['confidence_table'] = list(zip(
+        display_names,
+        T['chi_sq'],
+        T['chi_sq_red'],
+        T['p'],
+    ))
 
 
 def number_padding(number):
@@ -283,15 +321,6 @@ def number_padding(number):
         return r'$\num{'+number+'}$'
     else:
         return r'$\phantom{-}\num{'+number+'}$'
-
-
-def redraw_count(a):
-    '''
-    Takes a ``np.array`` with counts and re-draws the counts from the implicit
-    Gaussian distribution with width ``sqrt(N)``.
-    '''
-    out = [random.gauss(x, np.sqrt(x)) for x in a]
-    return np.array(out).reshape(a.shape)
 
 
 def visualize_matrix(matrix, name):
@@ -325,33 +354,83 @@ def figname(basename):
     return '_build/to_crop/mpl-{}.pdf'.format(basename)
 
 
-def job_afb_analysis(T, interpolator):
-    # TODO Remove interpolator, use direct energies.
-    # TODO Also bootstrap here.
+def job_afb_analysis(T):
+    data = np.loadtxt('Data/radiative_corrections.tsv')
+    corrections = data[:, 1]
+
     energies = np.loadtxt('Data/energies.txt')
     data = np.loadtxt('Data/afb.txt')
     negative = data[:, 0]
     positive = data[:, 1]
 
-    fig = pl.figure(figsize=default_figsize)
-    ax = fig.add_subplot(1, 1, 1)
-    ax.plot(energies, negative)
-    ax.plot(energies, positive)
-    fig.savefig(figname('afb_raw'))
+    results = []
+    for i in range(SAMPLES):
+        positive_boot = bootstrap.redraw_count(positive)
+        negative_boot = bootstrap.redraw_count(negative)
 
-    afb_val = (positive - negative) / (positive + negative)
-    afb_err = np.sqrt(
-        (2 * negative / (positive + negative)**2 * np.sqrt(positive))**2
-        + (2 * positive / (positive + negative)**2 * np.sqrt(negative))**2
-    )
+        result = afb_kernel(positive_boot, negative_boot, corrections)
+        if result is not None:
+            results.append(result)
+
+    afb_corr_dist, sin_sq_dist = zip(*results)
+
+    afb_filt, sin_sq_filt = zip(*[
+        (x[3], y)
+        for x, y in zip(afb_corr_dist, sin_sq_dist)
+        if not np.isnan(y)
+    ])
+
+    print('afb:', len(afb_corr_dist), len(afb_filt))
+
+    T['sin_sq_bootstrap_acceptance'] = siunitx((1 - len(sin_sq_filt) / len(sin_sq_dist)) * 100)
+
+    afb_val, afb_err = bootstrap.average_and_std_arrays(afb_corr_dist)
+    sin_sq_val, sin_sq_err = bootstrap.average_and_std_arrays(sin_sq_filt)
+
+    afb_val, sin_sq_val = afb_kernel(positive, negative, corrections)
+
+    sin_sq_up, sin_sq_down = bootstrap.percentile_arrays(sin_sq_filt, sin_sq_val)
+
+    print('sin_sq:', sin_sq_val, sin_sq_err, sin_sq_up, sin_sq_down)
 
     np.savetxt('_build/xy/afb.tsv', np.column_stack([energies, afb_val, afb_err]))
 
-    afb_corr_val = afb_val + interpolator(energies)
+    T['afb_table'] = list(zip(
+        siunitx(energies),
+        siunitx(afb_val, afb_err),
+    ))
 
-    np.savetxt('_build/xy/afb_corr.tsv', np.column_stack([energies, afb_corr_val, afb_err]))
+    T['sin_sq_afb'] = siunitx(sin_sq_val, sin_sq_err)
 
-    # TODO Extract sin_sq.
+    T['sin_sq_afb_asym'] = '{:.3f}^{{+{:.3f}}}_{{-{:.3f}}}'.format(sin_sq_val, sin_sq_up, sin_sq_down)
+
+    counts, bins = np.histogram(sin_sq_filt)
+    counts = np.array(list(counts) + [counts[-1]])
+    print(bins.shape, counts.shape)
+    np.savetxt('_build/xy/sin_sq_hist.tsv', np.column_stack([bins, counts]))
+
+    counts, bins = np.histogram([x[3] for x in afb_corr_dist])
+    counts = np.array(list(counts) + [counts[-1]])
+    print(bins.shape, counts.shape)
+    np.savetxt('_build/xy/afb_hist.tsv', np.column_stack([bins, counts]))
+
+    counts, bins = np.histogram(afb_filt, bins=bins)
+    counts = np.array(list(counts) + [counts[-1]])
+    print(bins.shape, counts.shape)
+    np.savetxt('_build/xy/afb_filt_hist.tsv', np.column_stack([bins, counts]))
+
+
+def afb_kernel(positive, negative, corrections):
+    afb = (positive - negative) / (positive + negative)
+    afb_corr = afb + corrections
+
+    afb_peak = afb_corr[3]
+
+    v_a = np.sqrt(afb_peak / 3)
+    sin_sq = (1 - v_a) / 4
+
+    return afb_corr, sin_sq
+
 
 def job_grope(T, show=False):
     files = ['electrons',
@@ -418,11 +497,12 @@ def job_grope(T, show=False):
         np.savetxt('_build/xy/hist-hcal_sume-'+file_+'.tsv',
                    np.column_stack([edges, hist_extended]))
 
-        # TODO Better angle.
         ax_3d.scatter(
             ctrk_n,
             #hcal_sume,
             ctrk_sump, ecal_sume, marker="o", color=color, label=file_, s=80)
+
+        ax_3d.view_init(-30, 60)
 
     ax_n.set_xscale('log')
     ax_n.set_xlabel('Ctrk(N)')
@@ -559,34 +639,11 @@ def job_asymetry(T):
     np.savetxt('_build/xy/afb_theory.tsv', np.column_stack([s_array, asymmetry]))
 
 
-def job_radiative_correction(T):
-    data = np.loadtxt('Data/radiative_corrections.tsv')
-    sqrt_mandelstam_s = data[:, 0]
-    correction = data[:, 1]
+def job_br_theory(T):
+    width_hadron = 2*299 + 3*378
+    width_lepton = 83.8
 
-    pl.clf()
-    pl.plot(sqrt_mandelstam_s, correction)
-
-    sqrt_mandelstam_s[0] -= 1e-2
-    sqrt_mandelstam_s[-1] += 1e-2
-
-    interpolator = scipy.interpolate.interp1d(sqrt_mandelstam_s, correction, kind='quadratic')
-
-    x = np.linspace(np.min(sqrt_mandelstam_s), np.max(sqrt_mandelstam_s))
-    y = interpolator(x)
-
-    pl.plot(x, y)
-
-    pl.savefig(figname('radiative'))
-
-    np.savetxt('_build/xy/radiative_data.tsv', np.column_stack([
-        sqrt_mandelstam_s, correction
-    ]))
-    np.savetxt('_build/xy/radiative_interpolated.tsv', np.column_stack([
-        x, y,
-    ]))
-
-    return interpolator
+    T['br_theory'] = siunitx(width_hadron / width_lepton)
 
 
 def test_keys(T):
@@ -614,16 +671,21 @@ def test_keys(T):
 def main():
     T = {}
 
+    T['sin_sq_weak_mixing'] = siunitx(sin_sq_weak_mixing)
+
+    # We use bootstrap and obtain different results every single time. This is
+    # bad, therefore we fix the seed here.
+    random.seed(0)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
 
-    interpolator = job_radiative_correction(T)
-
+    job_br_theory(T)
     bootstrap_driver(T)
     job_decay_widths(T)
     job_colors()
-    job_afb_analysis(T, interpolator)
+    job_afb_analysis(T)
     job_grope(T, options.show)
     job_angular_dependence(T)
     job_asymetry(T)

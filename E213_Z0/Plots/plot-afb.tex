@@ -10,26 +10,17 @@
 
         \addplot[
             black,
-            mark=o,
-            only marks,
-            %error bars/y dir=both,
-            %error bars/y explicit,
-        ] table[y error index=2] {../xy/afb.tsv};
-        \addlegendentry{Without corrections}
-
-        \addplot[
-            black,
             mark=*,
             only marks,
             error bars/y dir=both,
             error bars/y explicit,
-        ] table[y error index=2] {../xy/afb_corr.tsv};
-        \addlegendentry{With corrections}
+        ] table[y error index=2] {../xy/afb.tsv};
+%       \addlegendentry{With corrections}
 
-        \addplot[
-            black,
-        ] table {../xy/afb_theory.tsv};
-        \addlegendentry{Theory}
+%       \addplot[
+%           black,
+%       ] table {../xy/afb_theory.tsv};
+%       \addlegendentry{Theory}
 
         % TODO Add horizontal line at Z-mass.
 

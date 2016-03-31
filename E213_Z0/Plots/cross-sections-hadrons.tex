@@ -27,6 +27,7 @@
         ] table[y error index=2] {../xy/cross_section-hadrons.tsv};
 
         \addplot [band, fill=hadrons] table {../xy/cross_section-hadrons-band.tsv} \closedcycle;
+        \addplot [hadrons] table {../xy/cross_section-hadrons-fit.tsv};
 
     \end{axis}
 \end{tikzpicture}

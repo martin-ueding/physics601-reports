@@ -26,6 +26,7 @@
         ] table[y error index=2] {../xy/cross_section-electrons.tsv};
 
         \addplot [band, fill=electrons] table {../xy/cross_section-electrons-band.tsv} \closedcycle;
+        \addplot [electrons] table {../xy/cross_section-electrons-fit.tsv};
 
     \end{axis}
 \end{tikzpicture}

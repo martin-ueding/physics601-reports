@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=0.5\linewidth,
+            height=0.3\linewidth,
+            bar/.style={
+                ybar interval,
+            },
+            xlabel={$\sin(\theta_\mathrm w)^2$},
+            ylabel={Bootstrap samples},
+            yticklabel pos=right,
+        ]
+        \addplot[bar, draw, fill=black!30] table {../xy/sin_sq_hist.tsv};
+    \end{axis}
+\end{tikzpicture}
