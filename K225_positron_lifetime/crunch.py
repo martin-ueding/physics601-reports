@@ -30,6 +30,12 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
 
+def dandify_plot():
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
+
+
 def get_temp(filename):
     '''
     Retrieves the temperatures stored in the filename itself.
@@ -102,7 +108,8 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
         np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:upper], counts[lower:upper]]))
 
     pl.plot(channel, counts, linestyle="none", marker="o")
-    pl.savefig('_build/mpl-channel-counts-filename.pdf'.format(filename))
+    dandify_plot()
+    pl.savefig('_build/mpl-channel-counts-{}.pdf'.format(filename))
     pl.clf()
 
 
@@ -201,6 +208,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         y = linear(x, *popt)
         pl.plot(channel_val, time, linestyle="none", marker="o")
         pl.plot(x, y)
+        dandify_plot()
         pl.savefig('_build/mpl-jackknife-{}.pdf'.format(i))
         pl.clf()
 
@@ -279,6 +287,7 @@ def lifetime_spectra(T):
 
     pl.plot(channel, counts, linestyle="none", marker="o")
     pl.plot(x, y)
+    dandify_plot()
     pl.savefig('_build/mpl-channel-counts.pdf')
     pl.clf()
 
