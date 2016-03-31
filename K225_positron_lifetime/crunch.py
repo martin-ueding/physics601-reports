@@ -64,17 +64,6 @@ def get_temp(filename):
     return None
 
 
-def lorentz(x, mean, width, integral):
-    return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
-
-
-def gauss(x, mean, sigma, a):
-    return a / (np.sqrt(2 * np.pi) * sigma) \
-            * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
-
-
-def linear(x, a, b):
-    return a * x + b
 
 
 def prepare_for_pgf(filename, lower=0, upper=8000, error=False):
@@ -131,8 +120,6 @@ def job_time_gauge(T, show_gauss=False, show_lin=False):
         width = []
         amplitude = []
         for a in range(2):
-            boot_counts = redraw_count(counts)
-            popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
             width.append(popt[1])
             amplitude.append(popt[2])
