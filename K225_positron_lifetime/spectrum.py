@@ -25,7 +25,7 @@ def job_lifetime_spectra(T, slope_val):
     files = glob.glob('Data/in-*.txt')
 
 
-    for i, file_ in zip(itertools.count(), [sorted(files)[1]]):
+    for i, file_ in zip(itertools.count(), sorted(files)):
         print('Working on lifetime spectrum', file_)
 
         temp_lower, temp_upper = get_temp(file_)
