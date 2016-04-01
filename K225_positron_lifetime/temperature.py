@@ -38,3 +38,10 @@ def job_temperature_dependence(T, indium_spectra):
     pl.savefig('_build/mpl-tau_t.pdf')
     pl.clf()
 
+
+    pl.errorbar((temps_lower + temps_upper)/2, taus_t_val, yerr=taus_t_err, linestyle='none', marker='+')
+    pl.xlabel('Mean temp')
+    pl.ylabel(r'$\tau_\mathrm{t}$')
+    conf.dandify_plot()
+    pl.savefig('_build/mpl-tau_t.pdf')
+    pl.clf()
