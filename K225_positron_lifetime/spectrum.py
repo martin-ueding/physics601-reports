@@ -21,10 +21,10 @@ TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 p0 = [10.5, 0.3, 210, 190, 0.07, 0.8, 0]
 
 
-def job_lifetime_spectra(T, slope_val):
+def indium_lifetime_spectra(T, slope_val):
     files = glob.glob('Data/in-*.txt')
 
-    results = []
+    return_values = []
 
     for i, file_ in zip(itertools.count(), sorted(files)):
         print('Working on lifetime spectrum', file_)
@@ -64,10 +64,10 @@ def job_lifetime_spectra(T, slope_val):
         np.savetxt('_build/xy/lifetime-{:04d}-band.tsv'.format(int(temp_lower*10)),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
 
-        results.append([temp_lower, temp_upper, tau_0_val, tau_0_err,
-                        tau_t_val, tau_t_er])
+        return_values.append([temp_lower, temp_upper, tau_0_val, tau_0_err,
+                              tau_t_val, tau_t_err])
 
-    return zip(*results)
+    return zip(*return_values)
 
 
 def _lifetime_kernel(time, counts, counts_err, x):

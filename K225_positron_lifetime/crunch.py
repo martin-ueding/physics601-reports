@@ -24,17 +24,10 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 import spectrum
+import conf
+import temperature
 import time_gauge
 
-
-
-def dandify_plot():
-    '''
-    Common operations to make matplotlib plots look nicer.
-    '''
-    pl.grid(True)
-    pl.margins(0.05)
-    pl.tight_layout()
 
 
 def prepare_for_pgf(filename, lower=0, upper=8000, error=False):
@@ -57,7 +50,7 @@ def prepare_for_pgf(filename, lower=0, upper=8000, error=False):
     np.savetxt('_build/xy/{}.txt'.format(filename), to_save)
 
     pl.plot(channel, counts, linestyle="none", marker="o")
-    dandify_plot()
+    conf.dandify_plot()
     pl.savefig('_build/mpl-channel-counts-{}.pdf'.format(filename))
     pl.clf()
 
@@ -103,8 +96,10 @@ def main():
     options = parser.parse_args()
 
     slope_val = time_gauge.job_time_gauge(T)
-    spectrum.job_lifetime_spectra(T, slope_val)
-    #prepare_files(T)
+    indium_spectra = spectrum.indium_lifetime_spectra(T, slope_val)
+    temperature.job_temperature_dependence(T, indium_spectra)
+
+    prepare_files(T)
 
 
     test_keys(T)
