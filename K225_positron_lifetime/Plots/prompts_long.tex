@@ -12,12 +12,8 @@
             xtick={3600,3700,...,4200},
         ]
 
-        \addplot[
-                band, 
-                fill=blue, 
-        ] table {../xy/prompts-long.txt} \closedcycle;
-        \addplot[
-                black,
-        ] table {../xy/prompt-6-fit.txt};
+        \addplot[band, fill=blue] table {../xy/prompts-long.tsv} \closedcycle;
+        \addplot[black] table {../xy/prompt-6-fit.tsv};
+        \addplot[band] table {../xy/prompt-6-band.tsv} \closedcycle;
 \end{axis}
 \end{tikzpicture}
