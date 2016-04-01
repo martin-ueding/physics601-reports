@@ -72,15 +72,6 @@ def prepare_files(T):
     prepare_for_pgf('na-1275-li')
 
 
-def redraw_count(a):
-    '''
-    Takes a ``np.array`` with counts and re-draws the counts from the implicit
-    Gaussian distribution with width ``sqrt(N)``.
-    '''
-    out = [random.gauss(x, np.sqrt(x)) for x in a]
-    return np.array(out).reshape(a.shape)
-
-
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
