@@ -77,12 +77,14 @@ def prepare_for_pgf(filename,  error=False, show=False):
     channel = data[:,0]
     counts = data[:,1]
 
+    lower = 0
+    upper = 8000
     sieve_factor = 10
 
     if error:
         np.savetxt('_build/xy/{}.txt'.format(filename), bootstrap.pgfplots_error_band(channel[lower:upper:sieve_factor], counts[lower:upper:sieve_factor], np.sqrt(counts[lower:upper:sieve_factor])))
     else:
-        np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:uppe:sieve_factorr], counts[lower:upper:sieve_factor]]))
+        np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:upper:sieve_factor], counts[lower:upper:sieve_factor]]))
 
     if show:
         pl.plot(channel, counts, linestyle="none", marker="o")
@@ -104,6 +106,10 @@ def job_colors():
     with open('_build/colors.tex', 'w') as f:
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
+
+def lifetime(T):
+    slope = time_gauge(T)
+    lifetime_spectra(T, slope)
 
 def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
@@ -210,58 +216,89 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     time_res = FWHM_val * slope_val
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
+    return slope_val
 
-def lifetime_spectra(T):
+def lifetime_spectra(T, slope_val):
     files = glob.glob('Data/in-*.txt')
 
-    for i in range(len(files)):
-        data = np.loadtxt(files[i])
+    all_life = []
+
+    temps_val = []
+    temps_err = []
+    life = []
+    for file_ in sorted(files):
+        print('Working on lifetime spectrum', file_)
+        temp_lower, temp_upper = get_temp(file_)
+        temp_mean = (temp_lower + temp_upper)/2
+        temp_err = temp_upper - temp_mean
+        temps_val.append(temp_mean)
+        temps_err.append(temp_err)
+
+        data = np.loadtxt(file_)
         channel = data[:,0]
+        time = slope_val * channel
         counts = data[:,1]
 
-        mean = []
-        width = []
-        A_0 = []
-        A_t = []
-        tau_0 = []
-        tau_t = []
-        BG = []
 
-        for a in range(2):
+        results = []
+        life_mean = []
+        for a in range(25):
             boot_counts = redraw_count(counts)
-            popt, pconv = op.curve_fit(lifetime_spectrum, channel, boot_counts, p0=[
-                1600,
-                45,
-                180,
-                180,
-                40,
-                40,
-                0
-                ])
-            mean.append(popt[0])
-            width.append(popt[1])
-            A_0.append(popt[2])
-            A_t.append(popt[3])
-            tau_0.append(popt[4])
-            tau_t.append(popt[5])
-            BG.append(popt[6])
+            popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+            results.append(popt)
+            life_mean.append((popt[2]*popt[4] + popt[3]*popt[5]) / (popt[2] + popt[3]))
 
-        mean_val, mean_err = bootstrap.average_and_std_arrays(mean)
-        width_val, width_err = bootstrap.average_and_std_arrays(width)
-        A_0_val, A_0_err = bootstrap.average_and_std_arrays(A_0)
-        A_t_val, A_t_err = bootstrap.average_and_std_arrays(A_t)
-        tau_0_val, tau_0_err = bootstrap.average_and_std_arrays(tau_0)
-        tau_t_val, tau_t_err = bootstrap.average_and_std_arrays(tau_t)
-        BG_val, BG_err = bootstrap.average_and_std_arrays(BG)
+        all_life.append(life_mean)
+
+        popt_val, popt_err = bootstrap.average_and_std_arrays(results)
+        life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_mean)
+        life.append(life_mean_val)
+        
+        mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+        mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
 
 
-    x = np.linspace(1000, 3000, 500)
-    y = lifetime_spectrum(x, mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val)
+    popt_dist = []
+    y_dist =[]
+    x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
+    life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
+    for temp_life in zip(*all_life):
+        temps_boot = redraw(temps_val, temps_err)
+        leave_out = random.randint(0, len(temps_boot) - 1)
+        np.delete = lambda x, y: x
+        temps_fit = np.delete(temps_boot, leave_out)
+        life_val_fit = np.delete(temp_life, leave_out)
+        life_err_fit = np.delete(life_err, leave_out)
 
-    pl.plot(channel, counts, linestyle="none", marker="o")
-    pl.plot(x, y)
+        p0 = [16, -70, 0.32 ,1e4]
+        popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
+                                   sigma=life_err_fit, p0=p0)
+        print(popt)
+        popt_dist.append(popt)
+        y = s_curve(x, *popt)
+        y_dist.append(y)
+
+    y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+
+
+    pl.errorbar(temps_val, life, yerr=temps_err, linestyle="none", marker="o")
+    pl.plot(x, y_val)
+    pl.plot(x, y_val+y_err)
+    pl.plot(x, y_val-y_err)
     pl.show()
     pl.clf()
+
+
+
+
+
+
+
+def s_curve(T, sigma_S, H_t, tau_t, tau_f):
+    assert not isinstance(T, list), "x-value input in fit must be np.array."
+    sigma_S_exp = sigma_S * np.exp(- H_t/T)
+    return tau_f * (1 + sigma_S_exp * tau_t) / (1 + sigma_S_exp * tau_f)
+
 
 
 def redraw_count(a):
@@ -271,6 +308,11 @@ def redraw_count(a):
     '''
     out = [random.gauss(x, np.sqrt(x)) for x in a]
     return np.array(out).reshape(a.shape)
+
+
+def redraw(X_val, X_err):
+    val_boot = [random.gauss(val, err) for val, err in zip(X_val, X_err)]
+    return np.array(val_boot)
 
 
 def test_keys(T):
@@ -303,8 +345,7 @@ def main():
     options = parser.parse_args()
 
     prepare_files(T)
-    time_gauge(T)
-    lifetime_spectra(T)
+    lifetime(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
