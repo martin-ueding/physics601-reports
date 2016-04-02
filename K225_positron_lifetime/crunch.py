@@ -270,8 +270,9 @@ def lifetime_spectra(T, slope_val):
         life_val_fit = np.delete(temp_life, leave_out)
         life_err_fit = np.delete(life_err, leave_out)
 
-        p0 = [16, -70, 0.32 ,1e4]
-        # values from p 1657, Weiler/Schaefer: p0 = [1e17, .5, 200 ,260]
+         p0 = [16, -70, 0.32 ,1e4]
+        # values from p 1657, Weiler/Schaefer:
+        #p0 = [1e17, .5/1.38e-23*1.9e-19, 200 ,260]
         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
                                    sigma=life_err_fit, p0=p0)
         print(popt)
@@ -282,7 +283,7 @@ def lifetime_spectra(T, slope_val):
     y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
 
 
-    pl.errorbar(temps_val, life, yerr=temps_err, linestyle="none", marker="o")
+    pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="o")
     pl.plot(x, y_val)
     pl.plot(x, y_val+y_err)
     pl.plot(x, y_val-y_err)
