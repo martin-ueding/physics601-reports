@@ -253,7 +253,7 @@ def lifetime_spectra(T, slope_val):
 
         results = []
         life_mean = []
-        for a in range(25):
+        for a in range(10):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
             results.append(popt)
@@ -281,18 +281,30 @@ def lifetime_spectra(T, slope_val):
         life_val_fit = np.delete(temp_life, leave_out)
         life_err_fit = np.delete(life_err, leave_out)
 
-        p0 = [16, -70, 0.32, 1e4]
-        popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
-                                   sigma=life_err_fit, p0=p0)
-        print(popt)
-        popt_dist.append(popt)
-        y = s_curve(x, *popt)
-        y_dist.append(y)
+        p0 = [14, -79, 0.3, 0.7]
+        try:
+            popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
+                                       sigma=life_err_fit, p0=p0)
+        except RuntimeError as e:
+            print(e)
+            pl.errorbar(temps_fit, life_val_fit, yerr=life_err_fit, linestyle="none", marker="o")
+            y = s_curve(x, *p0)
+            pl.plot(x, y)
+            pl.show()
+            pl.clf()
+        else:
+            print(popt)
+            popt_dist.append(popt)
+            y = s_curve(x, *popt)
+            y_dist.append(y)
 
     y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+
+    print(siunitx(popt_val, popt_err))
 
 
-    pl.errorbar(temps_val, life, yerr=temps_err, linestyle="none", marker="o")
+    pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
     pl.plot(x, y_val)
     pl.plot(x, y_val+y_err)
     pl.plot(x, y_val-y_err)
