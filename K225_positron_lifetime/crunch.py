@@ -72,28 +72,17 @@ def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
 def linear(x, a, b):
     return a * x + b
 
-def prepare_for_pgf(filename, lower=0, upper=8000, error=False, show=False):
+def prepare_for_pgf(filename,  error=False, show=False):
     data = np.loadtxt('Data/{}.txt'.format(filename))
     channel = data[:,0]
     counts = data[:,1]
 
     sieve_factor = 10
-    lower //= sieve_factor
-    upper //= sieve_factor
-    delete = []
-    for i in range(len(channel)):
-        if i%sieve_factor == 0:
-            continue
-        else:
-            delete.append(i)
-    delete = np.array(delete)
-    channel = np.delete(channel, delete)
-    counts = np.delete(counts, delete)
 
     if error:
-        np.savetxt('_build/xy/{}.txt'.format(filename), bootstrap.pgfplots_error_band(channel[lower:upper], counts[lower:upper], np.sqrt(counts[lower:upper])))
+        np.savetxt('_build/xy/{}.txt'.format(filename), bootstrap.pgfplots_error_band(channel[lower:upper:sieve_factor], counts[lower:upper:sieve_factor], np.sqrt(counts[lower:upper:sieve_factor])))
     else:
-        np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:upper], counts[lower:upper]]))
+        np.savetxt('_build/xy/{}.txt'.format(filename), np.column_stack([channel[lower:uppe:sieve_factorr], counts[lower:upper:sieve_factor]]))
 
     if show:
         pl.plot(channel, counts, linestyle="none", marker="o")
