@@ -281,7 +281,7 @@ def lifetime_spectra(T, slope_val):
         life_val_fit = np.delete(temp_life, leave_out)
         life_err_fit = np.delete(life_err, leave_out)
 
-        p0 = [16, -70, 0.32 ,1e4]
+        p0 = [16, -70, 0.32, 1e4]
         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
                                    sigma=life_err_fit, p0=p0)
         print(popt)
