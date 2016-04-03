@@ -295,16 +295,10 @@ def lifetime_spectra(T, slope_val, width):
     pl.clf()
 
 
-
-
-
-
-
 def s_curve(T, sigma_S, H_t, tau_t, tau_f):
     assert not isinstance(T, list), "x-value input in fit must be np.array."
     sigma_S_exp = sigma_S * np.exp(- H_t/T)
     return tau_f * (1 + sigma_S_exp * tau_t) / (1 + sigma_S_exp * tau_f)
-
 
 
 def redraw_count(a):
