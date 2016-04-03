@@ -108,8 +108,8 @@ def job_colors():
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
 def lifetime(T):
-    slope = time_gauge(T)
-    lifetime_spectra(T, slope)
+    slope, width = time_gauge(T)
+    lifetime_spectra(T, slope, width)
 
 def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
@@ -216,9 +216,9 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     time_res = FWHM_val * slope_val
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
-    return slope_val
+    return slope_val, width_val*slope_val
 
-def lifetime_spectra(T, slope_val):
+def lifetime_spectra(T, slope_val, width):
     files = glob.glob('Data/in-*.txt')
 
     all_life = []
@@ -244,9 +244,11 @@ def lifetime_spectra(T, slope_val):
         life_mean = []
         for a in range(25):
             boot_counts = redraw_count(counts)
-            popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+            lifetime_spectrum_fixed_width = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+            popt, pconv = op.curve_fit(lifetime_spectrum_fixed_width, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
+            # popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
             results.append(popt)
-            life_mean.append((popt[2]*popt[4] + popt[3]*popt[5]) / (popt[2] + popt[3]))
+            life_mean.append((popt[1]*popt[3] + popt[2]*popt[4]) / (popt[1] + popt[2]))
 
         all_life.append(life_mean)
 
@@ -254,8 +256,10 @@ def lifetime_spectra(T, slope_val):
         life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_mean)
         life.append(life_mean_val)
         
-        mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-        mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+        # mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+        # mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+        mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+        mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
 
 
     popt_dist = []
@@ -270,9 +274,9 @@ def lifetime_spectra(T, slope_val):
         life_val_fit = np.delete(temp_life, leave_out)
         life_err_fit = np.delete(life_err, leave_out)
 
-         p0 = [16, -70, 0.32 ,1e4]
+        # p0 = [16, -70, 0.32 ,1e4]
         # values from p 1657, Weiler/Schaefer:
-        #p0 = [1e17, .5/1.38e-23*1.9e-19, 200 ,260]
+        p0 = [1.4e5, .5/1.38e-23*1.9e-19, .200, .260]
         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
                                    sigma=life_err_fit, p0=p0)
         print(popt)
