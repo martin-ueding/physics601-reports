@@ -78,16 +78,43 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \subsection{Positron sources}
 
+Our source of positrons will be $\mathrm{^{22}Na}$ throughout the experiment.
+Figure~\ref{fig:na22} shows that the sodium decays via a $\betaup^+$-decay or
+electron capture into an excited neon isotope. Both decay mechanism are related
+via the crossing symmetry and have the same amplitude. Figure~\ref{fig:beta}
+shows the first variant. The excited neon will quickly decay into the ground
+state and emit a photon. Said photon will mark the creation of the positron.
+
 \begin{figure}
     \centering
     \includegraphics{na22}
     \caption{%
-        %
+        Decay of $\mathrm{^{22}Na}$.
     }
     \label{fig:na22}
 \end{figure}
 
+Due to the creation of the neutrino, the energy spectrum of the positron is
+continuous.
+
+\begin{figure}
+    \centering
+    \includegraphics{beta}
+    \caption{%
+        Feynman diagram for the $\betaup^+$-decay.
+    }
+    \label{fig:beta}
+\end{figure}
+
 \subsection{Positron annihilation}
+
+The tree-level annihilation diagrams are shown in
+Figure~\ref{fig:annihilation}. Depending on the relative spin orientations of
+the electron and positron, a decay into an even or odd number of photons is
+possible. The decay into a single photon is not possible due to
+energy-momentum-conservation. Also, the additional creation of two more photon
+suppresses the cross section by $\alpha \approx 1/137$. Therefore we can assume
+that only decays in two and three photons occur.
 
 \begin{figure}
     \centering
@@ -95,7 +122,7 @@ Yes $\Box$ \hspace{2cm} No $\Box$
         \centering
         \includegraphics{two-photon}
         \caption{%
-            Into two photons
+            Two photons
         }
         \label{fig:/1}
     \end{subfigure}
@@ -104,17 +131,19 @@ Yes $\Box$ \hspace{2cm} No $\Box$
         \centering
         \includegraphics{three-photon}
         \caption{%
-            Into three photons
+            Three photons
         }
         \label{fig:/2}
     \end{subfigure}
     \caption{%
         Decay of a positron into photons.
     }
-    \label{fig:}
+    \label{fig:annihilation}
 \end{figure}
 
 \subsection{Positronium formation}
+
+% TODO Pickof-decay
 
 \section{Measurement technique}
 
