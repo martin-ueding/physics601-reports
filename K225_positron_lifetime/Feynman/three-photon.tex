@@ -1,0 +1,14 @@
+\feynmandiagram[%
+    vertical=a to b,
+]
+{
+    a[particle=$\eup^-$] --[fermion] v1 --[fermion] v2 --[fermion] v3 --[fermion] b[particle=$\eup^+$];
+    v1 --[photon] p1;
+    v2 --[photon] p2;
+    v3 --[photon] p3;
+
+    a --[draw=none] b;
+
+    v1 --[draw=none] v2;
+    v2 --[draw=none] v3;
+};
