@@ -1,0 +1,11 @@
+\feynmandiagram[%
+    layered layout,
+    horizontal=up to v1,
+]
+{
+    up [particle=u] --[fermion] v1;
+    v1 --[fermion] down [particle=d];
+    v1 --[photon, edge label=$\mathrm W^+$] v2;
+    v2 --[fermion] nu [particle=$\nuup_\eup$];
+    v2 --[anti fermion] e[particle=$\eup^+$];
+};
