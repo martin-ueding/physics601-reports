@@ -153,7 +153,7 @@ that only decays in two and three photons occur.
 
 In order to detect the photons, we use a LYSO scintillator. This material is
 radioactive itself and provides a built-in energy calibration. The decay scheme
-of the radionuclide is shown in Figure~\ref{fig:scheme-176Lu}
+of the radionuclide is shown in Figure~\ref{fig:scheme-176Lu}.
 
 \begin{figure}
     \centering
@@ -222,8 +222,10 @@ on Windows XP only.
 \subsection{Fast-slow coincidence circuit}
 
 The whole setup to measure the positron lifetime is the \enquote{fast-slow
-coincidence circuit}. It is shown in Figure~\ref{fig:fast-slow}. The source
-will emit a 
+coincidence circuit}. It is shown in Figure~\ref{fig:fast-slow}. The setup will
+measure the duration between a \SI{1275}{\kilo\electronvolt} (start) photon in
+the upper detector and a \SI{511}{\kilo\electronvolt} (stop) photon in the
+lower detector.
 
 \begin{figure}
     \centering
@@ -235,7 +237,37 @@ will emit a
     \label{fig:fast-slow}
 \end{figure}
 
+The start photon will be detected in the upper LYSO detector and amplified by
+the photomultiplier (PM). The signal from the last dynode is amplified and fed
+into the upper SCA\@. If the amplitude (i.e.\ the photon energy) matches, the SCA
+emits a long rectangular pulse to the coincidence unit. The fast signal from
+the same photomultiplier is given to a CFD\@. This upper CFD will trigger the
+start on the TAC\@.
+
+A short time later, when the positron has decayed, a
+\SI{511}{\kilo\electronvolt} photon will reach the other LYSO detector. The
+same outputs are used and fed to the lower SCA and CFD, respectively.
+Overlapping with the pulse of the upper SCA, the lower SCA will emit a
+rectangular pulse as well. Both pulses match in the coincidence unit and open
+the gate on the MCA\@. The output of the lower CFD is delayed to make sure that
+it arrives later at the TAC\@.
+
+Once the stop signal arrived at the TAC, the latter will emit an analog pulse
+to the MCA which is proportional to the duration between start and stop. In the
+MCA a histogram of durations is therefore built up.
+
 \subsection{Prompt curve}
+
+The bins in the MCA histogram do not have any time scale associated with them,
+a time gauge needs to be derived first. For this we use that electrons and
+positrons decay into two back-to-back photons when their net spin is zero. We
+can set both SCA windows to the typical \SI{511}{\kilo\electronvolt} energy and
+assume that both photons are emitted simultaneously. We expect to measure a
+duration of \SI{0}{\nano\second} plus the explicit delay. On the MCA this
+should give a sharp peak which marks our zero. Adding more time to the delay
+will shift this peak in the histogram. The distance of the peaks will give us
+the relation between duration and histogram bins. This process will be done
+several times for statistical accuracy.
 
 \chapter{Procedure and Analysis}
 
