@@ -1,4 +1,16 @@
-\begin{tikzpicture}
+\usetikzlibrary{decorations}
+\begin{tikzpicture}[
+        photon/.style={
+            ->,
+            decorate,
+            decoration={
+                snake,
+                amplitude=0.2ex,
+                segment length=1.5ex,
+                post length=0.5ex,
+            },
+        },
+    ]
     \graph[
         grow right=3cm,
         nodes={
@@ -6,7 +18,7 @@
         },
     ]
     {
-        source/Source ->[dotted] {
+        source/Source ->[photon] {
             lyso1/LYSO -> pm1/PM -> {
                 sca1/SCA ->[dashdotted] coin/Coincidence ->[dashdotted] mca/MCA,
                 cfd1/CFD ->[dashdotted] tac/TAC -> mca;
