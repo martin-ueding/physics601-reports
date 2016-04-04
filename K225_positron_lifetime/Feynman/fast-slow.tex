@@ -12,18 +12,20 @@
         },
     ]
     \graph[
-        grow right=3cm,
+        grow right=2.2cm,
         nodes={
             draw,
         },
     ]
     {
         source/Source ->[photon] {
-            lyso1/LYSO -> pm1/PM -> {
+            lyso1/LYSO %[> "Start"]
+            -> pm1/PM -> {
                 sca1/SCA ->[dashdotted] coin/Coincidence ->[dashdotted] mca/MCA,
                 cfd1/CFD ->[dashdotted] tac/TAC -> mca;
             },
-            lyso2/LYSO -> pm2/PM -> {
+            lyso2/LYSO %[> "Stop"]
+            -> pm2/PM -> {
                 cfd2/CFD ->[dashdotted] delay/Delay ->[dashdotted] tac,
                 sca2/SCA ->[dashdotted] coin,
             },
