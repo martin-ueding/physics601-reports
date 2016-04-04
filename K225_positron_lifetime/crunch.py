@@ -47,8 +47,8 @@ def get_temp(filename):
     basename = os.path.basename(filename)
     m = TEMP_PATTERN.match(basename)
     if m:
-        first = float(m.group(1).replace(',', '.'))
-        second = float(m.group(2).replace(',', '.'))
+        first = float(m.group(1).replace(',', '.')) + 273.15
+        second = float(m.group(2).replace(',', '.')) + 273.15
 
         return (first, second)
 
@@ -117,8 +117,8 @@ def job_colors():
 
 
 def lifetime(T):
-    slope = time_gauge(T)
-    lifetime_spectra(T, slope)
+    slope, width = time_gauge(T)
+    lifetime_spectra(T, slope, width)
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):
@@ -226,10 +226,9 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     time_res = FWHM_val * slope_val
     time_res_err = np.sqrt((FWHM_val * slope_err)**2 + (FWHM_err * slope_val)**2)
     T['time_resolution'] = siunitx(time_res , time_res_err)
-    return slope_val
+    return slope_val, width_val*slope_val
 
-
-def lifetime_spectra(T, slope_val):
+def lifetime_spectra(T, slope_val, width):
     files = glob.glob('Data/in-*.txt')
 
     all_life = []
@@ -255,9 +254,11 @@ def lifetime_spectra(T, slope_val):
         life_mean = []
         for a in range(10):
             boot_counts = redraw_count(counts)
-            popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+            lifetime_spectrum_fixed_width = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+            popt, pconv = op.curve_fit(lifetime_spectrum_fixed_width, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
+            # popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
             results.append(popt)
-            life_mean.append((popt[2]*popt[4] + popt[3]*popt[5]) / (popt[2] + popt[3]))
+            life_mean.append((popt[1]*popt[3] + popt[2]*popt[4]) / (popt[1] + popt[2]))
 
         all_life.append(life_mean)
 
@@ -265,63 +266,86 @@ def lifetime_spectra(T, slope_val):
         life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_mean)
         life.append(life_mean_val)
         
-        mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-        mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
-
+        # mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+        # mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+        mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+        mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
 
     popt_dist = []
     y_dist =[]
     x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
     life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
-    for temp_life in zip(*all_life):
-        temps_boot = redraw(temps_val, temps_err)
-        leave_out = random.randint(0, len(temps_boot) - 1)
-        np.delete = lambda x, y: x
-        temps_fit = np.delete(temps_boot, leave_out)
-        life_val_fit = np.delete(temp_life, leave_out)
-        life_err_fit = np.delete(life_err, leave_out)
+    
+    # p0=[4.2e10, 7.41e3, .352, .330]
+    p0=[1.e8, 5.7e3, .352, .330]
 
-        p0 = [14, -79, 0.3, 0.7]
-        try:
-            popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
-                                       sigma=life_err_fit, p0=p0)
-        except RuntimeError as e:
-            print(e)
-            pl.errorbar(temps_fit, life_val_fit, yerr=life_err_fit, linestyle="none", marker="o")
-            y = s_curve(x, *p0)
-            pl.plot(x, y)
-            pl.show()
-            pl.clf()
-        else:
-            print(popt)
-            popt_dist.append(popt)
-            y = s_curve(x, *popt)
-            y_dist.append(y)
+    # From here on >>without<< bootstrap
 
-    y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
-    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    temps_val = np.array(temps_val)
+    life_val = np.array(life_val)
+    try:
+        popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err)
+    except RuntimeError as e:
+        print(e)
+        pl.errorbar(temps_val, life_val, yerr=life_err, linestyle="none", marker="o")
+        y = s_curve(x, *p0)
+        pl.plot(x, y)
+        pl.show()
+        pl.clf()
+    else:
+        print(popt)
+        y = s_curve(x, *popt)
 
-    print(siunitx(popt_val, popt_err))
-
+    # print(siunitx(popt_val, popt_err))
 
     pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
-    pl.plot(x, y_val)
-    pl.plot(x, y_val+y_err)
-    pl.plot(x, y_val-y_err)
+    pl.plot(x, y)
     pl.show()
     pl.clf()
 
+    # From here on >>with<< bootstrap
 
+    # for temp_life in zip(*all_life):
+    #     temps_boot = redraw(temps_val, temps_err)
+    #     leave_out = random.randint(0, len(temps_boot) - 1)
+    #     np.delete = lambda x, y: x
+    #     temps_fit = np.delete(temps_boot, leave_out)
+    #     life_val_fit = np.delete(temp_life, leave_out)
+    #     life_err_fit = np.delete(life_err, leave_out)
 
+    #     try:
+    #         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
+    #                                    sigma=life_err_fit, p0=p0)
+    #     except RuntimeError as e:
+    #         print(e)
+    #         pl.errorbar(temps_fit, life_val_fit, yerr=life_err_fit, linestyle="none", marker="o")
+    #         y = s_curve(x, *p0)
+    #         pl.plot(x, y)
+    #         pl.show()
+    #         pl.clf()
+    #     else:
+    #         print(popt)
+    #         popt_dist.append(popt)
+    #         y = s_curve(x, *popt)
+    #         y_dist.append(y)
 
+    # y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+    # popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
 
+    # print(siunitx(popt_val, popt_err))
+
+    # pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
+    # pl.plot(x, y_val)
+    # pl.plot(x, y_val+y_err)
+    # pl.plot(x, y_val-y_err)
+    # pl.show()
+    # pl.clf()
 
 
 def s_curve(T, sigma_S, H_t, tau_t, tau_f):
     assert not isinstance(T, list), "x-value input in fit must be np.array."
     sigma_S_exp = sigma_S * np.exp(- H_t/T)
     return tau_f * (1 + sigma_S_exp * tau_t) / (1 + sigma_S_exp * tau_f)
-
 
 
 def redraw_count(a):
