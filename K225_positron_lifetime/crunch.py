@@ -29,6 +29,7 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
+
 def get_temp(filename):
     '''
     Retrieves the temperatures stored in the filename itself.
@@ -53,12 +54,15 @@ def get_temp(filename):
 
     return None
 
+
 def lorentz(x, mean, width, integral):
     return integral/np.pi * (width/2) / ((x - mean)**2 + (width/2)**2)
+
 
 def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
+
 
 def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
     return A_0/(2*tau_0) * np.exp((width**2-2*tau_0*(t-mean))/(2*tau_0**2)) \
@@ -69,8 +73,10 @@ def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
             + sp.erf((tau_t*(t-mean)-width**2)/(np.sqrt(2)*width*tau_t))) \
             + BG
 
+
 def linear(x, a, b):
     return a * x + b
+
 
 def prepare_for_pgf(filename,  error=False, show=False):
     data = np.loadtxt('Data/{}.txt'.format(filename))
@@ -91,6 +97,7 @@ def prepare_for_pgf(filename,  error=False, show=False):
         pl.show()
         pl.clf()
 
+
 def prepare_files(T):
     prepare_for_pgf('lyso-li', error=True, show=False)
     prepare_for_pgf('lyso-re', error=True, show=False)
@@ -100,6 +107,7 @@ def prepare_files(T):
     prepare_for_pgf('na-511-li', show=False)
     prepare_for_pgf('na-1275-li', show=False)
 
+
 def job_colors():
     colors = [(55,126,184), (152,78,163), (77,175,74), (228,26,28)]
 
@@ -107,9 +115,11 @@ def job_colors():
         for name, color in zip(names, colors):
             f.write(r'\definecolor{{{}s}}{{rgb}}{{{},{},{}}}'.format(name, *[x/255 for x in color]) + '\n')
 
+
 def lifetime(T):
     slope, width = time_gauge(T)
     lifetime_spectra(T, slope, width)
+
 
 def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
@@ -242,7 +252,7 @@ def lifetime_spectra(T, slope_val, width):
 
         results = []
         life_mean = []
-        for a in range(25):
+        for a in range(10):
             boot_counts = redraw_count(counts)
             lifetime_spectrum_fixed_width = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
             popt, pconv = op.curve_fit(lifetime_spectrum_fixed_width, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
@@ -275,20 +285,29 @@ def lifetime_spectra(T, slope_val, width):
         life_val_fit = np.delete(temp_life, leave_out)
         life_err_fit = np.delete(life_err, leave_out)
 
-        # p0 = [16, -70, 0.32 ,1e4]
-        # values from p 1657, Weiler/Schaefer:
         p0 = [4e10, 7700, .347, .31]
-        popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
-                                   sigma=life_err_fit, p0=p0)
-        print(popt)
-        popt_dist.append(popt)
-        y = s_curve(x, *popt)
-        y_dist.append(y)
+        try:
+            popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
+                                       sigma=life_err_fit, p0=p0)
+        except RuntimeError as e:
+            print(e)
+            pl.errorbar(temps_fit, life_val_fit, yerr=life_err_fit, linestyle="none", marker="o")
+            y = s_curve(x, *p0)
+            pl.plot(x, y)
+            pl.show()
+            pl.clf()
+        else:
+            print(popt)
+            popt_dist.append(popt)
+            y = s_curve(x, *popt)
+            y_dist.append(y)
 
     y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
 
+    print(siunitx(popt_val, popt_err))
 
-    pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="o")
+    pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
     pl.plot(x, y_val)
     pl.plot(x, y_val+y_err)
     pl.plot(x, y_val-y_err)
@@ -351,6 +370,7 @@ def main():
     test_keys(T)
     with open('_build/template.js', 'w') as f:
         json.dump(dict(T), f, indent=4, sort_keys=True)
+
 
 if __name__ == "__main__":
     main()
