@@ -164,10 +164,21 @@ of the radionuclide is shown in Figure~Figure~\ref{fig:scheme-176Lu}
     \label{fig:scheme-176Lu}
 \end{figure}
 
-Photons interact with matter through three channels: Compton scattering at low
-charge number $Z$, 
+Photons interact with matter through three main channels: photo effect, Compton
+effect and pair production. In the case of the scintillation material, we are
+not really interested in the details but use that usually the full energy of
+the incident photon is deposited. The material will exhibit a light pulse which
+is proportional to the incident energy.
 
 \subsection{Photomultiplier}
+
+The light pulse from the scintillator is too faint to measure directly. It is
+therefore amplified with a photomultiplier. A schematic is shown in
+Figure~\label{fig:photomultiplier}. Incoming photons will free an electron via
+the photo effect. The electron is then accelerated via several electric fields.
+Once it hits the first dynode, the accelerated electron has enough energy to
+create an avalanche of secondary electrons. This process repeats along the
+dozen dynodes until a measurable current is created.
 
 \begin{figure}
     \centering
@@ -178,9 +189,35 @@ charge number $Z$,
     \label{fig:photomultiplier}
 \end{figure}
 
+The signal at the very end of the multiplier might be saturated and have lost
+its energy proportionality. This signal will rise very fast due to quick
+saturation, therefore it is also called \enquote{fast signal}. Picking up the
+signal from one of the last dynodes will give a slower rising but
+energy-proportional signal, the \enquote{slow signal}.
+
 \subsection{Single channel analyzer (SCA)}
 
+We want to measure the lifetime of the positron by measuring the duration
+between the $\beta^+$-decay and the annihilation of the positron. Therefore we
+need to filter out the \SI{1275}{\kilo\electronvolt} and
+\SI{511}{\kilo\electronvolt} lines. A single channel analyzer takes an analog,
+energy proportional signal and gives a digital pulse if the amplitude lies in a
+certain interval. This interval is also called \enquote{SCA window}. Models
+either have an upper and lower limit or a lower limit and a window width.
+
 \subsection{Time-to-amplitude converter (TAC)}
+
+In order to measure the durations in the order of nanoseconds, we use a start
+and stop signal to a TAC\@. This device starts charging a capacitor with a
+constant current. Once the stop-signal is given, the capacitor is discharged,
+giving a duration proportional amplitude.
+
+\subsection{Multi channel analyzer (MCA)}
+
+We will feed the TAC amplitude into a multi channel analyzer. This is a
+hardware device that creates a histogram of incoming analog pulses. In our case
+this is realized as a PCI-card in a computer and proprietary software running
+on Windows XP only.
 
 \subsection{Fast-slow coincidence circuit}
 
