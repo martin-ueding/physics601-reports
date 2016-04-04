@@ -5,12 +5,13 @@
 # Licensed under The GNU Public License Version 2 (or later)
 
 import argparse
+import glob
 import json
 import os
+import pickle
 import random
 import re
 import sys
-import glob
 
 import matplotlib.pyplot as pl
 import numpy as np
@@ -228,7 +229,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     T['time_resolution'] = siunitx(time_res , time_res_err)
     return slope_val, width_val*slope_val
 
-def lifetime_spectra(T, slope_val, width):
+def get_indium_data(T, slope_val, width):
     files = glob.glob('Data/in-*.txt')
 
     all_life = []
@@ -271,6 +272,28 @@ def lifetime_spectra(T, slope_val, width):
         mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
         mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
 
+    return all_life, temps_val, temps_err, life
+
+INDIUM_FILE = '_build/indium.pickle'
+
+
+def load_indium_data():
+    with open(INDIUM_FILE, 'rb') as f:
+        return pickle.load(f)
+
+
+def save_indium_data(all_life, temps_val, temps_err, life):
+    with open(INDIUM_FILE, 'wb') as f:
+        pickle.dump([all_life, temps_val, temps_err, life], f)
+
+
+def lifetime_spectra(T, slope_val, width):
+    if os.path.isfile(INDIUM_FILE):
+        all_life, temps_val, temps_err, life = load_indium_data()
+    else:
+        all_life, temps_val, temps_err, life = get_indium_data(T, slope_val, width)
+        save_indium_data(all_life, temps_val, temps_err, life)
+
     popt_dist = []
     y_dist =[]
     x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
@@ -284,7 +307,7 @@ def lifetime_spectra(T, slope_val, width):
     temps_val = np.array(temps_val)
     life_val = np.array(life_val)
     try:
-        popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err)
+        popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err, p0=p0)
     except RuntimeError as e:
         print(e)
         pl.errorbar(temps_val, life_val, yerr=life_err, linestyle="none", marker="o")
