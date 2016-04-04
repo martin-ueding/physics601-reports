@@ -250,9 +250,11 @@ def get_indium_data(T, slope_val, width):
         time = slope_val * channel
         counts = data[:,1]
 
+        x = np.linspace(np.min(time), np.max(time), 2000)
 
         results = []
         life_mean = []
+        y_dist = []
         for a in range(10):
             boot_counts = redraw_count(counts)
             lifetime_spectrum_fixed_width = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
@@ -260,12 +262,29 @@ def get_indium_data(T, slope_val, width):
             # popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
             results.append(popt)
             life_mean.append((popt[1]*popt[3] + popt[2]*popt[4]) / (popt[1] + popt[2]))
+            y_dist.append(lifetime_spectrum_fixed_width(x, *popt))
 
         all_life.append(life_mean)
 
         popt_val, popt_err = bootstrap.average_and_std_arrays(results)
         life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_mean)
         life.append(life_mean_val)
+
+        y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+
+        pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+        pl.plot(time, counts, color='black')
+        pl.plot(x, y_val, color='red')
+        pl.xlabel('Time / ns')
+        pl.ylabel('Counts')
+        pl.tight_layout()
+        pl.grid(True)
+        pl.margins(0.05)
+        pl.savefig('_build/mpl-lifetime-{:04d}_dK.pdf'.format(int(temp_mean*10)))
+        pl.yscale('log')
+        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.pdf'.format(int(temp_mean*10)))
+        pl.clf()
+
         
         # mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
         # mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
