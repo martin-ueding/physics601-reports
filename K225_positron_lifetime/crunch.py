@@ -274,6 +274,7 @@ def get_indium_data(T, slope_val, width):
 
     return all_life, temps_val, temps_err, life
 
+
 INDIUM_FILE = '_build/indium.pickle'
 
 
