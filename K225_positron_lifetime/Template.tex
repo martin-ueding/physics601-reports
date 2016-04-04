@@ -94,10 +94,13 @@ neighboring atoms aggregate as there is no repelling positive charge.
 The density of vacancies depends on the temperature. The higher the
 temperature, the more vacancies we expect.
 
-% TODO
+At temperature $T$, the density of vacancies is given by
 \[
-    \exp\del{-\frac{H_\mathrm t}T}
+    C(T) = \exp\del{\frac{S}{k}} \exp\del{-\frac{H_\mathrm t}{kT}} \,.
 \]
+% TODO Cite (3)
+$H_\mathrm t$ is the energy needed for a vacancy to form, it is called
+\enquote{vacancy formation enthalpy}.
 
 \subsection{Trapping model}
 
@@ -115,6 +118,20 @@ A trapped positron could become free again. In our experiment we will not see
 this as the positron will annihilate before becoming free again. The model can
 therefore be described by a free lifetime, a trapping rate and a trapped
 lifetime.
+
+As a free positron can either annihilate or become trapped, its total lifetime
+is
+\[
+    \tau_0 = \del{\frac{1}{\tau_\mathrm f} + \sigma_\mathrm t C_\mathrm t}\inv
+    \,.
+\]
+% TODO Cite (1a)
+The trapped lifetime simply is $\tau_\mathrm t$.
+
+In an insulator, there is no conducting band of electrons. Positrons can
+actually find an electron and form positronium with it. The whole positronium
+atom will decay eventually. Its lifetime will be different if the positronium
+is free or trapped in a vacancy.
 
 \section{Positrons}
 
