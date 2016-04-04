@@ -276,7 +276,8 @@ def lifetime_spectra(T, slope_val, width):
     x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
     life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
     
-    p0=[4.2e10, 7.31e3, .352, .324]
+    # p0=[4.2e10, 7.41e3, .352, .330]
+    p0=[1.e8, 5.7e3, .352, .330]
 
     # From here on >>without<< bootstrap
 
@@ -304,16 +305,14 @@ def lifetime_spectra(T, slope_val, width):
 
     # From here on >>with<< bootstrap
 
-   # for temp_life in zip(*all_life):
-    #     print(temp_life)
-    #     temps_boot = temp_life # redraw(temps_val, temps_err)
+    # for temp_life in zip(*all_life):
+    #     temps_boot = redraw(temps_val, temps_err)
     #     leave_out = random.randint(0, len(temps_boot) - 1)
     #     np.delete = lambda x, y: x
     #     temps_fit = np.delete(temps_boot, leave_out)
     #     life_val_fit = np.delete(temp_life, leave_out)
     #     life_err_fit = np.delete(life_err, leave_out)
 
-    #     p0 = [4.2e9, 7e3, .355, .348]
     #     try:
     #         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
     #                                    sigma=life_err_fit, p0=p0)
