@@ -311,6 +311,7 @@ def lifetime_spectra(T, slope_val, width):
         popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err, p0=p0)
     except RuntimeError as e:
         print(e)
+        print('Showing the plot with initial parameters.')
         pl.errorbar(temps_val, life_val, yerr=life_err, linestyle="none", marker="o")
         y = s_curve(x, *p0)
         pl.plot(x, y)
@@ -322,6 +323,7 @@ def lifetime_spectra(T, slope_val, width):
 
     # print(siunitx(popt_val, popt_err))
 
+    print('Showing the plot with actual fit curve.')
     pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
     pl.plot(x, y)
     pl.show()
