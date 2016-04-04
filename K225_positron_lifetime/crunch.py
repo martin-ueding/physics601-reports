@@ -46,8 +46,8 @@ def get_temp(filename):
     basename = os.path.basename(filename)
     m = TEMP_PATTERN.match(basename)
     if m:
-        first = float(m.group(1).replace(',', '.'))
-        second = float(m.group(2).replace(',', '.'))
+        first = float(m.group(1).replace(',', '.')) + 273.15
+        second = float(m.group(2).replace(',', '.')) + 273.15
 
         return (first, second)
 
@@ -260,6 +260,7 @@ def lifetime_spectra(T, slope_val, width):
         # mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
         mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
         mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+        print('tau_t=', tau_t_val, 'tau_0=', tau_0_val)
 
 
     popt_dist = []
@@ -276,7 +277,7 @@ def lifetime_spectra(T, slope_val, width):
 
         # p0 = [16, -70, 0.32 ,1e4]
         # values from p 1657, Weiler/Schaefer:
-        p0 = [1.4e5, .5/1.38e-23*1.9e-19, .200, .260]
+        p0 = [4e10, 7700, .347, .31]
         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
                                    sigma=life_err_fit, p0=p0)
         print(popt)
