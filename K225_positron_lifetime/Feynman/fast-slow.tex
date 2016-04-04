@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+    \graph[
+        grow right=3cm,
+        nodes={
+            draw,
+        },
+    ]
+    {
+        source/Source ->[dotted] {
+            lyso1/LYSO -> pm1/PM -> {
+                sca1/SCA ->[dashdotted] coin/Coincidence ->[dashdotted] mca/MCA,
+                cfd1/CFD ->[dashdotted] tac/TAC -> mca;
+            },
+            lyso2/LYSO -> pm2/PM -> {
+                cfd2/CFD ->[dashdotted] delay/Delay ->[dashdotted] tac,
+                sca2/SCA ->[dashdotted] coin,
+            },
+        };
+    };
+\end{tikzpicture}
