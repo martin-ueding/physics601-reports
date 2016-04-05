@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={Channel number},
+            ylabel={Counts},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.5,
+            },
+            xmin=8,
+            xmax=20,
+        ]
+
+        \addplot[black] table {../xy/lifetime-295K-data.tsv};
+
+        \addplot[red] table {../xy/lifetime-295K-fit.tsv};
+        \addplot[band, fill=red] table {../xy/lifetime-295K-band.tsv} \closedcycle;
+    \end{axis}
+\end{tikzpicture}

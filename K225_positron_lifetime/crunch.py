@@ -244,6 +244,7 @@ def get_indium_data(T, slope_val, width):
         temp_err = temp_upper - temp_mean
         temps_val.append(temp_mean)
         temps_err.append(temp_err)
+        print('Mean temperature:', temp_mean)
 
         data = np.loadtxt(file_)
         channel = data[:,0]
@@ -272,6 +273,15 @@ def get_indium_data(T, slope_val, width):
 
         y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
 
+        # write data to plot with pgfplots
+
+        np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp_mean)), np.column_stack([time[0:4000:10], counts[0:4000:10]]))
+
+        np.savetxt('_build/xy/lifetime-{}K-fit.tsv'.format(int(temp_mean)), np.column_stack([x, y_val]))
+
+        np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+        # show plots
         pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
         pl.plot(time, counts, color='black')
         pl.plot(x, y_val, color='red')
