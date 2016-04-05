@@ -514,6 +514,8 @@ def test_keys(T):
 def main():
     T = {}
 
+    random.seed(0)
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--show', action='store_true')
     options = parser.parse_args()
