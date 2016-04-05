@@ -299,9 +299,12 @@ def get_indium_data(T, slope_val, width):
         pl.tight_layout()
         pl.grid(True)
         pl.margins(0.05)
+        pl.xlim((8, 20))
         pl.savefig('_build/mpl-lifetime-{:04d}_dK.pdf'.format(int(temp_mean*10)))
+        pl.savefig('_build/mpl-lifetime-{:04d}_dK.png'.format(int(temp_mean*10)))
         pl.yscale('log')
         pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.pdf'.format(int(temp_mean*10)))
+        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.png'.format(int(temp_mean*10)))
         pl.clf()
 
         
