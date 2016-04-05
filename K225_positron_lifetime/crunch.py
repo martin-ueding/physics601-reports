@@ -285,13 +285,19 @@ def get_indium_data(T, slope_val, width):
         range_1 = (10.87, 11.4)
         range_2 = (12.3, 15)
 
-        sel = (9 < time) & (time < 15)
 
         x = np.linspace(np.min(time), np.max(time), 2000)
 
-        for a in range(1):
-            #boot_counts = redraw_count(counts)
-            boot_counts = counts
+        BOOTSTRAP_SAMPLES = 10
+
+        for a in range(BOOTSTRAP_SAMPLES):
+            if BOOTSTRAP_SAMPLES > 1:
+                boot_counts = redraw_count(counts)
+            else:
+                boot_counts = counts
+
+            sel = (9 < time) & (time < 15)
+
             if fix_width:
                 fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
                 popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 210, 190, 0.07, 0.8, 0])
@@ -311,7 +317,7 @@ def get_indium_data(T, slope_val, width):
 
             x1 = np.linspace(range_1[0], range_1[1], 10)
             sel = (range_1[0] < time) & (time < range_1[1])
-            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e5, 1])
+            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e14, 0.4])
             a, b = popt
             y1 = exp_decay(x1, *popt)
             y1_dist.append(y1)
@@ -321,7 +327,7 @@ def get_indium_data(T, slope_val, width):
 
             x2 = np.linspace(range_2[0], range_2[1], 10)
             sel = (range_2[0] < time) & (time < range_2[1])
-            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e3, 1])
+            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[5e5, 1.2])
             a, b = popt
             y2 = exp_decay(x2, *popt)
             y2_dist.append(y2)
