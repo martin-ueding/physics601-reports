@@ -275,10 +275,10 @@ def get_indium_data(T, slope_val, width):
             boot_counts = redraw_count(counts)
             if fix_width:
                 fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-                popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
+                popt, pconv = op.curve_fit(fit_func, time, boot_counts, sigma=1/(10+np.sqrt(counts)), p0=[10.5, 210, 190, 0.07, 0.8, 0])
             else:
                 fit_func = lifetime_spectrum
-                popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+                popt, pconv = op.curve_fit(fit_func, time, boot_counts, sigma=1/(10+np.sqrt(counts)), p0=[10.5, 0.3, 210, 190, 0.2, 0.3, 0])
             results.append(popt)
             life_mean.append((popt[1]*popt[3] + popt[2]*popt[4]) / (popt[1] + popt[2]))
             y_dist.append(fit_func(x, *popt))
