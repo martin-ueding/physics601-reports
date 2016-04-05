@@ -237,6 +237,10 @@ def get_indium_data(T, slope_val, width):
     temps_val = []
     temps_err = []
     life = []
+
+    tau_ts = []
+    tau_0s = []
+
     for file_ in sorted(files):
         print('Working on lifetime spectrum', file_)
         temp_lower, temp_upper = get_temp(file_)
@@ -291,7 +295,10 @@ def get_indium_data(T, slope_val, width):
         mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
         mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
 
-    return all_life, temps_val, temps_err, life
+        tau_0s.append(tau_0_val)
+        tau_ts.append(tau_t_val)
+
+    return all_life, temps_val, temps_err, life, tau_0s, tau_ts
 
 
 INDIUM_FILE = '_build/indium.pickle'
@@ -302,32 +309,48 @@ def load_indium_data():
         return pickle.load(f)
 
 
-def save_indium_data(all_life, temps_val, temps_err, life):
+def save_indium_data(all_life, temps_val, temps_err, life, tau_0s, tau_ts):
     with open(INDIUM_FILE, 'wb') as f:
-        pickle.dump([all_life, temps_val, temps_err, life], f)
+        pickle.dump([all_life, temps_val, temps_err, life, tau_0s, tau_ts], f)
 
 
 def lifetime_spectra(T, slope_val, width):
     if os.path.isfile(INDIUM_FILE):
-        all_life, temps_val, temps_err, life = load_indium_data()
+        all_life, temps_val, temps_err, life, tau_0s, tau_ts = load_indium_data()
     else:
-        all_life, temps_val, temps_err, life = get_indium_data(T, slope_val, width)
-        save_indium_data(all_life, temps_val, temps_err, life)
+        all_life, temps_val, temps_err, life, tau_0s, tau_ts = get_indium_data(T, slope_val, width)
+        save_indium_data(all_life, temps_val, temps_err, life, tau_0s, tau_ts)
 
     popt_dist = []
     y_dist =[]
     x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
     life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
     
-    # p0=[4.2e10, 7.41e3, .352, .330]
-    p0=[1.e8, 5.7e3, .352, .330]
 
     # From here on >>without<< bootstrap
 
     temps_val = np.array(temps_val)
     life_val = np.array(life_val)
+
+    tau_t = np.mean(tau_ts)
+
+    def s_curve(T, sigma_S, H_t,
+                #tau_t,
+                tau_f):
+        assert not isinstance(T, list), "x-value input in fit must be np.array."
+        sigma_S_exp = sigma_S * np.exp(- H_t/T)
+        return tau_f * (1 + sigma_S_exp * tau_t) / (1 + sigma_S_exp * tau_f)
+
+    # p0=[4.2e10, 7.41e3, .352, .330]
+    p0=[1.e8,
+        5.7e5,
+       # .352,
+        .330]
+
     try:
-        popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err, p0=p0)
+        popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err,
+                                  # p0=p0
+                                  )
     except RuntimeError as e:
         print(e)
         print('Showing the plot with initial parameters.')
@@ -386,11 +409,6 @@ def lifetime_spectra(T, slope_val, width):
     # pl.show()
     # pl.clf()
 
-
-def s_curve(T, sigma_S, H_t, tau_t, tau_f):
-    assert not isinstance(T, list), "x-value input in fit must be np.array."
-    sigma_S_exp = sigma_S * np.exp(- H_t/T)
-    return tau_f * (1 + sigma_S_exp * tau_t) / (1 + sigma_S_exp * tau_f)
 
 
 def redraw_count(a):
