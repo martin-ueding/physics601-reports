@@ -7,6 +7,7 @@
 import argparse
 import glob
 import json
+import models
 import os
 import pickle
 import random
@@ -295,7 +296,7 @@ def get_indium_data(T, slope_val, width):
             #boot_counts = redraw_count(counts)
             boot_counts = counts
             if fix_width:
-                fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+                fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
                 popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 210, 190, 0.07, 0.8, 0])
                 mean, A_0, A_t, tau_0, tau_t, BG = popt
             else:
