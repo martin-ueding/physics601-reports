@@ -31,6 +31,13 @@ default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
 
 
+def dandify_plot():
+    pl.legend(loc='best')
+    pl.grid(True)
+    pl.margins(0.05)
+    pl.tight_layout()
+
+
 def get_temp(filename):
     '''
     Retrieves the temperatures stored in the filename itself.
@@ -237,6 +244,13 @@ def get_indium_data(T, slope_val, width):
     temps_val = []
     temps_err = []
     life = []
+
+    taus_0_val = []
+    taus_t_val = []
+
+    taus_0_err = []
+    taus_t_err = []
+
     for file_ in sorted(files):
         print('Working on lifetime spectrum', file_)
         temp_lower, temp_upper = get_temp(file_)
@@ -256,7 +270,7 @@ def get_indium_data(T, slope_val, width):
         results = []
         life_mean = []
         y_dist = []
-        for a in range(10):
+        for a in range(25):
             boot_counts = redraw_count(counts)
             lifetime_spectrum_fixed_width = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
             popt, pconv = op.curve_fit(lifetime_spectrum_fixed_width, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
@@ -300,6 +314,22 @@ def get_indium_data(T, slope_val, width):
         # mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
         mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
         mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+
+        taus_0_val.append(tau_0_val)
+        taus_t_val.append(tau_t_val)
+        taus_0_err.append(tau_0_err)
+        taus_t_err.append(tau_t_err)
+
+
+    pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
+                label=r'$\tau_0$', linestyle='none', marker='+')
+    pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
+                label=r'$\tau_\mathrm{t}$', linestyle='none', marker='+')
+    pl.xlabel('T / K')
+    pl.ylabel(r'$\tau$ / ns')
+    dandify_plot()
+    pl.savefig('_build/mpl-tau_0-tau_t.pdf')
+    pl.clf()
 
     return all_life, temps_val, temps_err, life
 
