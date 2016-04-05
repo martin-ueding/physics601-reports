@@ -242,9 +242,13 @@ def get_indium_data(T, slope_val, width):
 
     taus_0_val = []
     taus_t_val = []
-
     taus_0_err = []
     taus_t_err = []
+
+    taus_0_lin_val = []
+    taus_t_lin_val = []
+    taus_0_lin_err = []
+    taus_t_lin_err = []
 
     all_intens_0_val = []
     all_intens_0_err = []
@@ -274,6 +278,9 @@ def get_indium_data(T, slope_val, width):
         y2_dist = []
         intens_0_dist = []
         intens_t_dist = []
+
+        tau_0_lin_dist = []
+        tau_t_lin_dist = []
 
         range_1 = (10.87, 11.4)
         range_2 = (12.3, 15)
@@ -308,6 +315,7 @@ def get_indium_data(T, slope_val, width):
             a, b = popt
             y1 = exp_decay(x1, *popt)
             y1_dist.append(y1)
+            tau_0_lin_dist.append(b)
 
             print(a, b)
 
@@ -317,6 +325,7 @@ def get_indium_data(T, slope_val, width):
             a, b = popt
             y2 = exp_decay(x2, *popt)
             y2_dist.append(y2)
+            tau_t_lin_dist.append(b)
 
             print(a, b)
             print()
@@ -385,11 +394,22 @@ def get_indium_data(T, slope_val, width):
         taus_0_err.append(tau_0_err)
         taus_t_err.append(tau_t_err)
 
+        tau_0_lin_val, tau_0_lin_err = bootstrap.average_and_std_arrays(tau_0_lin_dist)
+        tau_t_lin_val, tau_t_lin_err = bootstrap.average_and_std_arrays(tau_t_lin_dist)
+
+        taus_0_lin_val.append(tau_0_lin_val)
+        taus_t_lin_val.append(tau_t_lin_val)
+        taus_0_lin_err.append(tau_0_lin_err)
+        taus_t_lin_err.append(tau_t_lin_err)
 
     pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
                 label=r'$\tau_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
                 label=r'$\tau_\mathrm{t}$', linestyle='none', marker='+')
+    pl.errorbar(temps_val, taus_0_lin_val, xerr=temps_err, yerr=taus_0_lin_err,
+                label=r'$\tau_0$ lin', linestyle='none', marker='+')
+    pl.errorbar(temps_val, taus_t_lin_val, xerr=temps_err, yerr=taus_t_lin_err,
+                label=r'$\tau_\mathrm{t}$ lin', linestyle='none', marker='+')
     pl.xlabel('T / K')
     pl.ylabel(r'$\tau$ / ns')
     dandify_plot()
