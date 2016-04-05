@@ -151,7 +151,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         mean = []
         width = []
         amplitude = []
-        for a in range(2):
+        for a in range(10):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
@@ -258,6 +258,7 @@ def get_indium_data(T, slope_val, width):
         temp_err = temp_upper - temp_mean
         temps_val.append(temp_mean)
         temps_err.append(temp_err)
+        print('Mean temperature:', temp_mean)
 
         data = np.loadtxt(file_)
         channel = data[:,0]
@@ -266,12 +267,12 @@ def get_indium_data(T, slope_val, width):
 
         x = np.linspace(np.min(time), np.max(time), 2000)
 
-        fix_width = False
+        fix_width = True
 
         results = []
         life_mean = []
         y_dist = []
-        for a in range(25):
+        for a in range(10):
             boot_counts = redraw_count(counts)
             if fix_width:
                 fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
@@ -291,6 +292,15 @@ def get_indium_data(T, slope_val, width):
 
         y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
 
+        # write data to plot with pgfplots
+
+        np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(time[0:4000], counts[0:4000], np.sqrt(counts[0:4000])))
+
+        np.savetxt('_build/xy/lifetime-{}K-fit.tsv'.format(int(temp_mean)), np.column_stack([x, y_val]))
+
+        np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+        # show plots
         pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
         pl.plot(time, counts, color='black')
         pl.plot(x, y_val, color='red')

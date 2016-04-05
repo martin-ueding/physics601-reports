@@ -502,17 +502,116 @@ calibration fit we get a resolution of \SI{<< time_resolution >>}{\nano\second}.
 
 \section{Adjusting SCA windows}
 
-Selecting \SI{1275}{\kilo\electronvolt} line on start-side.
-
-Checking SCA coindicence, has nice overlap.
-
-Check TAC+coincidence, has nice overlap.
+After the time calibration we have to set up the fast-slow coincidence
+circuit. For this we set the \textsc{sca} window on the start-side
+to the \SI{1275}{\kilo\electronvolt} line of the spectrum and check if the
+two \textsc{sca}'s as well as the \textsc{tac} and the coincidence unit have
+a nice overlap.
 
 \section{Indium sample}
+
+An indium sample is placed inside an aluminum block, which is mounted on a
+soldering iron. This allows us to control the sample's temperature with an
+potentiometer. A thermometer enables us to read off the actual temperature. Now
+the sample is placed between the detectors, which have to be shielded against
+the heat by two aluminum plates. We have to ensure that there is no contact to
+the heat shielding. 
+
+\subsection{Lifetime spectrum}
+
+The first measurement is at room temperature. After about \SI{30}{\minute} we
+stop the event recording at the computer and save the data. Then we turn up the
+temperature and wait for the temperature to reach a nearly
+constant value. We repeat this untill we have eight data sets. For every
+measurement we note the temperature in the beginning and at the end of the
+acquisition.
+
+The measurement at room temperature together with a fit function is shown in
+Figure~\ref{fig:lifetime-295K}. For the other measurements see
+Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
+
+\begin{figure}
+        \centering
+        \includegraphics{lifetime-295K}
+        \caption{%
+                Lifetime spectrum of indium at room temperature.
+        }
+        \label{fig:lifetime-295K}
+\end{figure}
 
 \subsection{Vacancy formation enthalpy}
 
 \section{Acrylic glass sample}
+
+\begin{appendix}
+
+        \chapter{Lifetime spectra}
+
+        %TODO insert temperatures
+        \begin{figure}
+                \centering
+                \includegraphics{lifetime-324K}
+                \caption{%
+                        Lifetime spectrum of indium at room temperature.
+                }
+                \label{fig:lifetime-324K}
+        \end{figure}
+
+        \begin{figure}
+                \centering
+                \includegraphics{lifetime-339K}
+                \caption{%
+                        Lifetime spectrum of indium at room temperature.
+                }
+                \label{fig:lifetime-339K}
+        \end{figure}
+
+        \begin{figure}
+                \centering
+                \includegraphics{lifetime-350K}
+                \caption{%
+                        Lifetime spectrum of indium at room temperature.
+                }
+                \label{fig:lifetime-350K}
+        \end{figure}
+
+        \begin{figure}
+                \centering
+                \includegraphics{lifetime-362K}
+                \caption{%
+                        Lifetime spectrum of indium at room temperature.
+                }
+                \label{fig:lifetime-362K}
+        \end{figure}
+
+        \begin{figure}
+                \centering
+                \includegraphics{lifetime-376K}
+                \caption{%
+                        Lifetime spectrum of indium at room temperature.
+                }
+                \label{fig:lifetime-376K}
+        \end{figure}
+
+        \begin{figure}
+                \centering
+                \includegraphics{lifetime-388K}
+                \caption{%
+                        Lifetime spectrum of indium at room temperature.
+                }
+                \label{fig:lifetime-388K}
+        \end{figure}
+
+        \begin{figure}
+        \centering
+        \includegraphics{lifetime-398K}
+        \caption{%
+                Lifetime spectrum of indium at room temperature.
+        }
+        \label{fig:lifetime-398K}
+\end{figure}
+
+\end{appendix}
 
 \end{document}
 
