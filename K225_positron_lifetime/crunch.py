@@ -267,17 +267,22 @@ def get_indium_data(T, slope_val, width):
 
         x = np.linspace(np.min(time), np.max(time), 2000)
 
+        fix_width = False
+
         results = []
         life_mean = []
         y_dist = []
         for a in range(25):
             boot_counts = redraw_count(counts)
-            lifetime_spectrum_fixed_width = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-            popt, pconv = op.curve_fit(lifetime_spectrum_fixed_width, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
-            # popt, pconv = op.curve_fit(lifetime_spectrum, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+            if fix_width:
+                fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+                popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
+            else:
+                fit_func = lifetime_spectrum
+                popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
             results.append(popt)
             life_mean.append((popt[1]*popt[3] + popt[2]*popt[4]) / (popt[1] + popt[2]))
-            y_dist.append(lifetime_spectrum_fixed_width(x, *popt))
+            y_dist.append(fit_func(x, *popt))
 
         all_life.append(life_mean)
 
@@ -304,16 +309,21 @@ def get_indium_data(T, slope_val, width):
         pl.tight_layout()
         pl.grid(True)
         pl.margins(0.05)
+        pl.xlim((8, 20))
         pl.savefig('_build/mpl-lifetime-{:04d}_dK.pdf'.format(int(temp_mean*10)))
+        pl.savefig('_build/mpl-lifetime-{:04d}_dK.png'.format(int(temp_mean*10)))
         pl.yscale('log')
         pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.pdf'.format(int(temp_mean*10)))
+        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.png'.format(int(temp_mean*10)))
         pl.clf()
 
         
-        # mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-        # mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
-        mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-        mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+        if fix_width:
+            mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+            mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
+        else:
+            mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
+            mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
 
         taus_0_val.append(tau_0_val)
         taus_t_val.append(tau_t_val)
