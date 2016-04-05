@@ -86,6 +86,10 @@ def linear(x, a, b):
     return a * x + b
 
 
+def exp_decay(x, a, b):
+    return a * np.exp(- x / b)
+
+
 def prepare_for_pgf(filename,  error=False, show=False):
     data = np.loadtxt('Data/{}.txt'.format(filename))
     channel = data[:,0]
@@ -270,26 +274,33 @@ def get_indium_data(T, slope_val, width):
         time = slope_val * channel
         counts = data[:,1]
 
-        x = np.linspace(np.min(time), np.max(time), 2000)
-
         fix_width = True
 
         results = []
         life_means = []
         y_dist = []
+        y1_dist = []
+        y2_dist = []
         intens_0_dist = []
         intens_t_dist = []
 
+        range_1 = (10.87, 11.4)
+        range_2 = (12.3, 15)
 
-        for a in range(10):
-            boot_counts = redraw_count(counts)
+        sel = (9 < time) & (time < 15)
+
+        x = np.linspace(np.min(time), np.max(time), 2000)
+
+        for a in range(1):
+            #boot_counts = redraw_count(counts)
+            boot_counts = counts
             if fix_width:
                 fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-                popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
+                popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 210, 190, 0.07, 0.8, 0])
                 mean, A_0, A_t, tau_0, tau_t, BG = popt
             else:
                 fit_func = lifetime_spectrum
-                popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+                popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
                 mean, width, A_0, A_t, tau_0, tau_t, BG = popt
             results.append(popt)
             intens_0 = A_0 / (A_0 + A_t)
@@ -299,6 +310,25 @@ def get_indium_data(T, slope_val, width):
             life_mean = intens_0 * tau_0 + intens_t * tau_t
             life_means.append(life_mean)
             y_dist.append(fit_func(x, *popt))
+
+            x1 = np.linspace(range_1[0], range_1[1], 10)
+            sel = (range_1[0] < time) & (time < range_1[1])
+            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e5, 1])
+            a, b = popt
+            y1 = exp_decay(x1, *popt)
+            y1_dist.append(y1)
+
+            print(a, b)
+
+            x2 = np.linspace(range_2[0], range_2[1], 10)
+            sel = (range_2[0] < time) & (time < range_2[1])
+            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e3, 1])
+            a, b = popt
+            y2 = exp_decay(x2, *popt)
+            y2_dist.append(y2)
+
+            print(a, b)
+            print()
 
         all_life.append(life_means)
 
@@ -314,6 +344,8 @@ def get_indium_data(T, slope_val, width):
         all_intens_t_err.append(intens_t_err)
 
         y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
+        y1_val, y1_err = bootstrap.average_and_std_arrays(y1_dist)
+        y2_val, y2_err = bootstrap.average_and_std_arrays(y2_dist)
 
         # write data to plot with pgfplots
 
@@ -325,8 +357,14 @@ def get_indium_data(T, slope_val, width):
 
         # show plots
         pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+        pl.fill_between(x1, y1_val - y1_err, y1_val + y1_err, alpha=0.5, color='orange')
+        pl.fill_between(x2, y2_val - y2_err, y2_val + y2_err, alpha=0.5, color='orange')
         pl.plot(time, counts, color='black')
+        counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
+        pl.plot(time, counts_smooth, color='green')
         pl.plot(x, y_val, color='red')
+        pl.plot(x1, y1_val, color='orange', linewidth=3)
+        pl.plot(x2, y2_val, color='orange', linewidth=3)
         pl.xlabel('Time / ns')
         pl.ylabel('Counts')
         dandify_plot()
@@ -336,6 +374,11 @@ def get_indium_data(T, slope_val, width):
         pl.yscale('log')
         pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.pdf'.format(int(temp_mean*10)))
         pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.png'.format(int(temp_mean*10)))
+
+        if False:
+            pl.show()
+            sys.exit(0)
+
         pl.clf()
 
         
@@ -409,7 +452,9 @@ def lifetime_spectra(T, slope_val, width):
     temps_val = np.array(temps_val)
     life_val = np.array(life_val)
     try:
-        popt, pconv = op.curve_fit(s_curve, temps_val, life_val, sigma=life_err, p0=p0)
+        popt, pconv = op.curve_fit(s_curve, temps_val, life_val,
+                                   #sigma=life_err,
+                                   p0=p0)
     except RuntimeError as e:
         print(e)
         print('Showing the plot with initial parameters.')
