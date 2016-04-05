@@ -2,18 +2,18 @@
     \begin{axis}[
             width=\linewidth,
             height=0.6\linewidth,
-            xlabel={Channel number},
+            xlabel={Time / \si{\nano\second}},
             ylabel={Counts},
             grid=major,
             band/.style={
                 draw=none,
                 opacity=0.5,
             },
-            xmin=8,
-            xmax=20,
+            xmin=9,
+            xmax=14,
         ]
 
-        \addplot[black] table {../xy/lifetime-398K-data.tsv};
+        \addplot[band, fill=black] table {../xy/lifetime-398K-data.tsv}\closedcycle;
 
         \addplot[red] table {../xy/lifetime-398K-fit.tsv};
         \addplot[band, fill=red] table {../xy/lifetime-398K-band.tsv} \closedcycle;
