@@ -241,9 +241,11 @@ def get_indium_data(T, slope_val, width):
     life = []
 
     taus_0_val = []
-    taus_t_val = []
     taus_0_err = []
+    taus_t_val = []
     taus_t_err = []
+    taus_f_val = []
+    taus_f_err = []
 
     taus_0_lin_val = []
     taus_t_lin_val = []
@@ -282,6 +284,8 @@ def get_indium_data(T, slope_val, width):
         tau_0_lin_dist = []
         tau_t_lin_dist = []
 
+        tau_f_dist = []
+
         range_1 = (10.87, 11.4)
         range_2 = (12.3, 15)
 
@@ -314,6 +318,9 @@ def get_indium_data(T, slope_val, width):
             life_mean = intens_0 * tau_0 + intens_t * tau_t
             life_means.append(life_mean)
             y_dist.append(fit_func(x, *popt))
+
+            tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
+            tau_f_dist.append(tau_f)
 
             x1 = np.linspace(range_1[0], range_1[1], 10)
             sel = (range_1[0] < time) & (time < range_1[1])
@@ -352,6 +359,10 @@ def get_indium_data(T, slope_val, width):
         y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
         y1_val, y1_err = bootstrap.average_and_std_arrays(y1_dist)
         y2_val, y2_err = bootstrap.average_and_std_arrays(y2_dist)
+
+        tau_f_val, tau_f_err = bootstrap.average_and_std_arrays(tau_f_dist)
+        taus_f_val.append(tau_f_val)
+        taus_f_err.append(tau_f_err)
 
         # write data to plot with pgfplots
 
@@ -412,6 +423,8 @@ def get_indium_data(T, slope_val, width):
                 label=r'$\tau_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
                 label=r'$\tau_\mathrm{t}$', linestyle='none', marker='+')
+    pl.errorbar(temps_val, taus_f_val, xerr=temps_err, yerr=taus_f_err,
+                label=r'$\tau_\mathrm{f}$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_0_lin_val, xerr=temps_err, yerr=taus_0_lin_err,
                 label=r'$\tau_0$ lin', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_lin_val, xerr=temps_err, yerr=taus_t_lin_err,
@@ -430,6 +443,17 @@ def get_indium_data(T, slope_val, width):
     pl.ylabel(r'Relative Intensity')
     dandify_plot()
     pl.savefig('_build/mpl-intensities.pdf')
+    pl.clf()
+
+
+    sigma_c = 1 / np.array(taus_0_val) - 1 / np.array(taus_f_val)
+
+    pl.semilogy(1 / np.array(temps_val), sigma_c, marker='+', linestyle='none')
+    pl.xlabel(r'$1 / T$')
+    pl.ylabel(r'$\sigma C_t(T)$')
+    dandify_plot()
+    pl.savefig('_build/mpl-arrhenius.pdf')
+    pl.savefig('_build/mpl-arrhenius.png')
     pl.clf()
 
 
