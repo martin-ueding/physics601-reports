@@ -73,16 +73,6 @@ def gauss(x, mean, sigma, a):
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
 
-def lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG):
-    return A_0/(2*tau_0) * np.exp((width**2-2*tau_0*(t-mean))/(2*tau_0**2)) \
-            * (sp.erf((width**2+tau_0*mean)/(np.sqrt(2)*width*tau_0)) \
-            + sp.erf((tau_0*(t-mean)-width**2)/(np.sqrt(2)*width*tau_0))) \
-            + A_t/(2*tau_t) * np.exp((width**2-2*tau_t*(t-mean))/(2*tau_t**2)) \
-            * (sp.erf((width**2+tau_t*mean)/(np.sqrt(2)*width*tau_t)) \
-            + sp.erf((tau_t*(t-mean)-width**2)/(np.sqrt(2)*width*tau_t))) \
-            + BG
-
-
 def linear(x, a, b):
     return a * x + b
 
@@ -300,7 +290,7 @@ def get_indium_data(T, slope_val, width):
                 popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 210, 190, 0.07, 0.8, 0])
                 mean, A_0, A_t, tau_0, tau_t, BG = popt
             else:
-                fit_func = lifetime_spectrum
+                fit_func = models.lifetime_spectrum
                 popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
                 mean, width, A_0, A_t, tau_0, tau_t, BG = popt
             results.append(popt)
