@@ -251,6 +251,11 @@ def get_indium_data(T, slope_val, width):
     taus_0_err = []
     taus_t_err = []
 
+    all_intens_0_val = []
+    all_intens_0_err = []
+    all_intens_t_val = []
+    all_intens_t_err = []
+
     for file_ in sorted(files):
         print('Working on lifetime spectrum', file_)
         temp_lower, temp_upper = get_temp(file_)
@@ -270,25 +275,43 @@ def get_indium_data(T, slope_val, width):
         fix_width = True
 
         results = []
-        life_mean = []
+        life_means = []
         y_dist = []
+        intens_0_dist = []
+        intens_t_dist = []
+
+
         for a in range(10):
             boot_counts = redraw_count(counts)
             if fix_width:
                 fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
                 popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 210, 190, 0.07, 0.8, 0])
+                mean, A_0, A_t, tau_0, tau_t, BG = popt
             else:
                 fit_func = lifetime_spectrum
                 popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
+                mean, width, A_0, A_t, tau_0, tau_t, BG = popt
             results.append(popt)
-            life_mean.append((popt[1]*popt[3] + popt[2]*popt[4]) / (popt[1] + popt[2]))
+            intens_0 = A_0 / (A_0 + A_t)
+            intens_t = A_t / (A_0 + A_t)
+            intens_0_dist.append(intens_0)
+            intens_t_dist.append(intens_t)
+            life_mean = intens_0 * tau_0 + intens_t * tau_t
+            life_means.append(life_mean)
             y_dist.append(fit_func(x, *popt))
 
-        all_life.append(life_mean)
+        all_life.append(life_means)
 
         popt_val, popt_err = bootstrap.average_and_std_arrays(results)
-        life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_mean)
+        life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_means)
         life.append(life_mean_val)
+
+        intens_0_val, intens_0_err = bootstrap.average_and_std_arrays(intens_0_dist)
+        all_intens_0_val.append(intens_0_val)
+        all_intens_0_err.append(intens_0_err)
+        intens_t_val, intens_t_err = bootstrap.average_and_std_arrays(intens_t_dist)
+        all_intens_t_val.append(intens_t_val)
+        all_intens_t_err.append(intens_t_err)
 
         y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
 
@@ -306,9 +329,7 @@ def get_indium_data(T, slope_val, width):
         pl.plot(x, y_val, color='red')
         pl.xlabel('Time / ns')
         pl.ylabel('Counts')
-        pl.tight_layout()
-        pl.grid(True)
-        pl.margins(0.05)
+        dandify_plot()
         pl.xlim((8, 20))
         pl.savefig('_build/mpl-lifetime-{:04d}_dK.pdf'.format(int(temp_mean*10)))
         pl.savefig('_build/mpl-lifetime-{:04d}_dK.png'.format(int(temp_mean*10)))
@@ -340,6 +361,17 @@ def get_indium_data(T, slope_val, width):
     dandify_plot()
     pl.savefig('_build/mpl-tau_0-tau_t.pdf')
     pl.clf()
+
+    pl.errorbar(temps_val, all_intens_0_val, xerr=temps_err, yerr=all_intens_0_err,
+                label=r'$A_0$', linestyle='none', marker='+')
+    pl.errorbar(temps_val, all_intens_t_val, xerr=temps_err, yerr=all_intens_t_err,
+                label=r'$A_\mathrm{t}$', linestyle='none', marker='+')
+    pl.xlabel('T / K')
+    pl.ylabel(r'Relative Intensity')
+    dandify_plot()
+    pl.savefig('_build/mpl-intensities.pdf')
+    pl.clf()
+
 
     return all_life, temps_val, temps_err, life
 
