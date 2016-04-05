@@ -292,7 +292,7 @@ def get_indium_data(T, slope_val, width):
 
         x = np.linspace(np.min(time), np.max(time), 2000)
 
-        BOOTSTRAP_SAMPLES = 10
+        BOOTSTRAP_SAMPLES = 1
 
         for a in range(BOOTSTRAP_SAMPLES):
             if BOOTSTRAP_SAMPLES > 1:
@@ -448,13 +448,21 @@ def get_indium_data(T, slope_val, width):
 
     sigma_c = 1 / np.array(taus_0_val) - 1 / np.array(taus_f_val)
 
-    pl.semilogy(1 / np.array(temps_val), sigma_c, marker='+', linestyle='none')
+    arr_x = 1 / np.array(temps_val)
+
+    pl.semilogy(arr_x, sigma_c, marker='+', linestyle='none')
+    popt, pconv = op.curve_fit(exp_decay, arr_x, sigma_c, p0=[0.7, 0.01])
+    print('Arrhenius fit:', popt)
+    x = np.linspace(np.min(arr_x), np.max(arr_x), 1000)
+    y = exp_decay(x, *popt)
+    pl.plot(x, y)
     pl.xlabel(r'$1 / T$')
     pl.ylabel(r'$\sigma C_t(T)$')
-    dandify_plot()
     pl.savefig('_build/mpl-arrhenius.pdf')
     pl.savefig('_build/mpl-arrhenius.png')
     pl.clf()
+
+
 
 
     return all_life, temps_val, temps_err, life
@@ -486,7 +494,7 @@ def lifetime_spectra(T, slope_val, width):
     life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
     
     # p0=[4.2e10, 7.41e3, .352, .330]
-    p0=[1.e8, 5.7e3, .352, .330]
+    p0=[1.e8, 1/3.98022399e-03, .352, .330]
 
     # From here on >>without<< bootstrap
 
@@ -502,7 +510,9 @@ def lifetime_spectra(T, slope_val, width):
         pl.errorbar(temps_val, life_val, yerr=life_err, linestyle="none", marker="o")
         y = s_curve(x, *p0)
         pl.plot(x, y)
-        pl.show()
+        dandify_plot()
+        pl.savefig('_build/mpl-s_curve-failure.pdf')
+        pl.savefig('_build/mpl-s_curve-failure.png')
         pl.clf()
     else:
         print(popt)
@@ -513,7 +523,9 @@ def lifetime_spectra(T, slope_val, width):
     print('Showing the plot with actual fit curve.')
     pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
     pl.plot(x, y)
-    pl.show()
+    dandify_plot()
+    pl.savefig('_build/mpl-s_curve.pdf')
+    pl.savefig('_build/mpl-s_curve.png')
     pl.clf()
 
     # From here on >>with<< bootstrap
