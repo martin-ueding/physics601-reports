@@ -276,6 +276,7 @@ def get_indium_data(T, slope_val, width):
             channel = data[:, 0]
             time = slope_val * channel
             counts = data[:, 1]
+            boot_counts = bootstrap.redraw_count(counts)
 
             if sample_id == 0:
                 all_counts.append(counts)
@@ -326,7 +327,7 @@ def get_indium_data(T, slope_val, width):
 
     # Generate plots with lifetime curves and fits.
     for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, all_lifetime_y_dist):
-        y_val, y_dist = bootstrap.average_and_std_arrays(lifetime_y_dist)
+        y_val, y_err = bootstrap.average_and_std_arrays(lifetime_y_dist)
 
         np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp)),
                    bootstrap.pgfplots_error_band(time[0:4000], counts[0:4000], np.sqrt(counts[0:4000])))
@@ -337,14 +338,10 @@ def get_indium_data(T, slope_val, width):
 
         # show plots
         pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
-        pl.fill_between(x1, y1_val - y1_err, y1_val + y1_err, alpha=0.5, color='orange')
-        pl.fill_between(x2, y2_val - y2_err, y2_val + y2_err, alpha=0.5, color='orange')
         pl.plot(time, counts, color='black')
         counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
         pl.plot(time, counts_smooth, color='green')
         pl.plot(x, y_val, color='red')
-        pl.plot(x1, y1_val, color='orange', linewidth=3)
-        pl.plot(x2, y2_val, color='orange', linewidth=3)
         pl.xlabel('Time / ns')
         pl.ylabel('Counts')
         dandify_plot()
@@ -388,8 +385,10 @@ def get_indium_data(T, slope_val, width):
     inv_temps = 1 / np.array(temps_val)
     results = []
     x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
-    for all_sigma_c in zip(all_sigma_c_dist):
+    for all_sigma_c in all_sigma_c_dist:
         p0 = [0.7, 0.01]
+        print('inv_temps:', inv_temps)
+        print('all_sigma_c:', all_sigma_c)
         popt, pconv = op.curve_fit(exp_decay, inv_temps, all_sigma_c, p0=p0)
         y = exp_decay(x, *popt)
 
@@ -408,7 +407,7 @@ def get_indium_data(T, slope_val, width):
 
     pl.fill_between(x, arr_y_val - arr_y_err, arr_y_val + arr_y_err, alpha=0.5, color='red')
     pl.plot(x, arr_y_val, color='red')
-    pl.errorbar(inv_temp, sigma_c_val, yerr=sigma_c_err, marker='+', linestyle='none')
+    pl.errorbar(inv_temps, sigma_c_val, yerr=sigma_c_err, marker='+', linestyle='none')
     pl.xlabel(r'$1 / T$')
     pl.ylabel(r'$\sigma C_t(T)$')
     pl.savefig('_build/mpl-arrhenius.pdf')
