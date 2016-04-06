@@ -7,31 +7,30 @@
                 grid=major,
                 band/.style={
                         draw=none,
-                        opacity=0.7,
                 },
         ]
         \addplot[
                 band, 
-                fill=blue, 
+                fill=black, 
         ] table {../xy/prompts-short.txt} \closedcycle;
         \addplot[
-                black,
+                red,
         ] table {../xy/prompt-1-fit.txt};
                 
         \addplot[
-                black,
+                red,
         ] table {../xy/prompt-2-fit.txt};
 
         \addplot[
-                black,
+                red,
         ] table {../xy/prompt-3-fit.txt};
 
         \addplot[
-                black,
+                red,
         ] table {../xy/prompt-4-fit.txt};
 
         \addplot[
-                black,
+                red,
         ] table {../xy/prompt-5-fit.txt};
 
     \end{axis}

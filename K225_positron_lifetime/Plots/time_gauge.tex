@@ -11,14 +11,14 @@
         },
         ]
         \addplot[
-                blue,
+                black,
                 mark=*,
                 only marks,
                 error bars/x dir=both,
                 error bars/x explicit,
         ] table[x error index = 1] {../xy/time_gauge_plot.txt} ;
         \addplot[
-                black,
+                red,
         ] table {../xy/time_gauge_fit.txt};
 \end{axis}
 \end{tikzpicture}

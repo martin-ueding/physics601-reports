@@ -7,12 +7,11 @@
         grid=major,
         band/.style={
                 draw=none,
-                opacity=0.7,
         },
         ]
         \addplot[
                 band, 
-                fill=blue, 
+                fill=black, 
         ] table {../xy/na-re.txt} \closedcycle;
 
         \node[anchor=east] (description_511) at (axis cs:1800,700){\SI{511}{\kilo\electronvolt}};
