@@ -253,6 +253,8 @@ def get_indium_data(T, slope_val, width):
     all_lifetime_y_dist = []
     all_lifetime_popt_dist = []
 
+    all_sigma_c_dist = []
+
     # Process lifetime curves with bootstrap.
     for sample_id in range(BOOTSTRAP_SAMPLES):
         print('Bootstrap sample', sample_id, 'running …')
@@ -293,6 +295,7 @@ def get_indium_data(T, slope_val, width):
             tau_bar = intens_0 * tau_0 + intens_t * tau_t
             y = fit_func(x, *popt)
             tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
+            sigma_c = 1 / tau_0 - 1 / tau_f
 
             results.append([
                 tau_0,
@@ -303,20 +306,23 @@ def get_indium_data(T, slope_val, width):
                 intens_t,
                 y,
                 popt,
+                sigma_c,
             ])
 
 
-        tau_0_dist, tau_bar_dist, tau_f_dist, tau_t_dist, intens_0_dist, \
-                intens_t_dist, lifetime_y_dist, lifetime_popt_dist = zip(*results)
+        tau_0_list, tau_bar_list, tau_f_list, tau_t_list, intens_0_list, \
+                intens_t_list, lifetime_y_list, lifetime_popt_list, sigma_c_list \
+                = zip(*results)
 
-        all_tau_0_dist.append(tau_0_dist)
-        all_tau_bar_dist.append(tau_bar_dist)
-        all_tau_f_dist.append(tau_f_dist)
-        all_tau_t_dist.append(tau_t_dist)
-        all_intens_0_dist.append(intens_0_dist)
-        all_intens_t_dist.append(intens_t_dist)
-        all_lifetime_y_dist.append(lifetime_y_dist)
-        all_lifetime_popt_dist.append(lifetime_popt_dist)
+        all_tau_0_dist.append(tau_0_list)
+        all_tau_bar_dist.append(tau_bar_list)
+        all_tau_f_dist.append(tau_f_list)
+        all_tau_t_dist.append(tau_t_list)
+        all_intens_0_dist.append(intens_0_list)
+        all_intens_t_dist.append(intens_t_list)
+        all_lifetime_y_dist.append(lifetime_y_list)
+        all_lifetime_popt_dist.append(lifetime_popt_list)
+        all_sigma_c_dist.append(sigma_c_list)
 
     # Generate plots with lifetime curves and fits.
     for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, all_lifetime_y_dist):
@@ -379,24 +385,38 @@ def get_indium_data(T, slope_val, width):
     pl.savefig('_build/mpl-intensities.pdf')
     pl.clf()
 
-    sigma_c = 1 / np.array(taus_0_val) - 1 / np.array(taus_f_val)
+    inv_temps = 1 / np.array(temps_val)
+    results = []
+    x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
+    for all_sigma_c in zip(all_sigma_c_dist):
+        p0 = [0.7, 0.01]
+        popt, pconv = op.curve_fit(exp_decay, inv_temps, all_sigma_c, p0=p0)
+        y = exp_decay(x, *popt)
 
-    arr_x = 1 / np.array(temps_val)
+        kelvin_to_eV = 8.621738-5
 
-    pl.semilogy(arr_x, sigma_c, marker='+', linestyle='none')
-    popt, pconv = op.curve_fit(exp_decay, arr_x, sigma_c, p0=[0.7, 0.01])
-    print('Arrhenius fit:', popt)
-    x = np.linspace(np.min(arr_x), np.max(arr_x), 1000)
-    y = exp_decay(x, *popt)
-    pl.plot(x, y)
+        results.append([
+            popt[1] * kelvin_to_eV,
+            y,
+        ])
+
+    Ht_eV_dist, arr_y_dist = zip(*results)
+
+    Ht_eV_val, Ht_eV_err = bootstrap.average_and_std_arrays(Ht_eV_dist)
+    arr_y_val, arr_y_err = bootstrap.average_and_std_arrays(arr_y_dist)
+    sigma_c_val, sigma_c_err = bootstrap.average_and_std_arrays(all_sigma_c_dist)
+
+    pl.fill_between(x, arr_y_val - arr_y_err, arr_y_val + arr_y_err, alpha=0.5, color='red')
+    pl.plot(x, arr_y_val, color='red')
+    pl.errorbar(inv_temp, sigma_c_val, yerr=sigma_c_err, marker='+', linestyle='none')
     pl.xlabel(r'$1 / T$')
     pl.ylabel(r'$\sigma C_t(T)$')
     pl.savefig('_build/mpl-arrhenius.pdf')
     pl.savefig('_build/mpl-arrhenius.png')
     pl.clf()
 
-
-
+    print('Done for now')
+    sys.exit(0)
 
     return all_life, temps_val, temps_err, life
 
