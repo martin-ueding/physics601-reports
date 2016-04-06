@@ -371,6 +371,7 @@ def get_indium_data(T, slope_val, width):
     pl.ylabel(r'$\tau$ / ns')
     dandify_plot()
     pl.savefig('_build/mpl-tau_0-tau_t.pdf')
+    pl.savefig('_build/mpl-tau_0-tau_t.png')
     pl.clf()
 
     # Plot relative intensities.
@@ -384,6 +385,7 @@ def get_indium_data(T, slope_val, width):
     pl.ylabel(r'Relative Intensity')
     dandify_plot()
     pl.savefig('_build/mpl-intensities.pdf')
+    pl.savefig('_build/mpl-intensities.png')
     pl.clf()
 
     inv_temps = 1 / np.array(temps_val)
