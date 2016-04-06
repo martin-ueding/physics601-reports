@@ -253,6 +253,7 @@ def get_indium_data(T, slope_val, width):
     all_lifetime_y_dist = []
     all_lifetime_popt_dist = []
 
+    # Process lifetime curves with bootstrap.
     for sample_id in range(BOOTSTRAP_SAMPLES):
         print('Bootstrap sample', sample_id, 'running …')
 
@@ -317,8 +318,7 @@ def get_indium_data(T, slope_val, width):
         all_lifetime_y_dist.append(lifetime_y_dist)
         all_lifetime_popt_dist.append(lifetime_popt_dist)
 
-    ####
-
+    # Generate plots with lifetime curves and fits.
     for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, all_lifetime_y_dist):
         y_val, y_dist = bootstrap.average_and_std_arrays(lifetime_y_dist)
 
@@ -349,7 +349,11 @@ def get_indium_data(T, slope_val, width):
         pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
         pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
         pl.clf()
-        
+
+    # Plot the lifetimes.
+    taus_0_val, taus_0_err = bootstrap.average_and_std_arrays(all_tau_0_dist)
+    taus_t_val, taus_t_err = bootstrap.average_and_std_arrays(all_tau_t_dist)
+    taus_f_val, taus_f_err = bootstrap.average_and_std_arrays(all_tau_f_dist)
     pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
                 label=r'$\tau_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
@@ -362,6 +366,9 @@ def get_indium_data(T, slope_val, width):
     pl.savefig('_build/mpl-tau_0-tau_t.pdf')
     pl.clf()
 
+    # Plot relative intensities.
+    all_intens_0_val, all_intens_0_err = bootstrap.average_and_std_arrays(all_intens_0_dist)
+    all_intens_t_val, all_intens_t_err = bootstrap.average_and_std_arrays(all_intens_t_dist)
     pl.errorbar(temps_val, all_intens_0_val, xerr=temps_err, yerr=all_intens_0_err,
                 label=r'$A_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, all_intens_t_val, xerr=temps_err, yerr=all_intens_t_err,
@@ -371,7 +378,6 @@ def get_indium_data(T, slope_val, width):
     dandify_plot()
     pl.savefig('_build/mpl-intensities.pdf')
     pl.clf()
-
 
     sigma_c = 1 / np.array(taus_0_val) - 1 / np.array(taus_f_val)
 
