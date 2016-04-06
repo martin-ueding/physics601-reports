@@ -326,7 +326,8 @@ def get_indium_data(T, slope_val, width):
         all_sigma_c_dist.append(sigma_c_list)
 
     # Generate plots with lifetime curves and fits.
-    for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, all_lifetime_y_dist):
+    for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, zip(*all_lifetime_y_dist)):
+        print('Creating lifetime plot with temp', temp)
         y_val, y_err = bootstrap.average_and_std_arrays(lifetime_y_dist)
 
         np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp)),
