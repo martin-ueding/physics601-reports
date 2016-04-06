@@ -247,11 +247,6 @@ def get_indium_data(T, slope_val, width):
     taus_f_val = []
     taus_f_err = []
 
-    taus_0_lin_val = []
-    taus_t_lin_val = []
-    taus_0_lin_err = []
-    taus_t_lin_err = []
-
     all_intens_0_val = []
     all_intens_0_err = []
     all_intens_t_val = []
@@ -280,9 +275,6 @@ def get_indium_data(T, slope_val, width):
         y2_dist = []
         intens_0_dist = []
         intens_t_dist = []
-
-        tau_0_lin_dist = []
-        tau_t_lin_dist = []
 
         tau_f_dist = []
 
@@ -321,27 +313,6 @@ def get_indium_data(T, slope_val, width):
 
             tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
             tau_f_dist.append(tau_f)
-
-            x1 = np.linspace(range_1[0], range_1[1], 10)
-            sel = (range_1[0] < time) & (time < range_1[1])
-            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e14, 0.4])
-            a, b = popt
-            y1 = exp_decay(x1, *popt)
-            y1_dist.append(y1)
-            tau_0_lin_dist.append(b)
-
-            print(a, b)
-
-            x2 = np.linspace(range_2[0], range_2[1], 10)
-            sel = (range_2[0] < time) & (time < range_2[1])
-            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[5e5, 1.2])
-            a, b = popt
-            y2 = exp_decay(x2, *popt)
-            y2_dist.append(y2)
-            tau_t_lin_dist.append(b)
-
-            print(a, b)
-            print()
 
         all_life.append(life_means)
 
@@ -411,24 +382,12 @@ def get_indium_data(T, slope_val, width):
         taus_0_err.append(tau_0_err)
         taus_t_err.append(tau_t_err)
 
-        tau_0_lin_val, tau_0_lin_err = bootstrap.average_and_std_arrays(tau_0_lin_dist)
-        tau_t_lin_val, tau_t_lin_err = bootstrap.average_and_std_arrays(tau_t_lin_dist)
-
-        taus_0_lin_val.append(tau_0_lin_val)
-        taus_t_lin_val.append(tau_t_lin_val)
-        taus_0_lin_err.append(tau_0_lin_err)
-        taus_t_lin_err.append(tau_t_lin_err)
-
     pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
                 label=r'$\tau_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
                 label=r'$\tau_\mathrm{t}$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_f_val, xerr=temps_err, yerr=taus_f_err,
                 label=r'$\tau_\mathrm{f}$', linestyle='none', marker='+')
-    pl.errorbar(temps_val, taus_0_lin_val, xerr=temps_err, yerr=taus_0_lin_err,
-                label=r'$\tau_0$ lin', linestyle='none', marker='+')
-    pl.errorbar(temps_val, taus_t_lin_val, xerr=temps_err, yerr=taus_t_lin_err,
-                label=r'$\tau_\mathrm{t}$ lin', linestyle='none', marker='+')
     pl.xlabel('T / K')
     pl.ylabel(r'$\tau$ / ns')
     dandify_plot()
