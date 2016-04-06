@@ -1,0 +1,54 @@
+\input{../../colors}
+
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={$T / \si{\kelvin}$},
+            ylabel={$/ \si{\nano\second}$},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.5,
+            },
+            % TODO Legend outside of plot.
+        ]
+
+        \addplot[
+            four1,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/tau_t.tsv};
+        \addlegendentry{$\tau_\mathrm t$}
+
+        \addplot[
+            four2,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/tau_bar.tsv};
+        \addlegendentry{$\bar\tau$}
+
+        \addplot[
+            four3,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/tau_f.tsv};
+        \addlegendentry{$\tau_\mathrm f$}
+
+        \addplot[
+            four4,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/tau_0.tsv};
+        \addlegendentry{$\tau_0$}
+
+    \end{axis}
+\end{tikzpicture}
