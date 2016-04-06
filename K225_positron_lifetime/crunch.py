@@ -137,7 +137,7 @@ def acryl_sampler():
     counts = data[:, 1]
 
     x = np.linspace(np.min(time), np.max(time), 2000)
-    p0 = [10.3, width, 12e3, 34e2, 1/2.17, 1/0.508, 2]
+    p0 = [10.3, width, 13e3, 34e2, 1/2.17, 1/0.508, 2]
     y1, y2, y = models.lifetime_spectrum_parts(x, *p0)
 
     pl.plot(time, counts, color='black')
@@ -167,9 +167,7 @@ def get_acryl_data(T, slope_val, width):
     x = np.linspace(np.min(time), np.max(time), 2000)
 
     fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
-            models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-
-    sel = (9 < time) & (time < 25)
+            np.log(models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG))
 
     results = []
 
@@ -193,14 +191,16 @@ def get_acryl_data(T, slope_val, width):
             lin_results.append(1/popt_lin[1])
             lin_lifetimes.append(1/popt_lin[1])
 
-        p0 = [10.5, 12e3, 34e2] + lin_lifetimes + [2]
-        popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=p0)
+        sel = (10 < time) & (time < 50) & (boot_counts > 0)
+
+        p0 = [10.5, 13e3, 34e2] + lin_lifetimes + [2]
+        popt, pconv = op.curve_fit(fit_func, time[sel], np.log(boot_counts[sel]), p0=p0)
         mean, A_0, A_t, tau_0, tau_t, BG = popt
 
         intens_0 = A_0 / (A_0 + A_t)
         intens_t = A_t / (A_0 + A_t)
         tau_bar = intens_0 * tau_0 + intens_t * tau_t
-        y = fit_func(x, *popt)
+        y = np.exp(fit_func(x, *popt))
         tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
         sigma_c = 1 / tau_0 - 1 / tau_f
 
@@ -251,14 +251,11 @@ def get_acryl_data(T, slope_val, width):
     print(x.shape)
     print(y_lin1_val.shape)
 
-    pl.plot(time, counts, color='black')
-    pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
-    pl.fill_between(x, y_lin1_val - y_lin1_err, y_lin1_val + y_lin1_err, alpha=0.5, color='blue')
-    pl.fill_between(x, y_lin2_val - y_lin2_err, y_lin2_val + y_lin2_err, alpha=0.5, color='blue')
+    pl.plot(time, counts, color='black', alpha=0.3)
     counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
     pl.plot(time, counts_smooth, color='green')
-    pl.plot(x, y_lin1_val, color='blue')
-    pl.plot(x, y_lin2_val, color='blue')
+    pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+    pl.plot(x, y_val, color='red')
     pl.xlabel('Time / ns')
     pl.ylabel('Counts')
     dandify_plot()
@@ -267,6 +264,11 @@ def get_acryl_data(T, slope_val, width):
     pl.savefig('_build/mpl-lifetime-acryl.pdf')
     pl.savefig('_build/mpl-lifetime-acryl.png')
     pl.yscale('log')
+    pl.fill_between(x, y_lin1_val - y_lin1_err, y_lin1_val + y_lin1_err, alpha=0.5, color='blue')
+    pl.fill_between(x, y_lin2_val - y_lin2_err, y_lin2_val + y_lin2_err, alpha=0.5, color='blue')
+    pl.plot(x, y_lin1_val, color='blue', alpha=0.5)
+    pl.plot(x, y_lin2_val, color='blue', alpha=0.5)
+    dandify_plot()
     pl.savefig('_build/mpl-lifetime-acryl-log.pdf')
     pl.savefig('_build/mpl-lifetime-acryl-log.png')
     #pl.show()
