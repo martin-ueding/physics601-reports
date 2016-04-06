@@ -240,6 +240,8 @@ def get_indium_data(T, slope_val, width):
     temps_val = []
     temps_err = []
 
+    all_counts = []
+
     all_tau_0_dist = []
     all_tau_bar_dist = []
     all_tau_f_dist = []
@@ -271,6 +273,9 @@ def get_indium_data(T, slope_val, width):
             channel = data[:, 0]
             time = slope_val * channel
             counts = data[:, 1]
+
+            if sample_id == 0:
+                all_counts.append(counts)
 
             x = np.linspace(np.min(time), np.max(time), 2000)
 
@@ -314,33 +319,15 @@ def get_indium_data(T, slope_val, width):
 
     ####
 
+    for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, all_lifetime_y_dist):
+        y_val, y_dist = bootstrap.average_and_std_arrays(lifetime_y_dist)
 
-        popt_val, popt_err = bootstrap.average_and_std_arrays(results)
-        life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_means)
-        life.append(life_mean_val)
-
-        intens_0_val, intens_0_err = bootstrap.average_and_std_arrays(intens_0_dist)
-        all_intens_0_val.append(intens_0_val)
-        all_intens_0_err.append(intens_0_err)
-        intens_t_val, intens_t_err = bootstrap.average_and_std_arrays(intens_t_dist)
-        all_intens_t_val.append(intens_t_val)
-        all_intens_t_err.append(intens_t_err)
-
-        y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
-        y1_val, y1_err = bootstrap.average_and_std_arrays(y1_dist)
-        y2_val, y2_err = bootstrap.average_and_std_arrays(y2_dist)
-
-        tau_f_val, tau_f_err = bootstrap.average_and_std_arrays(tau_f_dist)
-        taus_f_val.append(tau_f_val)
-        taus_f_err.append(tau_f_err)
-
-        # write data to plot with pgfplots
-
-        np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(time[0:4000], counts[0:4000], np.sqrt(counts[0:4000])))
-
-        np.savetxt('_build/xy/lifetime-{}K-fit.tsv'.format(int(temp_mean)), np.column_stack([x, y_val]))
-
-        np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(x, y_val, y_err))
+        np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp)),
+                   bootstrap.pgfplots_error_band(time[0:4000], counts[0:4000], np.sqrt(counts[0:4000])))
+        np.savetxt('_build/xy/lifetime-{}K-fit.tsv'.format(int(temp)),
+                   np.column_stack([x, y_val]))
+        np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp)),
+                   bootstrap.pgfplots_error_band(x, y_val, y_err))
 
         # show plots
         pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
@@ -356,31 +343,13 @@ def get_indium_data(T, slope_val, width):
         pl.ylabel('Counts')
         dandify_plot()
         pl.xlim((8, 20))
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK.pdf'.format(int(temp_mean*10)))
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK.png'.format(int(temp_mean*10)))
+        pl.savefig('_build/mpl-lifetime-{:04d}K.pdf'.format(int(temp)))
+        pl.savefig('_build/mpl-lifetime-{:04d}K.png'.format(int(temp)))
         pl.yscale('log')
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.pdf'.format(int(temp_mean*10)))
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.png'.format(int(temp_mean*10)))
-
-        if False:
-            pl.show()
-            sys.exit(0)
-
+        pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
+        pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
         pl.clf()
-
         
-        if fix_width:
-            mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-            mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
-        else:
-            mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-            mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
-
-        taus_0_val.append(tau_0_val)
-        taus_t_val.append(tau_t_val)
-        taus_0_err.append(tau_0_err)
-        taus_t_err.append(tau_t_err)
-
     pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
                 label=r'$\tau_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
