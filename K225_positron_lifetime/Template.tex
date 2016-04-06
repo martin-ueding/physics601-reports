@@ -190,6 +190,7 @@ $H_\mathrm t$ is the energy needed for a vacancy to form, it is called
 \enquote{vacancy formation enthalpy}.
 
 \subsection{Trapping model}
+\label{ssec:tra_mod}
 
 In a metal, the amount of free electrons is very large. A positron cannot form
 positronium as the amount of competing electrons is too high. The positron can
@@ -342,7 +343,41 @@ several times for statistical accuracy.
 
 \section{Analysis models}
 
-\subsection{Lifetime spektrum}
+\subsection{Lifetime spectrum}
+
+As in Section~\ref{ssec:tra_mod} stated the lifetime spectrum contains a
+superposition of two decays with different lifetimes $\tau_0$ and
+$\tau_\text{t}$ and their corresponding relative intensities $I_0$ and
+$I_\text{t}$:
+\begin{align*}
+        W (t) &= \frac{I_0}{\tau_0}\eup^{-\frac{t}{\tau_0}} +
+        \frac{I_t}{\tau_t}\eup^{-\frac{t}{\tau_t}}.
+        \intertext{%
+                For the detecting system has a limited time resolution the
+                obtained spectrum is a convolution of the real lifetime
+                spectrum with the resolution function:
+        }
+        M (t) &= (W * P)(t) \\
+              &= \sum_{i\in\{0,\text{t}\}}\frac{I_0}{2\tau_i}
+        \exp\!\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
+        \del{\text{erf}\!\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
+        + \text{erf}\!\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}},
+        \intertext{%
+                with $\text{erf}(x)$ being the Gaussian error function. For
+                fitting data, where we have a background $N_\text{BG}$, we use
+        }
+        N (t) &= \sum_{i\in\{0,\text{t}\}}\frac{A_i}{2\tau_i}
+        \exp\!\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
+        \del{\text{erf}\!\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
+        + \text{erf}\!\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}}
+        \\
+        & + N_\text{BG}.
+        \intertext{%
+                The count amplitudes $A_0$ and $A_\text{t}$ are related to the
+                intensities by
+        }
+        I_i &= \frac{A_i}{A_0 + A_\text{t}}.
+\end{align*}
 
 \subsection{Arrhenius plot}
 
