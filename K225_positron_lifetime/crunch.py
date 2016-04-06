@@ -146,7 +146,7 @@ def get_acryl_data(T, slope_val, width):
 
         boot_counts = bootstrap.redraw_count(counts)
 
-        p0 = [10.5, 4e4, 1e4, 0.3, 0.02, 2]
+        p0 = [10.5, 5e3, 9e3, 0.3, 0.1, 0]
         popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=p0)
         mean, A_0, A_t, tau_0, tau_t, BG = popt
 
@@ -196,7 +196,7 @@ def get_acryl_data(T, slope_val, width):
     pl.xlabel('Time / ns')
     pl.ylabel('Counts')
     dandify_plot()
-    pl.xlim((8, 20))
+    #pl.xlim((8, 20))
     pl.savefig('_build/mpl-lifetime-acryl.pdf')
     pl.savefig('_build/mpl-lifetime-acryl.png')
     pl.yscale('log')
