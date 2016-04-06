@@ -123,7 +123,86 @@ def job_colors():
 
 def lifetime(T):
     slope, width = time_gauge(T)
+    get_acryl_data(T, slope, width)
+    sys.exit(200)
     get_indium_data(T, slope, width)
+
+
+def get_acryl_data(T, slope_val, width):
+    data = np.loadtxt('Data/longlong.txt')
+    channel = data[:, 0]
+    time = slope_val * channel
+    counts = data[:, 1]
+
+    x = np.linspace(np.min(time), np.max(time), 2000)
+
+    fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
+            models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+
+    results = []
+
+    for sample_id in range(BOOTSTRAP_SAMPLES):
+        print('Bootstrap sample', sample_id, 'running …')
+
+        boot_counts = bootstrap.redraw_count(counts)
+
+        p0 = [10.5, 4e4, 1e4, 0.3, 0.02, 2]
+        popt, pconv = op.curve_fit(fit_func, time, boot_counts, p0=p0)
+        mean, A_0, A_t, tau_0, tau_t, BG = popt
+
+        intens_0 = A_0 / (A_0 + A_t)
+        intens_t = A_t / (A_0 + A_t)
+        tau_bar = intens_0 * tau_0 + intens_t * tau_t
+        y = fit_func(x, *popt)
+        tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
+        sigma_c = 1 / tau_0 - 1 / tau_f
+
+        results.append([
+            tau_0,
+            tau_bar,
+            tau_f,
+            tau_t,
+            intens_0,
+            intens_t,
+            y,
+            popt,
+            sigma_c,
+        ])
+        
+    tau_0_dist, tau_bar_dist, tau_f_dist, tau_t_dist, intens_0_dist, \
+            intens_t_dist, lifetime_y_dist, lifetime_popt_dist, sigma_c_dist \
+            = zip(*results)
+
+    tau_0_val, tau_0_err = bootstrap.average_and_std_arrays(tau_0_dist)
+    tau_t_val, tau_t_err = bootstrap.average_and_std_arrays(tau_t_dist)
+    tau_f_val, tau_f_err = bootstrap.average_and_std_arrays(tau_f_dist)
+    tau_bar_val, tau_bar_err = bootstrap.average_and_std_arrays(tau_bar_dist)
+
+    popt_val, popt_err = bootstrap.average_and_std_arrays(lifetime_popt_dist)
+    y_val, y_err = bootstrap.average_and_std_arrays(lifetime_y_dist)
+
+    print('tau_0', siunitx(tau_0_val, tau_0_err))
+    print('tau_t', siunitx(tau_t_val, tau_t_err))
+    print('tau_f', siunitx(tau_f_val, tau_f_err))
+    print('tau_bar', siunitx(tau_bar_val, tau_bar_err))
+
+    print('popt', siunitx(popt_val, popt_err))
+
+    pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+    pl.plot(time, counts, color='black')
+    counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
+    pl.plot(time, counts_smooth, color='green')
+    pl.plot(x, y_val, color='red')
+    pl.xlabel('Time / ns')
+    pl.ylabel('Counts')
+    dandify_plot()
+    pl.xlim((8, 20))
+    pl.savefig('_build/mpl-lifetime-acryl.pdf')
+    pl.savefig('_build/mpl-lifetime-acryl.png')
+    pl.yscale('log')
+    pl.savefig('_build/mpl-lifetime-acryl-log.pdf')
+    pl.savefig('_build/mpl-lifetime-acryl-log.png')
+    pl.clf()
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):
