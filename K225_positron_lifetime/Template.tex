@@ -626,6 +626,37 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
 
 \section{Acrylic glass sample}
 
+After we take all temperature dependent measurements with the indium sample, we
+place in an acrylic glass sample between the detectors. Inside the glass, there
+is $\mathrm{^{22}Na}$ dust. We measure at room temperature over night.
+
+Figure~\ref{fig:acrylic} shows the resulting spectrum we got the next morning.
+As done before for the indium, we fit the same two-decay model to our data. In
+contrast to the indium spectra, this fit turned out to be rather unstable. We
+did a few things to get it under control. First we fitted a simple exponential
+decay to the straight parts of the falling flank. This gave us a first estimate
+of the lifetimes for the positronium. We obtained
+\[
+    \tau_0 = \SI{<< acryl_tau_0_lin >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm t = \SI{<< acryl_tau_t_lin >>}{\nano\second} \,.
+\]
+Choosing fixed limits in the time for the fit, we introduce a systematic error.
+The proper treatment would be a $\chi^2$-weighted histogram of fit-parameters
+to control the statistical error. We do not need this treatment here, we just
+want to use those values as starting values for the unstable fit. Using those
+lifetimes as input for the full fit model, we obtained the lifetimes
+\[
+    \tau_0 = \SI{<< acryl_tau_0 >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm t = \SI{<< acryl_tau_t >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm f = \SI{<< acryl_tau_f >>}{\nano\second}
+    \eqnsep
+    \bar\tau = \SI{<< acryl_tau_bar >>}{\nano\second}
+    \,.
+\]
+
 \begin{figure}
     \centering
     \includegraphics{acrylic}
@@ -639,6 +670,15 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
         for the red fit line.
     }
     \label{fig:acrylic}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{acrylic-zoom}
+    \caption{%
+        Zoom-in of Figure~\ref{fig:acrylic}.
+    }
+    \label{fig:acrylic-zoom}
 \end{figure}
 
 \begin{appendix}
