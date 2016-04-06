@@ -30,6 +30,8 @@ import bootstrap
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
+BOOTSTRAP_SAMPLES = 1
+
 
 
 def dandify_plot():
@@ -235,83 +237,83 @@ def time_gauge(T, show_gauss=False, show_lin=False):
 def get_indium_data(T, slope_val, width):
     files = glob.glob('Data/in-*.txt')
 
-    all_life = []
-
     temps_val = []
     temps_err = []
-    life = []
 
-    taus_0_val = []
-    taus_0_err = []
-    taus_t_val = []
-    taus_t_err = []
-    taus_f_val = []
-    taus_f_err = []
+    all_tau_0_dist = []
+    all_tau_bar_dist = []
+    all_tau_f_dist = []
+    all_tau_t_dist = []
 
-    all_intens_0_val = []
-    all_intens_0_err = []
-    all_intens_t_val = []
-    all_intens_t_err = []
+    all_intens_0_dist = []
+    all_intens_t_dist = []
 
-    for file_ in sorted(files):
-        print('Working on lifetime spectrum', file_)
-        temp_lower, temp_upper = get_temp(file_)
-        temp_mean = (temp_lower + temp_upper)/2
-        temp_err = temp_upper - temp_mean
-        temps_val.append(temp_mean)
-        temps_err.append(temp_err)
-        print('Mean temperature:', temp_mean)
+    all_lifetime_y_dist = []
+    all_lifetime_popt_dist = []
 
-        data = np.loadtxt(file_)
-        channel = data[:,0]
-        time = slope_val * channel
-        counts = data[:,1]
-
-        fix_width = True
+    for sample_id in range(BOOTSTRAP_SAMPLES):
+        print('Bootstrap sample', sample_id, 'running …')
 
         results = []
-        life_means = []
-        y_dist = []
-        y1_dist = []
-        y2_dist = []
-        intens_0_dist = []
-        intens_t_dist = []
 
-        tau_f_dist = []
+        for file_ in sorted(files):
+            print('Working on lifetime spectrum', file_)
 
-        x = np.linspace(np.min(time), np.max(time), 2000)
+            if sample_id == 0:
+                temp_lower, temp_upper = get_temp(file_)
+                temp_mean = (temp_lower + temp_upper)/2
+                temp_err = temp_upper - temp_mean
+                temps_val.append(temp_mean)
+                temps_err.append(temp_err)
+                print('Mean temperature:', temp_mean)
 
-        BOOTSTRAP_SAMPLES = 1
+            data = np.loadtxt(file_)
+            channel = data[:, 0]
+            time = slope_val * channel
+            counts = data[:, 1]
 
-        for a in range(BOOTSTRAP_SAMPLES):
-            if BOOTSTRAP_SAMPLES > 1:
-                boot_counts = redraw_count(counts)
-            else:
-                boot_counts = counts
+            x = np.linspace(np.min(time), np.max(time), 2000)
 
             sel = (9 < time) & (time < 15)
 
-            if fix_width:
-                fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-                popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 210, 190, 0.07, 0.8, 0])
-                mean, A_0, A_t, tau_0, tau_t, BG = popt
-            else:
-                fit_func = models.lifetime_spectrum
-                popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
-                mean, width, A_0, A_t, tau_0, tau_t, BG = popt
-            results.append(popt)
+            fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
+                    models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+            p0 = [10.5, 210, 190, 0.07, 0.8, 0]
+            popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=p0)
+            mean, A_0, A_t, tau_0, tau_t, BG = popt
+
             intens_0 = A_0 / (A_0 + A_t)
             intens_t = A_t / (A_0 + A_t)
-            intens_0_dist.append(intens_0)
-            intens_t_dist.append(intens_t)
-            life_mean = intens_0 * tau_0 + intens_t * tau_t
-            life_means.append(life_mean)
-            y_dist.append(fit_func(x, *popt))
-
+            tau_bar = intens_0 * tau_0 + intens_t * tau_t
+            y = fit_func(x, *popt)
             tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
-            tau_f_dist.append(tau_f)
 
-        all_life.append(life_means)
+            results.append([
+                tau_0,
+                tau_bar,
+                tau_f,
+                tau_t,
+                intens_0,
+                intens_t,
+                y,
+                popt,
+            ])
+
+
+        tau_0_dist, tau_bar_dist, tau_f_dist, tau_t_dist, intens_0_dist, \
+                intens_t_dist, lifetime_y_dist, lifetime_popt_dist = zip(*results)
+
+        all_tau_0_dist.append(tau_0_dist)
+        all_tau_bar_dist.append(tau_bar_dist)
+        all_tau_f_dist.append(tau_f_dist)
+        all_tau_t_dist.append(tau_t_dist)
+        all_intens_0_dist.append(intens_0_dist)
+        all_intens_t_dist.append(intens_t_dist)
+        all_lifetime_y_dist.append(lifetime_y_dist)
+        all_lifetime_popt_dist.append(lifetime_popt_dist)
+
+    ####
+
 
         popt_val, popt_err = bootstrap.average_and_std_arrays(results)
         life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_means)
