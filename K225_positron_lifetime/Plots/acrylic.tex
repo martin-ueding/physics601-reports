@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+    \begin{semilogyaxis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={Time / \si{\nano\second}},
+            ylabel={Counts},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.5,
+            },
+            % TODO Better y-ticks.
+        ]
+
+        \addplot[black] table {../xy/acryl-lifetime-data.tsv};
+        \addplot[band, fill=red] table {../xy/acryl-lifetime-band.tsv} \closedcycle;
+        \addplot[red] table {../xy/acryl-lifetime-fit.tsv};
+    \end{semilogyaxis}
+\end{tikzpicture}
