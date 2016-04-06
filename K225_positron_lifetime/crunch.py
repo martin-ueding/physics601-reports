@@ -231,6 +231,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     T['time_resolution'] = siunitx(time_res , time_res_err)
     return slope_val, width_val*slope_val
 
+
 def get_indium_data(T, slope_val, width):
     files = glob.glob('Data/in-*.txt')
 
