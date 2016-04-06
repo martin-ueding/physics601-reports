@@ -436,10 +436,12 @@ def get_indium_data(T, slope_val, width):
                 label=r'$\bar\tau$', linestyle='none', marker='+')
     dandify_plot()
     pl.xlabel('T / K')
-    pl.ylabel(r'$\tau$ / ns')
+    pl.ylabel(r'$\bar\tau$ / ns')
     pl.savefig('_build/mpl-s_curve.pdf')
     pl.savefig('_build/mpl-s_curve.png')
     pl.clf()
+    np.savetxt('_build/xy/s_curve.tsv',
+               np.column_stack([temps_val, taus_bar_val, taus_bar_err]))
 
 
 def s_curve(T, sigma_S, H_t, tau_t, tau_f):
