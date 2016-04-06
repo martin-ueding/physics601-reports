@@ -124,7 +124,6 @@ def job_colors():
 def lifetime(T):
     slope, width = time_gauge(T)
     get_acryl_data(T, slope, width)
-    sys.exit(200)
     get_indium_data(T, slope, width)
 
 
