@@ -373,6 +373,14 @@ def get_indium_data(T, slope_val, width):
     pl.savefig('_build/mpl-tau_0-tau_t.pdf')
     pl.savefig('_build/mpl-tau_0-tau_t.png')
     pl.clf()
+    np.savetxt('_build/xy/tau_0.tsv',
+               np.column_stack([temps_val, taus_0_val, taus_0_err]))
+    np.savetxt('_build/xy/tau_t.tsv',
+               np.column_stack([temps_val, taus_t_val, taus_t_err]))
+    np.savetxt('_build/xy/tau_f.tsv',
+               np.column_stack([temps_val, taus_f_val, taus_f_err]))
+    np.savetxt('_build/xy/tau_bar.tsv',
+               np.column_stack([temps_val, taus_bar_val, taus_bar_err]))
 
     # Plot relative intensities.
     all_intens_0_val, all_intens_0_err = bootstrap.average_and_std_arrays(all_intens_0_dist)
