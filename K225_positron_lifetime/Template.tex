@@ -73,6 +73,88 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \chapter{Theory}
 
+\section{Positrons}
+
+\subsection{Positron sources}
+
+Our source of positrons will be $\mathrm{^{22}Na}$ throughout the experiment.
+Figure~\ref{fig:na22} shows that the sodium decays via a $\betaup^+$-decay or
+electron capture into an excited neon isotope. Both decay mechanism are related
+via the crossing symmetry and have the same amplitude. Figure~\ref{fig:beta}
+shows the first variant. The excited neon will quickly decay into the ground
+state and emit a photon. Said photon will mark the creation of the positron.
+
+\begin{figure}
+    \centering
+    \includegraphics{na22}
+    \caption{%
+        Decay of $\mathrm{^{22}Na}$.
+    }
+    \label{fig:na22}
+\end{figure}
+
+Due to the creation of the neutrino, the energy spectrum of the positron is
+continuous.
+
+\begin{figure}
+    \centering
+    \includegraphics{beta}
+    \caption{%
+        Feynman diagram for the $\betaup^+$-decay.
+    }
+    \label{fig:beta}
+\end{figure}
+
+\subsection{Positron annihilation}
+\ref{ssec:pos_ann}
+
+The tree-level annihilation diagrams are shown in
+Figure~\ref{fig:annihilation}. Depending on the relative spin orientations of
+the electron and positron, a decay into an even or odd number of photons is
+possible. The decay into a single photon is not possible due to
+energy-momentum-conservation. Also, the additional creation of two more photon
+suppresses the cross section by $\alpha \approx 1/137$. Therefore we can assume
+that only decays in two and three photons occur.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics{two-photon}
+        \caption{%
+            Two photons
+        }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics{three-photon}
+        \caption{%
+            Three photons
+        }
+        \label{fig:/2}
+    \end{subfigure}
+    \caption{%
+        Decay of a positron into photons.
+    }
+    \label{fig:annihilation}
+\end{figure}
+
+\subsection{Positronium formation}
+
+A positron can form a hydrogen-like metastable bound state with an electron.
+Depending on the particle's spins this state is called para-positronium (spins
+antiparallel) or ortho-positronium (spins parallel). The positronium atom will
+decay eventually due to a finite possibility for the positron to be located at
+the electron's position and vice versa. As written in
+Section~\ref{ssec:pos_ann} the para-positronium only decays in two photons and
+the ortho-positronium only in three photons. If the latter is located near
+other atoms, the long lifetime leads to the so called pick-off process, where
+the positron annihilates with one of the atom's electrons with antiparallel
+spin. This again leads to a reduced lifetime, which still is remarkably longer
+than the para-positronium's one.
+
 \section{Metals}
 
 A perfect metal consists of only atoms of one type. They are arranged in a
@@ -134,80 +216,7 @@ as given by \textcite[(1a)]{Weiler/Vacancy_formation}.
 The trapped lifetime simply is $\tau_\mathrm t$.
 
 In an insulator, there is no conducting band of electrons. Positrons can
-actually find an electron and form positronium with it. The whole positronium
-atom will decay eventually. Its lifetime will be different if the positronium
-is free or trapped in a vacancy.
-
-\section{Positrons}
-
-\subsection{Positron sources}
-
-Our source of positrons will be $\mathrm{^{22}Na}$ throughout the experiment.
-Figure~\ref{fig:na22} shows that the sodium decays via a $\betaup^+$-decay or
-electron capture into an excited neon isotope. Both decay mechanism are related
-via the crossing symmetry and have the same amplitude. Figure~\ref{fig:beta}
-shows the first variant. The excited neon will quickly decay into the ground
-state and emit a photon. Said photon will mark the creation of the positron.
-
-\begin{figure}
-    \centering
-    \includegraphics{na22}
-    \caption{%
-        Decay of $\mathrm{^{22}Na}$.
-    }
-    \label{fig:na22}
-\end{figure}
-
-Due to the creation of the neutrino, the energy spectrum of the positron is
-continuous.
-
-\begin{figure}
-    \centering
-    \includegraphics{beta}
-    \caption{%
-        Feynman diagram for the $\betaup^+$-decay.
-    }
-    \label{fig:beta}
-\end{figure}
-
-\subsection{Positron annihilation}
-
-The tree-level annihilation diagrams are shown in
-Figure~\ref{fig:annihilation}. Depending on the relative spin orientations of
-the electron and positron, a decay into an even or odd number of photons is
-possible. The decay into a single photon is not possible due to
-energy-momentum-conservation. Also, the additional creation of two more photon
-suppresses the cross section by $\alpha \approx 1/137$. Therefore we can assume
-that only decays in two and three photons occur.
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics{two-photon}
-        \caption{%
-            Two photons
-        }
-        \label{fig:/1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
-        \centering
-        \includegraphics{three-photon}
-        \caption{%
-            Three photons
-        }
-        \label{fig:/2}
-    \end{subfigure}
-    \caption{%
-        Decay of a positron into photons.
-    }
-    \label{fig:annihilation}
-\end{figure}
-
-\subsection{Positronium formation}
-
-
+actually find an electron and form positronium with it. 
 
 % TODO Pickof-decay
 
