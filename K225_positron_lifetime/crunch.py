@@ -30,7 +30,7 @@ import bootstrap
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
-BOOTSTRAP_SAMPLES = 1
+BOOTSTRAP_SAMPLES = 10
 
 
 
@@ -80,7 +80,7 @@ def linear(x, a, b):
 
 
 def exp_decay(x, a, b):
-    return a * np.exp(- x / b)
+    return a * np.exp(- b * x)
 
 
 def prepare_for_pgf(filename,  error=False, show=False):
@@ -337,22 +337,22 @@ def get_indium_data(T, slope_val, width):
         np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp)),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
 
-        # show plots
-        pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
-        pl.plot(time, counts, color='black')
-        counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
-        pl.plot(time, counts_smooth, color='green')
-        pl.plot(x, y_val, color='red')
-        pl.xlabel('Time / ns')
-        pl.ylabel('Counts')
-        dandify_plot()
-        pl.xlim((8, 20))
-        pl.savefig('_build/mpl-lifetime-{:04d}K.pdf'.format(int(temp)))
-        pl.savefig('_build/mpl-lifetime-{:04d}K.png'.format(int(temp)))
-        pl.yscale('log')
-        pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
-        pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
-        pl.clf()
+        if False:
+            pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+            pl.plot(time, counts, color='black')
+            counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
+            pl.plot(time, counts_smooth, color='green')
+            pl.plot(x, y_val, color='red')
+            pl.xlabel('Time / ns')
+            pl.ylabel('Counts')
+            dandify_plot()
+            pl.xlim((8, 20))
+            pl.savefig('_build/mpl-lifetime-{:04d}K.pdf'.format(int(temp)))
+            pl.savefig('_build/mpl-lifetime-{:04d}K.png'.format(int(temp)))
+            pl.yscale('log')
+            pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
+            pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
+            pl.clf()
 
     # Plot the lifetimes.
     taus_0_val, taus_0_err = bootstrap.average_and_std_arrays(all_tau_0_dist)
@@ -387,33 +387,38 @@ def get_indium_data(T, slope_val, width):
     results = []
     x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
     for all_sigma_c in all_sigma_c_dist:
-        p0 = [0.7, 0.01]
+        p0 = [11, 240]
         print('inv_temps:', inv_temps)
         print('all_sigma_c:', all_sigma_c)
         popt, pconv = op.curve_fit(exp_decay, inv_temps, all_sigma_c, p0=p0)
         y = exp_decay(x, *popt)
 
-        kelvin_to_eV = 8.621738-5
+        kelvin_to_eV = 8.621738e-5
 
         results.append([
+            popt,
             popt[1] * kelvin_to_eV,
             y,
         ])
 
-    Ht_eV_dist, arr_y_dist = zip(*results)
+    popt_dist, Ht_eV_dist, arr_y_dist = zip(*results)
 
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    print('popt:', siunitx(popt_val, popt_err))
     Ht_eV_val, Ht_eV_err = bootstrap.average_and_std_arrays(Ht_eV_dist)
     arr_y_val, arr_y_err = bootstrap.average_and_std_arrays(arr_y_dist)
     sigma_c_val, sigma_c_err = bootstrap.average_and_std_arrays(all_sigma_c_dist)
 
     pl.fill_between(x, arr_y_val - arr_y_err, arr_y_val + arr_y_err, alpha=0.5, color='red')
     pl.plot(x, arr_y_val, color='red')
-    pl.errorbar(inv_temps, sigma_c_val, yerr=sigma_c_err, marker='+', linestyle='none')
+    pl.errorbar(inv_temps, sigma_c_val, yerr=sigma_c_err, marker='+', linestyle='none', color='black')
     pl.xlabel(r'$1 / T$')
     pl.ylabel(r'$\sigma C_t(T)$')
     pl.savefig('_build/mpl-arrhenius.pdf')
     pl.savefig('_build/mpl-arrhenius.png')
     pl.clf()
+
+    print('Ht_eV:', siunitx(Ht_eV_val, Ht_eV_err))
 
     print('Done for now')
     sys.exit(0)
