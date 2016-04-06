@@ -30,6 +30,8 @@ import bootstrap
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
 TEMP_PATTERN = re.compile('in-(\d+(?:,\d+)?)-(\d+(?:,\d+)?)C\.txt')
+BOOTSTRAP_SAMPLES = 10
+
 
 
 def dandify_plot():
@@ -78,7 +80,7 @@ def linear(x, a, b):
 
 
 def exp_decay(x, a, b):
-    return a * np.exp(- x / b)
+    return a * np.exp(- b * x)
 
 
 def prepare_for_pgf(filename,  error=False, show=False):
@@ -121,7 +123,7 @@ def job_colors():
 
 def lifetime(T):
     slope, width = time_gauge(T)
-    lifetime_spectra(T, slope, width)
+    get_indium_data(T, slope, width)
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):
@@ -231,210 +233,150 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     T['time_resolution'] = siunitx(time_res , time_res_err)
     return slope_val, width_val*slope_val
 
+
 def get_indium_data(T, slope_val, width):
     files = glob.glob('Data/in-*.txt')
 
-    all_life = []
-
     temps_val = []
     temps_err = []
-    life = []
 
-    taus_0_val = []
-    taus_0_err = []
-    taus_t_val = []
-    taus_t_err = []
-    taus_f_val = []
-    taus_f_err = []
+    all_counts = []
 
-    taus_0_lin_val = []
-    taus_t_lin_val = []
-    taus_0_lin_err = []
-    taus_t_lin_err = []
+    all_tau_0_dist = []
+    all_tau_bar_dist = []
+    all_tau_f_dist = []
+    all_tau_t_dist = []
 
-    all_intens_0_val = []
-    all_intens_0_err = []
-    all_intens_t_val = []
-    all_intens_t_err = []
+    all_intens_0_dist = []
+    all_intens_t_dist = []
 
-    for file_ in sorted(files):
-        print('Working on lifetime spectrum', file_)
-        temp_lower, temp_upper = get_temp(file_)
-        temp_mean = (temp_lower + temp_upper)/2
-        temp_err = temp_upper - temp_mean
-        temps_val.append(temp_mean)
-        temps_err.append(temp_err)
-        print('Mean temperature:', temp_mean)
+    all_lifetime_y_dist = []
+    all_lifetime_popt_dist = []
 
-        data = np.loadtxt(file_)
-        channel = data[:,0]
-        time = slope_val * channel
-        counts = data[:,1]
+    all_sigma_c_dist = []
 
-        fix_width = True
+    # Process lifetime curves with bootstrap.
+    for sample_id in range(BOOTSTRAP_SAMPLES):
+        print('Bootstrap sample', sample_id, 'running …')
 
         results = []
-        life_means = []
-        y_dist = []
-        y1_dist = []
-        y2_dist = []
-        intens_0_dist = []
-        intens_t_dist = []
 
-        tau_0_lin_dist = []
-        tau_t_lin_dist = []
+        for file_ in sorted(files):
+            print('Working on lifetime spectrum', file_)
 
-        tau_f_dist = []
+            if sample_id == 0:
+                temp_lower, temp_upper = get_temp(file_)
+                temp_mean = (temp_lower + temp_upper)/2
+                temp_err = temp_upper - temp_mean
+                temps_val.append(temp_mean)
+                temps_err.append(temp_err)
+                print('Mean temperature:', temp_mean)
 
-        range_1 = (10.87, 11.4)
-        range_2 = (12.3, 15)
+            data = np.loadtxt(file_)
+            channel = data[:, 0]
+            time = slope_val * channel
+            counts = data[:, 1]
+            boot_counts = bootstrap.redraw_count(counts)
 
+            if sample_id == 0:
+                all_counts.append(counts)
 
-        x = np.linspace(np.min(time), np.max(time), 2000)
-
-        BOOTSTRAP_SAMPLES = 1
-
-        for a in range(BOOTSTRAP_SAMPLES):
-            if BOOTSTRAP_SAMPLES > 1:
-                boot_counts = redraw_count(counts)
-            else:
-                boot_counts = counts
+            x = np.linspace(np.min(time), np.max(time), 2000)
 
             sel = (9 < time) & (time < 15)
 
-            if fix_width:
-                fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-                popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 210, 190, 0.07, 0.8, 0])
-                mean, A_0, A_t, tau_0, tau_t, BG = popt
-            else:
-                fit_func = models.lifetime_spectrum
-                popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=[10.5, 0.3, 210, 190, 0.07, 0.8, 0])
-                mean, width, A_0, A_t, tau_0, tau_t, BG = popt
-            results.append(popt)
+            fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
+                    models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
+            p0 = [10.5, 210, 190, 0.07, 0.8, 0]
+            popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=p0)
+            mean, A_0, A_t, tau_0, tau_t, BG = popt
+
             intens_0 = A_0 / (A_0 + A_t)
             intens_t = A_t / (A_0 + A_t)
-            intens_0_dist.append(intens_0)
-            intens_t_dist.append(intens_t)
-            life_mean = intens_0 * tau_0 + intens_t * tau_t
-            life_means.append(life_mean)
-            y_dist.append(fit_func(x, *popt))
-
+            tau_bar = intens_0 * tau_0 + intens_t * tau_t
+            y = fit_func(x, *popt)
             tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
-            tau_f_dist.append(tau_f)
+            sigma_c = 1 / tau_0 - 1 / tau_f
 
-            x1 = np.linspace(range_1[0], range_1[1], 10)
-            sel = (range_1[0] < time) & (time < range_1[1])
-            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[1e14, 0.4])
-            a, b = popt
-            y1 = exp_decay(x1, *popt)
-            y1_dist.append(y1)
-            tau_0_lin_dist.append(b)
+            results.append([
+                tau_0,
+                tau_bar,
+                tau_f,
+                tau_t,
+                intens_0,
+                intens_t,
+                y,
+                popt,
+                sigma_c,
+            ])
 
-            print(a, b)
 
-            x2 = np.linspace(range_2[0], range_2[1], 10)
-            sel = (range_2[0] < time) & (time < range_2[1])
-            popt, pconv = op.curve_fit(exp_decay, time[sel], boot_counts[sel], p0=[5e5, 1.2])
-            a, b = popt
-            y2 = exp_decay(x2, *popt)
-            y2_dist.append(y2)
-            tau_t_lin_dist.append(b)
+        tau_0_list, tau_bar_list, tau_f_list, tau_t_list, intens_0_list, \
+                intens_t_list, lifetime_y_list, lifetime_popt_list, sigma_c_list \
+                = zip(*results)
 
-            print(a, b)
-            print()
+        all_tau_0_dist.append(tau_0_list)
+        all_tau_bar_dist.append(tau_bar_list)
+        all_tau_f_dist.append(tau_f_list)
+        all_tau_t_dist.append(tau_t_list)
+        all_intens_0_dist.append(intens_0_list)
+        all_intens_t_dist.append(intens_t_list)
+        all_lifetime_y_dist.append(lifetime_y_list)
+        all_lifetime_popt_dist.append(lifetime_popt_list)
+        all_sigma_c_dist.append(sigma_c_list)
 
-        all_life.append(life_means)
+    # Generate plots with lifetime curves and fits.
+    for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, zip(*all_lifetime_y_dist)):
+        print('Creating lifetime plot with temp', temp)
+        y_val, y_err = bootstrap.average_and_std_arrays(lifetime_y_dist)
 
-        popt_val, popt_err = bootstrap.average_and_std_arrays(results)
-        life_mean_val, life_mean_err = bootstrap.average_and_std_arrays(life_means)
-        life.append(life_mean_val)
-
-        intens_0_val, intens_0_err = bootstrap.average_and_std_arrays(intens_0_dist)
-        all_intens_0_val.append(intens_0_val)
-        all_intens_0_err.append(intens_0_err)
-        intens_t_val, intens_t_err = bootstrap.average_and_std_arrays(intens_t_dist)
-        all_intens_t_val.append(intens_t_val)
-        all_intens_t_err.append(intens_t_err)
-
-        y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
-        y1_val, y1_err = bootstrap.average_and_std_arrays(y1_dist)
-        y2_val, y2_err = bootstrap.average_and_std_arrays(y2_dist)
-
-        tau_f_val, tau_f_err = bootstrap.average_and_std_arrays(tau_f_dist)
-        taus_f_val.append(tau_f_val)
-        taus_f_err.append(tau_f_err)
-
-        # write data to plot with pgfplots
-
-        np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(time[0:4000], counts[0:4000], np.sqrt(counts[0:4000])))
-
-        np.savetxt('_build/xy/lifetime-{}K-fit.tsv'.format(int(temp_mean)), np.column_stack([x, y_val]))
-
-        np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp_mean)), bootstrap.pgfplots_error_band(x, y_val, y_err))
-
-        # show plots
-        pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
-        pl.fill_between(x1, y1_val - y1_err, y1_val + y1_err, alpha=0.5, color='orange')
-        pl.fill_between(x2, y2_val - y2_err, y2_val + y2_err, alpha=0.5, color='orange')
-        pl.plot(time, counts, color='black')
-        counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
-        pl.plot(time, counts_smooth, color='green')
-        pl.plot(x, y_val, color='red')
-        pl.plot(x1, y1_val, color='orange', linewidth=3)
-        pl.plot(x2, y2_val, color='orange', linewidth=3)
-        pl.xlabel('Time / ns')
-        pl.ylabel('Counts')
-        dandify_plot()
-        pl.xlim((8, 20))
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK.pdf'.format(int(temp_mean*10)))
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK.png'.format(int(temp_mean*10)))
-        pl.yscale('log')
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.pdf'.format(int(temp_mean*10)))
-        pl.savefig('_build/mpl-lifetime-{:04d}_dK-log.png'.format(int(temp_mean*10)))
+        np.savetxt('_build/xy/lifetime-{}K-data.tsv'.format(int(temp)),
+                   bootstrap.pgfplots_error_band(time[0:4000], counts[0:4000], np.sqrt(counts[0:4000])))
+        np.savetxt('_build/xy/lifetime-{}K-fit.tsv'.format(int(temp)),
+                   np.column_stack([x, y_val]))
+        np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp)),
+                   bootstrap.pgfplots_error_band(x, y_val, y_err))
 
         if False:
-            pl.show()
-            sys.exit(0)
+            pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+            pl.plot(time, counts, color='black')
+            counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
+            pl.plot(time, counts_smooth, color='green')
+            pl.plot(x, y_val, color='red')
+            pl.xlabel('Time / ns')
+            pl.ylabel('Counts')
+            dandify_plot()
+            pl.xlim((8, 20))
+            pl.savefig('_build/mpl-lifetime-{:04d}K.pdf'.format(int(temp)))
+            pl.savefig('_build/mpl-lifetime-{:04d}K.png'.format(int(temp)))
+            pl.yscale('log')
+            pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
+            pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
+            pl.clf()
 
-        pl.clf()
-
-        
-        if fix_width:
-            mean_err, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-            mean_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
-        else:
-            mean_val, width_val, A_0_val, A_t_val, tau_0_val, tau_t_val, BG_val = popt_val
-            mean_err, width_err, A_0_err, A_t_err, tau_0_err, tau_t_err, BG_err = popt_err
-
-        taus_0_val.append(tau_0_val)
-        taus_t_val.append(tau_t_val)
-        taus_0_err.append(tau_0_err)
-        taus_t_err.append(tau_t_err)
-
-        tau_0_lin_val, tau_0_lin_err = bootstrap.average_and_std_arrays(tau_0_lin_dist)
-        tau_t_lin_val, tau_t_lin_err = bootstrap.average_and_std_arrays(tau_t_lin_dist)
-
-        taus_0_lin_val.append(tau_0_lin_val)
-        taus_t_lin_val.append(tau_t_lin_val)
-        taus_0_lin_err.append(tau_0_lin_err)
-        taus_t_lin_err.append(tau_t_lin_err)
-
+    # Plot the lifetimes.
+    taus_0_val, taus_0_err = bootstrap.average_and_std_arrays(all_tau_0_dist)
+    taus_t_val, taus_t_err = bootstrap.average_and_std_arrays(all_tau_t_dist)
+    taus_f_val, taus_f_err = bootstrap.average_and_std_arrays(all_tau_f_dist)
+    taus_bar_val, taus_bar_err = bootstrap.average_and_std_arrays(all_tau_bar_dist)
     pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
                 label=r'$\tau_0$', linestyle='none', marker='+')
+    pl.errorbar(temps_val, taus_bar_val, xerr=temps_err, yerr=taus_bar_err,
+                label=r'$\bar\tau$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
                 label=r'$\tau_\mathrm{t}$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_f_val, xerr=temps_err, yerr=taus_f_err,
                 label=r'$\tau_\mathrm{f}$', linestyle='none', marker='+')
-    pl.errorbar(temps_val, taus_0_lin_val, xerr=temps_err, yerr=taus_0_lin_err,
-                label=r'$\tau_0$ lin', linestyle='none', marker='+')
-    pl.errorbar(temps_val, taus_t_lin_val, xerr=temps_err, yerr=taus_t_lin_err,
-                label=r'$\tau_\mathrm{t}$ lin', linestyle='none', marker='+')
     pl.xlabel('T / K')
     pl.ylabel(r'$\tau$ / ns')
     dandify_plot()
     pl.savefig('_build/mpl-tau_0-tau_t.pdf')
+    pl.savefig('_build/mpl-tau_0-tau_t.png')
     pl.clf()
 
+    # Plot relative intensities.
+    all_intens_0_val, all_intens_0_err = bootstrap.average_and_std_arrays(all_intens_0_dist)
+    all_intens_t_val, all_intens_t_err = bootstrap.average_and_std_arrays(all_intens_t_dist)
     pl.errorbar(temps_val, all_intens_0_val, xerr=temps_err, yerr=all_intens_0_err,
                 label=r'$A_0$', linestyle='none', marker='+')
     pl.errorbar(temps_val, all_intens_t_val, xerr=temps_err, yerr=all_intens_t_err,
@@ -443,128 +385,61 @@ def get_indium_data(T, slope_val, width):
     pl.ylabel(r'Relative Intensity')
     dandify_plot()
     pl.savefig('_build/mpl-intensities.pdf')
+    pl.savefig('_build/mpl-intensities.png')
     pl.clf()
 
+    inv_temps = 1 / np.array(temps_val)
+    results = []
+    x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
+    for all_sigma_c in all_sigma_c_dist:
+        p0 = [11, 240]
+        print('inv_temps:', inv_temps)
+        print('all_sigma_c:', all_sigma_c)
+        popt, pconv = op.curve_fit(exp_decay, inv_temps, all_sigma_c, p0=p0)
+        y = exp_decay(x, *popt)
 
-    sigma_c = 1 / np.array(taus_0_val) - 1 / np.array(taus_f_val)
+        kelvin_to_eV = 8.621738e-5
 
-    arr_x = 1 / np.array(temps_val)
+        results.append([
+            popt,
+            popt[1] * kelvin_to_eV,
+            y,
+        ])
 
-    pl.semilogy(arr_x, sigma_c, marker='+', linestyle='none')
-    popt, pconv = op.curve_fit(exp_decay, arr_x, sigma_c, p0=[0.7, 0.01])
-    print('Arrhenius fit:', popt)
-    x = np.linspace(np.min(arr_x), np.max(arr_x), 1000)
-    y = exp_decay(x, *popt)
-    pl.plot(x, y)
+    popt_dist, Ht_eV_dist, arr_y_dist = zip(*results)
+
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    print('popt:', siunitx(popt_val, popt_err))
+    Ht_eV_val, Ht_eV_err = bootstrap.average_and_std_arrays(Ht_eV_dist)
+    arr_y_val, arr_y_err = bootstrap.average_and_std_arrays(arr_y_dist)
+    sigma_c_val, sigma_c_err = bootstrap.average_and_std_arrays(all_sigma_c_dist)
+
+    pl.fill_between(x, arr_y_val - arr_y_err, arr_y_val + arr_y_err, alpha=0.5, color='red')
+    pl.plot(x, arr_y_val, color='red')
+    pl.errorbar(inv_temps, sigma_c_val, yerr=sigma_c_err, marker='+', linestyle='none', color='black')
     pl.xlabel(r'$1 / T$')
     pl.ylabel(r'$\sigma C_t(T)$')
     pl.savefig('_build/mpl-arrhenius.pdf')
     pl.savefig('_build/mpl-arrhenius.png')
     pl.clf()
 
+    np.savetxt('_build/xy/arrhenius-data.tsv',
+               np.column_stack([inv_temps, sigma_c_val, sigma_c_err]))
+    np.savetxt('_build/xy/arrhenius-fit.tsv',
+               np.column_stack([x, arr_y_val]))
+    np.savetxt('_build/xy/arrhenius-band.tsv',
+               bootstrap.pgfplots_error_band(x, arr_y_val, arr_y_err))
 
+    print('Ht_eV:', siunitx(Ht_eV_val, Ht_eV_err))
 
-
-    return all_life, temps_val, temps_err, life
-
-
-INDIUM_FILE = '_build/indium.pickle'
-
-
-def load_indium_data():
-    with open(INDIUM_FILE, 'rb') as f:
-        return pickle.load(f)
-
-
-def save_indium_data(all_life, temps_val, temps_err, life):
-    with open(INDIUM_FILE, 'wb') as f:
-        pickle.dump([all_life, temps_val, temps_err, life], f)
-
-
-def lifetime_spectra(T, slope_val, width):
-    if os.path.isfile(INDIUM_FILE):
-        all_life, temps_val, temps_err, life = load_indium_data()
-    else:
-        all_life, temps_val, temps_err, life = get_indium_data(T, slope_val, width)
-        save_indium_data(all_life, temps_val, temps_err, life)
-
-    popt_dist = []
-    y_dist =[]
-    x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
-    life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
-    
-    # p0=[4.2e10, 7.41e3, .352, .330]
-    p0=[1.e8, 1/3.98022399e-03, .352, .330]
-
-    # From here on >>without<< bootstrap
-
-    temps_val = np.array(temps_val)
-    life_val = np.array(life_val)
-    try:
-        popt, pconv = op.curve_fit(s_curve, temps_val, life_val,
-                                   #sigma=life_err,
-                                   p0=p0)
-    except RuntimeError as e:
-        print(e)
-        print('Showing the plot with initial parameters.')
-        pl.errorbar(temps_val, life_val, yerr=life_err, linestyle="none", marker="o")
-        y = s_curve(x, *p0)
-        pl.plot(x, y)
-        dandify_plot()
-        pl.savefig('_build/mpl-s_curve-failure.pdf')
-        pl.savefig('_build/mpl-s_curve-failure.png')
-        pl.clf()
-    else:
-        print(popt)
-        y = s_curve(x, *popt)
-
-    # print(siunitx(popt_val, popt_err))
-
-    print('Showing the plot with actual fit curve.')
-    pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
-    pl.plot(x, y)
+    pl.errorbar(temps_val, taus_bar_val, xerr=temps_err, yerr=taus_bar_err,
+                label=r'$\bar\tau$', linestyle='none', marker='+')
     dandify_plot()
+    pl.xlabel('T / K')
+    pl.ylabel(r'$\tau$ / ns')
     pl.savefig('_build/mpl-s_curve.pdf')
     pl.savefig('_build/mpl-s_curve.png')
     pl.clf()
-
-    # From here on >>with<< bootstrap
-
-    # for temp_life in zip(*all_life):
-    #     temps_boot = redraw(temps_val, temps_err)
-    #     leave_out = random.randint(0, len(temps_boot) - 1)
-    #     np.delete = lambda x, y: x
-    #     temps_fit = np.delete(temps_boot, leave_out)
-    #     life_val_fit = np.delete(temp_life, leave_out)
-    #     life_err_fit = np.delete(life_err, leave_out)
-
-    #     try:
-    #         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
-    #                                    sigma=life_err_fit, p0=p0)
-    #     except RuntimeError as e:
-    #         print(e)
-    #         pl.errorbar(temps_fit, life_val_fit, yerr=life_err_fit, linestyle="none", marker="o")
-    #         y = s_curve(x, *p0)
-    #         pl.plot(x, y)
-    #         pl.show()
-    #         pl.clf()
-    #     else:
-    #         print(popt)
-    #         popt_dist.append(popt)
-    #         y = s_curve(x, *popt)
-    #         y_dist.append(y)
-
-    # y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
-    # popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
-
-    # print(siunitx(popt_val, popt_err))
-
-    # pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
-    # pl.plot(x, y_val)
-    # pl.plot(x, y_val+y_err)
-    # pl.plot(x, y_val-y_err)
-    # pl.show()
-    # pl.clf()
 
 
 def s_curve(T, sigma_S, H_t, tau_t, tau_f):

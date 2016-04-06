@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={$\si{\kelvin} / T$},
+            ylabel={$\sigma_\mathrm t C_\mathrm t(T)$},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.5,
+            },
+            % TODO Better y-ticks.
+        ]
+
+        \addplot[band, fill=red] table {../xy/arrhenius-band.tsv} \closedcycle;
+        \addplot[
+            black,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/arrhenius-data.tsv};
+        \addplot[red] table {../xy/arrhenius-fit.tsv};
+    \end{axis}
+\end{tikzpicture}
