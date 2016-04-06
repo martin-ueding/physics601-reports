@@ -279,10 +279,6 @@ def get_indium_data(T, slope_val, width):
 
         tau_f_dist = []
 
-        range_1 = (10.87, 11.4)
-        range_2 = (12.3, 15)
-
-
         x = np.linspace(np.min(time), np.max(time), 2000)
 
         BOOTSTRAP_SAMPLES = 1
