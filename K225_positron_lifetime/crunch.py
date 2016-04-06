@@ -123,7 +123,7 @@ def job_colors():
 
 def lifetime(T):
     slope, width = time_gauge(T)
-    lifetime_spectra(T, slope, width)
+    get_indium_data(T, slope, width)
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):
@@ -358,8 +358,11 @@ def get_indium_data(T, slope_val, width):
     taus_0_val, taus_0_err = bootstrap.average_and_std_arrays(all_tau_0_dist)
     taus_t_val, taus_t_err = bootstrap.average_and_std_arrays(all_tau_t_dist)
     taus_f_val, taus_f_err = bootstrap.average_and_std_arrays(all_tau_f_dist)
+    taus_bar_val, taus_bar_err = bootstrap.average_and_std_arrays(all_tau_bar_dist)
     pl.errorbar(temps_val, taus_0_val, xerr=temps_err, yerr=taus_0_err,
                 label=r'$\tau_0$', linestyle='none', marker='+')
+    pl.errorbar(temps_val, taus_bar_val, xerr=temps_err, yerr=taus_bar_err,
+                label=r'$\bar\tau$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_t_val, xerr=temps_err, yerr=taus_t_err,
                 label=r'$\tau_\mathrm{t}$', linestyle='none', marker='+')
     pl.errorbar(temps_val, taus_f_val, xerr=temps_err, yerr=taus_f_err,
@@ -420,109 +423,14 @@ def get_indium_data(T, slope_val, width):
 
     print('Ht_eV:', siunitx(Ht_eV_val, Ht_eV_err))
 
-    print('Done for now')
-    sys.exit(0)
-
-    return all_life, temps_val, temps_err, life
-
-
-INDIUM_FILE = '_build/indium.pickle'
-
-
-def load_indium_data():
-    with open(INDIUM_FILE, 'rb') as f:
-        return pickle.load(f)
-
-
-def save_indium_data(all_life, temps_val, temps_err, life):
-    with open(INDIUM_FILE, 'wb') as f:
-        pickle.dump([all_life, temps_val, temps_err, life], f)
-
-
-def lifetime_spectra(T, slope_val, width):
-    if os.path.isfile(INDIUM_FILE):
-        all_life, temps_val, temps_err, life = load_indium_data()
-    else:
-        all_life, temps_val, temps_err, life = get_indium_data(T, slope_val, width)
-        save_indium_data(all_life, temps_val, temps_err, life)
-
-    popt_dist = []
-    y_dist =[]
-    x = np.linspace(np.min(temps_val), np.max(temps_val), 200)
-    life_val, life_err = bootstrap.average_and_std_arrays(np.array(all_life).T)
-    
-    # p0=[4.2e10, 7.41e3, .352, .330]
-    p0=[1.e8, 1/3.98022399e-03, .352, .330]
-
-    # From here on >>without<< bootstrap
-
-    temps_val = np.array(temps_val)
-    life_val = np.array(life_val)
-    try:
-        popt, pconv = op.curve_fit(s_curve, temps_val, life_val,
-                                   #sigma=life_err,
-                                   p0=p0)
-    except RuntimeError as e:
-        print(e)
-        print('Showing the plot with initial parameters.')
-        pl.errorbar(temps_val, life_val, yerr=life_err, linestyle="none", marker="o")
-        y = s_curve(x, *p0)
-        pl.plot(x, y)
-        dandify_plot()
-        pl.savefig('_build/mpl-s_curve-failure.pdf')
-        pl.savefig('_build/mpl-s_curve-failure.png')
-        pl.clf()
-    else:
-        print(popt)
-        y = s_curve(x, *popt)
-
-    # print(siunitx(popt_val, popt_err))
-
-    print('Showing the plot with actual fit curve.')
-    pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
-    pl.plot(x, y)
+    pl.errorbar(temps_val, taus_bar_val, xerr=temps_err, yerr=taus_bar_err,
+                label=r'$\bar\tau$', linestyle='none', marker='+')
     dandify_plot()
+    pl.xlabel('T / K')
+    pl.ylabel(r'$\tau$ / ns')
     pl.savefig('_build/mpl-s_curve.pdf')
     pl.savefig('_build/mpl-s_curve.png')
     pl.clf()
-
-    # From here on >>with<< bootstrap
-
-    # for temp_life in zip(*all_life):
-    #     temps_boot = redraw(temps_val, temps_err)
-    #     leave_out = random.randint(0, len(temps_boot) - 1)
-    #     np.delete = lambda x, y: x
-    #     temps_fit = np.delete(temps_boot, leave_out)
-    #     life_val_fit = np.delete(temp_life, leave_out)
-    #     life_err_fit = np.delete(life_err, leave_out)
-
-    #     try:
-    #         popt, pconv = op.curve_fit(s_curve, temps_fit, life_val_fit,
-    #                                    sigma=life_err_fit, p0=p0)
-    #     except RuntimeError as e:
-    #         print(e)
-    #         pl.errorbar(temps_fit, life_val_fit, yerr=life_err_fit, linestyle="none", marker="o")
-    #         y = s_curve(x, *p0)
-    #         pl.plot(x, y)
-    #         pl.show()
-    #         pl.clf()
-    #     else:
-    #         print(popt)
-    #         popt_dist.append(popt)
-    #         y = s_curve(x, *popt)
-    #         y_dist.append(y)
-
-    # y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
-    # popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
-
-    # print(siunitx(popt_val, popt_err))
-
-    # pl.errorbar(temps_val, life_val, xerr=temps_err, yerr=life_err, linestyle="none", marker="+")
-    # pl.plot(x, y_val)
-    # pl.plot(x, y_val+y_err)
-    # pl.plot(x, y_val-y_err)
-    # pl.show()
-    # pl.clf()
 
 
 def s_curve(T, sigma_S, H_t, tau_t, tau_f):
