@@ -277,6 +277,24 @@ def get_acryl_data(T, slope_val, width):
     np.savetxt('_build/xy/acryl-lifetime-data.tsv',
                np.column_stack([time, counts]))
 
+    np.savetxt('_build/xy/acryl-lifetime-smoothed.tsv',
+               np.column_stack([time, counts_smooth]))
+
+    np.savetxt('_build/xy/acryl-lifetime-fit.tsv',
+               np.column_stack([x, y_val]))
+    np.savetxt('_build/xy/acryl-lifetime-band.tsv',
+               bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+    np.savetxt('_build/xy/acryl-lifetime-fit-lin1.tsv',
+               np.column_stack([x, y_lin1_val]))
+    np.savetxt('_build/xy/acryl-lifetime-band-lin1.tsv',
+               bootstrap.pgfplots_error_band(x, y_lin1_val, y_lin1_err))
+
+    np.savetxt('_build/xy/acryl-lifetime-fit-lin2.tsv',
+               np.column_stack([x, y_lin2_val]))
+    np.savetxt('_build/xy/acryl-lifetime-band-lin2.tsv',
+               bootstrap.pgfplots_error_band(x, y_lin2_val, y_lin2_err))
+
 
 def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
