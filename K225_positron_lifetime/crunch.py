@@ -274,6 +274,9 @@ def get_acryl_data(T, slope_val, width):
     #pl.show()
     pl.clf()
 
+    np.savetxt('_build/xy/acryl-lifetime-data.tsv',
+               np.column_stack([time, counts]))
+
 
 def time_gauge(T, show_gauss=False, show_lin=False):
     time = []
