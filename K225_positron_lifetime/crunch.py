@@ -127,6 +127,37 @@ def lifetime(T):
     get_indium_data(T, slope, width)
 
 
+
+def acryl_sampler():
+    slope_val, width = 0.00674980594692, 0.30468471302
+
+    data = np.loadtxt('Data/longlong.txt')
+    channel = data[:, 0]
+    time = slope_val * channel
+    counts = data[:, 1]
+
+    x = np.linspace(np.min(time), np.max(time), 2000)
+    p0 = [10.3, width, 12e3, 34e2, 1/2.17, 1/0.508, 2]
+    y1, y2, y = models.lifetime_spectrum_parts(x, *p0)
+
+    pl.plot(time, counts, color='black')
+    pl.plot(x, y1, color='red')
+    pl.plot(x, y2, color='green')
+    pl.plot(x, y, color='gray')
+    dandify_plot()
+    pl.xlim((8, 40))
+    pl.ylim((0.5, np.max(counts)*1.2))
+    pl.savefig('_build/mpl-sampler.pdf')
+    pl.yscale('log')
+    dandify_plot()
+    pl.xlim((8, 40))
+    pl.ylim((0.5, np.max(counts)*1.2))
+    pl.savefig('_build/mpl-sampler-log.pdf')
+    pl.clf()
+    
+
+
+
 def get_acryl_data(T, slope_val, width):
     data = np.loadtxt('Data/longlong.txt')
     channel = data[:, 0]
@@ -138,16 +169,31 @@ def get_acryl_data(T, slope_val, width):
     fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
             models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
 
-    sel = (10 < time) & (time < 50)
+    sel = (9 < time) & (time < 25)
 
     results = []
+
+    sel1 = (10.92 < time) & (time < 11.58)
+    sel2 = (13.11 < time) & (time < 22)
+    sels = [sel1, sel2]
 
     for sample_id in range(BOOTSTRAP_SAMPLES):
         print('Bootstrap sample', sample_id, 'running …')
 
         boot_counts = bootstrap.redraw_count(counts)
 
-        p0 = [10.5, 5e3, 9e3, 2.17, 0.508, 0]
+        lin_lifetimes = []
+        lin_results = []
+        for sel_lin in sels:
+            popt_lin, pconv_lin = op.curve_fit(exp_decay, time[sel_lin], boot_counts[sel_lin], p0=[1e5, 0.3])
+            y_lin = exp_decay(x, *popt_lin)
+
+            lin_results.append(y_lin)
+            lin_results.append(popt_lin)
+            lin_results.append(1/popt_lin[1])
+            lin_lifetimes.append(1/popt_lin[1])
+
+        p0 = [10.5, 12e3, 34e2] + lin_lifetimes + [2]
         popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=p0)
         mean, A_0, A_t, tau_0, tau_t, BG = popt
 
@@ -157,19 +203,6 @@ def get_acryl_data(T, slope_val, width):
         y = fit_func(x, *popt)
         tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
         sigma_c = 1 / tau_0 - 1 / tau_f
-
-        sel1 = (10.92 < time) & (time < 11.58)
-        sel2 = (13.11 < time) & (time < 22)
-
-        sels = [sel1, sel2]
-        lin_results = []
-        for sel_lin in sels:
-            popt_lin, pconv_lin = op.curve_fit(exp_decay, time[sel_lin], boot_counts[sel_lin], p0=[1e5, 0.3])
-            y_lin = exp_decay(x, *popt_lin)
-
-            lin_results.append(y_lin)
-            lin_results.append(popt_lin)
-
 
         results.append([
             tau_0,
@@ -185,7 +218,8 @@ def get_acryl_data(T, slope_val, width):
         
     tau_0_dist, tau_bar_dist, tau_f_dist, tau_t_dist, intens_0_dist, \
             intens_t_dist, lifetime_y_dist, lifetime_popt_dist, sigma_c_dist, \
-            y_lin1_dist, popt_lin1_dist, y_lin2_dist, popt_lin2_dist \
+            y_lin1_dist, popt_lin1_dist, tau_lin1_dist, \
+            y_lin2_dist, popt_lin2_dist, tau_lin2_dist, \
             = zip(*results)
 
     tau_0_val, tau_0_err = bootstrap.average_and_std_arrays(tau_0_dist)
@@ -198,8 +232,10 @@ def get_acryl_data(T, slope_val, width):
 
     popt_lin1_val, popt_lin1_err = bootstrap.average_and_std_arrays(popt_lin1_dist)
     y_lin1_val, y_lin1_err = bootstrap.average_and_std_arrays(y_lin1_dist)
+    tau_lin1_val, tau_lin1_err = bootstrap.average_and_std_arrays(tau_lin1_dist)
     popt_lin2_val, popt_lin2_err = bootstrap.average_and_std_arrays(popt_lin2_dist)
     y_lin2_val, y_lin2_err = bootstrap.average_and_std_arrays(y_lin2_dist)
+    tau_lin2_val, tau_lin2_err = bootstrap.average_and_std_arrays(tau_lin2_dist)
 
     print('tau_0', siunitx(tau_0_val, tau_0_err))
     print('tau_t', siunitx(tau_t_val, tau_t_err))
@@ -209,6 +245,8 @@ def get_acryl_data(T, slope_val, width):
     print('popt', siunitx(popt_val, popt_err))
     print('popt_lin1', siunitx(popt_lin1_val, popt_lin1_err))
     print('popt_lin2', siunitx(popt_lin2_val, popt_lin2_err))
+    print('tau_lin1', siunitx(tau_lin1_val, tau_lin1_err))
+    print('tau_lin2', siunitx(tau_lin2_val, tau_lin2_err))
 
     print(x.shape)
     print(y_lin1_val.shape)
@@ -605,6 +643,9 @@ def test_keys(T):
 
 def main():
     T = {}
+
+    acryl_sampler()
+    #sys.exit(0)
 
     random.seed(0)
 

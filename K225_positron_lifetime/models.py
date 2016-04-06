@@ -23,6 +23,12 @@ def lifetime_spectrum(t, t0, width, A_0, A_t, tau_0, tau_t, bg):
     return summand_1 + summand_2 + bg
 
 
+def lifetime_spectrum_parts(t, t0, width, A_0, A_t, tau_0, tau_t, bg):
+    summand_1 = _get_summand(A_0, tau_0, width, t, t0)
+    summand_2 = _get_summand(A_t, tau_t, width, t, t0)
+    return summand_1, summand_2, summand_1 + summand_2 + bg
+
+
 def _get_exp(sigma, tau, t, t0):
     arg = (sigma**2 - 2 * tau * (t - t0)) / (2 * tau**2)
     return np.exp(arg)
