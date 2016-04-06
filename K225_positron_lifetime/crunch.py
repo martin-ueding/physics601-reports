@@ -506,6 +506,8 @@ def get_indium_data(T, slope_val, width):
         all_lifetime_popt_dist.append(lifetime_popt_list)
         all_sigma_c_dist.append(sigma_c_list)
 
+    T['temps_int'] = []
+
     # Generate plots with lifetime curves and fits.
     for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, zip(*all_lifetime_y_dist)):
         print('Creating lifetime plot with temp', temp)
@@ -517,6 +519,8 @@ def get_indium_data(T, slope_val, width):
                    np.column_stack([x, y_val]))
         np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp)),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+        T['temps_int'].append(int(temp))
 
         if False:
             pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
@@ -534,6 +538,8 @@ def get_indium_data(T, slope_val, width):
             pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
             pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
             pl.clf()
+
+    T['temps_int'].sort()
 
     # Plot the lifetimes.
     taus_0_val, taus_0_err = bootstrap.average_and_std_arrays(all_tau_0_dist)

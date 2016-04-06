@@ -684,74 +684,22 @@ detail.
     \label{fig:acrylic-zoom}
 \end{figure}
 
+% TODO Some hand waiving or so …
+
 \begin{appendix}
 
     \chapter{Lifetime spectra}
 
-    %TODO insert temperatures
+    %< for temp in temps_int[1:] >%
     \begin{figure}
         \centering
-        \includegraphics{lifetime-324K}
+        \includegraphics{lifetime-<< temp >>K}
         \caption{%
-            Lifetime spectrum of indium at room temperature.
+            Lifetime spectrum of indium at \SI{<< temp >>}{\kelvin}.
         }
-        \label{fig:lifetime-324K}
+        \label{fig:lifetime-<< temp >>K}
     \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-339K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-339K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-350K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-350K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-362K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-362K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-376K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-376K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-388K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-388K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-398K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-398K}
-    \end{figure}
-
+    %< endfor >%
 \end{appendix}
 
 \end{document}
