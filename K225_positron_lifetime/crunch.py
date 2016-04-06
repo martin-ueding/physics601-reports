@@ -245,11 +245,19 @@ def get_acryl_data(T, slope_val, width):
     print('tau_f', siunitx(tau_f_val, tau_f_err))
     print('tau_bar', siunitx(tau_bar_val, tau_bar_err))
 
+    T['acryl_tau_0'] = siunitx(tau_0_val, tau_0_err)
+    T['acryl_tau_t'] = siunitx(tau_t_val, tau_t_err)
+    T['acryl_tau_f'] = siunitx(tau_f_val, tau_f_err)
+    T['acryl_tau_bar'] = siunitx(tau_bar_val, tau_bar_err)
+
     print('popt', siunitx(popt_val, popt_err))
     print('popt_lin1', siunitx(popt_lin1_val, popt_lin1_err))
     print('popt_lin2', siunitx(popt_lin2_val, popt_lin2_err))
     print('tau_lin1', siunitx(tau_lin1_val, tau_lin1_err))
     print('tau_lin2', siunitx(tau_lin2_val, tau_lin2_err))
+
+    T['acryl_tau0_lin'] = siunitx(tau_lin1_val, tau_lin1_err)
+    T['acryl_taut_lin'] = siunitx(tau_lin2_val, tau_lin2_err)
 
     print(x.shape)
     print(y_lin1_val.shape)
