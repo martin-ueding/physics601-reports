@@ -164,7 +164,7 @@ def get_acryl_data(T, slope_val, width):
     time = slope_val * channel
     counts = data[:, 1]
 
-    x = np.linspace(np.min(time), np.max(time), 2000)
+    x = np.linspace(np.min(time), np.max(time), 500)
 
     fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
             np.log(models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG))
@@ -175,6 +175,9 @@ def get_acryl_data(T, slope_val, width):
     sel2 = (13.11 < time) & (time < 22)
     sels = [sel1, sel2]
 
+    x1 = np.linspace(np.min(time[sel1]), np.max(time[sel1]), 10)
+    x2 = np.linspace(np.min(time[sel2]), np.max(time[sel2]), 10)
+
     for sample_id in range(BOOTSTRAP_SAMPLES):
         print('Bootstrap sample', sample_id, 'running …')
 
@@ -182,9 +185,9 @@ def get_acryl_data(T, slope_val, width):
 
         lin_lifetimes = []
         lin_results = []
-        for sel_lin in sels:
+        for sel_lin, x_lin in zip(sels, [x1, x2]):
             popt_lin, pconv_lin = op.curve_fit(exp_decay, time[sel_lin], boot_counts[sel_lin], p0=[1e5, 0.3])
-            y_lin = exp_decay(x, *popt_lin)
+            y_lin = exp_decay(x_lin, *popt_lin)
 
             lin_results.append(y_lin)
             lin_results.append(popt_lin)
@@ -264,10 +267,10 @@ def get_acryl_data(T, slope_val, width):
     pl.savefig('_build/mpl-lifetime-acryl.pdf')
     pl.savefig('_build/mpl-lifetime-acryl.png')
     pl.yscale('log')
-    pl.fill_between(x, y_lin1_val - y_lin1_err, y_lin1_val + y_lin1_err, alpha=0.5, color='blue')
-    pl.fill_between(x, y_lin2_val - y_lin2_err, y_lin2_val + y_lin2_err, alpha=0.5, color='blue')
-    pl.plot(x, y_lin1_val, color='blue', alpha=0.5)
-    pl.plot(x, y_lin2_val, color='blue', alpha=0.5)
+    pl.fill_between(x1, y_lin1_val - y_lin1_err, y_lin1_val + y_lin1_err, alpha=0.5, color='blue')
+    pl.fill_between(x2, y_lin2_val - y_lin2_err, y_lin2_val + y_lin2_err, alpha=0.5, color='blue')
+    pl.plot(x1, y_lin1_val, color='blue', alpha=0.5)
+    pl.plot(x2, y_lin2_val, color='blue', alpha=0.5)
     dandify_plot()
     pl.savefig('_build/mpl-lifetime-acryl-log.pdf')
     pl.savefig('_build/mpl-lifetime-acryl-log.png')
@@ -286,14 +289,14 @@ def get_acryl_data(T, slope_val, width):
                bootstrap.pgfplots_error_band(x, y_val, y_err))
 
     np.savetxt('_build/xy/acryl-lifetime-fit-lin1.tsv',
-               np.column_stack([x, y_lin1_val]))
+               np.column_stack([x1, y_lin1_val]))
     np.savetxt('_build/xy/acryl-lifetime-band-lin1.tsv',
-               bootstrap.pgfplots_error_band(x, y_lin1_val, y_lin1_err))
+               bootstrap.pgfplots_error_band(x1, y_lin1_val, y_lin1_err))
 
     np.savetxt('_build/xy/acryl-lifetime-fit-lin2.tsv',
-               np.column_stack([x, y_lin2_val]))
+               np.column_stack([x2, y_lin2_val]))
     np.savetxt('_build/xy/acryl-lifetime-band-lin2.tsv',
-               bootstrap.pgfplots_error_band(x, y_lin2_val, y_lin2_err))
+               bootstrap.pgfplots_error_band(x2, y_lin2_val, y_lin2_err))
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):

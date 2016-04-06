@@ -10,10 +10,22 @@
                 opacity=0.5,
             },
             % TODO Better y-ticks.
+            ymin=0.5,
+            xmin=5,
+            xmax=30,
         ]
 
         \addplot[black] table {../xy/acryl-lifetime-data.tsv};
+
+        \addplot[gray] table {../xy/acryl-lifetime-smoothed.tsv};
+
         \addplot[band, fill=red] table {../xy/acryl-lifetime-band.tsv} \closedcycle;
         \addplot[red] table {../xy/acryl-lifetime-fit.tsv};
+
+        \addplot[band, fill=blue] table {../xy/acryl-lifetime-band-lin1.tsv} \closedcycle;
+        \addplot[dashed, blue] table {../xy/acryl-lifetime-fit-lin1.tsv};
+        \addplot[band, fill=blue] table {../xy/acryl-lifetime-band-lin2.tsv} \closedcycle;
+        \addplot[dashed, blue] table {../xy/acryl-lifetime-fit-lin2.tsv};
+
     \end{semilogyaxis}
 \end{tikzpicture}
