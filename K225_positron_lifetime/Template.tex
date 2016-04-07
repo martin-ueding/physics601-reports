@@ -652,42 +652,47 @@ of the \textsc{tac}.
     \label{fig:6-tac-and-coincidence-511}
 \end{figure}
 
-For a time calibration of our \textsc{mca} we use the coincidence unit as
-\textsc{mca}-gate and the \textsc{tac} as input, to take six prompt curves.
-Between the measurements another \SI{4}{\nano\second}-delay is interposed. For
-the first five prompt curves an acquisition time of about \SI{2}{\minute} is
-used.  Together with their fitted Gauss-curves they are shown in
-Figure~\ref{fig:prompts_short}. The sixth prompt curve and its fit is shown in
-Figure~\ref{fig:prompts_long}. To get a good estimation of the time resolution
-the acquisition time is \SI{20}{\minute}.
+For a time calibration of our \textsc{mca}, we use the coincidence unit as
+\textsc{mca}-gate and the \textsc{tac} as input. We take six prompt curves with
+that setup. After each measurements, another \SI{4}{\nano\second}-delay is
+interposed. For the first five prompt curves an acquisition time of about
+\SI{2}{\minute} is used. They are shown together with their fitted Gauss curves
+in Figure~\ref{fig:prompts_short}. The sixth prompt curve and its fit is shown
+in Figure~\ref{fig:prompts_long}. The time resolution the acquisition time is
+\SI{20}{\minute}, we want to get enough data to estimate the time resolution of
+the circuit.
 
 \begin{figure}
-\centering
-        \includegraphics{prompts_short}
-        \caption{%
-                Prompt curves for time calibration. Acquisition time for every
-                curve is approximately \SI{2}{\minute}.
-        }
-        \label{fig:prompts_short}
+    \centering
+    \includegraphics{prompts_short}
+    \caption{%
+        Prompt curves for time calibration. Acquisition time for every
+        curve is approximately \SI{2}{\minute}.
+    }
+    \label{fig:prompts_short}
 \end{figure}
-        
+
 \begin{figure}
-\centering
-        \includegraphics{prompts_long}
-        \caption{%
-                Additional prompt curve for time calibration and time
-                resolution estimation. Acquisition time is approximately
-                \SI{20}{\minute}.
-        }
-        \label{fig:prompts_long}
+    \centering
+    \includegraphics{prompts_long}
+    \caption{%
+        Additional prompt curve for time calibration and time
+        resolution estimation. Acquisition time is approximately
+        \SI{20}{\minute}.
+    }
+    \label{fig:prompts_long}
 \end{figure}
 
 From the fitted functions we get the mean channel to every delay time. The
-results are in Table~\ref{tab:time_gauge_param}. If one plots delay time
-against channel number (see Fig.~\ref{fig:time_gauge}) one gets a linear
-correlation. Because we do not need absolute time values, just time
-differences, only the slope of the fit is of interest for us, which is \SI{<<
-time_gauge_slope >>}{\milli\second} per channel.
+results are in Table~\ref{tab:time_gauge_param}. The error estimation in the
+curve fitting procedure is performed using resampling pseudo-bootstrap.
+
+
+
+One plots delay time against channel number (see Figure~\ref{fig:time_gauge})
+and obtains a linear correlation. Since we do not need absolute time values,
+just time differences, only the slope of the fit is of interest for us. It is
+\SI{<< time_gauge_slope >>}{\milli\second} per channel.
 
 \begin{table}
         \centering
