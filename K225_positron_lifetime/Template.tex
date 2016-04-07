@@ -343,6 +343,15 @@ several times for statistical accuracy.
 
 \section{Analysis models}
 
+\subsection{Prompt curves}
+
+Due to the limited time resolution of the whole setup the peaks are broadened.
+We have to fit a resolution function to the data:
+\[
+P(t) = \frac1{\sqrt{2\piup}\sigma}
+        \exp\del{-\frac{\del{t-t_0}^2}{2\sigma^2}}.
+\]
+
 \subsection{Lifetime spectrum}
 
 As in Section~\ref{ssec:tra_mod} stated the lifetime spectrum contains a
