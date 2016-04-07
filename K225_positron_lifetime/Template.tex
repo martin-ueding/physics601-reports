@@ -459,13 +459,25 @@ Figure~\ref{fig:natrium}.
         \end{subfigure}
         \caption{%
                 Spectrum of ${}^{22}\text{Na}$. The lines of the detector
-                material are also visible.
+                material are also visible. The trigger is set to the rising
+                flank of one of the signals.
         }
         \label{fig:natrium}
 \end{figure}
 
-We check the coincidence of both \textsc{sca} signals. This results in an
-oscillogram as shown in Figure~\ref{fig:1-sca-coincidence-511}
+\subsection{Coincidence verification}
+
+For the next few steps, we need simultaneous events from the left and right
+detectors. Our aim is to make sure that coincident events show up as such in
+the coincidence unit. We manual says to use the intrinsic spectrum from the
+\textsc{lyso} detectors. Our tutor suggested to use the back-to-back
+annihilation of positrons into two photons instead.
+
+We set both left and right \textsc{sca} to give the
+\SI{511}{\kilo\electronvolt} line. We check the coincidence of both
+\textsc{sca} signals, the oscillogram is shown in
+Figure~\ref{fig:1-sca-coincidence-511}. One can see that they overlap very
+nicely.
 
 \begin{figure}
     \centering
@@ -477,13 +489,20 @@ oscillogram as shown in Figure~\ref{fig:1-sca-coincidence-511}
     \label{fig:1-sca-coincidence-511}
 \end{figure}
 
-Figure~\ref{fig:2-sca-and-slow}
+Then we also took a quick look at the slow signal itself. For this we fed the
+slow signal and the matching \textsc{sca} signal into the oscilloscope,
+triggering onto the \textsc{sca} signal. See Figure~\ref{fig:2-sca-and-slow}
+for the oscillogram.
+
+% TODO Why is the SCA signal before the slow signal? That does not really make
+% any sense. Was there some additional delay?
 
 \begin{figure}
     \centering
     \includegraphics[width=.6\linewidth]{br-2-sca-and-slow}
     \caption{%
-        Signal of one \textsc{sca} with the corresponding slow signal.
+        Signal of one \textsc{sca}s with the corresponding slow signal. Trigger
+        is set to the \textsc{sca}.
     }
     \label{fig:2-sca-and-slow}
 \end{figure}
