@@ -423,16 +423,23 @@ additional information for this experiment:
 
 \chapter{Procedure and Analysis}
 
+We want to measure various lifetimes and related quantities using a fast-slow
+coincident circuit. Therefore we need to start constructing it from the basic
+building blocks and make sure that they all work as desired.
+
 \section{Slow circuit setup}
+
+First we set up the slow circuit part in several stages.
 
 \subsection{LYSO spectrum}
 
-Before adjusting the amplifiers, we have to associate the detected events with
-the corresponding transitions. To separate the decay of the ${}^{22}\text{Na}$
-from the intrinsic \textsc{lyso} spectrum, we first take the \textsc{lyso}
-spectrum of the left and right detectors. In Figure~\ref{fig:lyso} one can
-clearly determine the $\SI{596.82}{\kilo\electronvolt}$ cascade decay of the
-$6^+$ state of ${}^{176}\text{Hf}$.
+We have to associate the detected events with the corresponding transitions
+before adjusting the amplifiers, To separate the decay of the
+${}^{22}\text{Na}$ from the intrinsic \textsc{lyso} spectrum, we first take the
+\textsc{lyso} spectrum of the left and right detectors. In
+Figure~\ref{fig:lyso} one can clearly determine the
+$\SI{596.82}{\kilo\electronvolt}$ cascade decay of the $6^+$ state of
+${}^{176}\text{Hf}$.
 
 \begin{figure}
         \centering
@@ -440,7 +447,7 @@ $6^+$ state of ${}^{176}\text{Hf}$.
                 \centering
                 \includegraphics{lyso-li}
                 \caption{%
-                        Left detector.
+                        Left detector
                 }
                 \label{fig:lyso-li}
         \end{subfigure}
@@ -449,7 +456,7 @@ $6^+$ state of ${}^{176}\text{Hf}$.
                 \centering
                 \includegraphics{lyso-re}
                 \caption{%
-                        Right detector.
+                        Right detector
                 }
                 \label{fig:lyso-re}
         \end{subfigure}
@@ -458,7 +465,6 @@ $6^+$ state of ${}^{176}\text{Hf}$.
         }
         \label{fig:lyso}
 \end{figure}
-        
 
 \subsection{Gain adjust using sodium}
 
@@ -496,28 +502,141 @@ Figure~\ref{fig:natrium}.
         \end{subfigure}
         \caption{%
                 Spectrum of ${}^{22}\text{Na}$. The lines of the detector
-                material are also visible.
+                material are also visible. The trigger is set to the rising
+                flank of one of the signals.
         }
         \label{fig:natrium}
 \end{figure}
 
+\subsection{Coincidence verification}
 
-We check the coincidence of both \textsc{sca} signals.
+For the next few steps, we need simultaneous events from the left and right
+detectors. Our aim is to make sure that coincident events show up as such in
+the coincidence unit. We manual says to use the intrinsic spectrum from the
+\textsc{lyso} detectors. Our tutor suggested to use the back-to-back
+annihilation of positrons into two photons instead.
+
+We set both left and right \textsc{sca} to give the
+\SI{511}{\kilo\electronvolt} line. We check the coincidence of both
+\textsc{sca} signals, the oscillogram is shown in
+Figure~\ref{fig:1-sca-coincidence-511}. One can see that they overlap very
+nicely.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.48\linewidth]{br-1-sca-coincidence-511}
+    \caption{%
+        \textsc{sca} coincidence checked with the electron-positron
+        annihilation back-to-back radiation. The oscilloscope only had a floppy
+        disk interface, therefore we had to take pictures of the oscillogram
+        and invert them.
+    }
+    \label{fig:1-sca-coincidence-511}
+\end{figure}
+
+Then we also took a quick look at the slow signal itself. For this we fed the
+slow signal and the matching \textsc{sca} signal into the oscilloscope,
+triggering onto the \textsc{sca} signal. See Figure~\ref{fig:2-sca-and-slow}
+for the oscillogram.
+
+% TODO Why is the SCA signal before the slow signal? That does not really make
+% any sense. Was there some additional delay?
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{br-2-sca-and-slow}
+        \caption{%
+            \textsc{sca}
+        }
+        \label{fig:2-sca-and-slow}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{br-3-cfd-and-slow}
+        \caption{%
+            \textsc{cfd}
+        }
+        \label{fig:3-cfd-and-slow}
+    \end{subfigure}
+    \caption{%
+        Slow signal with \textsc{sca} and \textsc{cdf}. Always triggered on the
+        digital pulse
+    }
+    \label{fig:}
+\end{figure}
 
 \section{Fast circuit setup}
 
-Slow-signal and CFD signal, adjust CFD such that zero-line vanishes.
+One slow signal and the corresponding \textsc{cfd} signal are fed into the
+oscilloscope. We trigger onto the \textsc{cfd} dip. In the second channel
+(orange), we can see various amplitudes. We want to remove the zero line by
+setting the threshold as high as we need. Once the zero line vanishes in slow
+signal (see Figure~\ref{fig:3-cfd-and-slow}), the \textsc{cfd} is set up. We
+repeat this process with the other side.
 
-Look at CFD signals where stop-signal is delayed. We can verify that there is a
-\SI{20}{\milli\second} delay between the two.
+Having both \textsc{cfd}s set up, we can look at both output at the same time.
+The signal from the stop branch is led through a delay. With the help of the
+oscillogram (Figure~\ref{fig:4-cfd-delay}), we set that delay to
+\SI{20}{\milli\second}. This delay will produce an overall shift in our
+lifetime curves. As they are only interested in the lifetime, the absolute time
+if not of interest to us. Therefore we can set a delay time to make sure that
+start and stop signal are well separated.
 
-TAC produces an output.
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{br-4-cfd-delay}
+        \caption{%
+            Delay between \textsc{cfd}s.
+        }
+        \label{fig:4-cfd-delay}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{br-5-tac-511}
+        \caption{%
+            Signal from the \textsc{tac}.
+        }
+        \label{fig:5-tac-511}
+    \end{subfigure}
+    \caption{%
+        Oscillograms of time duration measurement with \textsc{cfd} and
+        \textsc{tac}.
+    }
+    \label{fig:}
+\end{figure}
+
+The output of both \textsc{cfs}s (with delay in stop branch) are hooked up to
+the \textsc{tac}. We make sure to use the same cables as before in order to
+keep the delay by the cables constant. The \textsc{tac} produces an output
+which we interpret as jitter around the fixed delay of \SI{20}{\milli\second}.
+The physical process that we observe are the back-to-back photons from the
+positron annihilation. Figure~\ref{fig:5-tac-511} shows the oscillogram
+generated by the \textsc{tac}.
+
+The fast circuit is now prepared for the rest of the experiment.
 
 \section{Time calibration}
 
 SCA coincidence already checked.
 
 TAC+coincidence has very nice overlap.
+Figure~\ref{fig:6-tac-and-coincidence-511}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.48\linewidth]{br-6-tac-and-coincidence-511}
+    \caption{%
+        Overlap of analog \textsc{tac} signal (orange) and digital coincidence
+        signal (blue).
+    }
+    \label{fig:6-tac-and-coincidence-511}
+\end{figure}
 
 For a time calibration of our \textsc{mca} we use the coincidence unit as
 \textsc{mca}-gate and the \textsc{tac} as input, to take six prompt curves.
@@ -552,9 +671,9 @@ the acquisition time is \SI{20}{\minute}.
 From the fitted functions we get the mean channel to every delay time. The
 results are in Table~\ref{tab:time_gauge_param}. If one plots delay time
 against channel number (see Fig.~\ref{fig:time_gauge}) one gets a linear
-correlation. Because we don't need absolute time values, just time differences,
-only the slope of the fit is of interest for us, which is \SI{<<
-time_gauge_slope >>}{\milli\second}.
+correlation. Because we do not need absolute time values, just time
+differences, only the slope of the fit is of interest for us, which is \SI{<<
+time_gauge_slope >>}{\milli\second} per channel.
 
 \begin{table}
         \centering
@@ -585,7 +704,6 @@ time_gauge_slope >>}{\milli\second}.
         }
         \label{fig:time_gauge}
 \end{figure}
-        
 
 The last prompt curve has a standard deviation of \num{<< width_6 >>}. From
 this we get $\textsc{fwhm} = \num{<< FWHM_6 >>}$. With the slope of the time
@@ -596,8 +714,37 @@ calibration fit we get a resolution of \SI{<< time_resolution >>}{\nano\second}.
 After the time calibration we have to set up the fast-slow coincidence
 circuit. For this we set the \textsc{sca} window on the start-side
 to the \SI{1275}{\kilo\electronvolt} line of the spectrum and check if the
-two \textsc{sca}'s as well as the \textsc{tac} and the coincidence unit have
+two \textsc{sca}s as well as the \textsc{tac} and the coincidence unit have
 a nice overlap.
+
+Figure~\ref{fig:7-sca-coincidence-1275}.
+
+Figure~\ref{fig:8-tac-and-coincidence-1275}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{br-7-sca-coincidence-1275}
+        \caption{%
+            %
+        }
+        \label{fig:7-sca-coincidence-1275}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{br-8-tac-and-coincidence-1275}
+        \caption{%
+            %
+        }
+        \label{fig:8-tac-and-coincidence-1275}
+    \end{subfigure}
+    \caption{%
+        %
+    }
+    \label{fig:}
+\end{figure}
 
 \section{Indium sample}
 
@@ -630,14 +777,72 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     \label{fig:lifetime-295K}
 \end{figure}
 
+\begin{table}
+    \centering
+    \begin{tabular}{SSSSS}
+        \toprule
+        {$T/\si{\kelvin}$}
+        & {$\tau_0 / \si{\nano\second}$}
+        & {$\tau_\mathrm t / \si{\nano\second}$}
+        & {$\tau_\mathrm f / \si{\nano\second}$}
+        & {$\bar \tau / \si{\nano\second}$}
+        \\
+        \midrule
+        %< for row in taus_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Mean channel number of Gauss fit width corresponding delay
+        times. Values are plotted in Figure~\ref{fig:taus}.
+    }
+    \label{tab:taus}
+\end{table}
+
 \begin{figure}
     \centering
     \includegraphics{taus}
     \caption{%
-        Compilation of the various lifetimes derived from the spectra.
+        Compilation of the various lifetimes derived from the spectra. Values
+        are enumerated in Table~\ref{tab:taus}.
     }
     \label{fig:taus}
 \end{figure}
+
+\begin{table}
+    \centering
+    \begin{tabular}{SSS}
+        \toprule
+        {$T/\si{\kelvin}$}
+        & {$A_0^\text{rel}$}
+        & {$A_\mathrm t^\text{rel}$}
+        \\
+        \midrule
+        %< for row in intensities_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Relative intensities of the non-trapped ($A_0$) and trapped ($A_\mathrm
+        t$) parts. These values are plotted in Figure~\ref{fig:intensities}.
+    }
+    \label{tab:intensities}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics{intensities}
+    \caption{%
+        Relative intensities of the non-trapped ($A_0$, upper curve) and
+        trapped ($A_\mathrm t$, lower curve) parts. The values are listed in
+        Table~\ref{tab:intensities}.
+    }
+    \label{fig:intensities}
+\end{figure}
+
+% TODO Plot with intensities.
 
 \begin{figure}
     \centering
@@ -651,85 +856,125 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
 
 \subsection{Vacancy formation enthalpy}
 
+\begin{table}
+    \centering
+    \begin{tabular}{SS}
+        \toprule
+        {$\si{\kelvin} / T$}
+        % TODO Which unit?
+        & {$\sigma_\mathrm t C_\mathrm t(T)$}
+        \\
+        \midrule
+        %< for row in arrhenius_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Converted values for the Arrhenius plot shown in
+        Figure~\ref{fig:arrhenius}.
+    }
+    \label{tab:arrhenius}
+\end{table}
+
 \begin{figure}
     \centering
     \includegraphics{arrhenius}
     \caption{%
-        %
+        Arrhenius plot with a linear ordinate. The band illustrates the
+        possible exponential decay fits. The values are listed in
+        Table~\ref{tab:arrhenius}.
     }
     \label{fig:arrhenius}
 \end{figure}
 
+\[
+    H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt} \,.
+\]
+
 \section{Acrylic glass sample}
+
+After we take all temperature dependent measurements with the indium sample, we
+place in an acrylic glass sample between the detectors. Inside the glass, there
+is $\mathrm{^{22}Na}$ dust. We measure at room temperature over night.
+
+Figure~\ref{fig:acrylic} shows the resulting spectrum we got the next morning.
+As done before for the indium, we fit the same two-decay model to our data. In
+contrast to the indium spectra, this fit turned out to be rather unstable. We
+did a few things to get it under control. First we fitted a simple exponential
+decay to the straight parts of the falling flank. This gave us a first estimate
+of the lifetimes for the positronium. We obtained
+\[
+    \tau_0 = \SI{<< acryl_tau_0_lin >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm t = \SI{<< acryl_tau_t_lin >>}{\nano\second} \,.
+\]
+Choosing fixed limits in the time for the fit, we introduce a systematic error.
+The proper treatment would be a $\chi^2$-weighted histogram of fit-parameters
+to control the statistical error. We do not need this treatment here, we just
+want to use those values as starting values for the unstable fit. Using those
+lifetimes as input for the full fit model, we obtained the lifetimes
+\[
+    \tau_0 = \SI{<< acryl_tau_0 >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm t = \SI{<< acryl_tau_t >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm f = \SI{<< acryl_tau_f >>}{\nano\second}
+    \eqnsep
+    \bar\tau = \SI{<< acryl_tau_bar >>}{\nano\second}
+    \,.
+\]
+
+\begin{figure}
+    \centering
+    \includegraphics{acrylic}
+    \caption{%
+        Overnight measurement with acrylic glass. Shown in black are the counts
+        observed with the \textsc{mca}. The gray line is a smoothed version of
+        the data (convolution with Gauss kernel) in order to help estimate the
+        mean value in the jitter. Our fitted model is shown in red. The two
+        dashed blue line segments are a decaying exponential fit to the
+        straight sections of the curve. Their slope is used as a starting value
+        for the red fit line.
+    }
+    \label{fig:acrylic}
+\end{figure}
+
+Figure~\ref{fig:acrylic-zoom} shows the data and the various fit lines in more
+detail.
+
+\begin{figure}
+    \centering
+    \includegraphics{acrylic-zoom}
+    \caption{%
+        Zoom-in of Figure~\ref{fig:acrylic}.
+    }
+    \label{fig:acrylic-zoom}
+\end{figure}
+
+% TODO Some hand waiving or so …
+
+\chapter{Conclusion}
+
+
+\[
+    H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt} \,.
+\]
 
 \begin{appendix}
 
     \chapter{Lifetime spectra}
 
-    %TODO insert temperatures
-    \begin{figure}
+    %< for temp in temps_int[1:] >%
+    \begin{figure}[htbp]
         \centering
-        \includegraphics{lifetime-324K}
+        \includegraphics{lifetime-<< temp >>K}
         \caption{%
-            Lifetime spectrum of indium at room temperature.
+            Lifetime spectrum of indium at \SI{<< temp >>}{\kelvin}.
         }
-        \label{fig:lifetime-324K}
+        \label{fig:lifetime-<< temp >>K}
     \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-339K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-339K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-350K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-350K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-362K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-362K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-376K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-376K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-388K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-388K}
-    \end{figure}
-
-    \begin{figure}
-        \centering
-        \includegraphics{lifetime-398K}
-        \caption{%
-            Lifetime spectrum of indium at room temperature.
-        }
-        \label{fig:lifetime-398K}
-    \end{figure}
-
+    %< endfor >%
 \end{appendix}
 
 \end{document}

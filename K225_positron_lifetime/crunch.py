@@ -127,49 +127,85 @@ def lifetime(T):
     get_indium_data(T, slope, width)
 
 
-def get_acryl_data(T, slope_val, width):
+
+def acryl_sampler():
+    slope_val, width = 0.00674980594692, 0.30468471302
+
     data = np.loadtxt('Data/longlong.txt')
     channel = data[:, 0]
     time = slope_val * channel
     counts = data[:, 1]
 
     x = np.linspace(np.min(time), np.max(time), 2000)
+    p0 = [10.3, width, 13e3, 34e2, 1/2.17, 1/0.508, 2]
+    y1, y2, y = models.lifetime_spectrum_parts(x, *p0)
+
+    pl.plot(time, counts, color='black')
+    pl.plot(x, y1, color='red')
+    pl.plot(x, y2, color='green')
+    pl.plot(x, y, color='gray')
+    dandify_plot()
+    pl.xlim((8, 40))
+    pl.ylim((0.5, np.max(counts)*1.2))
+    pl.savefig('_build/mpl-sampler.pdf')
+    pl.yscale('log')
+    dandify_plot()
+    pl.xlim((8, 40))
+    pl.ylim((0.5, np.max(counts)*1.2))
+    pl.savefig('_build/mpl-sampler-log.pdf')
+    pl.clf()
+    
+
+
+
+def get_acryl_data(T, slope_val, width):
+    data = np.loadtxt('Data/longlong.txt')
+    channel = data[:, 0]
+    time = slope_val * channel
+    counts = data[:, 1]
+
+    x = np.linspace(np.min(time), np.max(time), 500)
 
     fit_func = lambda t, mean, A_0, A_t, tau_0, tau_t, BG: \
-            models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG)
-
-    sel = (10 < time) & (time < 50)
+            np.log(models.lifetime_spectrum(t, mean, width, A_0, A_t, tau_0, tau_t, BG))
 
     results = []
+
+    sel1 = (10.92 < time) & (time < 11.58)
+    sel2 = (13.11 < time) & (time < 22)
+    sels = [sel1, sel2]
+
+    x1 = np.linspace(np.min(time[sel1]), np.max(time[sel1]), 10)
+    x2 = np.linspace(np.min(time[sel2]), np.max(time[sel2]), 10)
 
     for sample_id in range(BOOTSTRAP_SAMPLES):
         print('Bootstrap sample', sample_id, 'running …')
 
         boot_counts = bootstrap.redraw_count(counts)
 
-        p0 = [10.5, 5e3, 9e3, 2.17, 0.508, 0]
-        popt, pconv = op.curve_fit(fit_func, time[sel], boot_counts[sel], p0=p0)
+        lin_lifetimes = []
+        lin_results = []
+        for sel_lin, x_lin in zip(sels, [x1, x2]):
+            popt_lin, pconv_lin = op.curve_fit(exp_decay, time[sel_lin], boot_counts[sel_lin], p0=[1e5, 0.3])
+            y_lin = exp_decay(x_lin, *popt_lin)
+
+            lin_results.append(y_lin)
+            lin_results.append(popt_lin)
+            lin_results.append(1/popt_lin[1])
+            lin_lifetimes.append(1/popt_lin[1])
+
+        sel = (10 < time) & (time < 50) & (boot_counts > 0)
+
+        p0 = [10.5, 13e3, 34e2] + lin_lifetimes + [2]
+        popt, pconv = op.curve_fit(fit_func, time[sel], np.log(boot_counts[sel]), p0=p0)
         mean, A_0, A_t, tau_0, tau_t, BG = popt
 
         intens_0 = A_0 / (A_0 + A_t)
         intens_t = A_t / (A_0 + A_t)
         tau_bar = intens_0 * tau_0 + intens_t * tau_t
-        y = fit_func(x, *popt)
+        y = np.exp(fit_func(x, *popt))
         tau_f = 1 / (intens_0 / tau_0 - intens_t / tau_t)
         sigma_c = 1 / tau_0 - 1 / tau_f
-
-        sel1 = (10.92 < time) & (time < 11.58)
-        sel2 = (13.11 < time) & (time < 22)
-
-        sels = [sel1, sel2]
-        lin_results = []
-        for sel_lin in sels:
-            popt_lin, pconv_lin = op.curve_fit(exp_decay, time[sel_lin], boot_counts[sel_lin], p0=[1e5, 0.3])
-            y_lin = exp_decay(x, *popt_lin)
-
-            lin_results.append(y_lin)
-            lin_results.append(popt_lin)
-
 
         results.append([
             tau_0,
@@ -185,7 +221,8 @@ def get_acryl_data(T, slope_val, width):
         
     tau_0_dist, tau_bar_dist, tau_f_dist, tau_t_dist, intens_0_dist, \
             intens_t_dist, lifetime_y_dist, lifetime_popt_dist, sigma_c_dist, \
-            y_lin1_dist, popt_lin1_dist, y_lin2_dist, popt_lin2_dist \
+            y_lin1_dist, popt_lin1_dist, tau_lin1_dist, \
+            y_lin2_dist, popt_lin2_dist, tau_lin2_dist, \
             = zip(*results)
 
     tau_0_val, tau_0_err = bootstrap.average_and_std_arrays(tau_0_dist)
@@ -198,29 +235,38 @@ def get_acryl_data(T, slope_val, width):
 
     popt_lin1_val, popt_lin1_err = bootstrap.average_and_std_arrays(popt_lin1_dist)
     y_lin1_val, y_lin1_err = bootstrap.average_and_std_arrays(y_lin1_dist)
+    tau_lin1_val, tau_lin1_err = bootstrap.average_and_std_arrays(tau_lin1_dist)
     popt_lin2_val, popt_lin2_err = bootstrap.average_and_std_arrays(popt_lin2_dist)
     y_lin2_val, y_lin2_err = bootstrap.average_and_std_arrays(y_lin2_dist)
+    tau_lin2_val, tau_lin2_err = bootstrap.average_and_std_arrays(tau_lin2_dist)
 
     print('tau_0', siunitx(tau_0_val, tau_0_err))
     print('tau_t', siunitx(tau_t_val, tau_t_err))
     print('tau_f', siunitx(tau_f_val, tau_f_err))
     print('tau_bar', siunitx(tau_bar_val, tau_bar_err))
 
+    T['acryl_tau_0'] = siunitx(tau_0_val, tau_0_err)
+    T['acryl_tau_t'] = siunitx(tau_t_val, tau_t_err)
+    T['acryl_tau_f'] = siunitx(tau_f_val, tau_f_err)
+    T['acryl_tau_bar'] = siunitx(tau_bar_val, tau_bar_err)
+
     print('popt', siunitx(popt_val, popt_err))
     print('popt_lin1', siunitx(popt_lin1_val, popt_lin1_err))
     print('popt_lin2', siunitx(popt_lin2_val, popt_lin2_err))
+    print('tau_lin1', siunitx(tau_lin1_val, tau_lin1_err))
+    print('tau_lin2', siunitx(tau_lin2_val, tau_lin2_err))
+
+    T['acryl_tau_0_lin'] = siunitx(tau_lin1_val, tau_lin1_err)
+    T['acryl_tau_t_lin'] = siunitx(tau_lin2_val, tau_lin2_err)
 
     print(x.shape)
     print(y_lin1_val.shape)
 
-    pl.plot(time, counts, color='black')
-    pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
-    pl.fill_between(x, y_lin1_val - y_lin1_err, y_lin1_val + y_lin1_err, alpha=0.5, color='blue')
-    pl.fill_between(x, y_lin2_val - y_lin2_err, y_lin2_val + y_lin2_err, alpha=0.5, color='blue')
+    pl.plot(time, counts, color='black', alpha=0.3)
     counts_smooth = scipy.ndimage.filters.gaussian_filter1d(counts, 8)
     pl.plot(time, counts_smooth, color='green')
-    pl.plot(x, y_lin1_val, color='blue')
-    pl.plot(x, y_lin2_val, color='blue')
+    pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
+    pl.plot(x, y_val, color='red')
     pl.xlabel('Time / ns')
     pl.ylabel('Counts')
     dandify_plot()
@@ -229,10 +275,36 @@ def get_acryl_data(T, slope_val, width):
     pl.savefig('_build/mpl-lifetime-acryl.pdf')
     pl.savefig('_build/mpl-lifetime-acryl.png')
     pl.yscale('log')
+    pl.fill_between(x1, y_lin1_val - y_lin1_err, y_lin1_val + y_lin1_err, alpha=0.5, color='blue')
+    pl.fill_between(x2, y_lin2_val - y_lin2_err, y_lin2_val + y_lin2_err, alpha=0.5, color='blue')
+    pl.plot(x1, y_lin1_val, color='blue', alpha=0.5)
+    pl.plot(x2, y_lin2_val, color='blue', alpha=0.5)
+    dandify_plot()
     pl.savefig('_build/mpl-lifetime-acryl-log.pdf')
     pl.savefig('_build/mpl-lifetime-acryl-log.png')
     #pl.show()
     pl.clf()
+
+    np.savetxt('_build/xy/acryl-lifetime-data.tsv',
+               np.column_stack([time, counts]))
+
+    np.savetxt('_build/xy/acryl-lifetime-smoothed.tsv',
+               np.column_stack([time, counts_smooth]))
+
+    np.savetxt('_build/xy/acryl-lifetime-fit.tsv',
+               np.column_stack([x, y_val]))
+    np.savetxt('_build/xy/acryl-lifetime-band.tsv',
+               bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+    np.savetxt('_build/xy/acryl-lifetime-fit-lin1.tsv',
+               np.column_stack([x1, y_lin1_val]))
+    np.savetxt('_build/xy/acryl-lifetime-band-lin1.tsv',
+               bootstrap.pgfplots_error_band(x1, y_lin1_val, y_lin1_err))
+
+    np.savetxt('_build/xy/acryl-lifetime-fit-lin2.tsv',
+               np.column_stack([x2, y_lin2_val]))
+    np.savetxt('_build/xy/acryl-lifetime-band-lin2.tsv',
+               bootstrap.pgfplots_error_band(x2, y_lin2_val, y_lin2_err))
 
 
 def time_gauge(T, show_gauss=False, show_lin=False):
@@ -257,7 +329,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         mean = []
         width = []
         amplitude = []
-        for a in range(10):
+        for a in range(BOOTSTRAP_SAMPLES):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
@@ -283,18 +355,20 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         time.append((i-1)*4)
 
     # write files for prompt curve plotting
-    np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
-    np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
+    np.savetxt('_build/xy/prompts-short.txt',
+               bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
+    np.savetxt('_build/xy/prompts-long.txt',
+               bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
 
     # convert lists to arrays
     channel_val = np.array(channel_val)
     channel_err = np.array(channel_err)
     time = np.array(time)
 
-    T['time_gauge_param'] = list(zip(*[
+    T['time_gauge_param'] = list(zip(
         map(str, time),
         siunitx(channel_val, channel_err)
-    ]))
+    ))
 
     # linear fit with delete-1-jackknife
     slope = []
@@ -323,8 +397,10 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     x = np.linspace(750, 4000, 100)
     y = linear(x, slope_val, intercept_val)
 
-    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val,time , channel_err]))
-    np.savetxt('_build/xy/time_gauge_fit.txt', np.column_stack([x,y]))
+    np.savetxt('_build/xy/time_gauge_plot.txt',
+               np.column_stack([channel_val,time , channel_err]))
+    np.savetxt('_build/xy/time_gauge_fit.txt',
+               np.column_stack([x,y]))
         
 
     T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
@@ -434,6 +510,8 @@ def get_indium_data(T, slope_val, width):
         all_lifetime_popt_dist.append(lifetime_popt_list)
         all_sigma_c_dist.append(sigma_c_list)
 
+    T['temps_int'] = []
+
     # Generate plots with lifetime curves and fits.
     for temp, counts, lifetime_y_dist in zip(temps_val, all_counts, zip(*all_lifetime_y_dist)):
         print('Creating lifetime plot with temp', temp)
@@ -445,6 +523,8 @@ def get_indium_data(T, slope_val, width):
                    np.column_stack([x, y_val]))
         np.savetxt('_build/xy/lifetime-{}K-band.tsv'.format(int(temp)),
                    bootstrap.pgfplots_error_band(x, y_val, y_err))
+
+        T['temps_int'].append(int(temp))
 
         if False:
             pl.fill_between(x, y_val - y_err, y_val + y_err, alpha=0.5, color='red')
@@ -462,6 +542,8 @@ def get_indium_data(T, slope_val, width):
             pl.savefig('_build/mpl-lifetime-{:04d}K-log.pdf'.format(int(temp)))
             pl.savefig('_build/mpl-lifetime-{:04d}K-log.png'.format(int(temp)))
             pl.clf()
+
+    T['temps_int'].sort()
 
     # Plot the lifetimes.
     taus_0_val, taus_0_err = bootstrap.average_and_std_arrays(all_tau_0_dist)
@@ -491,6 +573,14 @@ def get_indium_data(T, slope_val, width):
     np.savetxt('_build/xy/tau_bar.tsv',
                np.column_stack([temps_val, taus_bar_val, taus_bar_err]))
 
+    T['taus_table'] = list(zip(
+        siunitx(temps_val, temps_err),
+        siunitx(taus_0_val, taus_0_err),
+        siunitx(taus_t_val, taus_t_err),
+        siunitx(taus_f_val, taus_f_err),
+        siunitx(taus_bar_val, taus_bar_err),
+    ))
+
     # Plot relative intensities.
     all_intens_0_val, all_intens_0_err = bootstrap.average_and_std_arrays(all_intens_0_dist)
     all_intens_t_val, all_intens_t_err = bootstrap.average_and_std_arrays(all_intens_t_dist)
@@ -505,23 +595,35 @@ def get_indium_data(T, slope_val, width):
     pl.savefig('_build/mpl-intensities.png')
     pl.clf()
 
+    np.savetxt('_build/xy/intensities-0.tsv',
+               np.column_stack([temps_val, all_intens_0_val, all_intens_0_err]))
+    np.savetxt('_build/xy/intensities-t.tsv',
+               np.column_stack([temps_val, all_intens_t_val, all_intens_t_err]))
+
+    T['intensities_table'] = list(zip(
+        siunitx(temps_val, temps_err),
+        siunitx(all_intens_0_val, all_intens_0_err),
+        siunitx(all_intens_t_val, all_intens_t_err),
+    ))
+
     inv_temps = 1 / np.array(temps_val)
     results = []
     x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
+    kelvin_to_eV = 8.621738e-5
     for all_sigma_c in all_sigma_c_dist:
         p0 = [11, 240]
         print('inv_temps:', inv_temps)
         print('all_sigma_c:', all_sigma_c)
-        popt, pconv = op.curve_fit(exp_decay, inv_temps, all_sigma_c, p0=p0)
-        y = exp_decay(x, *popt)
-
-        kelvin_to_eV = 8.621738e-5
-
-        results.append([
-            popt,
-            popt[1] * kelvin_to_eV,
-            y,
-        ])
+        for leave_out in range(len(all_sigma_c)):
+            inv_temps_jack = np.delete(inv_temps, leave_out)
+            all_sigma_c_jack = np.delete(all_sigma_c, leave_out)
+            popt, pconv = op.curve_fit(exp_decay, inv_temps_jack, all_sigma_c_jack, p0=p0)
+            y = exp_decay(x, *popt)
+            results.append([
+                popt,
+                popt[1] * kelvin_to_eV,
+                y,
+            ])
 
     popt_dist, Ht_eV_dist, arr_y_dist = zip(*results)
 
@@ -547,7 +649,14 @@ def get_indium_data(T, slope_val, width):
     np.savetxt('_build/xy/arrhenius-band.tsv',
                bootstrap.pgfplots_error_band(x, arr_y_val, arr_y_err))
 
+    T['arrhenius_table'] = list(zip(
+        siunitx(inv_temps),
+        siunitx(sigma_c_val, sigma_c_err),
+    ))
+
     print('Ht_eV:', siunitx(Ht_eV_val, Ht_eV_err))
+
+    T['Ht_eV'] = siunitx(Ht_eV_val, Ht_eV_err)
 
     pl.errorbar(temps_val, taus_bar_val, xerr=temps_err, yerr=taus_bar_err,
                 label=r'$\bar\tau$', linestyle='none', marker='+')
@@ -605,6 +714,9 @@ def test_keys(T):
 
 def main():
     T = {}
+
+    acryl_sampler()
+    #sys.exit(0)
 
     random.seed(0)
 
