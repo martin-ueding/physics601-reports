@@ -609,20 +609,21 @@ def get_indium_data(T, slope_val, width):
     inv_temps = 1 / np.array(temps_val)
     results = []
     x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
+    kelvin_to_eV = 8.621738e-5
     for all_sigma_c in all_sigma_c_dist:
         p0 = [11, 240]
         print('inv_temps:', inv_temps)
         print('all_sigma_c:', all_sigma_c)
-        popt, pconv = op.curve_fit(exp_decay, inv_temps, all_sigma_c, p0=p0)
-        y = exp_decay(x, *popt)
-
-        kelvin_to_eV = 8.621738e-5
-
-        results.append([
-            popt,
-            popt[1] * kelvin_to_eV,
-            y,
-        ])
+        for leave_out in range(len(all_sigma_c)):
+            inv_temps_jack = np.delete(inv_temps, leave_out)
+            all_sigma_c_jack = np.delete(all_sigma_c, leave_out)
+            popt, pconv = op.curve_fit(exp_decay, inv_temps_jack, all_sigma_c_jack, p0=p0)
+            y = exp_decay(x, *popt)
+            results.append([
+                popt,
+                popt[1] * kelvin_to_eV,
+                y,
+            ])
 
     popt_dist, Ht_eV_dist, arr_y_dist = zip(*results)
 
