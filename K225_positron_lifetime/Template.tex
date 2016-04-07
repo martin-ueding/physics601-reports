@@ -408,10 +408,10 @@ additional information for this experiment:
     \exp\del{\frac{S_\text{t}}{k}} \exp\del{-\frac{H_\mathrm t}{kT}}
 \tau_\text{f}} \,.
 \end{align}
-This shows, that the mean lifetime for low temperatures is
+This shows that the mean lifetime for low temperatures is
 approximately $\tau_\text{f}$. For high temperatures it reaches
 $\tau_\text{t}$, due to more vacancies. Fitting this to the
-mean lifetime allows to extract for example $\tau_\text{f}$. 
+mean lifetime allows to extract, for example, $\tau_\text{f}$. 
 Another way to get $\tau_\text{f}$ is given by
 \textcite[(6)]{Weiler/Vacancy_formation}:
 \[
@@ -589,11 +589,11 @@ setting the threshold as high as we need. Once the zero line vanishes in slow
 signal (see Figure~\ref{fig:3-cfd-and-slow}), the \textsc{cfd} is set up. We
 repeat this process with the other side.
 
-Having both \textsc{cfd}s set up, we can look at both output at the same time.
-The signal from the stop branch is led through a delay. With the help of the
-oscillogram (Figure~\ref{fig:4-cfd-delay}), we set that delay to
+Having both \textsc{cfd} units set up, we can look at both outputs at the same
+time. The signal from the stop branch is led through a delay. With the help of
+the oscillogram (Figure~\ref{fig:4-cfd-delay}), we set that delay to
 \SI{20}{\milli\second}. This delay will produce an overall shift in our
-lifetime curves. As they are only interested in the lifetime, the absolute time
+lifetime curves. As we are only interested in the lifetime, the absolute time
 if not of interest to us. Therefore we can set a delay time to make sure that
 start and stop signal are well separated.
 
@@ -623,7 +623,7 @@ start and stop signal are well separated.
     \label{fig:}
 \end{figure}
 
-The output of both \textsc{cfs}s (with delay in stop branch) are hooked up to
+The output of both \textsc{cfd}s (with delay in stop branch) are hooked up to
 the \textsc{tac}. We make sure to use the same cables as before in order to
 keep the delay by the cables constant. The \textsc{tac} produces an output
 which we interpret as jitter around the fixed delay of \SI{20}{\milli\second}.
@@ -635,11 +635,11 @@ The fast circuit is now prepared for the rest of the experiment.
 
 \section{Time calibration}
 
-The coincidence of the two \textsc{sca}s has already been checked. Now we have
-to make sure that the \textsc{tac} and the coincidence unit have sufficient
-overlap. We will use the coincidence unit as the gate for the \textsc{mca}. If
-there was insufficient overlap, the \textsc{mca} would not record the analog
-spectrum from the \textsc{tac}.
+The coincidence of the two \textsc{sca} units has already been checked. Now we
+have to make sure that the \textsc{tac} and the coincidence unit have
+sufficient overlap. We will use the coincidence unit as the gate for the
+\textsc{mca}. If there was insufficient overlap, the \textsc{mca} would not
+record the analog spectrum from the \textsc{tac}.
 
 In Figure~\ref{fig:6-tac-and-coincidence-511} we can see the digital pulse from
 the coincidence unit is very long and completely encompasses the analog output
@@ -657,11 +657,11 @@ of the \textsc{tac}.
 
 For a time calibration of our \textsc{mca}, we use the coincidence unit as
 \textsc{mca}-gate and the \textsc{tac} as input. We take six prompt curves with
-that setup. After each measurements, another \SI{4}{\nano\second}-delay is
+that setup. After each measurement, another \SI{4}{\nano\second}-delay is
 interposed. For the first five prompt curves an acquisition time of about
 \SI{2}{\minute} is used. They are shown together with their fitted Gauss curves
 in Figure~\ref{fig:prompts_short}. The sixth prompt curve and its fit is shown
-in Figure~\ref{fig:prompts_long}. The time resolution the acquisition time is
+in Figure~\ref{fig:prompts_long}. The acquisition time for that one is
 \SI{20}{\minute}, we want to get enough data to estimate the time resolution of
 the circuit.
 
@@ -687,12 +687,12 @@ the circuit.
 \end{figure}
 
 From the fitted functions we get the mean channel to every delay time. The
-results are in Table~\ref{tab:time_gauge_param}. The error estimation in the
-curve fitting procedure is performed using resampling pseudo-bootstrap. If we
-would have a lot of time, we could have repeated each prompt curve measurement
-a lot of times, say a hundred times. Each measurement would roughly give the
-same curve. Statistical fluctuations would give us slightly different counts in
-each bins.
+results are shown in Table~\ref{tab:time_gauge_param}. The error estimation in
+the curve fitting procedure is performed using resampling pseudo-bootstrap. If
+we would have a lot of time, we could have repeated each prompt curve
+measurement a lot of times, say a hundred times. Each measurement would roughly
+give the same curve. Statistical fluctuations would give us slightly different
+counts in each bin.
 
 \begin{table}
         \centering
@@ -716,13 +716,14 @@ each bins.
 Taking that many measurements is unrealistic as we only have one lab day for
 this. We need to generate more measurements from the ones that we have. This is
 the origin of the name \enquote{bootstrap}, we use the data that we have to
-generate more. This is as outrageous as pulling oneself up on one's bootstraps.
-The rational is the following. We have a counting experiment with $n_i$ counts
-in the $i$-th bin. Generally, a statistical error of $\sqrt{n_i}$ can be
-associated with that count. Assuming that the implied distribution is Gaussian,
-we can generate more points from a Gaussian distribution with mean $\mu = n_i$
-and standard deviation $\sigma = \sqrt{n_i}$. Performing this for all bins, we
-obtain a new \emph{bootstrap sample}.
+generate more. It sounds as outrageous as pulling oneself up on one's
+bootstraps. However, it is not. The rational is the following. We have a
+counting experiment with $n_i$ counts in the $i$-th bin. Generally, a
+statistical error of $\sqrt{n_i}$ can be associated with that count. Assuming
+that the implied distribution is Gaussian, we can generate more points from a
+Gaussian distribution with mean $\mu = n_i$ and standard deviation $\sigma =
+\sqrt{n_i}$. Performing this for all bins, we obtain a new \emph{bootstrap
+sample}.
 
 The analysis is performed for each of those samples as usual. In our case it is
 the curve fitting of a Gaussian distribution to the data. From out
@@ -747,7 +748,7 @@ the order of \num{e-4} and therefore no visible uncertainty.
 
 One plots delay time against channel number (see Figure~\ref{fig:time_gauge})
 and obtains a linear correlation. Since we do not need absolute time values,
-just time differences, only the slope of the fit is of interest for us. It is
+just time differences, only the slope of the fit is of interest to us. It is
 \SI{<< time_gauge_slope >>}{\milli\second} per channel. Here the error
 estimation is performed with the first order Jackknife method. We perform a
 linear fit with only six points. Taking one point away might change the outcome
@@ -774,11 +775,12 @@ calibration fit we get a resolution of \SI{<< time_resolution
 
 \section{Adjusting SCA windows}
 
-After the time calibration, we have to set up the fast-slow coincidence
-circuit. For this we set the \textsc{sca} window on the start-side
-to the \SI{1275}{\kilo\electronvolt} line of the spectrum and check if the
-two \textsc{sca}s as well as the \textsc{tac} and the coincidence unit have
-a nice overlap. This is shown in Figure~\ref{fig:7-sca-coincidence-1275} and
+After the time calibration, we have to set up the fast-slow coincidence circuit
+for the actual events that we want to measure. For this we set the \textsc{sca}
+window on the start-side to the \SI{1275}{\kilo\electronvolt} line of the
+spectrum and check if the two \textsc{sca}s as well as the \textsc{tac} and the
+coincidence unit have a nice overlap. This is shown in
+Figure~\ref{fig:7-sca-coincidence-1275} and
 Figure~\ref{fig:8-tac-and-coincidence-1275}, respectively. We see that the
 overlap is sufficient.
 
@@ -822,17 +824,17 @@ The first measurement is at room temperature. We let the fast-slow circuit
 select creation and annihilation events using the decay of exited neon and
 positron annihilation radiation, respectively. The lifetimes are recorded using
 the \textsc{mca}. After about \SI{30}{\minute} we stop the event recording save
-the data to disk. Then We turn up the temperature and wait for the temperature
+the data to disk. Then we turn up the temperature and wait for the temperature
 to stabilize. We repeat this until we have eight data sets. For every
 measurement we note the temperature in the beginning and at the end of the
 acquisition. Assuming a slow walk in the temperature, the mean and difference
 of the two temperatures will provide average value and an error estimate.
 
 In the theory section, we have mentioned the model for the lifetime spectrum in
-\eqref{eq:lifetime-fit}. We fit this model to each of the lifetime spectra
-recorded. The measurement at room temperature together with a fit function is
-shown in Figure~\ref{fig:lifetime-295K}. For the other measurements see
-Figures~\ref{fig:lifetime-324K} to \ref{fig:lifetime-398K} in the appendix.
+Equation~\eqref{eq:lifetime-fit}. We fit this model to each of the lifetime
+spectra recorded. The measurement at room temperature together with a fit
+function is shown in Figure~\ref{fig:lifetime-295K}. For the other measurements
+see Figures~\ref{fig:lifetime-324K} to \ref{fig:lifetime-398K} in the appendix.
 
 \begin{figure}
     \centering
@@ -920,7 +922,7 @@ shows $\bar\tau$ against the temperature. It only varies slightly. Within the
 errors of the data points, fitting a constant function would be well justified.
 
 We have tried to fit the model Equation~\eqref{eq:temp-model} to the data. With
-out data, it was so unstable that the fit did not converge even after tweaking
+our data, it was so unstable that the fit did not converge even after tweaking
 the initial parameters carefully. We therefore cannot produce a fit here for
 that data. Luckily there is another way to obtain the vacancy formation
 enthalpy; we will turn to that next.
@@ -1071,7 +1073,7 @@ detail.
     \label{fig:acrylic-zoom}
 \end{figure}
 
-With out setup, we can only register back-to-back photons. As the
+With our setup, we can only register back-to-back photons. As the
 ortho-positronium (parallel electron spins) decays into three photons, we
 cannot see that decay. With the para-helium (orthogonal electron spins), we
 have back-to-back photons and can see them well. If the ortho-positronium
@@ -1089,8 +1091,8 @@ The result found by \textcite[(7a)]{Weiler/Vacancy_formation} is \SI{0.54 +-
 0.03}{\electronvolt}. They also feature a table which contains results from
 other groups. In all cases the values are around \SI{0.5}{\electronvolt}
 \parencite[Table~1]{Weiler/Vacancy_formation}. We must therefore conclude that
-our value is \emph{way} off the expected value. Our estimation clearly states
-that the two results are incompatible with each other.
+our value is \emph{way} off the expected value. Our error estimation clearly
+states that the two results are incompatible with each other.
 
 We are not sure where this large discrepancy comes from. We can rule out a
 couple of possible causes.
@@ -1110,6 +1112,9 @@ couple of possible causes.
         The fast-slow coincidence circuit has produced good spectra, each
         coincidence has been checked. A false setting in one of the
         \textsc{sca} units would distort the lifetime spectrum more than this.
+        If we had switched a cable later on, it would manifest itself as a
+        constant offset, not something as dynamic as the lack of temperature
+        dependence.
 
     \item
         Convergence of the lifetime fits was a bit hard as there are a lot of
