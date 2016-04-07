@@ -397,8 +397,10 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     x = np.linspace(750, 4000, 100)
     y = linear(x, slope_val, intercept_val)
 
-    np.savetxt('_build/xy/time_gauge_plot.txt', np.column_stack([channel_val,time , channel_err]))
-    np.savetxt('_build/xy/time_gauge_fit.txt', np.column_stack([x,y]))
+    np.savetxt('_build/xy/time_gauge_plot.txt',
+               np.column_stack([channel_val,time , channel_err]))
+    np.savetxt('_build/xy/time_gauge_fit.txt',
+               np.column_stack([x,y]))
         
 
     T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
