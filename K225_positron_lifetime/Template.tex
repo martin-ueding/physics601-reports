@@ -383,7 +383,36 @@ $I_\text{t}$:
         \bar\tau &= I_0\tau_0 + I_\text{t}\tau_\text{t}.
 \end{align*}
 
-\subsection{Arrhenius plot}
+\subsection{Temperature dependence}
+
+The mean lifetime shows a sigmoidal behaviour, as given in the additional
+information for this experiment:
+\begin{align*}
+        \bar\tau &= \tau_\text{f} \frac{1 + \sigma C(T) \tau_\text{t}}{1 +
+        \sigma C(T) \tau_\text{f}} \\
+        &= \tau_\text{f} \frac{1 + \sigma \exp\del{\frac{S}{k}}
+\exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{t}} {1 + \sigma
+\exp\del{\frac{S}{k}} \exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{f}}.
+        \intertext{%
+                This shows, that the mean lifetime for low temperatures is
+                approximately $\tau_\text{f}$. For high temperatures it reaches
+                $\tau_\text{t}$, due to more vacancies. Fitting this to the
+                mean lifetime allows to extract for example $\tau_\text{f}$. 
+                Another way to get $\tau_\text{f}$ is given by
+                \textcite[(6)]{Weiler/Vacancy_formation}:
+        }
+        \tau_\text{f} &= \del{\frac{I_0}{\tau_0} +
+        \frac{I_\text{t}}{\tau_\text{t}}}^{-1}.
+        \intertext{%
+                The trapping rate $\sigma C(T)$ can be
+                written as
+        }
+        \sigma C(T) &= \frac{\bar\tau - \tau_\text{f}}
+        {\tau_\text{f}(\tau_\text{t}-\bar\tau)}.
+\end{align*}
+By plotting $\log(\sigma C)$ against $1/T$ in an Arrhenius diagram and fitting
+a linear function to the data, one can derive the vacancy formation enthalpy
+$H_\text{t}$ from the slope.
 
 \chapter{Procedure and Analysis}
 
