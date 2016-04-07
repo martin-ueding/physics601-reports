@@ -767,6 +767,25 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
 
 \subsection{Vacancy formation enthalpy}
 
+\begin{table}
+    \centering
+    \begin{tabular}{SS}
+        \toprule
+        {$\si{\kelvin} / T$}
+        % TODO Which unit?
+        & {$\sigma_\mathrm t C_\mathrm t(T)$}
+        \\
+        \midrule
+        %< for row in arrhenius_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+    }
+    \label{tab:arrhenius}
+\end{table}
+
 \begin{figure}
     \centering
     \includegraphics{arrhenius}
@@ -775,6 +794,10 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     }
     \label{fig:arrhenius}
 \end{figure}
+
+\[
+    H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt} \,.
+\]
 
 \section{Acrylic glass sample}
 

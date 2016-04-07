@@ -648,7 +648,14 @@ def get_indium_data(T, slope_val, width):
     np.savetxt('_build/xy/arrhenius-band.tsv',
                bootstrap.pgfplots_error_band(x, arr_y_val, arr_y_err))
 
+    T['arrhenius_table'] = list(zip(
+        siunitx(inv_temps),
+        siunitx(sigma_c_val, sigma_c_err),
+    ))
+
     print('Ht_eV:', siunitx(Ht_eV_val, Ht_eV_err))
+
+    T['Ht_eV'] = siunitx(Ht_eV_val, Ht_eV_err)
 
     pl.errorbar(temps_val, taus_bar_val, xerr=temps_err, yerr=taus_bar_err,
                 label=r'$\bar\tau$', linestyle='none', marker='+')
