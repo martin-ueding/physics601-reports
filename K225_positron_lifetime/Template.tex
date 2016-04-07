@@ -359,17 +359,17 @@ $I_\text{t}$:
         }
         M (t) &= (W * P)(t) \\
               &= \sum_{i\in\{0,\text{t}\}}\frac{I_0}{2\tau_i}
-        \exp\!\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
-        \del{\text{erf}\!\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
-        + \text{erf}\!\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}},
+        \exp\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
+        \del{\text{erf}\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
+        + \text{erf}\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}},
         \intertext{%
                 with $\text{erf}(x)$ being the Gaussian error function. For
                 fitting data, where we have a background $N_\text{BG}$, we use
         }
         N (t) &= \sum_{i\in\{0,\text{t}\}}\frac{A_i}{2\tau_i}
-        \exp\!\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
-        \del{\text{erf}\!\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
-        + \text{erf}\!\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}}
+        \exp\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
+        \del{\text{erf}\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
+        + \text{erf}\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}}
         \\
         & + N_\text{BG}.
         \intertext{%
