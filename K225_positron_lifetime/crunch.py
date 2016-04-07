@@ -595,6 +595,11 @@ def get_indium_data(T, slope_val, width):
     pl.savefig('_build/mpl-intensities.png')
     pl.clf()
 
+    np.savetxt('_build/xy/intensities-0.tsv',
+               np.column_stack([temps_val, all_intens_0_val, all_intens_0_err]))
+    np.savetxt('_build/xy/intensities-t.tsv',
+               np.column_stack([temps_val, all_intens_t_val, all_intens_t_err]))
+
     T['intensities_table'] = list(zip(
         siunitx(temps_val, temps_err),
         siunitx(all_intens_0_val, all_intens_0_err),
