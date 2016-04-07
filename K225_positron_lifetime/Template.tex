@@ -685,14 +685,11 @@ the circuit.
 
 From the fitted functions we get the mean channel to every delay time. The
 results are in Table~\ref{tab:time_gauge_param}. The error estimation in the
-curve fitting procedure is performed using resampling pseudo-bootstrap.
-
-
-
-One plots delay time against channel number (see Figure~\ref{fig:time_gauge})
-and obtains a linear correlation. Since we do not need absolute time values,
-just time differences, only the slope of the fit is of interest for us. It is
-\SI{<< time_gauge_slope >>}{\milli\second} per channel.
+curve fitting procedure is performed using resampling pseudo-bootstrap. If we
+would have a lot of time, we could have repeated each prompt curve measurement
+a lot of times, say a hundred times. Each measurement would roughly give the
+same curve. Statistical fluctuations would give us slightly different counts in
+each bins.
 
 \begin{table}
         \centering
@@ -713,20 +710,63 @@ just time differences, only the slope of the fit is of interest for us. It is
         \label{tab:time_gauge_param}
 \end{table}
 
+Taking that many measurements is unrealistic as we only have one lab day for
+this. We need to generate more measurements from the ones that we have. This is
+the origin of the name \enquote{bootstrap}, we use the data that we have to
+generate more. This is as outrageous as pulling oneself up on one's bootstraps.
+The rational is the following. We have a counting experiment with $n_i$ counts
+in the $i$-th bin. Generally, a statistical error of $\sqrt{n_i}$ can be
+associated with that count. Assuming that the implied distribution is Gaussian,
+we can generate more points from a Gaussian distribution with mean $\mu = n_i$
+and standard deviation $\sigma = \sqrt{n_i}$. Performing this for all bins, we
+obtain a new \emph{bootstrap sample}.
+
+The analysis is performed for each of those samples as usual. In our case it is
+the curve fitting of a Gaussian distribution to the data. From out
+\texttt{scipy.optimize.curve\_fit} we get optimal parameters for the fitted
+model. For each of the fits onto the bootstrap samples, we record those
+parameters. Then we take mean and standard deviation to obtain a value and its
+error estimate.
+
+In contrast to Gaussian error propagation, we did not have to take any
+derivatives. Also we did not have to assume that the errors stay small and
+Gaussian distributed throughout the analysis. This bootstrap method allows us
+to obtain error estimates for any type of analysis by performing the whole
+analysis several times.
+
+A visualization of the bootstrap samples is given by a \enquote{band} of values
+along the optimal fit line. This band marks one standard deviation of the
+distribution of fit functions at each point. A wide band means a high
+uncertainty in the fitted function. For the Gaussian functions, the band is so
+narrow that one cannot see it. In the parameter table
+(Table~\ref{tab:time_gauge_param}) one can see that the relative error is in
+the order of \num{e-4} and therefore no visible uncertainty.
+
+One plots delay time against channel number (see Figure~\ref{fig:time_gauge})
+and obtains a linear correlation. Since we do not need absolute time values,
+just time differences, only the slope of the fit is of interest for us. It is
+\SI{<< time_gauge_slope >>}{\milli\second} per channel. Here the error
+estimation is performed with the first order Jackknife method. We perform a
+linear fit with only six points. Taking one point away might change the outcome
+of the fit if that point was an outlier. In the Jackknife procedure, we repeat
+the curve fitting with a single point excluded in one of the fits. Iterating
+through the points, we perform six fits. Then again we can take mean and
+standard deviation of our fit parameters. The distribution of fit curves is so
+narrow that it is hidden below the solid red line.
+
 \begin{figure}
         \centering
         \includegraphics{time_gauge}
         \caption{%
-                Time calibration of \textsc{mca}-channels. The error bars for
-                the channel number are so small, they hide behind the
-                markers.
+                Time calibration of \textsc{mca}-channels with linear fit.
         }
         \label{fig:time_gauge}
 \end{figure}
 
 The last prompt curve has a standard deviation of \num{<< width_6 >>}. From
 this we get $\textsc{fwhm} = \num{<< FWHM_6 >>}$. With the slope of the time
-calibration fit we get a resolution of \SI{<< time_resolution >>}{\nano\second}.
+calibration fit we get a resolution of \SI{<< time_resolution
+>>}{\nano\second}.
 
 \section{Adjusting SCA windows}
 

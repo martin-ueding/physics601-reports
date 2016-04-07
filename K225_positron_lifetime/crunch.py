@@ -373,6 +373,8 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     # linear fit with delete-1-jackknife
     slope = []
     intercept = []
+    y_dist = []
+    x = np.linspace(750, 4000, 100)
     for i in range(len(channel_val)):
         channel_jackknife = np.delete(channel_val, i)
         time_jackknife = np.delete(time, i)
@@ -381,6 +383,10 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         
         slope.append(popt[0])
         intercept.append(popt[1])
+
+        y = linear(x, *popt)
+
+        y_dist.append(y)
 
         if show_lin:
             x = np.linspace(0, 4000, 1000)
@@ -392,17 +398,17 @@ def time_gauge(T, show_gauss=False, show_lin=False):
 
     slope_val, slope_err = bootstrap.average_and_std_arrays(slope)
     intercept_val, intercept_err = bootstrap.average_and_std_arrays(intercept)
+    y_val, y_err = bootstrap.average_and_std_arrays(y_dist)
 
     # files for fit and plot of time gauge 
-    x = np.linspace(750, 4000, 100)
-    y = linear(x, slope_val, intercept_val)
 
     np.savetxt('_build/xy/time_gauge_plot.txt',
-               np.column_stack([channel_val,time , channel_err]))
+               np.column_stack([channel_val,time, channel_err]))
     np.savetxt('_build/xy/time_gauge_fit.txt',
-               np.column_stack([x,y]))
+               np.column_stack([x, y_val]))
+    np.savetxt('_build/xy/time_gauge_band.txt',
+               bootstrap.pgfplots_error_band(x, y_val, y_err))
         
-
     T['time_gauge_slope'] = siunitx(slope_val*1e3, slope_err*1e3)
     T['time_gauge_intercept'] = siunitx(intercept_val, intercept_err)
 
