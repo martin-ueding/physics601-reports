@@ -606,7 +606,6 @@ def get_indium_data(T, slope_val, width):
         siunitx(all_intens_t_val, all_intens_t_err),
     ))
 
-
     inv_temps = 1 / np.array(temps_val)
     results = []
     x = np.linspace(np.min(inv_temps), np.max(inv_temps), 1000)
