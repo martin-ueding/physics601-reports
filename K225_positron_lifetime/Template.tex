@@ -699,14 +699,61 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     \label{fig:lifetime-295K}
 \end{figure}
 
+\begin{table}
+    \centering
+    \begin{tabular}{SSSSS}
+        \toprule
+        {$T/\si{\kelvin}$}
+        & {$\tau_0 / \si{\nano\second}$}
+        & {$\tau_\mathrm t / \si{\nano\second}$}
+        & {$\tau_\mathrm f / \si{\nano\second}$}
+        & {$\bar \tau / \si{\nano\second}$}
+        \\
+        \midrule
+        %< for row in taus_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Mean channel number of Gauss fit width corresponding delay
+        times. Values are plotted in Figure~\ref{fig:taus}.
+    }
+    \label{tab:taus}
+\end{table}
+
 \begin{figure}
     \centering
     \includegraphics{taus}
     \caption{%
-        Compilation of the various lifetimes derived from the spectra.
+        Compilation of the various lifetimes derived from the spectra. Values
+        are enumerated in Table~\ref{tab:taus}.
     }
     \label{fig:taus}
 \end{figure}
+
+\begin{table}
+    \centering
+    \begin{tabular}{SSS}
+        \toprule
+        {$T/\si{\kelvin}$}
+        & {$A_0^\text{rel}$}
+        & {$A_\mathrm t^\text{rel}$}
+        \\
+        \midrule
+        %< for row in intensities_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Relative intensities of the non-trapped ($A_0$) and trapped ($A_\mathrm
+        t$) parts.
+    }
+    \label{tab:intensities}
+\end{table}
+
+% TODO Plot with intensities.
 
 \begin{figure}
     \centering

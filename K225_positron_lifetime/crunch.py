@@ -573,6 +573,14 @@ def get_indium_data(T, slope_val, width):
     np.savetxt('_build/xy/tau_bar.tsv',
                np.column_stack([temps_val, taus_bar_val, taus_bar_err]))
 
+    T['taus_table'] = list(zip(
+        siunitx(temps_val, temps_err),
+        siunitx(taus_0_val, taus_0_err),
+        siunitx(taus_t_val, taus_t_err),
+        siunitx(taus_f_val, taus_f_err),
+        siunitx(taus_bar_val, taus_bar_err),
+    ))
+
     # Plot relative intensities.
     all_intens_0_val, all_intens_0_err = bootstrap.average_and_std_arrays(all_intens_0_dist)
     all_intens_t_val, all_intens_t_err = bootstrap.average_and_std_arrays(all_intens_t_dist)
@@ -586,6 +594,13 @@ def get_indium_data(T, slope_val, width):
     pl.savefig('_build/mpl-intensities.pdf')
     pl.savefig('_build/mpl-intensities.png')
     pl.clf()
+
+    T['intensities_table'] = list(zip(
+        siunitx(temps_val, temps_err),
+        siunitx(all_intens_0_val, all_intens_0_err),
+        siunitx(all_intens_t_val, all_intens_t_err),
+    ))
+
 
     inv_temps = 1 / np.array(temps_val)
     results = []
