@@ -385,8 +385,8 @@ $I_\text{t}$:
 
 \subsection{Temperature dependence}
 
-The mean lifetime shows a sigmoidal behaviour, as given in the additional
-information for this experiment:
+The mean lifetime shows a sigmoidal temperature dependence, as given in the
+additional information for this experiment:
 \begin{align*}
         \bar\tau &= \tau_\text{f} \frac{1 + \sigma C(T) \tau_\text{t}}{1 +
         \sigma C(T) \tau_\text{f}} \\
@@ -409,10 +409,17 @@ information for this experiment:
         }
         \sigma C(T) &= \frac{\bar\tau - \tau_\text{f}}
         {\tau_\text{f}(\tau_\text{t}-\bar\tau)}.
+        \intertext{%
+                By plotting $\log(\sigma C)$ against $1/T$ in an Arrhenius
+                diagram and fitting a linear function to the data, one can
+                derive the vacancy formation enthalpy $H_\text{t}$ from the
+                slope:
+        }
+        \log\del{\frac{\bar\tau - \tau_\text{f}}
+        {\tau_\text{f}(\tau_\text{t}-\bar\tau)}} &= \log(\sigma) +
+                \frac{S_\text{t}}k - \frac{H_\text{t}}{k}\cdot\frac1T.
 \end{align*}
-By plotting $\log(\sigma C)$ against $1/T$ in an Arrhenius diagram and fitting
-a linear function to the data, one can derive the vacancy formation enthalpy
-$H_\text{t}$ from the slope.
+
 
 \chapter{Procedure and Analysis}
 
