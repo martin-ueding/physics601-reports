@@ -329,7 +329,7 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         mean = []
         width = []
         amplitude = []
-        for a in range(10):
+        for a in range(BOOTSTRAP_SAMPLES):
             boot_counts = redraw_count(counts)
             popt, pconv = op.curve_fit(gauss, channel, boot_counts, p0=[400+i*600, 200, 100])
             mean.append(popt[0])
