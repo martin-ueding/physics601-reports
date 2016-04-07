@@ -365,10 +365,10 @@ def time_gauge(T, show_gauss=False, show_lin=False):
     channel_err = np.array(channel_err)
     time = np.array(time)
 
-    T['time_gauge_param'] = list(zip(*[
+    T['time_gauge_param'] = list(zip(
         map(str, time),
         siunitx(channel_val, channel_err)
-    ]))
+    ))
 
     # linear fit with delete-1-jackknife
     slope = []
