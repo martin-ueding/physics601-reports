@@ -355,8 +355,10 @@ def time_gauge(T, show_gauss=False, show_lin=False):
         time.append((i-1)*4)
 
     # write files for prompt curve plotting
-    np.savetxt('_build/xy/prompts-short.txt', bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
-    np.savetxt('_build/xy/prompts-long.txt', bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
+    np.savetxt('_build/xy/prompts-short.txt',
+               bootstrap.pgfplots_error_band(channel[500:3500], counts_tot[500:3500], np.sqrt(counts_tot[500:3500])))
+    np.savetxt('_build/xy/prompts-long.txt',
+               bootstrap.pgfplots_error_band(channel[3600:4200], counts[3600:4200], np.sqrt(counts[3600:4200])))
 
     # convert lists to arrays
     channel_val = np.array(channel_val)
