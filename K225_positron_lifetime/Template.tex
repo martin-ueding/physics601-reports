@@ -359,75 +359,82 @@ superposition of two decays with different lifetimes $\tau_0$ and
 $\tau_\text{t}$ and their corresponding relative intensities $I_0$ and
 $I_\text{t}$:
 \begin{align*}
-        W (t) &= \frac{I_0}{\tau_0}\eup^{-\frac{t}{\tau_0}} +
-        \frac{I_\text{t}}{\tau_\text{t}}\eup^{-\frac{t}{\tau_\text{t}}}.
-        \intertext{%
-                For the detecting system has a limited time resolution the
-                obtained spectrum is a convolution of the real lifetime
-                spectrum with the resolution function:
-        }
-        M (t) &= (W * P)(t) \\
-              &= \sum_{i\in\{0,\text{t}\}}\frac{I_0}{2\tau_i}
-        \exp\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
-        \del{\text{erf}\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
-        + \text{erf}\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}},
-        \intertext{%
-                with $\text{erf}(x)$ being the Gaussian error function. For
-                fitting data, where we have a background $N_\text{BG}$, we use
-        }
+    W (t) &= \frac{I_0}{\tau_0}\eup^{-\frac{t}{\tau_0}} +
+    \frac{I_\text{t}}{\tau_\text{t}}\eup^{-\frac{t}{\tau_\text{t}}}.
+    \intertext{%
+        For the detecting system has a limited time resolution the
+        obtained spectrum is a convolution of the real lifetime
+        spectrum with the resolution function:
+    }
+    M (t) &= (W * P)(t) \\
+          &= \sum_{i\in\{0,\text{t}\}}\frac{I_0}{2\tau_i}
+    \exp\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
+    \del{\text{erf}\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
+    + \text{erf}\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}},
+\end{align*}
+with $\text{erf}(x)$ being the Gaussian error function. For
+fitting data, where we have a background $N_\text{BG}$, we use
+\begin{equation}
+    \label{eq:lifetime-fit}
+    \begin{aligned}
         N (t) &= \sum_{i\in\{0,\text{t}\}}\frac{A_i}{2\tau_i}
         \exp\del{\frac{\sigma^2-2\tau_i(t-t_0)}{2\tau_i^2}}
         \del{\text{erf}\del{\frac{\sigma^2 + \tau_it_0} {\sqrt2\sigma\tau_i}}
         + \text{erf}\del{\frac{\tau_i(t-t_0)-\sigma^2}{\sqrt2\sigma\tau_i}}}
         \\
-        & + N_\text{BG}.
-        \intertext{%
-                The count amplitudes $A_0$ and $A_\text{t}$ are related to the
-                intensities by
-        }
-        I_i &= \frac{A_i}{A_0 + A_\text{t}}.
-        \intertext{%
-                With this we obtain the mean lifetime as
-        }
-        \bar\tau &= I_0\tau_0 + I_\text{t}\tau_\text{t}.
-\end{align*}
+        &\qquad + N_\text{BG} \,.
+    \end{aligned}
+\end{equation}
+The count amplitudes $A_0$ and $A_\text{t}$ are related to the
+intensities by
+\[
+    I_i = \frac{A_i}{A_0 + A_\text{t}} \,.
+\]
+With this we obtain the mean lifetime as
+\[
+    \bar\tau = I_0\tau_0 + I_\text{t}\tau_\text{t} \,.
+\]
 
 \subsection{Temperature dependence}
 
 The mean lifetime shows a sigmoidal temperature dependence, as given in the
 additional information for this experiment:
-\begin{align*}
-        \bar\tau &= \tau_\text{f} \frac{1 + \sigma C(T) \tau_\text{t}}{1 +
-        \sigma C(T) \tau_\text{f}} \\
-        &= \tau_\text{f} \frac{1 + \sigma \exp\del{\frac{S_\text{t}}{k}}
-\exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{t}} {1 + \sigma
-\exp\del{\frac{S_\text{t}}{k}} \exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{f}}.
-        \intertext{%
-                This shows, that the mean lifetime for low temperatures is
-                approximately $\tau_\text{f}$. For high temperatures it reaches
-                $\tau_\text{t}$, due to more vacancies. Fitting this to the
-                mean lifetime allows to extract for example $\tau_\text{f}$. 
-                Another way to get $\tau_\text{f}$ is given by
-                \textcite[(6)]{Weiler/Vacancy_formation}:
-        }
-        \tau_\text{f} &= \del{\frac{I_0}{\tau_0} +
-        \frac{I_\text{t}}{\tau_\text{t}}}^{-1}.
-        \intertext{%
-                The trapping rate $\sigma C(T)$ can be
-                written as
-        }
-        \sigma C(T) &= \frac{\bar\tau - \tau_\text{f}}
-        {\tau_\text{f}(\tau_\text{t}-\bar\tau)}.
-        \intertext{%
-                By plotting $\log(\sigma C)$ against $1/T$ in an Arrhenius
-                diagram and fitting a linear function to the data, one can
-                derive the vacancy formation enthalpy $H_\text{t}$ from the
-                slope:
-        }
-        \log\del{\frac{\bar\tau - \tau_\text{f}}
-        {\tau_\text{f}(\tau_\text{t}-\bar\tau)}} &= \log(\sigma) +
-                \frac{S_\text{t}}k - \frac{H_\text{t}}{k}\cdot\frac1T.
-\end{align*}
+\begin{align}
+    \nonumber
+    \bar\tau &= \tau_\text{f} \frac{1 + \sigma C(T) \tau_\text{t}}{1 +
+    \sigma C(T) \tau_\text{f}} \\
+    \label{eq:temp-model}
+    &= \tau_\text{f} \frac{1 + \sigma \exp\del{\frac{S_\text{t}}{k}}
+    \exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{t}} {1 + \sigma
+    \exp\del{\frac{S_\text{t}}{k}} \exp\del{-\frac{H_\mathrm t}{kT}}
+\tau_\text{f}} \,.
+\end{align}
+This shows, that the mean lifetime for low temperatures is
+approximately $\tau_\text{f}$. For high temperatures it reaches
+$\tau_\text{t}$, due to more vacancies. Fitting this to the
+mean lifetime allows to extract for example $\tau_\text{f}$. 
+Another way to get $\tau_\text{f}$ is given by
+\textcite[(6)]{Weiler/Vacancy_formation}:
+\[
+    \tau_\text{f} = \del{\frac{I_0}{\tau_0} +
+    \frac{I_\text{t}}{\tau_\text{t}}}^{-1} \,.
+\]
+The trapping rate $\sigma C(T)$ can be written as
+\[
+    \sigma C(T) = \frac{\bar\tau - \tau_\text{f}}
+    {\tau_\text{f}(\tau_\text{t}-\bar\tau)} \,.
+\]
+
+By plotting $\log(\sigma C)$ against $1/T$ in an Arrhenius
+diagram and fitting a linear function to the data, one can
+derive the vacancy formation enthalpy $H_\text{t}$ from the
+slope:
+\begin{equation}
+    \label{eq:arrhenius}
+    \log\del{\frac{\bar\tau - \tau_\text{f}}
+    {\tau_\text{f}(\tau_\text{t}-\bar\tau)}} = \log(\sigma) +
+    \frac{S_\text{t}}k - \frac{H_\text{t}}{k}\cdot\frac1T \,.
+\end{equation}
 
 
 \chapter{Procedure and Analysis}
@@ -752,7 +759,8 @@ of the fit if that point was an outlier. In the Jackknife procedure, we repeat
 the curve fitting with a single point excluded in one of the fits. Iterating
 through the points, we perform six fits. Then again we can take mean and
 standard deviation of our fit parameters. The distribution of fit curves is so
-narrow that it is hidden below the solid red line.
+narrow that it is hidden below the solid red line. We will see a broad band
+later on in a different plot.
 
 \begin{figure}
         \centering
@@ -770,12 +778,13 @@ calibration fit we get a resolution of \SI{<< time_resolution
 
 \section{Adjusting SCA windows}
 
-After the time calibration we have to set up the fast-slow coincidence
+After the time calibration, we have to set up the fast-slow coincidence
 circuit. For this we set the \textsc{sca} window on the start-side
 to the \SI{1275}{\kilo\electronvolt} line of the spectrum and check if the
 two \textsc{sca}s as well as the \textsc{tac} and the coincidence unit have
 a nice overlap. This is shown in Figure~\ref{fig:7-sca-coincidence-1275} and
-Figure~\ref{fig:8-tac-and-coincidence-1275} respectively.
+Figure~\ref{fig:8-tac-and-coincidence-1275}, respectively. We see that the
+overlap is sufficient.
 
 \begin{figure}
     \centering
@@ -783,7 +792,7 @@ Figure~\ref{fig:8-tac-and-coincidence-1275} respectively.
         \centering
         \includegraphics[width=\linewidth]{br-7-sca-coincidence-1275}
         \caption{%
-                \textsc{Sca} and \textsc{sca}.
+                Left and right \textsc{sca}.
         }
         \label{fig:7-sca-coincidence-1275}
     \end{subfigure}
@@ -797,7 +806,7 @@ Figure~\ref{fig:8-tac-and-coincidence-1275} respectively.
         \label{fig:8-tac-and-coincidence-1275}
     \end{subfigure}
     \caption{%
-        Check for coincidence between different elements of the circuit.
+        Coincidence check between different elements of the circuit.
     }
     \label{fig:}
 \end{figure}
@@ -805,24 +814,29 @@ Figure~\ref{fig:8-tac-and-coincidence-1275} respectively.
 \section{Indium sample}
 
 An indium sample is placed inside an aluminum block, which is mounted on a
-soldering iron. This allows us to control the sample's temperature with an
+soldering iron. This allows us to control the sample's temperature with a
 potentiometer. A thermometer enables us to read off the actual temperature. Now
-the sample is placed between the detectors, which have to be shielded against
+the sample is placed between the detectors which have to be shielded against
 the heat by two aluminum plates. We have to ensure that there is no contact to
-the heat shielding. 
+the heat shielding to prevent heat conduction. 
 
 \subsection{Lifetime spectrum}
 
-The first measurement is at room temperature. After about \SI{30}{\minute} we
-stop the event recording at the computer and save the data. Then we turn up the
-temperature and wait for the temperature to reach a nearly
-constant value. We repeat this untill we have eight data sets. For every
+The first measurement is at room temperature. We let the fast-slow circuit
+select creation and annihilation events using the decay of exited neon and
+positron annihilation radiation, respectively. The lifetimes are recorded using
+the \textsc{mca}. After about \SI{30}{\minute} we stop the event recording save
+the data to disk. Then We turn up the temperature and wait for the temperature
+to stabilize. We repeat this until we have eight data sets. For every
 measurement we note the temperature in the beginning and at the end of the
-acquisition.
+acquisition. Assuming a slow walk in the temperature, the mean and difference
+of the two temperatures will provide average value and an error estimate.
 
-The measurement at room temperature together with a fit function is shown in
-Figure~\ref{fig:lifetime-295K}. For the other measurements see
-Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
+In the theory section, we have mentioned the model for the lifetime spectrum in
+\eqref{eq:lifetime-fit}. We fit this model to each of the lifetime spectra
+recorded. The measurement at room temperature together with a fit function is
+shown in Figure~\ref{fig:lifetime-295K}. For the other measurements see
+Figures~\ref{fig:lifetime-324K} to \ref{fig:lifetime-398K} in the appendix.
 
 \begin{figure}
     \centering
@@ -832,6 +846,13 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     }
     \label{fig:lifetime-295K}
 \end{figure}
+
+From the eight fits at different temperature we obtain a set of lifetimes. The
+lifetimes $\tau_0$ and $\tau_\mathrm t$ are direct parameters. The
+$\tau_\mathrm f$ and $\bar \tau$ are derived using the relations quoted in our
+theoretical introduction. All lifetimes are listed in Table~\ref{tab:taus}.
+Also they are plotted in Figure~\ref{fig:taus}. Error estimation is done with
+the bootstrap method.
 
 \begin{table}
     \centering
@@ -850,8 +871,8 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
         \bottomrule
     \end{tabular}
     \caption{%
-        Mean channel number of Gauss fit width corresponding delay
-        times. Values are plotted in Figure~\ref{fig:taus}.
+        Various lifetimes derived from the spectra. This data is visualized in
+        Figure~\ref{fig:taus}.
     }
     \label{tab:taus}
 \end{table}
@@ -865,6 +886,13 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     }
     \label{fig:taus}
 \end{figure}
+
+We would expect $\bar\tau$ to have a strong temperature dependence. However, it
+is mostly constant. This should not be the case as this would imply a near
+constant density of vacancies throughout the temperature range. The mixing of
+the two components in $\bar\tau$ is mediated by the ratios of intensities $A_0$
+and $A_\mathrm t$. These quantities are also fit parameters and listed in
+Table~\ref{tab:intensities}.
 
 \begin{table}
     \centering
@@ -887,6 +915,20 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     \label{tab:intensities}
 \end{table}
 
+The plot in Figure~\ref{fig:intensities} shows that the two intensities depend
+only lightly on the temperature. They do not cross over, therefore $\bar\tau$
+has only a weak temperature dependence. Our expectation was to find a strong
+temperature dependence in $\bar\tau$ which would have a sigmoidal shape. The
+two asymptotes would be $\tau_0$ and $\tau_\mathrm t$. Figure~\ref{fig:s_curve}
+shows $\bar\tau$ against the temperature. It only varies slightly. Within the
+errors of the data points, fitting a constant function would be well justified.
+
+We have tried to fit the model Equation~\eqref{eq:temp-model} to the data. With
+out data, it was so unstable that the fit did not converge even after tweaking
+the initial parameters carefully. We therefore cannot produce a fit here for
+that data. Luckily there is another way to obtain the vacancy formation
+enthalpy; we will turn to that next.
+
 \begin{figure}
     \centering
     \includegraphics{intensities}
@@ -898,19 +940,23 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     \label{fig:intensities}
 \end{figure}
 
-% TODO Plot with intensities.
-
 \begin{figure}
     \centering
     \includegraphics{s_curve}
     \caption{%
         $\bar\tau$ against the temperature. One would expect to see an
-        \enquote{S}-shape here.
+        sigmoidal shape here.
     }
     \label{fig:s_curve}
 \end{figure}
 
 \subsection{Vacancy formation enthalpy}
+
+The vacancy formation enthalpy~$H_\mathrm t$ is the energy needed for form
+another vacancy. We can obtain it from the Arrhenius plot using
+Equation~\ref{eq:arrhenius}. First we need to convert the data that we have
+into the required form. The transformed data is listed in
+Table~\ref{tab:arrhenius}.
 
 \begin{table}
     \centering
@@ -933,6 +979,16 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     \label{tab:arrhenius}
 \end{table}
 
+From the data we create a plot (Figure~\ref{fig:arrhenius}) and fit an
+exponential decay. An alternative is a logarithmic plot with a linear fit. The
+solid red line shows the optimal fitted curve. Error estimation is done by a
+combination of bootstrap and Jackknife methods. From the previous steps, we
+have a whole distribution of lifetimes. Converting them will give us
+distributions of values for $\sigma_\mathrm t C_\mathrm t(T)$. Performing the
+curve fit once for every distribution gives us a distribution of fit
+parameters. As there are several outliers, the Jackknife procedure also
+accounts for the uncertainty due to their presence.
+
 \begin{figure}
     \centering
     \includegraphics{arrhenius}
@@ -944,6 +1000,7 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
     \label{fig:arrhenius}
 \end{figure}
 
+From all those fits, we obtain a vacancy formation enthalpy of
 \[
     H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt} \,.
 \]
@@ -951,8 +1008,8 @@ Figures~\ref{fig:lifetime-324K}~to~\ref{fig:lifetime-398K} in the appendix.
 \section{Acrylic glass sample}
 
 After we take all temperature dependent measurements with the indium sample, we
-place in an acrylic glass sample between the detectors. Inside the glass, there
-is $\mathrm{^{22}Na}$ dust. We measure at room temperature over night.
+place an acrylic glass sample between the detectors. Inside the glass, there is
+$\mathrm{^{22}Na}$ dust. We measure at room temperature over night.
 
 Figure~\ref{fig:acrylic} shows the resulting spectrum we got the next morning.
 As done before for the indium, we fit the same two-decay model to our data. In
@@ -966,7 +1023,7 @@ of the lifetimes for the positronium. We obtained
     \tau_\mathrm t = \SI{<< acryl_tau_t_lin >>}{\nano\second} \,.
 \]
 Choosing fixed limits in the time for the fit, we introduce a systematic error.
-The proper treatment would be a $\chi^2$-weighted histogram of fit-parameters
+The proper treatment would be a $\chi^2$-weighted histogram of fit parameters
 to control the statistical error. We do not need this treatment here, we just
 want to use those values as starting values for the unstable fit. Using those
 lifetimes as input for the full fit model, we obtained the lifetimes
@@ -980,6 +1037,19 @@ lifetimes as input for the full fit model, we obtained the lifetimes
     \bar\tau = \SI{<< acryl_tau_bar >>}{\nano\second}
     \,.
 \]
+
+The fit was done in the vertical logarithmic scale, the internally used
+$\chi^2$ the logarithmic counts to compute the likelihood of the fit. Bins with
+zero counts were excluded as $\log(0)$ does not give a sensible value. Points
+before \SI{10}{\nano\second} were also excluded as the model significantly
+deviates from our data. The actual physic happens in the falling flank,
+therefore we are allowed to discard the rising flank. Error estimation was done
+using bootstrap alone. With over 8000 points, a first order Jackknife would not
+alter anything.
+
+Figure~\ref{fig:acrylic} shows the data and the fit curve.
+Figure~\ref{fig:acrylic-zoom} shows the data and the various fit lines in more
+detail.
 
 \begin{figure}
     \centering
@@ -996,9 +1066,6 @@ lifetimes as input for the full fit model, we obtained the lifetimes
     \label{fig:acrylic}
 \end{figure}
 
-Figure~\ref{fig:acrylic-zoom} shows the data and the various fit lines in more
-detail.
-
 \begin{figure}
     \centering
     \includegraphics{acrylic-zoom}
@@ -1008,14 +1075,38 @@ detail.
     \label{fig:acrylic-zoom}
 \end{figure}
 
+% TODO Which lifetimes are accessible with this setup?
+
 % TODO Some hand waiving or so …
 
 \chapter{Conclusion}
 
-
+We were able to derive the vacancy formation enthalpy to be
 \[
     H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt} \,.
 \]
+The result found by \textcite[(7a)]{Weiler/Vacancy_formation} is \SI{0.54 +-
+0.03}{\electronvolt}. They also feature a table which contains results from
+other groups. In all cases the values are around \SI{0.5}{\electronvolt}
+\parencite[Table~1]{Weiler/Vacancy_formation}. We must therefore conclude that
+our value is \emph{way} off the expected value. Our estimation clearly states
+that the two results are incompatible with each other.
+
+% TODO Possible sources for errors.
+
+For the acrylic glass, we found the lifetimes of the positronium to be
+\[
+    \tau_0 = \SI{<< acryl_tau_0 >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm t = \SI{<< acryl_tau_t >>}{\nano\second}
+    \eqnsep
+    \tau_\mathrm f = \SI{<< acryl_tau_f >>}{\nano\second}
+    \eqnsep
+    \bar\tau = \SI{<< acryl_tau_bar >>}{\nano\second}
+    \,.
+\]
+
+% TODO Comparison with literature values.
 
 \begin{appendix}
 
