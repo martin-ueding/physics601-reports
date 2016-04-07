@@ -1083,6 +1083,8 @@ larger, therefore we do not see a significant contribution.
 
 \chapter{Conclusion}
 
+The time resolution of our setup is \SI{<< time_resolution >>}{\nano\second}.
+
 We were able to derive the vacancy formation enthalpy to be
 \[
     H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt} \,.
@@ -1122,6 +1124,12 @@ couple of possible causes.
         magnitude. Looking closely at the lifetime spectra shows that the slope
         of the falling flanks is always roughly the same. The problem of near
         constant lifetimes already manifests itself in the raw data.
+
+    \item
+        The only explanation left would be the limited time resolution of our
+        system. The fit to the lifetime spectra explicitly contained a
+        convolution with the time resolution function, i.e.\ this is already
+        accounted for.
 \end{itemize}
 
 For the acrylic glass, we found the lifetimes of the positronium to be
