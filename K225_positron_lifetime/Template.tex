@@ -82,9 +82,9 @@ Figure~\ref{fig:na22} shows that the sodium decays via a $\betaup^+$-decay or
 electron capture into an excited neon isotope. Both decay mechanisms are
 related via the crossing symmetry and have the same amplitude. Due to the
 creation of the neutrino, the energy spectrum of the positron is continuous.
-Figure~\ref{fig:beta} shows the first variant. The excited neon will quickly
-decay into the ground state and emit a photon. Said photon will mark the
-creation of the positron.
+Figure~\ref{fig:beta} shows the first variant. The excited neon will decay
+into the ground state within a few picoseconds and emit a photon. Said photon
+will mark the creation of the positron.
 
 
 \begin{figure}
@@ -112,9 +112,10 @@ The tree-level annihilation diagrams are shown in
 Figure~\ref{fig:annihilation}. Depending on the relative spin orientations of
 the electron and positron, a decay into an even or odd number of photons is
 possible. The decay into a single photon is not possible due to
-energy-momentum-conservation. Also, the additional creation of two more photon
-suppresses the cross section by $\alpha \approx 1/137$. Therefore we can assume
-that only decays in two and three photons occur.
+energy-momentum-conservation. Also, the additional creation of two more
+photons is suppressed by the cross section by a factor of $\alpha \approx
+1/137$. Therefore we can assume that only decays in two and three photons
+occur.
 
 \begin{figure}
     \centering
@@ -235,11 +236,11 @@ of the radionuclide is shown in Figure~\ref{fig:scheme-176Lu}.
     \label{fig:scheme-176Lu}
 \end{figure}
 
-Photons interact with matter through three main channels: photo effect, Compton
-effect and pair production. In the case of the scintillation material, we are
-not really interested in the details but use that usually the full energy of
-the incident photon is deposited. The material will exhibit a light pulse which
-is proportional to the incident energy.
+The three main channels through which Photons interact with matter are the
+photo effect, the Compton effect and pair production. In the case of the
+scintillation material, we are not really interested in the details but use
+that usually the full energy of the incident photon is deposited. The material
+will exhibit a light pulse which is proportional to the incident energy.
 
 \subsection{Photomultiplier}
 
@@ -278,17 +279,17 @@ either have an upper and lower limit or a lower limit and a window width.
 
 \subsection{Time-to-amplitude converter (TAC)}
 
-In order to measure the durations in the order of nanoseconds, we use a start
-and stop signal to a \textsc{tac}\@. This device starts charging a capacitor with a
-constant current. Once the stop-signal is given, the capacitor is discharged,
-giving a duration proportional amplitude.
+In order to measure the durations in the order of nanoseconds, we give a start
+and stop signal to a \textsc{tac}\@. This device starts charging a capacitor
+with a constant current. Once the stop-signal is given, the capacitor is
+discharged, giving a duration proportional amplitude.
 
 \subsection{Multi channel analyzer (MCA)}
 
-We will feed the \textsc{tac} amplitude into a multi channel analyzer. This is a
-hardware device that creates a histogram of incoming analog pulses. In our case
-this is realized as a PCI-card in a computer and proprietary software running
-on Windows XP only.
+We will feed the \textsc{tac} amplitude into a multi channel analyzer. This is
+a hardware device that creates a histogram of incoming analog pulses. In our
+case this is realized as a PCI-card in a computer and proprietary software
+running on Windows XP only.
 
 \subsection{Fast-slow coincidence circuit}
 
@@ -400,17 +401,17 @@ The mean lifetime shows a sigmoidal temperature dependence, as given in the
 additional information for this experiment:
 \begin{align}
     \nonumber
-    \bar\tau &= \tau_\text{f} \frac{1 + \sigma C(T) \tau_\text{t}}{1 +
-    \sigma C(T) \tau_\text{f}} \\
+    \bar\tau &= \tau_\text{f} \frac{1 + \sigma_\text{t} C_\text{t}(T) \tau_\text{t}}{1 +
+    \sigma_\text{t} C_\text{t}(T) \tau_\text{f}} \\
     \label{eq:temp-model}
-    &= \tau_\text{f} \frac{1 + \sigma \exp\del{\frac{S_\text{t}}{k}}
-    \exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{t}} {1 + \sigma
-    \exp\del{\frac{S_\text{t}}{k}} \exp\del{-\frac{H_\mathrm t}{kT}}
+    &= \tau_\text{f} \frac{1 + \sigma_\text{t} \exp\del{\frac{S_\text{t}}{k}}
+        \exp\del{-\frac{H_\mathrm t}{kT}} \tau_\text{t}} {1 + \sigma_\text{t}
+        \exp\del{\frac{S_\text{t}}{k}} \exp\del{-\frac{H_\mathrm t}{kT}}
 \tau_\text{f}} \,.
 \end{align}
 This shows that the mean lifetime for low temperatures is
 approximately $\tau_\text{f}$. For high temperatures it reaches
-$\tau_\text{t}$, due to more vacancies. Fitting this to the
+$\tau_\text{t}$ due to more vacancies. Fitting this to the
 mean lifetime allows to extract, for example, $\tau_\text{f}$. 
 Another way to get $\tau_\text{f}$ is given by
 \textcite[(6)]{Weiler/Vacancy_formation}:
@@ -418,20 +419,20 @@ Another way to get $\tau_\text{f}$ is given by
     \tau_\text{f} = \del{\frac{I_0}{\tau_0} +
     \frac{I_\text{t}}{\tau_\text{t}}}^{-1} \,.
 \]
-The trapping rate $\sigma C(T)$ can be written as
+The trapping rate $\sigma_\text{t} C_\text{t}(T)$ can be written as
 \[
-    \sigma C(T) = \frac{\bar\tau - \tau_\text{f}}
+        \sigma_\text{t} C_\text{t}(T) = \frac{\bar\tau - \tau_\text{f}}
     {\tau_\text{f}(\tau_\text{t}-\bar\tau)} \,.
 \]
 
-By plotting $\log(\sigma C)$ against $1/T$ in an Arrhenius
+By plotting $\log(\sigma_\text{t} C_\text{t})$ against $1/T$ in an Arrhenius
 diagram and fitting a linear function to the data, one can
 derive the vacancy formation enthalpy $H_\text{t}$ from the
 slope:
 \begin{equation}
     \label{eq:arrhenius}
     \log\del{\frac{\bar\tau - \tau_\text{f}}
-    {\tau_\text{f}(\tau_\text{t}-\bar\tau)}} = \log(\sigma) +
+    {\tau_\text{f}(\tau_\text{t}-\bar\tau)}} = \log(\sigma_\text{t}) +
     \frac{S_\text{t}}k - \frac{H_\text{t}}{k}\cdot\frac1T \,.
 \end{equation}
 
@@ -487,7 +488,7 @@ In the sodium spectrum, we expect to see the \SI{511}{\kilo\electronvolt} line
 from the annihilation as well as a \SI{1275}{\kilo\electronvolt} line from the
 excited neon.
 
-We adjust the gain of the amplifiers such that the sodium spectrum fill the
+We adjust the gain of the amplifiers such that the sodium spectrum fills the
 8192 channels of the \textsc{mca}. The maximum window width of the \textsc{sca}
 is not sufficient to let everything through. Also the upper bound for the
 \textsc{sca} is below the last channel of the \textsc{mca}. Therefore we cannot
@@ -541,7 +542,7 @@ nicely.
     \centering
     \includegraphics[width=.48\linewidth]{br-1-sca-coincidence-511}
     \caption{%
-        \textsc{sca} coincidence checked with the electron-positron
+        \textsc{Sca} coincidence checked with the electron-positron
         annihilation back-to-back radiation. The oscilloscope only had a floppy
         disk interface, therefore we had to take pictures of the oscillogram
         and invert them.
@@ -549,7 +550,7 @@ nicely.
     \label{fig:1-sca-coincidence-511}
 \end{figure}
 
-Then we also took a quick look at the slow signal itself. For this we fed the
+Then we also take a quick look at the slow signal itself. For this we feed the
 slow signal and the matching \textsc{sca} signal into the oscilloscope,
 triggering onto the \textsc{sca} signal. See Figure~\ref{fig:2-sca-and-slow}
 for the oscillogram.
@@ -594,7 +595,7 @@ time. The signal from the stop branch is led through a delay. With the help of
 the oscillogram (Figure~\ref{fig:4-cfd-delay}), we set that delay to
 \SI{20}{\milli\second}. This delay will produce an overall shift in our
 lifetime curves. As we are only interested in the lifetime, the absolute time
-if not of interest to us. Therefore we can set a delay time to make sure that
+is not of interest to us. Therefore we can set a delay time to make sure that
 start and stop signal are well separated.
 
 \begin{figure}
@@ -662,7 +663,7 @@ interposed. For the first five prompt curves an acquisition time of about
 \SI{2}{\minute} is used. They are shown together with their fitted Gauss curves
 in Figure~\ref{fig:prompts_short}. The sixth prompt curve and its fit is shown
 in Figure~\ref{fig:prompts_long}. The acquisition time for that one is
-\SI{20}{\minute}, we want to get enough data to estimate the time resolution of
+\SI{20}{\minute}, for we want to get enough data to estimate the time resolution of
 the circuit.
 
 \begin{figure}
@@ -732,8 +733,8 @@ model. For each of the fits onto the bootstrap samples, we record those
 parameters. Then we take mean and standard deviation to obtain a value and its
 error estimate.
 
-In contrast to Gaussian error propagation, we did not have to take any
-derivatives. Also we did not have to assume that the errors stay small and
+In contrast to Gaussian error propagation, we do not have to take any
+derivatives. Also we do not have to assume that the errors stay small and
 Gaussian distributed throughout the analysis. This bootstrap method allows us
 to obtain error estimates for any type of analysis by performing the whole
 analysis several times.
@@ -822,13 +823,14 @@ the heat shielding to prevent heat conduction.
 
 The first measurement is at room temperature. We let the fast-slow circuit
 select creation and annihilation events using the decay of exited neon and
-positron annihilation radiation, respectively. The lifetimes are recorded using
-the \textsc{mca}. After about \SI{30}{\minute} we stop the event recording save
-the data to disk. Then we turn up the temperature and wait for the temperature
-to stabilize. We repeat this until we have eight data sets. For every
-measurement we note the temperature in the beginning and at the end of the
-acquisition. Assuming a slow walk in the temperature, the mean and difference
-of the two temperatures will provide average value and an error estimate.
+positron annihilation radiation, respectively. The lifetimes are recorded
+using the \textsc{mca}. After about \SI{30}{\minute} we stop the event
+recording and save the data. Then we turn up the temperature and wait for the
+temperature to stabilize. We repeat this until we have eight data sets. For
+every measurement we note the temperature in the beginning and at the end of
+the acquisition. Assuming a slow walk in the temperature, the mean and
+difference of the two temperatures will provide average value and an error
+estimate.
 
 In the theory section, we have mentioned the model for the lifetime spectrum in
 Equation~\eqref{eq:lifetime-fit}. We fit this model to each of the lifetime
@@ -950,7 +952,7 @@ enthalpy; we will turn to that next.
 
 \subsection{Vacancy formation enthalpy}
 
-The vacancy formation enthalpy~$H_\mathrm t$ is the energy needed for form
+The vacancy formation enthalpy~$H_\mathrm t$ is the energy needed to form
 another vacancy. We can obtain it from the Arrhenius plot using
 Equation~\ref{eq:arrhenius}. First we need to convert the data that we have
 into the required form. The transformed data is listed in
@@ -1011,10 +1013,10 @@ $\mathrm{^{22}Na}$ dust. We measure at room temperature over night.
 
 Figure~\ref{fig:acrylic} shows the resulting spectrum we got the next morning.
 As done before for the indium, we fit the same two-decay model to our data. In
-contrast to the indium spectra, this fit turned out to be rather unstable. We
-did a few things to get it under control. First we fitted a simple exponential
-decay to the straight parts of the falling flank. This gave us a first estimate
-of the lifetimes for the positronium. We obtained
+contrast to the indium spectra, this fit turns out to be rather unstable. We
+did a few things to get it under control. First we fit a simple exponential
+decay to the straight parts of the falling flank. This gives us a first
+estimate of the lifetimes for the positronium. We obtain
 \[
     \tau_0 = \SI{<< acryl_tau_0_lin >>}{\nano\second}
     \eqnsep
@@ -1024,7 +1026,7 @@ Choosing fixed limits in the time for the fit, we introduce a systematic error.
 The proper treatment would be a $\chi^2$-weighted histogram of fit parameters
 to control the statistical error. We do not need this treatment here, we just
 want to use those values as starting values for the unstable fit. Using those
-lifetimes as input for the full fit model, we obtained the lifetimes
+lifetimes as input for the full fit model, we obtain the lifetimes
 \[
     \tau_0 = \SI{<< acryl_tau_0 >>}{\nano\second}
     \eqnsep
