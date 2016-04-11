@@ -801,9 +801,9 @@ not split by university and home.
 
 \section{Screening some decays}
 
-At first we looked at some decays in the event display software
-\textsc{grope}. In order to learn the signatures of the various decays, we
-start with Monte Carlo datasets which only contain decays into a given channel.
+At first we look at some decays in the event display software \textsc{grope}.
+In order to learn the signatures of the various decays, we start with Monte
+Carlo datasets which only contain decays into a given channel.
 
 The characteristics have different names within \textsc{grope} and
 \textsc{paw}. Both are programming language identifiers and hard to
@@ -838,17 +838,16 @@ Table~\ref{tab:nomenclature} for an overview.
     \label{tab:nomenclature}
 \end{table}
 
-Figure~\ref{fig:grope} shows the events as displayed by \textsc{grope}. We have
-picked a representative event for each category of decay (electrons, muons,
-tauons, hadrons).
-
 \input{../Snippets/grope.tex}
 
-The electron decay in Figure~\ref{fig:grope/electrons} shows the typical
+Figure~\ref{fig:grope} shows a characteristic decay of each category
+(electrons, muons, tauons, hadrons) as displayed by \textsc{grope}. The
+electron decay in Figure~\ref{fig:grope/electrons} shows the typical
 back-to-back signature of two very fast (no curvature in the vertex chamber)
 charged particles. All the energy is deposited in the \ecal{}. In the dark blue
 header one can see that the missing energy is very small. The \eecal{} is
-pretty much identical with \pcharged{}. Both energies are almost the beam energy.
+pretty much identical with \pcharged{}. Both energies are almost the beam
+energy.
 
 Decays into muons have a different signature. The most prominent feature are
 the hits in the muon chambers, as one can see in Figure~\ref{fig:grope/muons}.
@@ -903,8 +902,8 @@ somewhat expected as we will never be able to avoid false-positives and
 false-negatives.
 
 While we were trying to find suitable cuts, a 3D visualization like shown in
-Figure~\ref{fig:mpl-scatter} was really helpful. There we could turn the cloud
-of events in the characteristics space and see different clusters. Such a
+Figure~\ref{fig:mpl-scatter} was really helpful. There we could rotate the
+cloud of events in the characteristics space and see different clusters. Such a
 3D-representation can hardly be printed and must be viewed interactively,
 though.
 
@@ -919,8 +918,8 @@ though.
 
 We would really have liked to perform this visualization with more data. Then
 one could even do a 3D-histogram and find cut surfaces which separate the data
-most cleanly. In \textsc{paw} we were limited to hyperplanes anyway, so we just
-chose a few axis-parallel planes as they did the job sufficiently well.
+most cleanly. In \textsc{paw} we are limited to hyperplanes anyway, so we just
+choose a few axis-parallel planes as they will do the job sufficiently well.
 
 After the refining using events from the \texttt{test} dataset, we have the
 cuts listed in Table~\ref{tab:cuts}.
@@ -976,7 +975,7 @@ As expected from decay modes with hadrons, we see that tauons can have six
 charged tracks. Hadrons can also decay with six or less charged tracks, but the
 most part decays with more than ten tracks.
 
-The other characteristics were also plotted using \textsc{paw}. \pcharged\ is
+The other characteristics are also plotted using \textsc{paw}. \pcharged\ is
 shown in Figure~\ref{fig:paw-pcharged}, \eecal\ in Figure~\ref{fig:paw-e_ecal}
 and \ehcal\ in Figure~\ref{fig:paw-e_hcal}.
 
@@ -990,7 +989,7 @@ comparison to the other leptonic channels (only $s$-channel there) impossible.
 
 We have shown in Figure~\ref{fig:channels} how the $s$- and $t$-channel scale
 with the angle. At small angle, the unwanted $t$-channel dominates. Therefore
-we need to cut large $\cos(\theta)$ out of our analysis. The efficiency will do
+we need to cut large $\cos(\theta)$ out of our analysis. The efficiency will go
 down, but the quality of the remaining data will be better. We also cut the
 peak at $\cos(\theta) < -0.9$ as we do not know its origin but know that it
 cannot come from a simple $s$-channel process.
@@ -1055,11 +1054,11 @@ has a lot of analysis steps, the propagated error might be too large or small.
 Besides being tedious, this scheme also does not provide any help when doing
 fits. Methods like the \texttt{scipy.optimize.curve\_fit}, which we use here,
 will give a covariance matrix. Taking the square root of the diagonal usually
-gives a sufficient error estimate if the error are uncorrelated, which is often
-the case. Although the function can perform an error-weighted fit, it does not
-incorporate the uncertainty of the input data into the error of the fit
-parameters (at least in older version). Still, uncertainties in categorical
-variable (usually $x$) are not included in this function.
+gives a sufficient error estimate if the errors are uncorrelated, which is
+often the case. Although the function can perform an error-weighted fit, it
+does not incorporate the uncertainty of the input data into the error of the
+fit parameters (at least in older versions). Still, uncertainties in the
+categorical variable (usually $x$) are not included in this function.
 
 A method to alleviate all those problems is the \emph{bootstrap} method. It is
 an intrinsically numerical and statistical procedure. It is a \enquote{meta
@@ -1122,8 +1121,9 @@ nt/cuts $12 e_lep>44.5.and.e_lep<45.0
 \end{lstlisting}
 
 Using those, we can filter the data for muons (\texttt{\$2}), positive or
-negative angle (\texttt{cos\_thet<0.} or \texttt{cos\_thet>0}) and for the energy (\texttt{\$11}). Printing this as
-a histogram, we use the following code:
+negative angle (\texttt{cos\_thet<0.} or \texttt{cos\_thet>0}) and for the
+energy (\texttt{\$11}). Printing this as a histogram, we use the following
+code:
 
 \begin{lstlisting}
 nt/plot daten1.cos_thet $2.and.cos_thet<0..and.$11
@@ -1144,8 +1144,8 @@ $\cos(\theta) < 0$, which we call $N_-$. The asymmetry is then simply
 \]
 
 Our analysis to this point is based on the tree level formalism. Higher order
-corrections are needed in every QFT for more accurate result. Here we are given
-the combined effect of all those corrections as a table of shift for
+corrections are needed in every \textsc{qft} for more accurate results. Here we
+are given the combined effect of all those corrections as a table of shift for
 $A_\text{FB}$. For each beam energy, we add the correction and obtain a final
 value for $A_\text{FB}$. The resulting asymmetries for the different beam
 energies are shown in  Table~\ref{tab:afb} and Figure~\ref{fig:plot-afb}. Error
@@ -1179,13 +1179,6 @@ using resampling bootstrap for the final result.
     \label{fig:plot-afb}
 \end{figure}
 
-The figure also includes the theoretical expectation that we have computed in
-the exercises in Section~\ref{sec:exercises-asymmetry}. We have re-computed the
-expectation value with the physical value of $\sin(\theta_\text w)^2$ for the
-various beam energies used. Our results do not imply this exact trend (i.e.\
-almost constant) of the asymmetry. However, as the errors are quite large, our
-measurements are still consistent with it.
-
 \subsection{Weak mixing angle}
 
 At the peak, the relation
@@ -1194,9 +1187,9 @@ At the peak, the relation
     \qquad\text{and}\qquad
     \frac{v_\mathrm l}{a_\mathrm l} = 1 - 4 \sin(\theta_\mathrm w)^2
 \]
-holds for leptons. Taken from the manual, Equation~(2.21). Using the asymmetry
-value at the peak (fourth data point), we obtain $\sin(\theta_\mathrm w)^2 =
-\num{<< sin_sq_afb >>}$ from
+holds for leptons. This expression is taken from the manual, Equation~(2.21).
+Using the asymmetry value at the peak (fourth data point), we obtain
+$\sin(\theta_\mathrm w)^2 = \num{<< sin_sq_afb >>}$ from
 \[
     \sin(\theta_\mathrm w)^2 = \frac{1 - \sqrt{A_\text{FB}^\text{peak} / 3}}4
     \,.
@@ -1251,21 +1244,21 @@ statistics. A loose cut will water the sorting with underground events. Say we
 want to filter out electrons but our cuts are too loose. Then some tauon events
 might slip into the electrons category.
 
-Both types of errors, the false-negatives and the false-positives, can be
-handled using a detection matrix~$\mat D$ and Monte Carlo datasets.
-The Monte Carlo datasets are purely of one decay channel. Therefore we know
-exactly that we only have, say, electrons. Applying our cuts to the Monte Carlo
-electrons, we will see how many are actually detected as electrons. This is our
-efficiency. Then we take the other three kinds (muons, tauons, hadrons) of the
-Monte Carlo datasets and apply the electron cuts to it. Ideally, we should not
-get any events. The ratio of other events that we falsely identify as electrons
-is the underground.
+Both types of errors, the false-negatives (inefficiency) and the
+false-positives (underground), can be handled using a detection matrix~$\mat D$
+and Monte Carlo datasets. The Monte Carlo datasets are purely of one decay
+channel. Therefore we know exactly that we only have, say, electrons. Applying
+our cuts to the Monte Carlo electrons, we will see how many are actually
+detected as electrons. This is our efficiency. Then we take the other three
+kinds (muons, tauons, hadrons) of the Monte Carlo datasets and apply the
+electron cuts to it. Ideally, we should not get any events. The ratio of other
+events that we falsely identify as electrons is the underground.
 
 Using a linear model for this, we need a mapping from the actual events vector
-$\vec A$ (in electron-muon-tauon-hadrons space, $\N^4$) to the identified events
-vector $\vec I$ (same space). The detection matrix is then defined via $\vec I
-= \mat D \vec A$. In order to find the sixteen matrix elements, we apply four
-four-vector with Monte Carlo events, one for each decay type.
+$\vec A$ (in electron-muon-tauon-hadrons space, $\N^4$) to the identified
+events vector $\vec I$ (same space). The detection matrix is then defined via
+$\vec I = \mat D \vec A$. In order to find the sixteen matrix elements, we
+apply four four-vectors with Monte Carlo events, one for each decay type.
 
 \subsection{Determining matrix elements}
 
@@ -1405,10 +1398,9 @@ not come out right and use the values for the muons as an replacement,
 
 \subsection{Counts}
 
-In order to compute cross sections, we need count rates. We have filtered the
-dataset with our cuts and an energy selection. For instance in the following
-snippet we use the muon filter (\texttt{\$2}) with the third beam energy
-(\texttt{\$13}):
+In order to compute cross sections, we need count rates. We filter the dataset
+with our cuts and an energy selection. For instance in the following snippet we
+use the muon filter (\texttt{\$2}) with the third beam energy (\texttt{\$13}):
 
 \begin{lstlisting}
 nt/plot daten1.ncharged $2.and.$13
@@ -1852,7 +1844,9 @@ probably due to our overestimation of the scattering into electrons.
 
 Since we have overestimated the partial cross section of the electrons, we were
 not able to fully show the lepton universality. However, we have assumed the
-lepton universality at some point and used the muonic cross section 
+lepton universality at some point and used the muonic cross section instead.
+The results obtained with this exchange gives us sensible results, implying
+that lepton universality actually holds.
 
 \section{Implicit assumptions}
 
