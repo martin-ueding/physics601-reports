@@ -321,7 +321,7 @@ the matrix element. For that we need the following:
     = \bar v^{s'}(\four k)
     \mat\gamma_3
     \del{g_\text v^f - g_\text a^f \mat\gamma_5}
-    u^s(\four p) \,. \\
+    u^s(\four p) \,.
 \end{multline*}
 
 Now we can write the modulus squared of the matrix element
@@ -373,7 +373,7 @@ Now we can write the modulus squared of the matrix element
         where we can now simplify this. As an aside, we have
         \[
             \del{g_\text v^f - g_\text a^f \mat\gamma_5}^2
-            = (g_\text v^f)^2 - (g_\text a^f)^2 - 2 g_\text v^f g_\text a^f
+            = (g_\text v^f)^2 + (g_\text a^f)^2 - 2 g_\text v^f g_\text a^f
             \mat\gamma_5 \,.
         \]
         The square of $\mat\gamma_5$ is just the unit matrix in Dirac space.
@@ -385,7 +385,7 @@ Now we can write the modulus squared of the matrix element
     }
     &=
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \tr\del{
         \four k
         \mat\gamma_3
@@ -394,15 +394,15 @@ Now we can write the modulus squared of the matrix element
     }
     \,.
     \intertext{%
-        Using a trace identity like given by \textcite[(A.27)]{Peskin/QFT/1995}
-        we obtain
+        Using a trace identity like the one given by
+        \textcite[(A.27)]{Peskin/QFT/1995}, we obtain
     }
-    &= \frac{4 g^2}{\cos(\theta_\text w)^2} \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    &= \frac{4 g^2}{\cos(\theta_\text w)^2} \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     (2 k_3 p_3 + \four k \cdot \four p) \,.
 \end{align*}
 This is our final form of the matrix element.
 
-The decay width is given by additional factors and a integration over phase
+The decay width is given by additional factors and an integration over phase
 space. We have
 \begin{align*}
     \Gamma_f
@@ -419,14 +419,14 @@ space. We have
     \frac{\dif^3 k}{E_{\vec k}}
     \delta^4(\four q - \four k - \four p)
     \frac{4 g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     (2 k_3 p_3 + \four k \cdot \four p) \,.
     \intertext{%
         Then we simplify even more and obtain
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \int
     \frac{\dif^3 p}{E_{\vec p}}
     \frac{\dif^3 k}{E_{\vec k}}
@@ -439,7 +439,7 @@ space. We have
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \\&\qquad\times
     \int
     \frac{\dif^3 p}{E_{\vec p}}
@@ -455,12 +455,12 @@ space. We have
             \vec b := \frac{\vec p - \vec k}{2} \,.
         \]
         The Jacobian of this transformation is unity. The $\delta^3(\vec k +
-        \vec p)$ will become $\delta^3(\vec a)$, in the $\int \dif^3 a$
-        integral, this will set $\vec a$ to $\vec 0$. So far we have
+        \vec p)$ will become $\delta^3(\vec a)$. This will set $\vec a$ to
+        $\vec 0$ in the $\int \dif^3 a$ integral. So far we have
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \int
     \frac{\dif^3 b}{E_{\vec p} E_{\vec k}}
     \delta(\sqrt s - E_{\vec k} - E_{\vec p})
@@ -473,7 +473,7 @@ space. We have
     }
     &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \int
     \frac{\dif^3 b}{E_{\vec b}^2}
     \delta(\sqrt s - 2 E_{\vec b})
@@ -484,7 +484,7 @@ space. We have
     }
     &= \frac{1}{4 \piup M_{\mathrm Z^0}}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \\&\qquad\times
     \int \dif b \, b^2 \int \dif \cos(\theta) \,
     \frac{1}{b^2}
@@ -497,7 +497,7 @@ space. We have
     }
     &= \frac{M_{\mathrm Z^0}}{16 \piup}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
     \int \dif \cos(\theta) \,
     (- 2 \cos(\theta)^2 + 2) \,.
     \intertext{%
@@ -505,7 +505,7 @@ space. We have
     }
     &= \frac{M_{\mathrm Z^0}}{6 \piup}
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2} \,.
     \intertext{%
         Replacing $g^2$ with $8 M_{\mathrm W}^2 G_\text F / \sqrt 2$ (see
         Equation~(2.1) from the manual) and using $M_\mathrm W = \MZ
@@ -513,14 +513,14 @@ space. We have
     }
     &= \frac{2 \sqrt 2}{3 \piup}
     G_\text F M_{\mathrm Z^0}^3
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2} \,.
     \intertext{%
         For quarks, we also need to sum over all the colors, which just gives
         the factor $N_\mathrm c^f$ for the given flavor $f$.
     }
     &= \frac{N_\mathrm c^f 2 \sqrt 2}{3 \piup}
     G_\text F M_{\mathrm Z^0}^3
-    \del{(g_\text v^f)^2 - (g_\text a^f)^2} \,.
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2} \,.
 \end{align*}
 
 Except for a missing factor $1/8$ up front, this is the same as
