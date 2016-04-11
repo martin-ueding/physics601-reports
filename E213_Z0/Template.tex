@@ -49,7 +49,7 @@
 \maketitle
 
 \begin{abstract}
-    In this experiment we analyse data from electron positron collisions
+    In this experiment we analyze data from electron positron collisions
     collected with the \textsc{opal} detector at the \textsc{lep} collider.
     Aim of the experiment is to have an insight in methods of data analysis in
     high energy physics.
@@ -345,7 +345,7 @@ Now we can write the modulus squared of the matrix element
     \sum_\text{spins} |\mathcal M|^2
     &=
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \tr\del{
+    \trdirac\del{
         \four k
         \mat\gamma_3
         \del{g_\text v^f - g_\text a^f \mat\gamma_5}
@@ -361,7 +361,7 @@ Now we can write the modulus squared of the matrix element
     }
     &=
     \frac{g^2}{\cos(\theta_\text w)^2}
-    \tr\del{
+    \trdirac\del{
         \four k
         \mat\gamma_3
         \del{g_\text v^f - g_\text a^f \mat\gamma_5}^2
@@ -380,13 +380,14 @@ Now we can write the modulus squared of the matrix element
         The term with $\mat\gamma_5$ will drop out as the trace identity
         contains the Levi-Civita symbol~$\epsilon_{\mu\nu\rho\gamma}$ which
         will be zero if two of the indices are 3, as we have in our case.
-        Therefore we can directly drop that term. As it does not contain any
-        further Dirac structure, we can pull it out front and obtain
+        Therefore we can directly drop that term. As the parentheses does not
+        contain any further Dirac structure, we can pull it out front and
+        obtain
     }
     &=
     \frac{g^2}{\cos(\theta_\text w)^2}
     \del{(g_\text v^f)^2 + (g_\text a^f)^2}
-    \tr\del{
+    \trdirac\del{
         \four k
         \mat\gamma_3
         \four p
