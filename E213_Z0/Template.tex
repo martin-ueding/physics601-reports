@@ -1765,9 +1765,9 @@ more than a standard deviation away from the expected value of 3. The error is
 quite large, but that is expected from the various uncertainties going into
 this quantity.
 
-\chapter{Discussion}
+\chapter{Conclusion}
 
-\section{Results}
+\section{Results and discussion}
 
 We were able to determine the weak mixing angle to $\sin(\theta_\mathrm w)^2 =
 << sin_sq_afb_asym >>$. The literature value is \num{<< sin_sq_weak_mixing >>}
@@ -1775,8 +1775,6 @@ and lies very well within our uncertainty.
 
 Our analysis leads to \num{<< neutrino_families >>} neutrino families. The
 current value is 3, this also lies nicely within the uncertainty.
-
-% TODO Z mass and width.
 
 The mass of the $\mathrm Z^0$ was determined to be \SI{<< mean_mass
 >>}{\giga\electronvolt}. Here the literature value is \SI{<< mass_z_lit
@@ -1786,11 +1784,13 @@ have computed the total width to be \SI{<< total_width >>}{\mega\electronvolt}
 in the exercises. Our value is too high to be within the uncertainty. This is
 probably due to our overestimation of the scattering into electrons.
 
-% TODO Lepton universality
+Since we have overestimated the partial cross section of the electrons, we were
+not able to fully show the lepton universality. However, we have assumed the
+lepton universality at some point and used the muonic cross section 
 
 \section{Implicit assumptions}
 
-% TODO
+During our analysis, we have used a couple implicit assumptions.
 
 \begin{itemize}
     \item
@@ -1801,10 +1801,30 @@ probably due to our overestimation of the scattering into electrons.
         we have used resampling. This is an assumption that would have been
         done anyway when using Gaussian error propagation. At least we did not
         have to assume that the errors are small at any point.
+
+    \item
+        The energy of the beam should have been roughly constant within one of
+        the seven settings. From the \textsc{paw} histograms we could see that
+        is sufficiently the case.
+
+    \item
+        The Breit-Wigner prescription is only good for a narrow resonance.
+        Otherwise one would have a violation of unitarity. As we have seen in
+        our results, this assumption can be justified.
+
+    \item
+        We assume that the \textsc{opal} detector does not have a bias. The
+        Monte Carlo datasets allow us to derive the bias of our cuts. If the
+        detector is less sensible to certain decays, we would have a bias in
+        the end as well.
+
+        As far as we know, the event rate is so high that not every single
+        event can be recorded. Therefore there are \textsc{fpga} stages which
+        reduce the number of events dramatically. Those are constructed not to
+        introduce a bias, but one has to ensure this.
+
+    % TODO
 \end{itemize}
-
-\section{Conclusion}
-
 
 \begin{appendix}
 
