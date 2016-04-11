@@ -148,7 +148,7 @@ def bootstrap_kernel(mc_sizes, matrix, readings, lum, radiative_hadrons,
     return x, masses, widths, np.array(cross_sections), y_list, corr.T, \
             matrix, inverted, readings, peaks_nb, brs, width_electron, \
             width_flavors, missing_width, width_lepton, neutrino_families, \
-            popts
+            popts, mean_mass, mean_width
 
 
 def bootstrap_driver(T):
@@ -203,7 +203,8 @@ def bootstrap_driver(T):
     x_dist, masses_dist, widths_dist, cross_sections_dist, y_dist, corr_dist, \
             matrix_dist, inverted_dist, readings_dist, peaks_dist, brs_dist, \
             width_electron_dist, width_flavors_dist, missing_width_dist, \
-            width_lepton_dist, neutrino_families_dist, popts_dist \
+            width_lepton_dist, neutrino_families_dist, popts_dist, \
+            mean_mass_dist, mean_width_dist \
             = zip(*results)
 
     # We only need one of the lists of the x-values as they are all the same.
@@ -314,6 +315,12 @@ def bootstrap_driver(T):
         T['chi_sq_red'],
         T['p'],
     ))
+
+    mean_mass_val, mean_mass_err = bootstrap.average_and_std_arrays(mean_mass_dist)
+    mean_width_val, mean_width_err = bootstrap.average_and_std_arrays(mean_width_dist)
+
+    T['mean_mass'] = siunitx(mean_mass_val, mean_mass_err)
+    T['mean_width'] = siunitx(mean_width_val, mean_width_err)
 
 
 def number_padding(number):
@@ -689,6 +696,8 @@ def main():
     job_grope(T, options.show)
     job_angular_dependence(T)
     job_asymetry(T)
+
+    T['mass_z_lit'] = siunitx(mass_z / 1e3, digits=5)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
