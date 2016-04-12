@@ -19,3 +19,7 @@ $(pres_out): $(pres_tex) $(figures_pdf) $(plots_pdf) $(postscript_pdf)
 $(pres_tex): Presentation.tex $(build)/template.js
 	@echo "$(on)Inserting values into presentation$(off)"
 	../insert.py $^ $@
+
+ifneq "$(wildcard /etc/fedora-release)" ""
+    $(pres_out): $(feynman_pdf)
+endif
