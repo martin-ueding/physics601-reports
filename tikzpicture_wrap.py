@@ -62,8 +62,6 @@ def main():
     with open(options.outfile, 'w') as f:
         f.write(rendered)
 
-    print(rendered)
-
 def _parse_args():
     '''
     Parses the command line arguments.
