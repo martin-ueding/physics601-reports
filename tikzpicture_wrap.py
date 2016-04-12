@@ -23,10 +23,6 @@ template_text = r'''
 
 \pagestyle{empty}
 
-\setbeamertemplate{footline}[frame number]{}
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{footline}{}
-
 \begin{document}
 
 << snippet >>
