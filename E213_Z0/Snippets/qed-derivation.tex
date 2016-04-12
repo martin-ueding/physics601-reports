@@ -1,0 +1,258 @@
+First we compute the invariant matrix element~$\mathcal M$. Reading off the
+Feynman diagram, we have
+\begin{align*}
+    \iup \mathcal M
+    &= \epsilon^\mu \bar u^s(\four p) \frac{\iup g}{\cos(\theta_\text w)}
+    \mat\gamma_\mu \del{g_\text v^f - g_\text a^f \mat\gamma_5} v^{s'}(\four k)
+    \,,
+    \intertext{%
+        where we have used the rules given by \textcite[(D.56)]{romao/aqt}. We
+        chose the center of mass system, as we always can for a single massive
+        particle, and have $\four q = (\sqrt s, \vec 0)$. As the gauge boson
+        does not have any three momentum direction, we can choose the
+        polarization vector $\four \epsilon$ like we want. We chose it in the
+        positive $x^3$-direction and have $\four \epsilon = (0, 0, 0, 1)$. With
+        that we can simplify the Lorentz structure a little bit and obtain
+    }
+    &= \bar u^s(\four p) \frac{\iup g}{\cos(\theta_\text w)}
+    \mat\gamma_3 \del{g_\text v^f - g_\text a^f \mat\gamma_5} v^{s'}(\four k)
+    \,.
+\end{align*}
+
+For the decay width, which we are interested in, we need the modulus squared of
+the matrix element. For that we need the following:
+\begin{align*}
+    &\sbr{\bar u^s(\four p) \mat\gamma_3 \del{g_\text v^f - g_\text a^f \mat\gamma_5}
+    v^{s'}(\four k)}^\dagger \\
+    &\quad=
+    v^{s'}(\four k)^\dagger
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5^\dagger}
+    \mat\gamma_3^\dagger
+    \mat\gamma_0
+    u^s(\four p) \\
+    &\quad=
+    \underbracket{v^{s'}(\four k)^\dagger
+    \mat\gamma_0}
+    \underbracket{\mat\gamma_0
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5^\dagger}
+    \mat\gamma_0}
+    \underbracket{\mat\gamma_0
+        \mat\gamma_3^\dagger
+    \mat\gamma_0}
+    u^s(\four p) \\
+    &\quad= \bar v^{s'}(\four k)
+    \del{g_\text v^f + g_\text a^f \mat\gamma_5}
+    \mat\gamma_3
+    u^s(\four p) \\
+    &\quad= \bar v^{s'}(\four k)
+    \mat\gamma_3
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5}
+    u^s(\four p) \,.
+\end{align*}
+
+Now we can write the modulus squared of the matrix element
+\begin{align*}
+    |\mathcal M|^2
+    &= \frac{g^2}{\cos(\theta_\text w)^2}
+    \bar v^{s'}(\four k)
+    \mat\gamma_3
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5}
+    u^s(\four p)
+    \bar u^s(\four p)
+    \mat\gamma_3
+    \del{g_\text v^f - g_\text a^f \mat\gamma_5}
+    v^{s'}(\four k)
+    \,. \\
+    \intertext{%
+        As the detector is not sensitive to the spin of the resulting fermions,
+        we need to sum over all the final state spin configurations $s$ and
+        $s'$. This will give us a fermion trace,
+    }
+    \sum_\text{spins} |\mathcal M|^2
+    &=
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \trdirac\del{
+        \four k
+        \mat\gamma_3
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5}
+        \four p
+        \mat\gamma_3
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5}
+    }
+    \,, \\
+    \intertext{%
+        where we have neglected the masses of the fermions. The second
+        parentheses with $\mat\gamma_5$ can be anticommuted twice and be
+        collapsed with the first one. We have
+    }
+    &=
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \trdirac\del{
+        \four k
+        \mat\gamma_3
+        \del{g_\text v^f - g_\text a^f \mat\gamma_5}^2
+        \four p
+        \mat\gamma_3
+    }
+    \,, \\
+    \intertext{%
+        where we can now simplify this. As an aside, we have
+        \[
+            \del{g_\text v^f - g_\text a^f \mat\gamma_5}^2
+            = (g_\text v^f)^2 + (g_\text a^f)^2 - 2 g_\text v^f g_\text a^f
+            \mat\gamma_5 \,.
+        \]
+        The square of $\mat\gamma_5$ is just the unit matrix in Dirac space.
+        The term with $\mat\gamma_5$ will drop out as the trace identity
+        contains the Levi-Civita symbol~$\epsilon_{\mu\nu\rho\gamma}$ which
+        will be zero if two of the indices are 3, as we have in our case.
+        Therefore we can directly drop that term. As the parentheses does not
+        contain any further Dirac structure, we can pull it out front and
+        obtain
+    }
+    &=
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \trdirac\del{
+        \four k
+        \mat\gamma_3
+        \four p
+        \mat\gamma_3
+    }
+    \,.
+    \intertext{%
+        Using a trace identity like the one given by
+        \textcite[(A.27)]{Peskin/QFT/1995}, we obtain
+    }
+    &= \frac{4 g^2}{\cos(\theta_\text w)^2} \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+\end{align*}
+This is our final form of the matrix element.
+
+The decay width is given by additional factors and an integration over phase
+space. We have
+\begin{align*}
+    \Gamma_f
+    &= \frac{1}{2 M_{\mathrm Z^0}} (2 \piup)^4 \int
+    \frac{\dif^3 p}{(2\piup)^3 2 E_{\vec p}}
+    \frac{\dif^3 k}{(2\piup)^3 2 E_{\vec k}}
+    \delta^4(\four q - \four k - \four p)
+    |\mathcal M|^2 \,.
+    \intertext{%
+        We simplify the factors and insert the matrix element and get
+    }
+    &= \frac{1}{32 \piup^2 M_{\mathrm Z^0}} \int
+    \frac{\dif^3 p}{E_{\vec p}}
+    \frac{\dif^3 k}{E_{\vec k}}
+    \delta^4(\four q - \four k - \four p)
+    \frac{4 g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+    \intertext{%
+        Then we simplify even more and obtain
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \int
+    \frac{\dif^3 p}{E_{\vec p}}
+    \frac{\dif^3 k}{E_{\vec k}}
+    \delta^4(\four q - \four k - \four p)
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+    \intertext{%
+        The total energy-momentum conserving Dirac-distribution can be split
+        into time-like and space-like part. In the center-of-mass frame, this
+        gives us
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \\&\qquad\times
+    \int
+    \frac{\dif^3 p}{E_{\vec p}}
+    \frac{\dif^3 k}{E_{\vec k}}
+    \delta(\sqrt s - E_{\four k} - E_{\four p})
+    \delta^3(\vec k + \vec p)
+    (2 k_3 p_3 + \four k \cdot \four p) \,,
+    \intertext{%
+        which suggests the following change in variables:
+        \[
+            \vec a := \vec p + \vec k
+            \eqnsep
+            \vec b := \frac{\vec p - \vec k}{2} \,.
+        \]
+        The Jacobian of this transformation is unity. The $\delta^3(\vec k +
+        \vec p)$ will become $\delta^3(\vec a)$. This will set $\vec a$ to
+        $\vec 0$ in the $\int \dif^3 a$ integral. So far we have
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \int
+    \frac{\dif^3 b}{E_{\vec p} E_{\vec k}}
+    \delta(\sqrt s - E_{\vec k} - E_{\vec p})
+    (2 k_3 p_3 + \four k \cdot \four p) \,.
+    \intertext{%
+        Now we have to replace $k$ and $p$ with $b$. We have $\vec p = \vec b$
+        and $\vec k = - \vec b$. Their magnitude is the same, which is expected
+        in the center-of-mass frame in a two body decay. This simplifies the
+        relations to
+    }
+    &= \frac{1}{8 \piup^2 M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \int
+    \frac{\dif^3 b}{E_{\vec b}^2}
+    \delta(\sqrt s - 2 E_{\vec b})
+    (- 2 b_3 b_3 + E_{\vec b}^2 + \vec b \cdot \vec b) \,.
+    \intertext{%
+        As we have massless particles, we have $E_{\vec b} = |\vec b|$. We
+        change into spherical coordinates in $\vec b$ and obtain
+    }
+    &= \frac{1}{4 \piup M_{\mathrm Z^0}}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \\&\qquad\times
+    \int \dif b \, b^2 \int \dif \cos(\theta) \,
+    \frac{1}{b^2}
+    \delta(\sqrt s - 2 b)
+    (- 2 b^2 \cos(\theta)^2 + b^2 + b^2) \,,
+    \intertext{%
+        where we have performed $\int \dif \phi = 2 \piup$ already as we do not
+        have any explicit $\phi$-dependence. The radial integration will set $b
+        = \sqrt s / 2$. In our case $s = M_{\mathrm Z^0}^2$ and we have
+    }
+    &= \frac{M_{\mathrm Z^0}}{16 \piup}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2}
+    \int \dif \cos(\theta) \,
+    (- 2 \cos(\theta)^2 + 2) \,.
+    \intertext{%
+        The angular integration gives $(-4/3 + 4) = 8/3$, so we get
+    }
+    &= \frac{M_{\mathrm Z^0}}{6 \piup}
+    \frac{g^2}{\cos(\theta_\text w)^2}
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2} \,.
+    \intertext{%
+        Replacing $g^2$ with $8 M_{\mathrm W}^2 G_\text F / \sqrt 2$ (see
+        Equation~(2.1) from the manual) and using $M_\mathrm W = \MZ
+        \cos(\theta_\mathrm w)$ (see (2.3)), we will obtain
+    }
+    &= \frac{2 \sqrt 2}{3 \piup}
+    G_\text F M_{\mathrm Z^0}^3
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2} \,.
+    \intertext{%
+        For quarks, we also need to sum over all the colors, which just gives
+        the factor $N_\mathrm c^f$ for the given flavor $f$.
+    }
+    &= 8 \frac{N_\mathrm c^f \sqrt 2}{12 \piup}
+    G_\text F M_{\mathrm Z^0}^3
+    \del{(g_\text v^f)^2 + (g_\text a^f)^2} \,.
+\end{align*}
+
+Except for a missing factor $1/8$ up front, this is the same as
+Equation~(2.12) given in the manual. In the derivation, we have an angular
+dependency of $1 - \cos(\theta)$ which also looks strange. Both errors are
+probably related.
+
+% FIXME Find the missing factors.
