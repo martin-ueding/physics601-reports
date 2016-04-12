@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={Channel number},
+            ylabel={Counts},
+            grid=major,
+            band/.style={
+                draw=none,
+            },
+            xtick={3600,3700,...,4200},
+        ]
+
+        \addplot[
+                band, 
+                fill=black, 
+        ] table {../xy/prompts-long.txt} \closedcycle;
+        \addplot[
+                red,
+        ] table {../xy/prompt-6-fit.txt};
+\end{axis}
+\end{tikzpicture}

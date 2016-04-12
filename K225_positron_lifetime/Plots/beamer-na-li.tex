@@ -1,0 +1,25 @@
+\begin{tikzpicture}
+\begin{axis}[
+        width=0.49\linewidth,
+        height=0.35\textwidth,
+        xlabel={Channel number},
+        ylabel={Counts},
+        grid=major,
+        band/.style={
+                draw=none,
+        },
+        ]
+        \addplot[
+                band, 
+                fill=black, 
+        ] table {../xy/na-li.txt} \closedcycle;
+
+        \node[anchor=east] (description_511) at (axis cs:1800,900){\SI{511}{\kilo\electronvolt}};
+        \node (peak_511) at (axis cs:2700,1350){};
+        \draw[->](description_511)--(peak_511);
+
+        \node[anchor=south] (description_1275) at (axis cs:6500,700){\SI{1275}{\kilo\electronvolt}};
+        \node (peak_1275) at (axis cs:7000,150){};
+        \draw[->](description_1275)--(peak_1275);
+\end{axis}
+\end{tikzpicture}

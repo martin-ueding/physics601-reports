@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            xlabel={Channel number},
+            ylabel={delay time/\si{\nano\second}},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.7,
+            },
+        ]
+        \addplot[
+            black,
+            mark=+,
+            only marks,
+            error bars/x dir=both,
+            error bars/x explicit,
+        ] table[x error index = 1] {../xy/time_gauge_plot.txt} ;
+        \addplot[
+            band,
+            fill=red,
+        ] table {../xy/time_gauge_band.txt} \closedcycle;
+        \addplot[ red, ] table {../xy/time_gauge_fit.txt};
+    \end{axis}
+\end{tikzpicture}

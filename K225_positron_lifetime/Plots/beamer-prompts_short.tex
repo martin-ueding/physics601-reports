@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+        \begin{axis}[
+                width=\linewidth,
+                height=0.6\linewidth,
+                xlabel={Channel number},
+                ylabel={Counts},
+                grid=major,
+                band/.style={
+                        draw=none,
+                },
+        ]
+        \addplot[
+                band, 
+                fill=black, 
+        ] table {../xy/prompts-short.txt} \closedcycle;
+        \addplot[
+                red,
+        ] table {../xy/prompt-1-fit.txt};
+                
+        \addplot[
+                red,
+        ] table {../xy/prompt-2-fit.txt};
+
+        \addplot[
+                red,
+        ] table {../xy/prompt-3-fit.txt};
+
+        \addplot[
+                red,
+        ] table {../xy/prompt-4-fit.txt};
+
+        \addplot[
+                red,
+        ] table {../xy/prompt-5-fit.txt};
+
+    \end{axis}
+\end{tikzpicture}

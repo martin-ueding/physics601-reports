@@ -1,0 +1,34 @@
+\usetikzlibrary{decorations}
+\begin{tikzpicture}[
+        photon/.style={
+            ->,
+            decorate,
+            decoration={
+                snake,
+                amplitude=0.2ex,
+                segment length=1.5ex,
+                post length=0.5ex,
+            },
+        },
+    ]
+    \graph[
+        grow right=2.2cm,
+        nodes={
+            draw,
+        },
+    ]
+    {
+        source/Source ->[photon] {
+            lyso1/LYSO %[> "Start"]
+            -> pm1/PM -> {
+                sca1/SCA ->[dashdotted] coin/Coincidence ->[dashdotted] mca/MCA,
+                cfd1/CFD ->[dashdotted] tac/TAC -> mca;
+            },
+            lyso2/LYSO %[> "Stop"]
+            -> pm2/PM -> {
+                cfd2/CFD ->[dashdotted] delay/Delay ->[dashdotted] tac,
+                sca2/SCA ->[dashdotted] coin,
+            },
+        };
+    };
+\end{tikzpicture}
