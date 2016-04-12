@@ -7,6 +7,8 @@
 %\usetheme{Marburg}
 
 \usepackage[bibatend, beamer]{../../header}
+\usepackage{adjustbox}
+\usepackage{transparent}
 
 \renewcommand\iup{\text i}
 \renewcommand\eup{\text e}
@@ -21,6 +23,25 @@
     Lino Lemmer
 }
 \date{\daterange{2016-03-24}{2016-03-25}}
+
+\newcommand\transition[2]{%
+    {
+        \setbeamertemplate{background canvas}{%
+            \includegraphics[height=\paperheight]{#2}
+        }
+        \begin{frame}[plain]
+            \centering
+            \transparent{0.8}
+            \colorbox{white}{%
+                \marginbox{1ex}{%
+                    \begin{huge}
+                        #1
+                    \end{huge}
+                }
+            }
+        \end{frame}
+    }
+}
 
 \begin{document}
 
@@ -80,7 +101,14 @@
 \end{frame}
 
 
+\subsection{Bootstrap}
+
+\transition{Bootstrap}{boots-3}
+
+
 \section{Conduction}
+
+\transition{Conduction}{rack-and-detector}
 
 \subsection{Slow circuit setup}
 
@@ -176,6 +204,8 @@
 
 
 \section{Analysis}
+
+\transition{Analysis}{crunch1}
 
 \begin{frame}
     \includegraphics{beamer-taus}
