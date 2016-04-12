@@ -168,7 +168,7 @@ $(build)/%.pdf: $(build)/to_crop/%.pdf
 	@echo "$(on)Typesetting figure $<$(off)"
 	cd $$(dirname $@) \
 	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
-	     2>&1 |$(tail)
+	     2>&1 #|$(tail)
 
 $(build)/%.pdf: Postscript/%.ps
 	@echo "$(on)Converting PS file $<$(off)"

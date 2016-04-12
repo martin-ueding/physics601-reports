@@ -4,27 +4,32 @@
 # Copyright © 2015-2016 Martin Ueding <dev@martin-ueding.de>
 
 import argparse
+import os
 
 import jinja2
 
 template_text = r'''
-\documentclass[11pt, {{ lang }}]{scrartcl}
+\documentclass[11pt, << lang >>]{<< documentclass >>}
 
-\usepackage{../../../header}
+\usepackage[<< extra_opts >>]{../../../header}
 
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.9}
 
-{% for package in packages %}
-\usepackage{ {{ package }} }
-{% endfor %}
+%< for package in packages >%
+\usepackage{<< package >>}
+%< endfor >%
 
 \pagestyle{empty}
 
+\setbeamertemplate{footline}[frame number]{}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+
 \begin{document}
 
-{{ snippet }}
+<< snippet >>
 
 \end{document}
 '''
@@ -32,7 +37,12 @@ template_text = r'''
 def main():
     options = _parse_args()
 
-    template = jinja2.Template(template_text)
+    env = jinja2.Environment(
+        "%<", ">%",
+        "<<", ">>",
+        "/*", "*/",
+    )
+    template = env.from_string(template_text)
 
     with open(options.infile) as f:
         snippet = f.read()
@@ -40,10 +50,19 @@ def main():
     if options.packages is None:
         options.packages = []
 
-    rendered = template.render(lang=options.lang, snippet=snippet, packages=options.packages)
+    is_beamer = os.path.basename(options.infile).startswith('beamer-')
+    documentclass = 'beamer' if is_beamer else 'scrartcl'
+    extra_opts = 'beamer' if is_beamer else ''
+
+    rendered = template.render(lang=options.lang, snippet=snippet,
+                               packages=options.packages,
+                               documentclass=documentclass,
+                               extra_opts=extra_opts)
 
     with open(options.outfile, 'w') as f:
         f.write(rendered)
+
+    print(rendered)
 
 def _parse_args():
     '''
