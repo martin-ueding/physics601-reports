@@ -225,6 +225,104 @@
     \includegraphics{beamer-bootstrap-band}
 \end{frame}
 
+\begin{frame}
+    Control over statistical fluctuations.
+
+    \pause
+
+    \alert{What about outliers?}
+
+    \pause
+
+    \begin{block}{Jackknife method}
+        \begin{itemize}
+            \item Remove one element
+            \item Perform analysis
+            \item Repeat with all points
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Jackknife}
+    \centering
+    \includegraphics{beamer-jackknife-resample-1.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Jackknife}
+    \centering
+    \includegraphics{beamer-jackknife-resample-2.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Jackknife}
+    \centering
+    \includegraphics{beamer-jackknife-resample-3.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Jackknife}
+    \centering
+    \includegraphics{beamer-jackknife-resample-4.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Jackknife}
+    \framesubtitle{Band of fits}
+    \centering
+    \includegraphics{beamer-jackknife-band}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling and Jackknife}
+
+    Both methods can be combined!
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling and Jackknife}
+    \framesubtitle{Band of fits}
+    \centering
+    \includegraphics{beamer-combined-band}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling and Jackknife}
+    \framesubtitle{Band of fits}
+    \centering
+    \includegraphics{beamer-combined-band2}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Comparison of methods}
+    {
+        \centering
+        \begin{tabular}{lSS}
+            \toprule
+            {Method}
+            & {$a$}
+            & {$b$}
+            \\
+            \midrule
+            \texttt{sqrt(pconv.diagonal())} & << ' & '.join(pconv_example_popt) >> \\
+            Resampling & << ' & '.join(bootstrap_example_popt) >> \\
+            Jackknife & << ' & '.join(jackknife_example_popt) >> \\
+            Combined & << ' & '.join(combined_example_popt) >> \\
+            \bottomrule
+        \end{tabular}
+    }
+
+    \pause
+
+    Data is generated from $y(x) = 1 \cdot x + 0$.
+
+    \pause
+
+    Standard method underestimates the error.
+
+\end{frame}
+
 \section{Conduction}
 
 \transition{Conduction}{rack-and-detector}

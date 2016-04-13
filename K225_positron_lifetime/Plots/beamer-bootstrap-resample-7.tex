@@ -1,5 +1,7 @@
 \begin{tikzpicture}
     \begin{axis}[
+            ymin=-2,
+            ymax=11,
             width=\linewidth,
             height=0.6\linewidth,
             grid=major,
@@ -20,7 +22,7 @@
         ]
 
         \addplot[
-            black,
+            gray,
             mark=*,
             only marks,
             error bars/y dir=both,

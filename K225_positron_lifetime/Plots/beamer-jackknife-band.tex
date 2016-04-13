@@ -1,7 +1,5 @@
 \begin{tikzpicture}
     \begin{axis}[
-            ymin=-2,
-            ymax=11,
             width=\linewidth,
             height=0.6\linewidth,
             grid=major,
@@ -11,6 +9,10 @@
             },
         ]
 
+
+        \addplot[band, fill=green!70!black] table {../xy/jackknife-band.tsv} \closedcycle;
+        \addplot[green!70!black] table {../xy/jackknife-final-fit.tsv};
+
         \addplot[
             black,
             mark=*,
@@ -18,7 +20,5 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
-
-        \addplot[red] table {../xy/bootstrap-normal-fit.tsv};
     \end{axis}
 \end{tikzpicture}

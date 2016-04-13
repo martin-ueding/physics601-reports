@@ -1,7 +1,5 @@
 \begin{tikzpicture}
     \begin{axis}[
-            ymin=-2,
-            ymax=11,
             width=\linewidth,
             height=0.6\linewidth,
             grid=major,
@@ -16,7 +14,7 @@
                 opacity=0.8,
             },
             resampled fit/.style={
-                red,
+                green!70!black,
                 opacity=0.8,
             },
         ]
@@ -31,14 +29,10 @@
 
         \foreach \num in {0,1}
         {
-            \addplot[resampled points] table {../xy/bootstrap-\num-resampled.tsv};
+            \addplot[resampled fit] table  {../xy/jackknife-\num-fit.tsv};
         }
 
-        \foreach \num in {0}
-        {
-            \addplot[resampled fit] table  {../xy/bootstrap-\num-fit.tsv};
-        }
-
+        \addplot[resampled points] table {../xy/jackknife-1-resampled.tsv};
 
     \end{axis}
 \end{tikzpicture}

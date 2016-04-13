@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.6\linewidth,
+            grid=major,
+            band/.style={
+                draw=none,
+            },
+        ]
+
+
+        \addplot[band, opacity=0.4, fill=red] table {../xy/bootstrap-band.tsv} \closedcycle;
+        \addplot[band, opacity=0.4, fill=green] table {../xy/jackknife-band.tsv} \closedcycle;
+        \addplot[band, opacity=0.4, fill=gray] table {../xy/combined-band.tsv} \closedcycle;
+
+        %\addplot[black] table {../xy/combined-final-fit.tsv};
+        %\addplot[red] table {../xy/bootstrap-final-fit.tsv};
+        %\addplot[green] table {../xy/jackknife-final-fit.tsv};
+
+        \addplot[
+            black,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
+    \end{axis}
+\end{tikzpicture}

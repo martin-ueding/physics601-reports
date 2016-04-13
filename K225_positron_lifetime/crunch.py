@@ -26,6 +26,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
 import bootstrap
+import bootstrap_examples
 
 default_figsize = (15.1 / 2.54, 8.3 / 2.54)
 
@@ -720,6 +721,8 @@ def test_keys(T):
 
 def main():
     T = {}
+
+    bootstrap_examples.main(T)
 
     acryl_sampler()
     #sys.exit(0)

@@ -1,15 +1,17 @@
 \begin{tikzpicture}
     \begin{axis}[
-            ymin=-2,
-            ymax=11,
             width=\linewidth,
             height=0.6\linewidth,
             grid=major,
             band/.style={
                 draw=none,
-                opacity=0.5,
             },
         ]
+
+
+        \addplot[black, opacity=0.4, fill=gray] table {../xy/combined-band.tsv} \closedcycle;
+
+        \addplot[black] table {../xy/combined-final-fit.tsv};
 
         \addplot[
             black,
@@ -18,7 +20,5 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
-
-        \addplot[red] table {../xy/bootstrap-normal-fit.tsv};
     \end{axis}
 \end{tikzpicture}

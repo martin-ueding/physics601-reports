@@ -10,6 +10,7 @@ import matplotlib.pyplot as pl
 import numpy as np
 import scipy.optimize as op
 
+from unitprint2 import siunitx
 import bootstrap
 
 
@@ -17,7 +18,7 @@ def linear(x, a, b):
     return a * x + b
 
 
-def main():
+def main(T):
     options = _parse_args()
 
     NUM_POINTS = 7
@@ -44,32 +45,22 @@ def main():
     np.savetxt('_build/xy/bootstrap-normal-fit.tsv',
                np.column_stack([fit_x, fit_y]))
 
-    pl.errorbar(x, y, yerr=y_err, linestyle='none', marker='+')
-    pl.margins(0.05)
-    pl.plot(fit_x, fit_y)
-    #pl.savefig('raw.pdf')
-    pl.clf()
+    T['pconv_example_popt'] = siunitx(popt, np.sqrt(pconv.diagonal()), error_digits=2)
 
     y_dist = []
-
+    popt_dist = []
     for i in range(40):
         boot_y = [random.gauss(Y, err) for Y, err in zip(y, y_err)]
         popt, pconv = op.curve_fit(linear, x, boot_y)
         boot_fit_y = linear(fit_x, *popt)
 
-        pl.plot(x, boot_y, linestyle='none', marker='+')
-        pl.plot(fit_x, boot_fit_y)
-
         y_dist.append(boot_fit_y)
+        popt_dist.append(popt)
 
         np.savetxt('_build/xy/bootstrap-{:d}-resampled.tsv'.format(i),
                    np.column_stack([x, boot_y]))
         np.savetxt('_build/xy/bootstrap-{:d}-fit.tsv'.format(i),
                    np.column_stack([fit_x, boot_fit_y]))
-
-    pl.margins(0.05)
-    #pl.savefig('boot.pdf')
-    pl.clf()
 
     fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(y_dist)
     np.savetxt('_build/xy/bootstrap-band.tsv',
@@ -77,12 +68,57 @@ def main():
     np.savetxt('_build/xy/bootstrap-final-fit.tsv'.format(i),
                np.column_stack([fit_x, fit_y_val]))
 
-    pl.errorbar(x, y, yerr=y_err, linestyle='none', marker='+')
-    pl.plot(fit_x, fit_y_val)
-    pl.fill_between(fit_x, fit_y_val + fit_y_err, fit_y_val - fit_y_err)
-    pl.margins(0.05)
-    #pl.savefig('averaged.pdf')
-    pl.clf()
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    T['bootstrap_example_popt'] = siunitx(popt_val, popt_err, error_digits=2)
+
+    y_dist = []
+    popt_dist = []
+    for i in range(len(x)):
+        jack_x = np.delete(x, i)
+        jack_y = np.delete(y, i)
+
+        popt, pconv = op.curve_fit(linear, jack_x, jack_y)
+        boot_fit_y = linear(fit_x, *popt)
+
+        y_dist.append(boot_fit_y)
+        popt_dist.append(popt)
+
+        np.savetxt('_build/xy/jackknife-{:d}-resampled.tsv'.format(i),
+                   np.column_stack([jack_x, jack_y]))
+        np.savetxt('_build/xy/jackknife-{:d}-fit.tsv'.format(i),
+                   np.column_stack([fit_x, boot_fit_y]))
+
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(y_dist)
+    np.savetxt('_build/xy/jackknife-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    np.savetxt('_build/xy/jackknife-final-fit.tsv'.format(i),
+               np.column_stack([fit_x, fit_y_val]))
+
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    T['jackknife_example_popt'] = siunitx(popt_val, popt_err, error_digits=2)
+
+    y_dist = []
+    popt_dist = []
+    for j in range(30):
+        boot_y = [random.gauss(Y, err) for Y, err in zip(y, y_err)]
+        for i in range(len(x)):
+            jack_x = np.delete(x, i)
+            jack_y = np.delete(boot_y, i)
+
+            popt, pconv = op.curve_fit(linear, jack_x, jack_y)
+            boot_fit_y = linear(fit_x, *popt)
+
+            y_dist.append(boot_fit_y)
+            popt_dist.append(popt)
+
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(y_dist)
+    np.savetxt('_build/xy/combined-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    np.savetxt('_build/xy/combined-final-fit.tsv'.format(i),
+               np.column_stack([fit_x, fit_y_val]))
+
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    T['combined_example_popt'] = siunitx(popt_val, popt_err, error_digits=2)
 
 
 
