@@ -39,10 +39,15 @@ def main():
     fit_x = np.linspace(np.min(x), np.max(x), 100)
     fit_y = linear(fit_x, *popt)
 
+    np.savetxt('_build/xy/bootstrap-normal-data.tsv',
+               np.column_stack([x, y, y_err]))
+    np.savetxt('_build/xy/bootstrap-normal-fit.tsv',
+               np.column_stack([fit_x, fit_y]))
+
     pl.errorbar(x, y, yerr=y_err, linestyle='none', marker='+')
     pl.margins(0.05)
     pl.plot(fit_x, fit_y)
-    pl.savefig('raw.pdf')
+    #pl.savefig('raw.pdf')
     pl.clf()
 
     y_dist = []
@@ -57,17 +62,24 @@ def main():
 
         y_dist.append(boot_fit_y)
 
+        np.savetxt('_build/xy/bootstrap-{:02d}-resampled.tsv',
+                   np.column_stack([x, boot_y]))
+        np.savetxt('_build/xy/bootstrap-{:02d}-fit.tsv',
+                   np.column_stack([fit_x, boot_fit_y]))
+
     pl.margins(0.05)
-    pl.savefig('boot.pdf')
+    #pl.savefig('boot.pdf')
     pl.clf()
 
     fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(y_dist)
+    np.savetxt('_build/xy/bootstrap-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
 
     pl.errorbar(x, y, yerr=y_err, linestyle='none', marker='+')
     pl.plot(fit_x, fit_y_val)
     pl.fill_between(fit_x, fit_y_val + fit_y_err, fit_y_val - fit_y_err)
     pl.margins(0.05)
-    pl.savefig('averaged.pdf')
+    #pl.savefig('averaged.pdf')
     pl.clf()
 
 
