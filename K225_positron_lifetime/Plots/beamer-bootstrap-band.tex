@@ -11,6 +11,10 @@
             },
         ]
 
+
+        \addplot[band, fill=red] table {../xy/bootstrap-band.tsv} \closedcycle;
+        \addplot[red] table {../xy/bootstrap-final-fit.tsv};
+
         \addplot[
             black,
             mark=*,

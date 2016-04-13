@@ -18,5 +18,7 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
+
+        \addplot[red] table {../xy/bootstrap-normal-fit.tsv};
     \end{axis}
 \end{tikzpicture}

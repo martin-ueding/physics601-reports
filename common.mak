@@ -119,7 +119,7 @@ $(tex): Template.tex $(build)/template.js
 # CSV and TSV files is used. The LaTeX compilation is done with `latexmk` and
 # therefore that will be intelligent to only run the LaTeX engine if one of the
 # included files is changed.
-$(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.?sv)
+#$(plots_page_pdf): $(build)/template.js $(wildcard $(build)/xy/*.?sv)
 
 $(build)/template.js: crunch.py $(wildcard Data/*.*) $(wildcard *.py)| $(build)/xy $(build)/to_crop
 	@echo "$(on)Crunching the numbers$(off)"

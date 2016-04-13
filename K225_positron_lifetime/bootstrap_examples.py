@@ -62,9 +62,9 @@ def main():
 
         y_dist.append(boot_fit_y)
 
-        np.savetxt('_build/xy/bootstrap-{:02d}-resampled.tsv',
+        np.savetxt('_build/xy/bootstrap-{:02d}-resampled.tsv'.format(i),
                    np.column_stack([x, boot_y]))
-        np.savetxt('_build/xy/bootstrap-{:02d}-fit.tsv',
+        np.savetxt('_build/xy/bootstrap-{:02d}-fit.tsv'.format(i),
                    np.column_stack([fit_x, boot_fit_y]))
 
     pl.margins(0.05)
@@ -74,6 +74,8 @@ def main():
     fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(y_dist)
     np.savetxt('_build/xy/bootstrap-band.tsv',
                bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    np.savetxt('_build/xy/bootstrap-final-fit.tsv'.format(i),
+               np.column_stack([fit_x, fit_y_val]))
 
     pl.errorbar(x, y, yerr=y_err, linestyle='none', marker='+')
     pl.plot(fit_x, fit_y_val)
