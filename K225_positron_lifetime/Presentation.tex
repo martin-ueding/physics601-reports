@@ -15,14 +15,14 @@
 
 \graphicspath{{./}{../Figures/}}
 
-\title{Positron lifetime in metals and insulators}
-\subtitle{Experiment K225 -- Universität Bonn}
+\title{K225 Positron lifetime in metals and insulators}
+\subtitle{Advanced Lab Course -- Universität Bonn}
 \author{%
     Martin Ueding
     \and
     Lino Lemmer
 }
-\date{\daterange{2016-03-24}{2016-03-25}}
+\date{Experiment: \daterange{2016-03-24}{2016-03-25} \\ Talk: 2016-04-29}
 
 \newcommand\transition[2]{%
     {
@@ -83,20 +83,147 @@
 \subsection{Detector and electronics}
 
 \begin{frame}
+    \centering
     \includegraphics{beamer-scheme-176Lu}
 \end{frame}
 
 \begin{frame}
+    \centering
     \includegraphics{beamer-photomultiplier}
 \end{frame}
 
 \begin{frame}
+    \centering
     \includegraphics{beamer-fast-slow}
 \end{frame}
 
 \subsection{Bootstrap}
 
 \transition{Bootstrap}{boots-3}
+
+\begin{frame}
+    \frametitle{The usual way}
+    \framesubtitle{Some data}
+    \centering
+    \includegraphics{beamer-bootstrap-raw}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The usual way}
+    \framesubtitle{A linear fit}
+    \centering
+    \includegraphics{beamer-bootstrap-fit}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The usual way}
+    \framesubtitle{Fit parameter error estimation}
+
+    \begin{alertblock}{Problem}
+        What are the errors on the two fit parameters?
+    \end{alertblock}
+
+    \pause
+
+    \begin{block}{Common solutions}
+        \begin{itemize}
+            \item
+                Perform linear regression only
+            \item
+                Use diagonal of covariance matrix
+            \item
+                Attempt Gaussian error propagation
+        \end{itemize}
+    \end{block}
+
+    \pause
+
+    None of them are particularly good!
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Idea}
+
+    \begin{block}{Realization}
+            Given errors imply a distribution. Error is standard deviation of a
+            normal distribution.
+    \end{block}
+
+    \pause
+
+    \begin{block}{Method}
+        \begin{enumerate}
+            \item Draw samples from implied normal distribution
+            \item Perform analysis with re-sampled data
+            \item Look at distribution of results
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Original data}
+    \centering
+    \includegraphics{beamer-bootstrap-raw}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Resample each point}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-1.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Perform a single fit}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-2.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Add more samples}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-3.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Perform another fit}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-4.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{More samples and fit}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-5.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{More samples and fit}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-6.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Lots of fits}
+    \centering
+    \includegraphics{beamer-bootstrap-resample-7.pdf}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Resampling}
+    \framesubtitle{Band of fits}
+    \centering
+    \includegraphics{beamer-bootstrap-band}
+\end{frame}
 
 \section{Conduction}
 

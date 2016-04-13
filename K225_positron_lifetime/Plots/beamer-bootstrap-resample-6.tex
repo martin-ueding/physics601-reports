@@ -7,11 +7,17 @@
                 draw=none,
                 opacity=0.5,
             },
+            resampled points/.style={
+                blue,
+                mark=*,
+                only marks,
+                opacity=0.8,
+            },
+            resampled fit/.style={
+                red,
+                opacity=0.8,
+            },
         ]
-
-
-        \addplot[band, fill=red] table {../xy/bootstrap-band.tsv} \closedcycle;
-        \addplot[red] table {../xy/bootstrap-final-fit.tsv};
 
         \addplot[
             black,
@@ -20,5 +26,12 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
+
+        \foreach \num in {0,1,...,3}
+        {
+            \addplot[resampled points] table {../xy/bootstrap-\num-resampled.tsv};
+            \addplot[resampled fit] table  {../xy/bootstrap-\num-fit.tsv};
+        }
+
     \end{axis}
 \end{tikzpicture}

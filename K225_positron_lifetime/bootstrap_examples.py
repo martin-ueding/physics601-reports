@@ -52,7 +52,7 @@ def main():
 
     y_dist = []
 
-    for i in range(10):
+    for i in range(40):
         boot_y = [random.gauss(Y, err) for Y, err in zip(y, y_err)]
         popt, pconv = op.curve_fit(linear, x, boot_y)
         boot_fit_y = linear(fit_x, *popt)
@@ -62,9 +62,9 @@ def main():
 
         y_dist.append(boot_fit_y)
 
-        np.savetxt('_build/xy/bootstrap-{:02d}-resampled.tsv'.format(i),
+        np.savetxt('_build/xy/bootstrap-{:d}-resampled.tsv'.format(i),
                    np.column_stack([x, boot_y]))
-        np.savetxt('_build/xy/bootstrap-{:02d}-fit.tsv'.format(i),
+        np.savetxt('_build/xy/bootstrap-{:d}-fit.tsv'.format(i),
                    np.column_stack([fit_x, boot_fit_y]))
 
     pl.margins(0.05)
