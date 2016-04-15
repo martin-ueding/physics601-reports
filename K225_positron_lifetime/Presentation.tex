@@ -494,9 +494,9 @@
 
     Model is a combination of
     \begin{itemize}
-        \item Resolution function
-        \item Short lived component
-        \item Long lived component
+        \item Resolution function (width, central value)
+        \item Short lived component (lifetime, amplitude)
+        \item Long lived component (lifetime, amplitude)
         \item Constant offset
     \end{itemize}
 \end{frame}
@@ -531,19 +531,62 @@
     \includegraphics{beamer-arrhenius}
 \end{frame}
 
-\subsection{Acyclic glass}
+\begin{frame}
+    \frametitle{Result}
+
+    Our result:
+    \[
+        H_\text t = \SI{<< Ht_eV >>}{\electronvolt}
+    \]
+
+    \pause
+
+    Literature \parencite[(7a)]{Weiler/Vacancy_formation}:
+    \[
+        H_\text t = \SI{0.54 +- 0.03}{\electronvolt}
+    \]
+
+    \alert{Does not match at all!}
+\end{frame}
+
+\subsection{Acrylic glass}
 
 \begin{frame}
     \frametitle{Lifetime in acrylic glass}
+
+    \centering
     \includegraphics{beamer-acrylic}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Lifetime in acrylic glass}
+    \frametitle{Lifetime in acrylic glass (zoom)}
+
+    \centering
     \includegraphics{beamer-acrylic-zoom}
 \end{frame}
 
-        %\includegraphics{lifetime-<< temp >>K}
+\begin{frame}
+    \frametitle{Fit results}
+
+    Preliminary fit:
+    \[
+        \tau_0 = \SI{<< acryl_tau_0_lin >>}{\nano\second}
+        \qquad
+        \tau_\text t = \SI{<< acryl_tau_t_lin >>}{\nano\second}
+    \]
+
+    Complete fit:
+        \begin{gather*}
+            \tau_0 = \SI{<< acryl_tau_0 >>}{\nano\second}
+            \qquad
+            \tau_\text t = \SI{<< acryl_tau_t >>}{\nano\second} \\
+            \tau_\text f = \SI{<< acryl_tau_f >>}{\nano\second}
+            \qquad
+            \bar\tau = \SI{<< acryl_tau_bar >>}{\nano\second}
+        \end{gather*}
+\end{frame}
+
+% \includegraphics{lifetime-<< temp >>K}
 
 \begin{frame}
     \frametitle{References}
