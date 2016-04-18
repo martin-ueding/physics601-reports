@@ -328,7 +328,10 @@
 
     \IfFileExists{\bibliographyfile}{
         \bibliography{\bibliographyfile}
-        \AtEndDocument{\printbibliography}
+        \if@beamer
+        \else
+            \AtEndDocument{\printbibliography}
+        \fi
     }{
         \PackageError{header}{Bibliography file not found!}
         {Try to fix the path of the bibliographyfile that is currently set to \bibliographyfile.}

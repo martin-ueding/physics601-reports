@@ -56,11 +56,15 @@
 \subsection{Positron sources}
 
 \begin{frame}
-\includegraphics{beamer-na22}
+
+    \centering
+    \includegraphics{beamer-na22}
 \end{frame}
 
 \begin{frame}
-% \includegraphics{beamer-beta}
+
+    \centering
+    \includegraphics{beamer-beta}
 \end{frame}
 
 \subsection{Positron decay}
@@ -71,11 +75,11 @@
     \begin{columns}[c]
         \begin{column}{.5\textwidth}
             \centering
-%             \includegraphics{beamer-two-photon}
+            \includegraphics{beamer-two-photon}
         \end{column}
         \begin{column}{.5\textwidth}
             \centering
-%             \includegraphics{beamer-three-photon}
+            \includegraphics{beamer-three-photon}
         \end{column}
     \end{columns}
 \end{frame}
@@ -94,7 +98,7 @@
 
 \begin{frame}
     \centering
-%     \includegraphics{beamer-fast-slow}
+    \includegraphics{beamer-fast-slow}
 \end{frame}
 
 \subsection{Bootstrap}
@@ -347,28 +351,40 @@
 \subsection{Slow circuit setup}
 
 \begin{frame}
+
+    \centering
     \includegraphics{beamer-lyso-li}
 \end{frame}
 
 \begin{frame}
+
+    \centering
     \includegraphics{beamer-lyso-re}
 \end{frame}
 
 \begin{frame}
+
+    \centering
     \includegraphics{beamer-na-li}
 \end{frame}
 
 \begin{frame}
+
+    \centering
     \includegraphics{beamer-na-re}
 \end{frame}
 
 \begin{frame}
     \frametitle{SCA and coincidence on \SI{511}{\kilo\electronvolt}}
+
+    \centering
     \includegraphics[height=\oscillatorSize\textheight]{br-1-sca-coincidence-511}
 \end{frame}
 
 \begin{frame}
     \frametitle{SCA and slow-signal on \SI{511}{\kilo\electronvolt}}
+
+    \centering
     \includegraphics[height=\oscillatorSize\textheight]{br-2-sca-and-slow}
 \end{frame}
 
@@ -401,10 +417,6 @@
 \end{frame}
 
 \begin{frame}
-    \includegraphics{beamer-time_gauge}
-\end{frame}
-
-\begin{frame}
     \includegraphics[height=\oscillatorSize\textheight]{br-7-sca-coincidence-1275}
 \end{frame}
 
@@ -416,6 +428,8 @@
 
 \begin{frame}
     \frametitle{Lifetime at room temperature}
+
+    \centering
     \includegraphics{beamer-lifetime-295K}
 \end{frame}
 
@@ -423,44 +437,156 @@
 
 \transition{Analysis}{crunch1}
 
+\subsection{Time gauge}
+
+\begin{frame}
+    \frametitle{Conversion}
+
+    We need to convert MCA channels into durations.
+\end{frame}
+
+\begin{frame}
+    \frametitle{Recall the prompt curves}
+
+    \centering
+    \includegraphics{beamer-prompts_short}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Channel -- delay relation}
+
+    \centering
+    \includegraphics{beamer-time_gauge}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Channel -- delay relation}
+
+    A linear fit (with Jackknife) gives
+    \SI{<< time_gauge_slope >>}{\milli\second} per channel
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Time resolution}
+
+    \centering
+    \includegraphics{beamer-prompts_long}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Time resolution}
+
+    Resolution of \SI{<< time_resolution >>}{\nano\second}
+\end{frame}
+
 \subsection{Lifetimes}
 
 \begin{frame}
-    \frametitle{Extracted lifetime}
-    \includegraphics{beamer-taus}
+    \frametitle{Now to the lifetime spectra}
+    
+    \centering
+    \includegraphics{beamer-lifetime-295K}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Lifetime model}
+
+    Model is a combination of
+    \begin{itemize}
+        \item Resolution function (width, central value)
+        \item Short lived component (lifetime, amplitude)
+        \item Long lived component (lifetime, amplitude)
+        \item Constant offset
+    \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{Relative intensities}
+
+    \centering
     \includegraphics{beamer-intensities}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Extracted lifetimes}
+
+    \centering
+    \includegraphics{beamer-taus}
 \end{frame}
 
 \subsection{Vacancy formation enthalpy}
 
 \begin{frame}
     \frametitle{Mean lifetime / S-curve}
+
+    \centering
     \includegraphics{beamer-s_curve}
 \end{frame}
 
 \begin{frame}
     \frametitle{Arrhenius plot}
 
+    \centering
     \includegraphics{beamer-arrhenius}
 \end{frame}
 
-\subsection{Acyclic glass}
+\begin{frame}
+    \frametitle{Result}
+
+    Our result:
+    \[
+        H_\text t = \SI{<< Ht_eV >>}{\electronvolt}
+    \]
+
+    \pause
+
+    Literature \parencite[(7a)]{Weiler/Vacancy_formation}:
+    \[
+        H_\text t = \SI{0.54 +- 0.03}{\electronvolt}
+    \]
+
+    \alert{Does not match at all!}
+\end{frame}
+
+\subsection{Acrylic glass}
 
 \begin{frame}
     \frametitle{Lifetime in acrylic glass}
+
+    \centering
     \includegraphics{beamer-acrylic}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Lifetime in acrylic glass}
+    \frametitle{Lifetime in acrylic glass (zoom)}
+
+    \centering
     \includegraphics{beamer-acrylic-zoom}
 \end{frame}
 
-        %\includegraphics{lifetime-<< temp >>K}
+\begin{frame}
+    \frametitle{Fit results}
+
+    Preliminary fit:
+    \[
+        \tau_0 = \SI{<< acryl_tau_0_lin >>}{\nano\second}
+        \qquad
+        \tau_\text t = \SI{<< acryl_tau_t_lin >>}{\nano\second}
+    \]
+
+    Complete fit:
+        \begin{gather*}
+            \tau_0 = \SI{<< acryl_tau_0 >>}{\nano\second}
+            \qquad
+            \tau_\text t = \SI{<< acryl_tau_t >>}{\nano\second} \\
+            \tau_\text f = \SI{<< acryl_tau_f >>}{\nano\second}
+            \qquad
+            \bar\tau = \SI{<< acryl_tau_bar >>}{\nano\second}
+        \end{gather*}
+\end{frame}
+
+\includegraphics{lifetime-<< temp >>K}
 
 \begin{frame}
     \frametitle{References}
