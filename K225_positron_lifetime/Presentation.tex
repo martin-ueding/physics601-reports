@@ -152,19 +152,33 @@
 
 \begin{frame}
     \frametitle{Photomultiplier}
-    \centering
     \includegraphics{beamer-photomultiplier}
     \pause
     Different signal types depending on where signal is taken:
     \begin{itemize}
         \item 
-            Anode: Rising quickly, possibly saturated $\Rightarrow$ Fast-signal
+            Anode: Rising quickly, possibly saturated $\Rightarrow$ fast signal
         \item
-            Dinode: Rising slower, energy proportional $\Rightarrow$ Slow-signal
+            Dinode: Rising slower, energy proportional $\Rightarrow$ slow signal
     \end{itemize}
 \end{frame}
 
 \begin{frame}
+    \frametitle{Electronic components}
+    \begin{description}
+    \item[\textsc{sca}]
+        “Single channel analizer”. Takes analog signal, gives digital pulse if amplitude lies in certain interval (“\textsc{sca} window”)
+    \item[\textsc{cfd}]
+        “Constant fraction discriminator”. Takes analog signal, gives digital pulse if amplitude lies above a certain value when a defined fraction of the amplitude is reached
+    \item[\textsc{tac}]
+        “Time-amplitude converter”. Takes two digital pulses, gives a signal with amplitude proportional to the time between the two pulses
+    \item[\textsc{mca}]
+        “Multi channel analizer”. Creates histogram of incoming analog pulse heights
+    \end{description}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Fast-slow-coincidence circuit}
     \centering
     \includegraphics{beamer-fast-slow}
 \end{frame}
