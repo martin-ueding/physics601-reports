@@ -43,7 +43,7 @@
     }
 }
 
-\newcommand\oscillatorSize{0.7}
+\newcommand\oscillatorSize{0.6}
 
 \begin{document}
 
@@ -541,41 +541,63 @@
 \end{frame}
 
 \begin{frame}
-
-\end{frame}
-
-\begin{frame}
-    \frametitle{SCA and coincidence on \SI{511}{\kilo\electronvolt}}
-
-    \centering
-    \includegraphics[height=\oscillatorSize\textheight]{br-1-sca-coincidence-511}
-\end{frame}
-
-\begin{frame}
-    \frametitle{SCA and slow-signal on \SI{511}{\kilo\electronvolt}}
-
-    \centering
-    \includegraphics[height=\oscillatorSize\textheight]{br-2-sca-and-slow}
+    \frametitle{SCA coincidence on \SI{511}{\kilo\electronvolt}}
+    \begin{columns}
+        \column{.4\textwidth}
+        \begin{itemize}
+            \item 
+                Both SCA windows on \SI{511}{\kilo\electronvolt}
+            \item
+                Outputs on oscilloscope
+            \item
+                Check for coincidence
+        \end{itemize}
+        \pause
+        \column{.6\textwidth}
+        \includegraphics[height=\oscillatorSize\textheight]{br-1-sca-coincidence-511}
+    \end{columns}
 \end{frame}
 
 \subsection{Fast circuit setup}
 
-\begin{frame}
-    \includegraphics[height=\oscillatorSize\textheight]{br-3-cfd-and-slow}
-\end{frame}
 
 \begin{frame}
-    \includegraphics[height=\oscillatorSize\textheight]{br-4-cfd-delay}
+    \frametitle{Fast circuit setup}
+    \begin{columns}
+        \column{.4\textwidth}
+        \begin{itemize}
+            \item<1->
+                Raise CFD threshold until zero line in slow signal vanishes
+            \item<3->
+                Add delay in \emph{stop} branch
+        \end{itemize}
+        \column{.6\textwidth}
+        \includegraphics<2>[height=\oscillatorSize\textheight]{br-3-cfd-and-slow}
+        \includegraphics<4>[height=\oscillatorSize\textheight]{br-4-cfd-delay}
+    \end{columns}
 \end{frame}
 
 \subsection{Time calibration}
 
 \begin{frame}
-    \includegraphics[height=\oscillatorSize\textheight]{br-5-tac-511}
-\end{frame}
-
-\begin{frame}
-    \includegraphics[height=\oscillatorSize\textheight]{br-6-tac-and-coincidence-511}
+    \frametitle{Time calibration}
+    \begin{columns}
+        \column{.4\textwidth}
+        \begin{itemize}
+            \item 
+                SCA coincidence checked
+            \item<2->
+                Check simultaneousness of TAC and coincidence unit
+            \item<4->
+                Measure prompt curve
+            \item<5->
+                After adding \SI{4}{\nano\second} delay measure again
+            \item<6>
+                Measure 5 times for \SI{2}{\minute}, last time for \SI{20}{\minute}
+        \end{itemize}
+        \column{.6\textwidth}
+        \includegraphics<3->[height=\oscillatorSize\textheight]{br-6-tac-and-coincidence-511}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
