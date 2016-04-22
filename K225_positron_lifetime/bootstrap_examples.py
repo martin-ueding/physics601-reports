@@ -23,12 +23,9 @@ def main(T):
 
     NUM_POINTS = 7
 
-    # x = np.linspace(1, 5, NUM_POINTS)
-    # errs = [np.abs(random.gauss(1, 0.5)) for X in x]
-    # y = [random.gauss(X, err) for X, err in zip(x, errs)]
-
-    # np.savetxt('example.txt',
-    #            np.column_stack([x, y, errs]))
+    x = np.linspace(1, 5, NUM_POINTS)
+    errs = np.ones(x.shape)
+    y = [random.gauss(X, err) for X, err in zip(x, errs)]
 
     data = np.loadtxt('example.txt')
     x = data[:, 0]
