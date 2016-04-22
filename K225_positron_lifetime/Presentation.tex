@@ -495,6 +495,10 @@
 \begin{frame}
     \frametitle{Comparison of methods}
     \framesubtitle{Other data sets}
+
+    Values: $a = << bootstrap_small_pconv_val[0] >>$, $b = <<
+    bootstrap_small_pconv_val[1] >>$.
+
     \begin{tabular}{l*6l}
         \toprule
         & \multicolumn{2}{c}{large}
@@ -530,9 +534,6 @@
         & << ' & '.join(bootstrap_large_choice_err) >> \\
         \bottomrule
     \end{tabular}
-
-     Values: $a = << bootstrap_small_pconv_val[0] >>$, $b = <<
-     bootstrap_small_pconv_val[1] >>$.
 \end{frame}
 
 \begin{frame}
@@ -717,7 +718,7 @@
     \frametitle{Channel -- delay relation}
 
     A linear fit (with Jackknife) gives
-    \SI{<< time_gauge_slope >>}{\milli\second} per channel
+    \SI{<< time_gauge_slope >>}{\nano\second} per channel
 \end{frame}
 
 
