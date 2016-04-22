@@ -18,21 +18,23 @@ def linear(x, a, b):
     return a * x + b
 
 
-def main(T):
+def main(T={}):
     options = _parse_args()
 
     NUM_POINTS = 7
 
-    x = np.linspace(1, 5, NUM_POINTS)
-    errs = np.ones(x.shape)
-    y = [random.gauss(X, err) for X, err in zip(x, errs)]
+    x = np.linspace(1, 7, NUM_POINTS)
+    y_err = np.ones(x.shape)
+    y = [random.gauss(X, err) for X, err in zip(x, y_err)]
 
-    data = np.loadtxt('example.txt')
-    x = data[:, 0]
-    y = data[:, 1]
-    y_err = data[:, 2]
+    #data = np.loadtxt('example.txt')
+    #x = data[:, 0]
+    #y = data[:, 1]
+    #y_err = data[:, 2]
 
     popt, pconv = op.curve_fit(linear, x, y, sigma=y_err)
+
+    print(pconv)
 
     fit_x = np.linspace(np.min(x), np.max(x), 100)
     fit_y = linear(fit_x, *popt)
