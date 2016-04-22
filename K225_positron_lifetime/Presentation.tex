@@ -15,6 +15,13 @@
 
 \graphicspath{{./}{../Figures/}}
 
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
 \title{K225 Positron lifetime in metals and insulators}
 \subtitle{Advanced Lab Course -- Universität Bonn}
 \author{%
@@ -46,6 +53,10 @@
 \newcommand\oscillatorSize{0.6}
 
 \begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
 
 \begin{frame}
     \titlepage
@@ -219,6 +230,8 @@
 \end{frame}
 
 \subsection{Detector and electronics}
+
+\transition{Experimental setup}{rack-and-detector}
 
 \begin{frame}
     \frametitle{\textsc{Lyso} scintillator}
@@ -483,6 +496,7 @@
     \frametitle{Comparison of methods}
     \framesubtitle{Other data sets}
     \begin{tabular}{l*6l}
+        \toprule
         & \multicolumn{2}{c}{large}
         & \multicolumn{2}{c}{medium}
         & \multicolumn{2}{c}{small}
@@ -514,6 +528,7 @@
         & << ' & '.join(bootstrap_small_choice_err) >>
         & << ' & '.join(bootstrap_normal_choice_err) >>
         & << ' & '.join(bootstrap_large_choice_err) >> \\
+        \bottomrule
     \end{tabular}
 
      Values: $a = << bootstrap_small_pconv_val[0] >>$, $b = <<
@@ -786,6 +801,8 @@
     \]
 
     \alert{Does not match at all!}
+
+    % TODO Is there a double log taken?
 \end{frame}
 
 \subsection{Acrylic glass}
@@ -826,6 +843,16 @@
 \end{frame}
 
 % \includegraphics{lifetime-<< temp >>K}
+
+\begin{frame}
+    \frametitle{Conclusion}
+
+    % TODO
+\end{frame}
+
+\begin{frame}
+    \titlepage
+\end{frame}
 
 \begin{frame}
     \frametitle{References}
