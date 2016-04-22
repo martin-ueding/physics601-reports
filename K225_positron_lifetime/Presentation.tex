@@ -455,28 +455,8 @@
 \end{frame}
 
 \begin{frame}
-    \frametitle{Resampling and Jackknife}
-
-    Both methods can be combined!
-\end{frame}
-
-\begin{frame}
-    \frametitle{Resampling and Jackknife}
-    \framesubtitle{Band of fits}
-    \centering
-    \includegraphics{beamer-combined-band}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Resampling and Jackknife}
-    \framesubtitle{Band of fits}
-    \centering
-    \includegraphics{beamer-combined-band2}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Resampling and Jackknife}
-    \framesubtitle{Comparison of methods}
+    \frametitle{Comparison of methods}
+    \framesubtitle{Current data set}
     {
         \centering
         \begin{tabular}{lSS}
@@ -486,10 +466,9 @@
             & {$b$}
             \\
             \midrule
-            \texttt{sqrt(pconv.diagonal())} & << ' & '.join(pconv_example_popt) >> \\
-            Resampling & << ' & '.join(bootstrap_example_popt) >> \\
-            Jackknife & << ' & '.join(jackknife_example_popt) >> \\
-            Combined & << ' & '.join(combined_example_popt) >> \\
+            \texttt{sqrt(pconv.diagonal())} & << ' & '.join(bootstrap_normal_pconv_popt) >> \\
+            Resampling & << ' & '.join(bootstrap_normal_resampling_popt) >> \\
+            Jackknife & << ' & '.join(bootstrap_normal_jackknife_popt) >> \\
             \bottomrule
         \end{tabular}
     }
@@ -498,10 +477,47 @@
 
     Data is generated from $y(x) = 1 \cdot x + 0$.
 
-    \pause
+\end{frame}
 
-    Standard method underestimates the error.
+\begin{frame}
+    \frametitle{Comparison of methods}
+    \framesubtitle{Other data sets}
+    \begin{tabular}{l*6l}
+        & \multicolumn{2}{c}{large}
+        & \multicolumn{2}{c}{medium}
+        & \multicolumn{2}{c}{small}
+        \\
+        \cmidrule(rl){2-3}
+        \cmidrule(rl){4-5}
+        \cmidrule(l){6-7}
+        Method
+        & $a$
+        & $b$
+        & $a$
+        & $b$
+        & $a$
+        & $b$ \\
+        \midrule
+        pconv
+        & << ' & '.join(bootstrap_small_pconv_err) >>
+        & << ' & '.join(bootstrap_normal_pconv_err) >>
+        & << ' & '.join(bootstrap_large_pconv_err) >> \\
+        Resampling
+        & << ' & '.join(bootstrap_small_resampling_err) >>
+        & << ' & '.join(bootstrap_normal_resampling_err) >>
+        & << ' & '.join(bootstrap_large_resampling_err) >> \\
+        Jackknife
+        & << ' & '.join(bootstrap_small_jackknife_err) >>
+        & << ' & '.join(bootstrap_normal_jackknife_err) >>
+        & << ' & '.join(bootstrap_large_jackknife_err) >> \\
+        Choice
+        & << ' & '.join(bootstrap_small_choice_err) >>
+        & << ' & '.join(bootstrap_normal_choice_err) >>
+        & << ' & '.join(bootstrap_large_choice_err) >> \\
+    \end{tabular}
 
+     Values: $a = << bootstrap_small_pconv_val[0] >>$, $b = <<
+     bootstrap_small_pconv_val[1] >>$.
 \end{frame}
 
 \begin{frame}

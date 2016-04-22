@@ -43,7 +43,9 @@ def do_resampling(T, prefix, x, y, y_err):
                np.column_stack([fit_x, fit_y_val]))
 
     popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
-    T['bootstrap_{}_example_popt'.format(prefix)] = siunitx(popt_val, popt_err, error_digits=2)
+    popt_val, pconv = op.curve_fit(linear, x, y, sigma=y_err)
+    T['bootstrap_{}_popt'.format(prefix)] = siunitx(popt_val, popt_err, error_digits=2)
+    T['bootstrap_{}_err'.format(prefix)] = siunitx(popt_err)
 
 
 def do_jackknife(T, prefix, x, y, y_err):
@@ -71,8 +73,38 @@ def do_jackknife(T, prefix, x, y, y_err):
     np.savetxt('_build/xy/bootstrap-{}-final-fit.tsv'.format(prefix),
                np.column_stack([fit_x, fit_y_val]))
 
+
     popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
-    T['bootstrap_{}_example_popt'.format(prefix)] = siunitx(popt_val, popt_err, error_digits=2)
+    popt_val, pconv = op.curve_fit(linear, x, y, sigma=y_err)
+    T['bootstrap_{}_popt'.format(prefix)] = siunitx(popt_val, popt_err, error_digits=2)
+    T['bootstrap_{}_err'.format(prefix)] = siunitx(popt_err)
+
+
+def do_choice(T, prefix, x, y, y_err):
+    fit_x = np.linspace(np.min(x), np.max(x), 100)
+    y_dist = []
+    popt_dist = []
+    for i in range(len(x)):
+        choice_x = bootstrap.generate_sample(x)
+        choice_y = bootstrap.generate_sample(y)
+        choice_y_err = bootstrap.generate_sample(y_err)
+
+        popt, pconv = op.curve_fit(linear, choice_x, choice_y, sigma=choice_y_err)
+        boot_fit_y = linear(fit_x, *popt)
+
+        y_dist.append(boot_fit_y)
+        popt_dist.append(popt)
+
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(y_dist)
+    np.savetxt('_build/xy/bootstrap-{}-band.tsv'.format(prefix),
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    np.savetxt('_build/xy/bootstrap-{}-final-fit.tsv'.format(prefix),
+               np.column_stack([fit_x, fit_y_val]))
+
+    popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
+    popt_val, pconv = op.curve_fit(linear, x, y, sigma=y_err)
+    T['bootstrap_{}_popt'.format(prefix)] = siunitx(popt_val, popt_err, error_digits=2)
+    T['bootstrap_{}_err'.format(prefix)] = siunitx(popt_err)
 
 
 def do_pconv(T, prefix, x, y, y_err):
@@ -86,14 +118,9 @@ def do_pconv(T, prefix, x, y, y_err):
     np.savetxt('_build/xy/bootstrap-{}-normal-fit.tsv'.format(prefix),
                np.column_stack([fit_x, fit_y]))
 
-    T['bootstrap_{}_example_popt'.format(prefix)] = siunitx(popt, np.sqrt(pconv.diagonal()), error_digits=2)
-
-
-def generate_large_chi_sq(num_points):
-    x = np.linspace(1, 7, num_points)
-    y_err = np.ones(x.shape)
-    y = [random.gauss(X, err * 3) for X, err in zip(x, y_err)]
-    return x, y, y_err
+    T['bootstrap_{}_popt'.format(prefix)] = siunitx(popt, np.sqrt(pconv.diagonal()), error_digits=2)
+    T['bootstrap_{}_val'.format(prefix)] = siunitx(popt)
+    T['bootstrap_{}_err'.format(prefix)] = siunitx(np.sqrt(pconv.diagonal()))
 
 
 def generate_normal_chi_sq(num_points):
@@ -101,12 +128,6 @@ def generate_normal_chi_sq(num_points):
     y_err = np.ones(x.shape)
     y = [random.gauss(X, err) for X, err in zip(x, y_err)]
     return x, y, y_err
-
-
-def generate_small_chi_sq(num_points):
-    x = np.linspace(1, 7, num_points)
-    y_err = np.ones(x.shape)
-    return x, x, y_err
 
 
 def main(T={}):
@@ -119,16 +140,17 @@ def main(T={}):
     do_pconv(T, 'normal_pconv', x, y, y_err)
     do_resampling(T, 'normal_resampling', x, y, y_err)
     do_jackknife(T, 'normal_jackknife', x, y, y_err)
+    do_choice(T, 'normal_choice', x, y, y_err)
 
-    x, y, y_err = generate_small_chi_sq(NUM_POINTS)
-    do_pconv(T, 'small_pconv', x, y, y_err)
-    do_resampling(T, 'small_resampling', x, y, y_err)
-    do_jackknife(T, 'small_jackknife', x, y, y_err)
+    do_pconv(T, 'small_pconv', x, y, y_err*10)
+    do_resampling(T, 'small_resampling', x, y, y_err*10)
+    do_jackknife(T, 'small_jackknife', x, y, y_err*10)
+    do_choice(T, 'small_choice', x, y, y_err*10)
 
-    x, y, y_err = generate_large_chi_sq(NUM_POINTS)
-    do_pconv(T, 'large_pconv', x, y, y_err)
-    do_resampling(T, 'large_resampling', x, y, y_err)
-    do_jackknife(T, 'large_jackknife', x, y, y_err)
+    do_pconv(T, 'large_pconv', x, y, y_err/10)
+    do_resampling(T, 'large_resampling', x, y, y_err/10)
+    do_jackknife(T, 'large_jackknife', x, y, y_err/10)
+    do_choice(T, 'large_choice', x, y, y_err/10)
 
     pp.pprint(T)
 
