@@ -4,6 +4,7 @@
 # Copyright © 2016 Martin Ueding <dev@martin-ueding.de>
 
 import argparse
+import pprint
 import random
 
 import matplotlib.pyplot as pl
@@ -20,12 +21,14 @@ def linear(x, a, b):
 
 def main(T={}):
     options = _parse_args()
+    pp = pprint.PrettyPrinter()
 
     NUM_POINTS = 7
 
     x = np.linspace(1, 7, NUM_POINTS)
     y_err = np.ones(x.shape)
     y = [random.gauss(X, err) for X, err in zip(x, y_err)]
+    y = x
 
     #data = np.loadtxt('example.txt')
     #x = data[:, 0]
@@ -119,7 +122,7 @@ def main(T={}):
     popt_val, popt_err = bootstrap.average_and_std_arrays(popt_dist)
     T['combined_example_popt'] = siunitx(popt_val, popt_err, error_digits=2)
 
-
+    pp.pprint(T)
 
 
 def _parse_args():
