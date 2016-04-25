@@ -21,7 +21,7 @@ def load_file(path):
         reader = csv.reader(f)
         for row in reader:
             x.append(float(row[3]))
-            y.append(float(row[3]))
+            y.append(float(row[4]))
 
     return np.array(x), np.array(y)
 
@@ -39,16 +39,15 @@ def load_dir(digit_str):
 
     if has1:
         x1, y1 = load_file(ch1_file)
-        if len(rvalue) == 0:
-            rvalue.append(x1)
+        rvalue.append(x1)
         rvalue.append(y1)
     if has2:
         x2, y2 = load_file(ch2_file)
-        if len(rvalue) == 0:
-            rvalue.append(x2)
+        rvalue.append(x2)
         rvalue.append(y2)
 
     return rvalue
+
 
 if __name__ == '__main__':
     print(load_dir('0000'))

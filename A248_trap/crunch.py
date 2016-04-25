@@ -23,6 +23,32 @@ import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
 import bootstrap
+import trek
+
+
+def dandify_plot():
+    pl.margins(0.05)
+    pl.tight_layout()
+    pl.grid(True)
+    pl.legend(loc='best')
+
+
+def job_some_osci(T):
+    x1, y1, x2, y2 = trek.load_dir('0020')
+    B_x1, B_y1, B_x2, B_y2 = trek.load_dir('0019')
+
+    fig, ax1 = pl.subplots()
+    ax2 = ax1.twinx()
+    ax1.plot(x1, y1, color='blue', label='Spectrum')
+    ax1.plot(B_x1, B_y1, color='green', label='Spectrum')
+    ax2.plot(x2, y2, color='red', label='MOT without B')
+    ax2.plot(B_x2, B_y2, color='red', label='MOT with B')
+    ax2.plot(B_x2, B_y2 - y2, color='orange', label='MOT signal')
+
+    dandify_plot()
+    pl.savefig('_build/mpl-20.pdf')
+    pl.savefig('_build/mpl-20.png')
+    pl.clf()
 
 
 def test_keys(T):
@@ -53,6 +79,8 @@ def main():
     # We use bootstrap and obtain different results every single time. This is
     # bad, therefore we fix the seed here.
     random.seed(0)
+
+    job_some_osci(T)
 
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
