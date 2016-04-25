@@ -26,6 +26,34 @@ import bootstrap
 import trek
 
 
+def subtract_images(number_str):
+    img_with = scipy.misc.imread('Figures/{}-mit.bmp'.format(number_str))
+    img_without = scipy.misc.imread('Figures/{}-ohne.bmp'.format(number_str))
+
+    difference = np.subtract(img_with.astype(int), img_without.astype(int))
+
+    print(img_with.dtype)
+
+    print(np.min(img_with), np.max(img_with))
+    print(np.min(img_without), np.max(img_without))
+    print(np.min(difference), np.max(difference))
+
+    old_min = np.min(difference)
+    old_max = np.max(difference)
+    span = old_max - old_min
+
+    #difference = (difference - old_min) * 255 / span
+
+    print(np.min(difference), np.max(difference))
+    print()
+
+    return difference
+
+
+def invert_image(image):
+    return 255 - image
+
+
 def dandify_plot():
     pl.margins(0.05)
     pl.tight_layout()
@@ -81,6 +109,12 @@ def main():
     random.seed(0)
 
     job_some_osci(T)
+
+    diff = subtract_images('03')
+    scipy.misc.imsave('_build/difference-3.png', diff)
+    scipy.misc.imsave('_build/difference-3-inv.png', invert_image(diff))
+    diff = subtract_images('04')
+    scipy.misc.imsave('_build/difference-4.png', diff)
 
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
