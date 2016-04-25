@@ -15,6 +15,9 @@ import numpy as np
 
 
 def load_file(path):
+    '''
+    Loads a file from the given path and returns X and Y values.
+    '''
     x = []
     y = []
     with open(path) as f:
@@ -27,6 +30,11 @@ def load_file(path):
 
 
 def load_dir(digit_str):
+    '''
+    Loads one or two channels from the data set indicated by a string of
+    numbers, say '0001'. Return value are either X, Y or X_1, Y_1, X_2, Y_2. It
+    should always be X_1 == X_2 as it is the same image.
+    '''
     path = 'Data/ALL{}'.format(digit_str)
 
     ch1_file = os.path.join(path, 'F{}CH1.CSV'.format(digit_str))
