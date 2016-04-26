@@ -129,7 +129,6 @@
     \begin{itemize}
         \item
             Hydrogen-like metastable bound state of electron and positron
-        \pause
         \item
             Two possible configurations:
             \begin{itemize}
@@ -138,13 +137,10 @@
                 \item
                     Ortho-positronium: spins parallel
             \end{itemize}
-        \pause
         \item
             Lifetime depends on if it is free or trapped and on configuration 
-        \pause
         \item
             Pick-off process reduces ortho-positronium's lifetime in presence of matter
-        \pause
         \item
             Too many free electrons in metals to form positronium
     \end{itemize}
@@ -157,7 +153,6 @@
     \begin{itemize}
         \item 
             Perfect metal is periodic lattice of one atom type
-        \pause
         \item
             Various defects can occur:
             \begin{itemize}
@@ -181,13 +176,11 @@
     \begin{itemize}
         \item
             Formation of vacancies temperature dependent
-        \pause
         \item
-            density of vacancies:
+            Density of vacancies:
             \[
                 C(T)=\exp\del{\frac{S_\text{t}}k}\exp\del{\frac{H_\text{t}}{kT}}
             \]
-        \pause
         \item
             $H_t$: Vacancy formation enthalpy
         \pause
@@ -223,7 +216,6 @@
 \begin{frame}
     \frametitle{\textsc{Lyso} scintillator}
     Operation of a scintillator known:
-    \pause
     \begin{itemize}
         \item 
             Ionizing radiation loses all its energy by exciting scintillator material
@@ -234,6 +226,7 @@
         \item
             Intensity proportional to particle's energy
     \end{itemize}
+    \pause
     \textsc{Lyso} scintillator is radioactive itself\\
     $\Rightarrow$ intrinsic energy calibration
 \end{frame}
@@ -260,13 +253,13 @@
 \begin{frame}
     \frametitle{Electronic components}
     \begin{description}
-    \item[\textsc{sca}]
+    \item[SCA]
         “Single channel analizer”. Takes analog signal, gives digital pulse if amplitude lies in certain interval (“\textsc{sca} window”)
-    \item[\textsc{cfd}]
+    \item[CFD]
         “Constant fraction discriminator”. Takes analog signal, gives digital pulse if amplitude lies above a certain value when a defined fraction of the amplitude is reached
-    \item[\textsc{tac}]
+    \item[TAC]
         “Time-amplitude converter”. Takes two digital pulses, gives a signal with amplitude proportional to the time between the two pulses
-    \item[\textsc{mca}]
+    \item[MCA]
         “Multi channel analizer”. Creates histogram of incoming analog pulse heights
     \end{description}
 \end{frame}
@@ -560,20 +553,19 @@
 
 \subsection{Fast circuit setup}
 
-
 \begin{frame}
     \frametitle{Fast circuit setup}
     \begin{columns}
         \column{.4\textwidth}
         \begin{itemize}
-            \item<1->
+            \item
                 Raise CFD threshold until zero line in slow signal vanishes
-            \item<3->
+            \item
                 Add delay in \emph{stop} branch
         \end{itemize}
         \column{.6\textwidth}
         \includegraphics<2>[height=\oscillatorSize\textheight]{br-3-cfd-and-slow}
-        \includegraphics<4>[height=\oscillatorSize\textheight]{br-4-cfd-delay}
+        \includegraphics<3>[height=\oscillatorSize\textheight]{br-4-cfd-delay}
     \end{columns}
 \end{frame}
 
