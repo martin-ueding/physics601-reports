@@ -27,16 +27,16 @@
             only marks,
             error bars/y dir=both,
             error bars/y explicit,
-        ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
+        ] table[y error index=2] {../xy/bootstrap-normal_pconv-normal-data.tsv};
 
         \foreach \num in {0,1}
         {
-            \addplot[resampled points] table {../xy/bootstrap-\num-resampled.tsv};
+            \addplot[resampled points] table {../xy/bootstrap-normal_resampling-\num-resampled.tsv};
         }
 
         \foreach \num in {0}
         {
-            \addplot[resampled fit] table  {../xy/bootstrap-\num-fit.tsv};
+            \addplot[resampled fit] table  {../xy/bootstrap-normal_resampling-\num-fit.tsv};
         }
 
 

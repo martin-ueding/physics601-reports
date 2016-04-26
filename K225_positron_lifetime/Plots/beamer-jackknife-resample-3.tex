@@ -25,14 +25,14 @@
             only marks,
             error bars/y dir=both,
             error bars/y explicit,
-        ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
+        ] table[y error index=2] {../xy/bootstrap-normal_pconv-normal-data.tsv};
 
         \foreach \num in {0,1}
         {
-            \addplot[resampled fit] table  {../xy/jackknife-\num-fit.tsv};
+            \addplot[resampled fit] table  {../xy/bootstrap-normal_jackknife-\num-fit.tsv};
         }
 
-        \addplot[resampled points] table {../xy/jackknife-1-resampled.tsv};
+        \addplot[resampled points] table {../xy/bootstrap-normal_jackknife-1-resampled.tsv};
 
     \end{axis}
 \end{tikzpicture}

@@ -12,8 +12,8 @@
         ]
 
 
-        \addplot[band, fill=red] table {../xy/bootstrap-band.tsv} \closedcycle;
-        \addplot[red] table {../xy/bootstrap-final-fit.tsv};
+        \addplot[band, fill=red] table {../xy/bootstrap-normal_resampling-band.tsv} \closedcycle;
+        \addplot[red] table {../xy/bootstrap-normal_resampling-final-fit.tsv};
 
         \addplot[
             black,
@@ -21,6 +21,6 @@
             only marks,
             error bars/y dir=both,
             error bars/y explicit,
-        ] table[y error index=2] {../xy/bootstrap-normal-data.tsv};
+        ] table[y error index=2] {../xy/bootstrap-normal_pconv-normal-data.tsv};
     \end{axis}
 \end{tikzpicture}

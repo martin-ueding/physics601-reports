@@ -722,6 +722,8 @@ def test_keys(T):
 def main():
     T = {}
 
+    random.seed(10000)
+
     bootstrap_examples.main(T)
 
     acryl_sampler()
