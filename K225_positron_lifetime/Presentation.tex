@@ -226,7 +226,8 @@
 \begin{frame}
     \frametitle{Fast-slow-coincidence circuit}
     \centering
-    \includegraphics{beamer-fast-slow}
+    \includegraphics<1>{beamer-fast-slow}
+    \includegraphics<2>{beamer-fast-slow-lyso}
 \end{frame}
 
 \begin{frame}
@@ -256,7 +257,7 @@
 \begin{frame}
     \frametitle{Fast-slow-coincidence circuit}
     \centering
-    \includegraphics{beamer-fast-slow}
+    \includegraphics{beamer-fast-slow-pm}
 \end{frame}
 
 \begin{frame}
@@ -269,28 +270,28 @@
         \item 
             Anode: Rising quickly, possibly saturated $\Rightarrow$ fast signal
         \item
-            Dinode: Rising slower, energy proportional $\Rightarrow$ slow signal
+            Dynode: Rising slower, energy proportional $\Rightarrow$ slow signal
     \end{itemize}
 \end{frame}
 
 \begin{frame}
-    \frametitle{Fast-slow-coincidence circuit}
-    \centering
-    \includegraphics{beamer-fast-slow}
-\end{frame}
-
-\begin{frame}
     \frametitle{Electronic components}
-    \begin{description}
+    \only<1,3,5,7>{\vspace{2cm}}
+    \includegraphics<1>{beamer-fast-slow-sca}
+    \includegraphics<3>{beamer-fast-slow-cfd}
+    \includegraphics<5>{beamer-fast-slow-tac}
+    \includegraphics<7>{beamer-fast-slow-mca}
+
+    \onslide<2,4,6,8>{\begin{description}
     \item[SCA]
-        “Single channel analizer”. Takes analog signal, gives digital pulse if amplitude lies in certain interval (“\textsc{sca} window”)
-    \item[CFD]
+        “Single channel analizer”. Takes analog signal, gives digital pulse if amplitude lies in certain interval (“SCA window”)
+    \item[CFD]<4,6,8>
         “Constant fraction discriminator”. Takes analog signal, gives digital pulse if amplitude lies above a certain value when a defined fraction of the amplitude is reached
-    \item[TAC]
+    \item[TAC]<6,8>
         “Time-amplitude converter”. Takes two digital pulses, gives a signal with amplitude proportional to the time between the two pulses
-    \item[MCA]
+    \item[MCA]<8>
         “Multi channel analizer”. Creates histogram of incoming analog pulse heights
-    \end{description}
+    \end{description}}
 \end{frame}
 
 \begin{frame}

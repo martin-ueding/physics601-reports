@@ -1,0 +1,49 @@
+\begin{tikzpicture}
+    \node[rectangle, draw] (source) at (0,0) {Source};
+    \node[rectangle, draw, ultra thick] (lyso1) at (0,1) {\textbf{LYSO}};
+    \node[rectangle, draw, ultra thick] (lyso2) at (0,-1) {\textbf{LYSO}};
+
+    \node[rectangle, draw] (pm1) at (2,1) {PM};
+    \node[rectangle, draw] (pm2) at (2,-1) {PM};
+
+    % slow
+    \node[rectangle, draw] (sca1) at (3.5,.5) {SCA};
+    \node[rectangle, draw] (sca2) at (3.5,-.5) {SCA};
+    \node[rectangle, draw] (coincidence) at (5.5,0) {Coincidence};
+
+    % fast
+    \node[rectangle, draw] (cfd1) at (7.,1.) {CFD};
+    \node[rectangle, draw] (cfd2) at (7.,-1.) {CFD};
+    \node[rectangle, draw] (delay) at (9.5,1.) {Delay};
+    \node[rectangle, draw] (tac) at (9.5,0) {TAC};
+
+    \node[rectangle, draw] (mca) at (7.5,0) {MCA};
+
+    % photons
+    
+    \draw[wave, ->] (source) to (lyso1);
+    \draw[wave, ->] (source) to (lyso2);
+
+    % analog
+
+    \draw[->] (lyso1) to (pm1);
+    \draw[->] (pm1) to (sca1);
+    \draw[->] (pm1) to (cfd1);
+
+    \draw[->] (lyso2) to (pm2);
+    \draw[->] (pm2) to (sca2);
+    \draw[->] (pm2) to (cfd2);
+
+    \draw[->] (tac) to (mca);
+
+    % digital
+
+    \draw[dashdotted, ->] (sca1) to (coincidence);
+    \draw[dashdotted, ->] (sca2) to (coincidence);
+    \draw[dashdotted, ->] (coincidence) to (mca);
+
+    \draw[dashdotted, ->] (cfd1) to (delay);
+    \draw[dashdotted, ->] (delay) to (tac);
+    \draw[dashdotted, ->] (cfd2) to (tac);
+
+\end{tikzpicture}
