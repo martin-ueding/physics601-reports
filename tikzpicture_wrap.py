@@ -14,6 +14,9 @@ template_text = r'''
 \usepackage[<< extra_opts >>]{../../../header}
 
 \usepackage{tikz}
+\tikzset{
+    wave/.style={decorate, decoration=snake}
+}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.9}
 
