@@ -5,6 +5,7 @@
 \usetheme{Malmoe}
 %\usetheme{Dresden}
 %\usetheme{Marburg}
+\useoutertheme{infolines}
 
 \usepackage[bibatend, beamer]{../../header}
 \usepackage{adjustbox}
@@ -15,12 +16,12 @@
 
 \graphicspath{{./}{../Figures/}}
 
-\addtobeamertemplate{navigation symbols}{}{%
-    \usebeamerfont{footline}%
-    \usebeamercolor[fg]{footline}%
-    \hspace{1em}%
-    \insertframenumber/\inserttotalframenumber
-}
+%\addtobeamertemplate{navigation symbols}{}{%
+%    \usebeamerfont{footline}%
+%    \usebeamercolor[fg]{footline}%
+%    \hspace{1em}%
+%    \insertframenumber/\inserttotalframenumber
+%}
 
 \title{K225 Positron lifetime in metals and insulators}
 \subtitle{Advanced Lab Course -- Universität Bonn}
@@ -29,7 +30,7 @@
     \and
     Lino Lemmer
 }
-\date{Experiment: \daterange{2016-03-24}{2016-03-25} \\ Talk: 2016-04-29}
+\date{2016-04-29}
 
 \newcommand\transition[2]{%
     {
@@ -854,10 +855,36 @@
 
 % \includegraphics{lifetime-<< temp >>K}
 
+\section{Conclusion}
+
 \begin{frame}
     \frametitle{Conclusion}
 
-    % TODO
+    \begin{columns}[t]
+        \begin{column}{0.4\linewidth}
+
+    \begin{block}{Time resolution}
+        \SI{<< time_resolution >>}{\nano\second}
+    \end{block}
+    
+    \begin{block}{Vacancy formation enthalpy}
+        $H_\mathrm t = \SI{<< Ht_eV >>}{\electronvolt}$
+    \end{block}
+
+        \end{column}
+        \hfill
+        \begin{column}{0.4\linewidth}
+
+    \begin{block}{Acrylic glass}
+        \begin{align*}
+            \tau_0 &= \SI{<< acryl_tau_0 >>}{\nano\second} \\
+            \tau_\mathrm t &= \SI{<< acryl_tau_t >>}{\nano\second} \\
+            \tau_\mathrm f &= \SI{<< acryl_tau_f >>}{\nano\second} \\
+            \bar\tau &= \SI{<< acryl_tau_bar >>}{\nano\second}
+        \end{align*}
+    \end{block}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
