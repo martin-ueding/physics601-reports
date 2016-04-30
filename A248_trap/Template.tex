@@ -81,12 +81,34 @@ which leads to a net acceleration. This effect causes the so called radiation pr
 To cool atoms down one has to make sure that only those atoms that move
 towards the laser beam feel this pressure. This can be done using the Doppler
 effect: In the rest system of the atom, that flies towards the laser beam, the
-photons of the laser are blue detuned, with $\nu'=\nu(1+v/c)$. To get those
-atoms on resonance again one has to detune the laser to the red.
+photons of the laser are blue detuned, with $\nu'=\nu(1+v/c)$, where $v$ is
+the velocity of the atom. To get those atoms on resonance again one has to
+detune the laser to the red.
 
 \subsection{Optical molasses}
 
-\subsection{Counterpropagating beams}
+The force of a laser with intensity $I$ and detuning $\delta$ on an atom can be expressed as
+\[
+    F_\text{radiation} = \frac{\hbar k\gamma}2\cdot\frac{I/I_\text{S}}{\del{2\frac{\delta +
+    kv}\Gamma}^2 + 1 + I/I_\text{S}}\, ,
+\]
+where $k$ denotes the wave vector of the photons, $\Gamma$ the decay rate of the
+excited state and $I_\text{S}$ the saturation intensity. This force is non zero
+at $v=0$ as we would need to cool down. To solve this one uses two
+counterpropagating laser beams with the same detuning. For small velocities
+this gives a frictional force:
+\[
+    F_\text{count} = -\frac{8\hbar k^2\delta}{\Gamma}
+    \frac{I/I_\text{S}}{\del{\del{2\delta/\Gamma}^2 + 1 + I/I_\text{S}}^2}
+    \cdot v \, .
+\]
+Applying three orthogonal pairs of lasers gives an effective deacceleration of
+atoms and with this a cooling. This setup is known as \emph{optical molasses}.
+This process is limited by heating due to spontaneous emission. This leads to
+the so called \emph{Doppler limit}:
+\[
+    T_\text{Doppler} = \frac{\hbar \Gamma}{2k_\text{B}} \, .
+\]
 
 \subsection{Cooling but no caught atoms}
 
