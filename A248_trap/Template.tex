@@ -90,7 +90,7 @@ detune the laser to the red.
 The force of a laser with intensity $I$ and detuning $\delta =
 \omega_\text{laser}-\omega_\text{res}$ on an atom can be expressed as
 \[
-    F_\text{radiation} = \frac{\hbar k\Gamma}2\cdot\frac{I/I_\text{S}}{\del{2\frac{\delta +
+    F_\text{radiation} = \frac{\hbar k\Gamma}2\cdot\frac{I/I_\text{S}}{\del{2\frac{\delta -
     kv}\Gamma}^2 + 1 + I/I_\text{S}}\, ,
 \]
 where $k$ denotes the wave vector of the photons, $\Gamma$ the decay rate of the
@@ -99,9 +99,9 @@ at $v=0$ as we would need to cool down. To solve this one uses two
 counterpropagating laser beams with the same detuning. For small velocities
 this gives a frictional force:
 \[
-    F_\text{count} = -\frac{8\hbar k^2\delta}{\Gamma}
+    F_\text{count} = \frac{8\hbar k^2\delta}{\Gamma}
     \frac{I/I_\text{S}}{\del{\del{2\delta/\Gamma}^2 + 1 + I/I_\text{S}}^2}
-    \cdot v \, .
+    \cdot v \underset{\delta<0}{=} -\alpha\cdot v \, .
 \]
 Applying three orthogonal pairs of lasers gives an effective deacceleration of
 atoms and with this a cooling. This setup is known as \emph{optical molasses}.
@@ -113,11 +113,38 @@ the so called \emph{Doppler limit}:
 
 \section{Magneto-optical trap}
 
-\subsection{Magnetic quadrupole field}
+Since the forces in the optical molasses are independent of space, the atoms
+have the possibility to diffuse out of the cooling area. Due to collisions
+those atoms get heated up again. We need an additional force that keeps the
+atoms inside that area. One possibility is to use a \emph{magneto optical trap}
+(\textsc{mot}).
 
-\subsection{Circularly polarized beams}
+To simplify the working principle we consider a two level system with one
+possible transition ($F=0 \to F=1$). Also we add a 1-dimensional linear
+increasing magnetic field (w.l.o.g.) along the $z$ axis, which is zero at
+$z=0$. Due to the Zeeman effect we get a space-dependent energy splitting of
+the three possible $F=1$ configurations, which causes a lowering of the $m=1$
+state's energy for $z<0$ and a lowering of the $m=-1$ level for $z>0$ (see
+Figure~\ref{fig:mot-principle}).
 
-\subsection{Position depending force}
+Now we add two counterpropagating laser beams with detuning $\delta<0$. If now
+the laser beam propagating in positive $z$ direction has a $\sigma^+$ helicity
+and the counterpropagating beam has a $\sigma^-$ helicity, atoms which are
+located at $z<0$ have a higher possibility to absorb $\sigma^+$ photons and
+hence get pushed back to $z=0$. For atoms at $z>0$ it is the other way around.
+There the absorption of a $\sigma^-$ photon is more likely, so that they 
+also get pushed back to $z=0$.
+
+While in reality the energy levels are way more complex the working principle
+remains the same.
+
+\begin{figure}
+    %TODO make this figure
+    \caption{%
+        Energy levels and transitions in a spatially varying magnetic field.
+    }
+    \label{fig:mot-principle}
+\end{figure}
 
 \section{Rubidium}
 
