@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+    \draw[ultra thick] (-4,3) node[left] {$F=1$}  -- (4,3) node[right] {$m=0$} ;
+    \draw[ultra thick] (-4,2.) -- (4,4.) node[right] {$m=+1$} ;
+    \draw[ultra thick] (-4,4.) -- (4,2.) node[right] {$m=-1$} ;
+
+    \draw[ultra thick] (-4, -1) node[left] {$F=0$}  -- (4,-1) node[right] {$m=0$} ;
+
+    \draw[dashed] (-4,2.5) -- (4,2.5);
+    \draw[<->] (-3.7,3) -- node[right] {$\hbar\delta$} (-3.7,2.5);
+
+    \draw[->] (-6,-2.5) -- (-6,-1.5) node[right] {$E$};
+    \draw[->] (-6,-2.5) -- (-5,-2.5) node[right] {$z$};
+
+    \draw[wave, ->] (-2,-1) to node[right] {$\sigma^+$} (-2,2.5);
+    \draw[wave, ->] (2,-1) to node[right] {$\sigma^-$} (2,2.5);
+\end{tikzpicture}
