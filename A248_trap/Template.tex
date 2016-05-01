@@ -173,7 +173,48 @@ state $F=3$ again and with this get the atom back in the cooling cycle
 
 \section{Doppler-free spectroscopy}
 
+Since the Doppler broadening of spectral lines at room temperature is orders of
+magnitude bigger than the natural linewidth, lines which lie close together can
+not be resolved. To nevertheless investigate those lines one has to use
+Doppler-free spectroscopy.
+
 \subsection{Pump and signal beam}
+
+For this two counterpropagating laser beams of same frequency are needed, a
+\emph{pump beam} and a \emph{probe beam} with lower intensity. The absorption
+of the probe beam gets recorded. For a simple understanding again consider a
+two level system with ground state $\ket{g}$, excited state $\ket{e}$ and
+energy difference of $\hbar\omega_0$. If the lasers both have the frequency
+$\omega_0$ atoms with $v\neq0$ along the laser's direction will be out of
+resonance due to the Doppler effect. Those atoms with $v\approx 0$ will be
+excited by the pump beam and hence the absorption of the probe beam is very
+low. If the lasers are detuned to the red from the resonance frequency the pump
+beam and the probe beam excite oncoming atoms with respect to their own
+propagation direction. Therefor the absorption of the probe beam is high.
+The same holds for blue detuned lasers. 
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{doppler-free-2-level}
+        \caption{%
+            Two level system.
+        }
+        \label{fig:doppler-free-2-level}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{doppler-free-3-level}
+        \caption{%
+            Three level system.
+        }
+        \label{fig:doppler-free-3-level}
+    \end{subfigure}
+    \caption{%
+        Absorption spectra in Doppler-free spectroscopy.
+    }
+\end{figure}
 
 \subsection{Groups of atoms with similar velocity}
 
