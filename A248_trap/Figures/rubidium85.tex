@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+    \draw[ultra thick] (0,0) -- (6,0) node[right] {$F=2$};
+    \draw[ultra thick] (0,1.5) -- (6,1.5) node[right] {$F=3$};
+
+    \draw[ultra thick] (0,3.5) -- (6,3.5) node[right] {$F'=1$};
+    \draw[ultra thick] (0,4.0) -- (6,4.0) node[right] {$F'=2$};
+    \draw[ultra thick] (0,5.0) -- (6,5.0) node[right] {$F'=3$};
+    \draw[ultra thick] (0,6.5) -- (6,6.5) node[right] {$F'=4$};
+
+    \node (low_state) at (-1,.75) {$5\text{S}_{1/2}$};
+    \node (high_state) at (-1,5.) {$5\text{P}_{3/2}$};
+
+    \draw[<->] (0.7,0) -- (0.7,3.5);
+    \draw[<->] (1.5,0) -- (1.5,4.0);
+    \draw[<->, red] (2.3,0) -- (2.3,5.0);
+    \draw[<->] (3.7,1.5) -- (3.7,4.0);
+    \draw[<->] (4.5,1.5) -- (4.5,5.0);
+    \draw[<->, red] (5.3,1.5) -- (5.3,6.5);
+\end{tikzpicture}
