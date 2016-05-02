@@ -1,0 +1,22 @@
+folder	content
+ALL0000	
+ALL0001	
+ALL0002 -
+ALL0003 |
+ALL0004	|filling of
+ALL0005 |trap
+ALL0006	|
+ALL0007 -
+ALL0008	cooling transition
+ALL0009	cooling transition
+ALL0010	pumping transition
+ALL0011	pumping transition
+ALL0012
+ALL0013
+ALL0014
+ALL0015
+ALL0016
+ALL0017 scan through pumping frequency, cooling locked, MOT on
+ALL0018 scan through pumping frequency, cooling locked, MOT off
+ALL0019 scan through cooling frequency, pumping locked, MOT on
+ALL0020 scan through cooling frequency, pumping locked, MOT off
