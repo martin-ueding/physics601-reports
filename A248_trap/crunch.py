@@ -62,23 +62,28 @@ def dandify_plot():
 
 
 def job_some_osci(T):
-    x1, y1, x2, y2 = trek.load_dir('0020')
-    B_x1, B_y1, B_x2, B_y2 = trek.load_dir('0019')
+    # pumpin laser
+    osci08_x1, osci08_y1, osci08_x2, osci08_y2 = trek.load_dir('0008') 
+    # scan through lasing frequency with MOT off
+    osci19_x1, osci19_y1, osci19_x2, osci19_y2 = trek.load_dir('0019')
+    # scan through lasing frequency with MOT off
+    osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
 
     fig, ax1 = pl.subplots()
     ax2 = ax1.twinx()
-    ax1.plot(x1, y1, color='blue', label='Spectrum')
-    ax1.plot(B_x1, B_y1, color='green', label='Spectrum')
-    ax2.plot(x2, y2, color='red', label='MOT without B')
-    ax2.plot(B_x2, B_y2, color='red', label='MOT with B')
-    ax2.plot(B_x2, B_y2 - y2, color='orange', label='MOT signal')
+    ax1.plot(osci20_x1, osci20_y1, color='blue', label='Spectrum')
+    ax1.plot(osci19_x1, osci19_y1, color='green', label='Spectrum')
+    ax2.plot(osci20_x2, osci20_y2, color='red', label='MOT without B')
+    ax2.plot(osci19_x2, osci19_y2, color='red', label='MOT with B')
+    ax2.plot(osci19_x2, osci19_y2 - y2, color='orange', label='MOT signal')
 
     dandify_plot()
     pl.savefig('_build/mpl-20.pdf')
     pl.savefig('_build/mpl-20.png')
     pl.clf()
 
-    np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([x1, y1]))
+    np.savetxt('_build/xy/doppler-free-pumpin.tsv', np.column_stack([osci08_x2, osci08_y2]))
+    np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
 
 
 
