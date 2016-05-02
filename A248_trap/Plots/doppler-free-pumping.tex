@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth,
+        height=0.6\linewidth,
+        xlabel={Time / \si{\second}},
+        ylabel={Intensity / arb.u.},    
+        grid=major,
+        xmin=1,
+        xmax=9.5,
+        ]
+        \addplot[
+            black,
+            ] table {../xy/doppler-free-pumping.tsv};
+
+           \draw[->] (axis cs:6.8,8.08) node[above] {$F=2\to F'=3$} -- (axis cs:6.15,7.93);
+           \draw[->] (axis cs:4.8,8.05) node[above] {$F=2\to F'=2$} -- (axis cs:5.55,7.95);
+    \end{axis}
+\end{tikzpicture}
