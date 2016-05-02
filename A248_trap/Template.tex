@@ -264,7 +264,24 @@ Figure~\ref{fig:doppler-free-3-level}).
 
 \section{Setup and calibration}
 
-Locking laser on cooling transition.
+First we have to lock the cooling laser to the right transition. For this we
+tune the laser roughly to the wanted frequency. The lock box gets a triangular
+signal from a function generator, changes its amplitude and offset and gives it
+to the piezo which controls the gratings position. The Doppler-free spectrum of
+the $F=3$ ground state of ${}^{85}\text{Ru}$ is shown in
+Figure~\ref{fig:doppler-free-cooling}. From there we choose the right line,
+zoom in and lock the laser to a frequency a bit below it.
+
+\begin{figure}
+    \centering
+    \includegraphics{doppler-free-cooling}
+    \caption{%
+        Doppler-free spectrum of the ${}^{85}\text{Ru}$ $F=3 \to F'=2,3,4$
+        lines. The time is related to the lasing frequency via the triangular
+        voltage applied to the piezo.
+    }
+    \label{fig:doppler-free-cooling}
+\end{figure}
 
 Light through fiber, \SI{16.8}{\milli\watt}.
 

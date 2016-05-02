@@ -1,0 +1,20 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth,
+        height=0.6\linewidth,
+        xlabel={Time / \si{\second}},
+        ylabel={Intensity / arb.u.},    
+        grid=major,
+        xmin=-4.1,
+        xmax=5.,
+        ]
+        \addplot[
+            black,
+            ] table {../xy/doppler-free-cooling.tsv};
+
+            \draw[->] (axis cs:1.15,26) node[above] {$F=3\to F'=4$} -- (axis cs:.95,24.8);
+            \draw[->] (axis cs:.45,28) node[right] {$F=3\to F'=2,4$} -- (axis cs:-.25,27);
+        \draw[->] (axis cs:.45,28.7) node[right] {$F=3\to F'=3,4$} -- (axis cs:-.85,27);
+        \draw[->] (axis cs:-1.95,28) node[above] {$F=3\to F'=2,3$} -- (axis cs:-2.05,26.);
+    \end{axis}
+\end{tikzpicture}

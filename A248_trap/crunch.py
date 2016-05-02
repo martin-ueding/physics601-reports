@@ -78,6 +78,9 @@ def job_some_osci(T):
     pl.savefig('_build/mpl-20.png')
     pl.clf()
 
+    np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([x1, y1]))
+
+
 
 def test_keys(T):
     '''
