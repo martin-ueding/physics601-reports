@@ -25,6 +25,8 @@ from unitprint2 import siunitx
 import bootstrap
 import trek
 
+def loading(x, a, b, offset):
+    return a*(1-np.exp(-b*(x-offset)))
 
 def subtract_images(number_str):
     img_with = scipy.misc.imread('Figures/{}-mit.bmp'.format(number_str))
@@ -86,6 +88,30 @@ def job_some_osci(T):
     np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
 
 
+def job_loading(T):
+    res_max = []
+    res_slope = []
+    for directory in ['0002', '0003', '0004', '0005', '0006', '0007']:
+        data_x, data_y = trek.load_dir(directory)
+        data_x, data_y = data_x[120:-500], data_y[120:-500]
+
+        lower = np.where(data_y > .095)[0][0]
+
+        fit_x = np.linspace(data_x[lower-20], data_x[-1], 100)
+        popt, pconv = op.curve_fit(loading, data_x[lower:], data_y[lower:])
+        res_max.append(popt[0])
+        res_slope.append(popt[1])
+        fit_y = loading(fit_x, *popt)
+        pl.plot(data_x, data_y)
+        pl.plot(fit_x, fit_y)
+        pl.show()
+        pl.clf()
+
+    print(res_max)
+    maximum_val, maximum_err = np.mean(res_max), np.std(res_max)
+    slope_val, slope_err = np.mean(res_slope), np.std(res_slope)
+
+
 
 def test_keys(T):
     '''
@@ -117,6 +143,7 @@ def main():
     random.seed(0)
 
     job_some_osci(T)
+    job_loading(T)
 
     diff = subtract_images('03')
     scipy.misc.imsave('_build/difference-3.png', diff)

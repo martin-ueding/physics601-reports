@@ -316,13 +316,13 @@ vacuum chamber. Then we adjust the top mirror such that the beams overlap
 perfectly. This can be checked with the help of a camera, which is still
 sensitive to the beam's wavelength.
 
-Before we adjust the transversal ($x$ and $y$) beams we try to get equal light power to each
-axis. So we measure the fiber power again, which is \SI{15.1}{\milli\watt} and
-set the $z$-axis power to to \SI{5.0}{\milli\watt} by rotating the $\lambda/2$
-plate behind the fiber. Against our expectations we then have no power on the
-transversal elevator. We try it the other way around and adjust the $\lambda/2$
-plate again until we have \SI{8.8}{\milli\watt} on the elevator and
-\SI{4.8}{\milli\watt} on the $z$-axis.
+Before we adjust the transversal ($x$ and $y$) beams we try to get equal light
+power to each axis. So we measure the fiber power again, which is
+\SI{15.1}{\milli\watt} and set the $z$-axis power to to \SI{5.0}{\milli\watt}
+by rotating the $\lambda/2$ plate behind the fiber. Against our expectations we
+then have no power on the transversal elevator. We try it the other way around
+and adjust the $\lambda/2$ plate again until we have \SI{8.8}{\milli\watt} on
+the elevator and \SI{4.8}{\milli\watt} on the $z$-axis.
 
 After measuring the beam power directly in front of the vacuum chamber we
 realize that we incur loss on all the mirrors and first adjust the splitting in
@@ -340,39 +340,49 @@ optimize the overlap. Now when toggling the power supply of the magnetic field,
 we can see a little difference in the brightness which indicates a
 working \textsc{mot}. With the help of a photo diode we then adjust the laser
 locks to make the \textsc{mot} even larger.
-
-Because we have already installed the photo diode we then take a few shots of
-the loading behavior.
-
 Replacing the photo diode with the power meter, we see that out MOT is very
 bright. With underground, it has around \SI{560}{\nano\watt}.
 
 % TODO Add table with measurements.
 
+\section{MOT characterization}
+
+\subsection{MOT population}
+
 Lens says something with \SI{50}{\milli\meter}. Its distance to the MOT are
 \SI{10}{\centi\meter}, roughly estimated.
 
-Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
+\subsection{Size of MOT}
 
-$x$: \SI{3.57}{\milli\watt}
-$y$: \SI{3.36}{\milli\watt}
-$z$: \SI{4.45}{\milli\watt}
-
-\SI{3.9}{\milli\watt}
+\subsection{Influence of quarter waveplates}
 
 The effect of the $\lambda/4$ plates in front of the MOT have a significant
 effect. One can loose the MOT completely. The effect of the plates in the
 backreflected beam is not very large. Ideally, this should be zero, of
 course.
 
+\subsection{Influence of magnetic field}
+
 Go through the magnetic field current.
 
 % TODO Tablet with magnetic field.
 
+\subsection{Loading behaviour}
+
+Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
+
 Room temperature \SI{24}{\celsius}
+
+\subsection{Detuning of the laser frequencies}
 
 Unlock the cooling laser. Run a slow frequency of around \SI{100}{\milli\hertz}
 and scan the MOT intensity with the photo diode. 
+
+$x$: \SI{3.57}{\milli\watt}
+$y$: \SI{3.36}{\milli\watt}
+$z$: \SI{4.45}{\milli\watt}
+
+\SI{3.9}{\milli\watt}
 
 \end{document}
 
