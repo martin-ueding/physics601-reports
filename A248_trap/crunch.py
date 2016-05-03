@@ -102,14 +102,33 @@ def job_loading(T):
         res_max.append(popt[0])
         res_slope.append(popt[1])
         fit_y = loading(fit_x, *popt)
-        pl.plot(data_x, data_y)
-        pl.plot(fit_x, fit_y)
-        pl.show()
-        pl.clf()
+        # pl.plot(data_x, data_y)
+        # pl.plot(fit_x, fit_y)
+        # pl.show()
+        # pl.clf()
 
     print(res_max)
     maximum_val, maximum_err = np.mean(res_max), np.std(res_max)
     slope_val, slope_err = np.mean(res_slope), np.std(res_slope)
+
+
+def job_intensity(T):
+    data = np.loadtxt('Data/mot-intensity.tsv')
+    mot_with = data[:,0]
+    und = data[:,1]
+    err = data[:,2]
+    mot_w_o = mot_with - und
+    
+    power_mean = np.mean(mot_w_o)
+    power_err = np.std(mot_w_o)
+
+    T['power_mot'] = siunitx(power_mean, power_err)
+    T['power_mot_table'] = list(zip(
+        siunitx(mot_with, err),
+        siunitx(und, err),
+        siunitx(mot_w_o, err*np.sqrt(2))
+    ))
+
 
 
 
@@ -143,6 +162,7 @@ def main():
     random.seed(0)
 
     job_some_osci(T)
+    job_intensity(T)
     job_loading(T)
 
     diff = subtract_images('03')
