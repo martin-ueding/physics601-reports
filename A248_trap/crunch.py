@@ -59,6 +59,24 @@ def subtract_images(number_str):
     return difference
 
 
+def add_images(image_1, image_2):
+    img_1 = scipy.misc.imread(image_1)
+    img_2 = scipy.misc.imread(image_2)
+
+    sum_ = np.add(img_1.astype(int), img_2.astype(int))
+
+    old_min = np.min(sum_)
+    old_max = np.max(sum_)
+    span = old_max - old_min
+
+    #difference = (difference - old_min) * 255 / span
+
+    print(np.min(sum_), np.max(sum_))
+    print()
+
+    return sum_
+
+
 def invert_image(image):
     return 255 - image
 
@@ -199,6 +217,7 @@ def main():
     scipy.misc.imsave('_build/difference-3-inv.png', invert_image(diff))
     diff = subtract_images('04')
     scipy.misc.imsave('_build/difference-4.png', diff)
+    scipy.misc.imsave('_build/motsize.png', add_images('Figures/scale.bmp','_build/difference-3-inv.png'))
 
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
