@@ -31,8 +31,8 @@ def loading(x, a, b, offset):
     return a*(1-np.exp(-b*(x-offset)))
 
 
-def errorfunction(x, power, rad, x_offs):
-        return power / 2 * sp.erfc(np.sqrt(2) / rad * (x - x_offs))
+def errorfunction(x, power, diam, x_offs):
+        return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
 
 
 def subtract_images(number_str):
