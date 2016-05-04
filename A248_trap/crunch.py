@@ -141,25 +141,23 @@ def job_diameter(T):
     position = data[:,0]
     power = data[:,1]
 
-
     x = np.linspace(np.min(position), np.max(position), 100)
     popt, pconv = op.curve_fit(errorfunction, position, power, p0=[3.4, .4, 29.5])
-    print(*popt)
+    err = np.sqrt(pconv.diagonal())
 
     y = errorfunction(x, *popt)
-    pl.plot(position, power, linestyle="none", marker="+")
-    pl.plot(x, y)
-    pl.show()
-    pl.clf()
+    # pl.plot(position, power, linestyle="none", marker="+")
+    # pl.plot(x, y)
+    # pl.show()
+    # pl.clf()
 
     T['beam_diameter_table'] = list(zip(
         siunitx(position),
         siunitx(power)
     ))
 
-
-
-    
+    T['beam_diameter'] = siunitx(popt[1], err[1])
+    T['beam_power'] = siunitx(popt[0], err[0])
 
 
 def test_keys(T):
