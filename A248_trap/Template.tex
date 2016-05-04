@@ -20,6 +20,8 @@
     pdftitle=
 }
 
+\newcommand\mot{\textsc{mot}}
+
 \usepackage{longtable}
 \usepackage{subcaption}
 
@@ -117,7 +119,7 @@ Since the forces in the optical molasses are independent of space, the atoms
 have the possibility to diffuse out of the cooling area. Due to collisions
 those atoms get heated up again. We need an additional force that keeps the
 atoms inside that area. One possibility is to use a \emph{magneto optical trap}
-(\textsc{mot}).
+(\mot).
 
 To simplify the working principle we consider a two level system with one
 possible transition ($F=0 \to F=1$). Also we add a 1-dimensional linear
@@ -150,7 +152,7 @@ remains the same.
 \section{Rubidium}
 
 Natural rubidium consists about \SI{72}{\percent} of ${}^{85}\text{Ru}$ and
-\SI{28}{\percent} of ${}^{87}\text{Ru}$. In our \textsc{mot} we use the former.
+\SI{28}{\percent} of ${}^{87}\text{Ru}$. In our \mot{} we use the former.
 Part of its hyperfine level scheme is shown in Figure~\ref{fig:rubidium85}. To
 create a quasi two level system we use the closed $F=3 \to F'=4$ transition.
 Since this is not a real two level system there is a finite probability for the
@@ -338,14 +340,8 @@ on to the $x$ direction and repeat the procedure.
 After checking the locking of the lasers we tweak again on all the mirrors to
 optimize the overlap. Now when toggling the power supply of the magnetic field,
 we can see a little difference in the brightness which indicates a working
-\textsc{mot}. With the help of a photo diode we then adjust the laser locks to
-make the \textsc{mot} even larger.  Replacing the photo diode with the power
-meter, we see that out \textsc{mot} is very bright, but not very constant in
-power.
-Therefor we measure a few times to find a mean value (see
-Table~\ref{tab:mot_power}). Our \textsc{mot}'s power is hence \SI{<< power_mot
->>}{\nano\watt} which is quite good, as the instruction states that about
-\SI{50}{\nano\watt} are needed.
+\mot. With the help of a photo diode we then adjust the laser locks to
+make the \mot{} even larger.
 
 \begin{table}
     \centering
@@ -353,7 +349,7 @@ Table~\ref{tab:mot_power}). Our \textsc{mot}'s power is hence \SI{<< power_mot
         \toprule
         {total power/\si{\nano\watt}}
         & {underground/\si{\nano\watt}} 
-        & {\textsc{mot}/\si{\nano\watt}} \\
+        & {power of \mot/\si{\nano\watt}} \\
         \midrule
         %< for row in power_mot_table >%
         << ' & '.join(row) >> \\
@@ -361,7 +357,8 @@ Table~\ref{tab:mot_power}). Our \textsc{mot}'s power is hence \SI{<< power_mot
         \bottomrule
     \end{tabular}
     \caption{%
-        Measured power of the \textsc{mot}.
+        Measured powers. The third column is just the difference of the first
+        two columns.
     }
     \label{tab:mot_power}
 \end{table}
@@ -370,8 +367,40 @@ Table~\ref{tab:mot_power}). Our \textsc{mot}'s power is hence \SI{<< power_mot
 
 \subsection{MOT population}
 
-Lens says something with \SI{50}{\milli\meter}. Its distance to the MOT are
-\SI{10}{\centi\meter}, roughly estimated.
+The first attribute of our \mot{} is the number of caught atoms. For this we
+have to find the fluorescence power. After replacing the photo diode with the
+power meter, we see that out \mot{} is very bright, but not very constant in
+power.  Therefor we measure a few times to find a mean value (see
+Table~\ref{tab:mot_power}). Our \mot's power is hence \SI{<< power_mot
+>>}{\nano\watt} which is quite good, as the instruction states that about
+\SI{50}{\nano\watt} are needed. We also need the diameter of the lens and its
+distance to the \mot. Since the lens is an 1 inch lens its diameter is
+\SI{2.54}{\centi\meter}. Its distance to the \mot{} is \SI{10}{\centi\meter},
+roughly estimated. Then we need the beam's power. We measure on each axis
+separately and get $P_x = \SI{3.57}{\milli\watt}$, $P_y =
+\SI{3.36}{\milli\watt}$ and $P_z = \SI{4.45}{\milli\watt}$.
+
+The last thing we have to know is the beam diameter. For this we put a razor
+blade on an optical rail and measure the remaining power depending on the
+razor's position. Our measurements are shown in Table~\ref{tab:beam_diameter}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{SS}
+        \toprule
+        {absolute position/\si{\centi\meter}}
+        & {power of beam/\si{\milli\watt}} \\
+        \midrule
+        %< for row in beam_diameter_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+    \caption{%
+        Measurement to estimate the beam diameter.
+    }
+    \label{tab:mot_power}
+\end{table}
 
 \subsection{Size of MOT}
 
@@ -398,10 +427,6 @@ Room temperature \SI{24}{\celsius}
 
 Unlock the cooling laser. Run a slow frequency of around \SI{100}{\milli\hertz}
 and scan the MOT intensity with the photo diode. 
-
-$x$: \SI{3.57}{\milli\watt}
-$y$: \SI{3.36}{\milli\watt}
-$z$: \SI{4.45}{\milli\watt}
 
 \SI{3.9}{\milli\watt}
 

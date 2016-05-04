@@ -19,14 +19,21 @@ import scipy.misc
 import scipy.ndimage.filters
 import scipy.optimize as op
 import scipy.stats
+import scipy.special as sp
 import mpl_toolkits.mplot3d.axes3d as p3
 
 from unitprint2 import siunitx
 import bootstrap
 import trek
 
+
 def loading(x, a, b, offset):
     return a*(1-np.exp(-b*(x-offset)))
+
+
+def errorfunction(x, ampl, rad, x_offs):
+        return ampl * sp.erfc(np.sqrt(2) / rad * (x - x_offs))
+
 
 def subtract_images(number_str):
     img_with = scipy.misc.imread('Figures/{}-mit.bmp'.format(number_str))
@@ -107,7 +114,6 @@ def job_loading(T):
         # pl.show()
         # pl.clf()
 
-    print(res_max)
     maximum_val, maximum_err = np.mean(res_max), np.std(res_max)
     slope_val, slope_err = np.mean(res_slope), np.std(res_slope)
 
@@ -116,20 +122,42 @@ def job_intensity(T):
     data = np.loadtxt('Data/mot-intensity.tsv')
     mot_with = data[:,0]
     und = data[:,1]
-    err = data[:,2]
+    # err = data[:,2]
     mot_w_o = mot_with - und
     
     power_mean = np.mean(mot_w_o)
     power_err = np.std(mot_w_o)
 
-    T['power_mot'] = siunitx(power_mean, power_err)
+    T['power_mot'] = siunitx(power_mean)
     T['power_mot_table'] = list(zip(
-        siunitx(mot_with, err),
-        siunitx(und, err),
-        siunitx(mot_w_o, err*np.sqrt(2))
+        siunitx(mot_with),
+        siunitx(und),
+        siunitx(mot_w_o)
     ))
 
 
+def job_diameter(T):
+    data = np.loadtxt('Data/diameter.tsv')
+    position = data[:,0]
+    power = data[:,1]
+
+
+    x = np.linspace(np.min(position), np.max(position), 100)
+    popt, pconv = op.curve_fit(errorfunction, position, power, p0=[1.7, .4, 29.5])
+    print(*popt)
+
+    y = errorfunction(x, *popt)
+    pl.plot(position, power, linestyle="none", marker="+")
+    pl.plot(x, y)
+    pl.show()
+    pl.clf()
+
+    T['beam_diameter_table'] = list(zip(
+        siunitx(position),
+        siunitx(power)
+    ))
+
+    
 
 
 def test_keys(T):
@@ -163,6 +191,7 @@ def main():
 
     job_some_osci(T)
     job_intensity(T)
+    job_diameter(T)
     job_loading(T)
 
     diff = subtract_images('03')
