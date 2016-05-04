@@ -31,8 +31,8 @@ def loading(x, a, b, offset):
     return a*(1-np.exp(-b*(x-offset)))
 
 
-def errorfunction(x, ampl, rad, x_offs):
-        return ampl * sp.erfc(np.sqrt(2) / rad * (x - x_offs))
+def errorfunction(x, power, rad, x_offs):
+        return power / 2 * sp.erfc(np.sqrt(2) / rad * (x - x_offs))
 
 
 def subtract_images(number_str):
@@ -143,7 +143,7 @@ def job_diameter(T):
 
 
     x = np.linspace(np.min(position), np.max(position), 100)
-    popt, pconv = op.curve_fit(errorfunction, position, power, p0=[1.7, .4, 29.5])
+    popt, pconv = op.curve_fit(errorfunction, position, power, p0=[3.4, .4, 29.5])
     print(*popt)
 
     y = errorfunction(x, *popt)
@@ -156,6 +156,8 @@ def job_diameter(T):
         siunitx(position),
         siunitx(power)
     ))
+
+
 
     
 
