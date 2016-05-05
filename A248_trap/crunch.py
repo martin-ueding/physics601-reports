@@ -32,7 +32,11 @@ def loading(x, a, b, offset):
 
 
 def errorfunction(x, power, diam, x_offs):
-        return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
+    return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
+
+
+def cos_squared(x, ampl, x_offs, y_offs):
+    return ampl * (np.cos(x - x_offs))**2 + y_offs
 
 
 def subtract_images(number_str):
@@ -178,6 +182,32 @@ def job_diameter(T):
     T['beam_power'] = siunitx(popt[0], err[0])
 
 
+def job_lambda_4(T):
+    for name in ['front', 'behind']:
+        data = np.loadtxt('Data/lambda-{}.tsv'.format(name))
+        angle = data[:,0]
+        power = data[:,1]
+
+        if name=='front':
+            for i in range(len(angle)):
+                if angle[i] > 100:
+                    angle[i] = angle[i] - 360
+
+        angle *= (np.pi / 180)
+        x = np.linspace(np.min(angle), np.max(angle), 100)
+        popt, pconv = op.curve_fit(cos_squared, angle, power, p0=[400,1, 350])
+        y = cos_squared(x, *popt)
+        print(*popt)
+
+        pl.plot(angle, power, linestyle="none", marker="+")
+        pl.plot(x, y)
+        pl.show()
+        pl.clf()
+
+        np.savetxt('_build/xy/lambda_{}.tsv'.format(name), np.column_stack([angle, power]))
+        np.savetxt('_build/xy/lambda_{}_fit.tsv'.format(name), np.column_stack([x, y]))
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -211,6 +241,7 @@ def main():
     job_intensity(T)
     job_diameter(T)
     job_loading(T)
+    job_lambda_4(T)
 
     diff = subtract_images('03')
     scipy.misc.imsave('_build/difference-3.png', diff)
