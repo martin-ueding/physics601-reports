@@ -23,6 +23,8 @@ green := $(shell tput setaf 2)
 red := $(shell tput setaf 1)
 reset := $(shell tput sgr0)
 
+latexrun := ../../latexrun.py
+
 # Main document.
 tex := "$(build)/physics601-$(number)-Ueding_Lemmer.tex"
 out := "$(build)/physics601-$(number)-Ueding_Lemmer.pdf"
@@ -104,9 +106,7 @@ $(build)/to_crop:
 # TikZ graphics.
 $(out): $(tex) $(figures_pdf) $(plots_pdf) $(postscript_pdf)
 	@echo "$(on)Compiling main document$(off)"
-	cd $$(dirname $@) \
-	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
-	    2>&1 | $(tail)
+	cd $$(dirname $@) && $(latexrun) $$(basename $<)
 
 # The main LaTeX file is generated using the template engine.
 $(tex): Template.tex $(build)/template.js
