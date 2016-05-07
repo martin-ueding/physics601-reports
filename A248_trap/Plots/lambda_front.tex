@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth,
+        height=.6\linewidth,
+        xlabel={angle},
+        ylabel={power/\si{\nano\watt}},
+        grid=major, 
+        scaled x ticks=real:3.14159,
+        xtick scale label code/.code={$\cdot \pi$}
+    ]
+        \addplot[only marks] table {../xy/lambda_front.tsv};
+        \addplot[no markers] table {../xy/lambda_front_fit.tsv};
+    \end{axis}
+\end{tikzpicture}
