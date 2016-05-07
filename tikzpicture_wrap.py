@@ -9,7 +9,7 @@ import os
 import jinja2
 
 template_text = r'''
-\documentclass[11pt, << lang >>]{<< documentclass >>}
+\documentclass[11pt, << lang >>, DIV=15, BCOR=2cm]{<< documentclass >>}
 
 \usepackage[<< extra_opts >>]{../../../header}
 

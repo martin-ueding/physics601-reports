@@ -1,0 +1,31 @@
+\begin{tikzpicture}
+    \pgfplotsset{set layers}
+
+    \begin{axis}[
+            width=.9\linewidth,
+            height=0.6\linewidth,
+            xmin=-1.5,
+            xmax=2,
+            xlabel={Time / \si{\second}},
+            ylabel={Rb spectrum / arb.u.},    
+            grid=major,
+            axis y line*=left,
+        ]
+
+        \addplot[black] table {../xy/scan-pumping-mot-input.tsv};
+    \end{axis}
+
+    \begin{axis}[
+            width=.9\linewidth,
+            height=0.6\linewidth,
+            xmin=-1.5,
+            xmax=2,
+            ylabel={\textsc{mot} intensity / arb.u.},    
+            axis y line*=right,
+        ]
+        
+        %\addplot[green] table {../xy/scan-cooling-mot-output.tsv};
+        %\addplot[blue] table {../xy/scan-cooling-no_mot-output.tsv};
+        \addplot[red] table {../xy/scan-pumping-difference-output.tsv};
+    \end{axis}
+\end{tikzpicture}

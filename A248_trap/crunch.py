@@ -104,18 +104,22 @@ def job_scan_cooling(T):
     osci19_x1, osci19_y1, osci19_x2, osci19_y2 = trek.load_dir('0019')
     osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
 
-    fig, ax1 = pl.subplots()
-    ax2 = ax1.twinx()
-    ax1.plot(osci20_x1, osci20_y1, color='blue', label='Spectrum')
-    ax1.plot(osci19_x1, osci19_y1, color='green', label='Spectrum')
-    ax2.plot(osci20_x2, osci20_y2, color='red', label='MOT without B')
-    ax2.plot(osci19_x2, osci19_y2, color='red', label='MOT with B')
-    ax2.plot(osci19_x2, osci19_y2 - osci20_y2, color='orange', label='MOT signal')
+    np.savetxt('_build/xy/scan-cooling-mot-input.tsv', np.column_stack([osci20_x1, osci20_y1]))
+    np.savetxt('_build/xy/scan-cooling-mot-output.tsv', np.column_stack([osci20_x2, osci20_y2]))
+    np.savetxt('_build/xy/scan-cooling-no_mot-input.tsv', np.column_stack([osci19_x1, osci19_y1]))
+    np.savetxt('_build/xy/scan-cooling-no_mot-output.tsv', np.column_stack([osci19_x2, osci19_y2]))
+    np.savetxt('_build/xy/scan-cooling-difference-output.tsv', np.column_stack([osci19_x2, osci19_y2 - osci20_y2]))
 
-    dandify_plot()
-    pl.savefig('_build/mpl-20.pdf')
-    pl.savefig('_build/mpl-20.png')
-    pl.clf()
+
+def job_scan_pumping(T):
+    osci17_x1, osci17_y1, osci17_x2, osci17_y2 = trek.load_dir('0017')
+    osci18_x1, osci18_y1, osci18_x2, osci18_y2 = trek.load_dir('0018')
+
+    np.savetxt('_build/xy/scan-pumping-mot-input.tsv', np.column_stack([osci18_x1, osci18_y1]))
+    np.savetxt('_build/xy/scan-pumping-mot-output.tsv', np.column_stack([osci18_x2, osci18_y2]))
+    np.savetxt('_build/xy/scan-pumping-no_mot-input.tsv', np.column_stack([osci17_x1, osci17_y1]))
+    np.savetxt('_build/xy/scan-pumping-no_mot-output.tsv', np.column_stack([osci17_x2, osci17_y2]))
+    np.savetxt('_build/xy/scan-pumping-difference-output.tsv', np.column_stack([osci17_x2, osci17_y2 - osci18_y2]))
 
 
 def job_loading(T):
@@ -240,6 +244,7 @@ def main():
 
     job_doppler_free(T)
     job_scan_cooling(T)
+    job_scan_pumping(T)
 
     job_intensity(T)
     job_diameter(T)
