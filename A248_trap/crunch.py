@@ -92,12 +92,16 @@ def dandify_plot():
     pl.legend(loc='best')
 
 
-def job_some_osci(T):
-    # pumpin laser
+def job_doppler_free(T):
     osci08_x1, osci08_y1, osci08_x2, osci08_y2 = trek.load_dir('0008') 
-    # scan through lasing frequency with MOT off
+    osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
+
+    np.savetxt('_build/xy/doppler-free-pumping.tsv', np.column_stack([osci08_x1, osci08_y1]))
+    np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
+
+
+def job_scan_cooling(T):
     osci19_x1, osci19_y1, osci19_x2, osci19_y2 = trek.load_dir('0019')
-    # scan through lasing frequency with MOT off
     osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
 
     fig, ax1 = pl.subplots()
@@ -112,9 +116,6 @@ def job_some_osci(T):
     pl.savefig('_build/mpl-20.pdf')
     pl.savefig('_build/mpl-20.png')
     pl.clf()
-
-    np.savetxt('_build/xy/doppler-free-pumping.tsv', np.column_stack([osci08_x1, osci08_y1]))
-    np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
 
 
 def job_loading(T):
@@ -201,7 +202,7 @@ def job_lambda_4(T):
 
         pl.plot(angle, power, linestyle="none", marker="+")
         pl.plot(x, y)
-        pl.show()
+        #pl.show()
         pl.clf()
 
         np.savetxt('_build/xy/lambda_{}.tsv'.format(name), np.column_stack([angle, power]))
@@ -237,7 +238,9 @@ def main():
     # bad, therefore we fix the seed here.
     random.seed(0)
 
-    job_some_osci(T)
+    job_doppler_free(T)
+    job_scan_cooling(T)
+
     job_intensity(T)
     job_diameter(T)
     job_loading(T)
