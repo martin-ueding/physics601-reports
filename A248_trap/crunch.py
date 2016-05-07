@@ -26,6 +26,14 @@ from unitprint2 import siunitx
 import bootstrap
 import trek
 
+def linear(x, a, b):
+    return a * x + b
+
+
+def gauss(x, mean, sigma, a):
+    return a / (np.sqrt(2 * np.pi) * sigma) \
+            * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
+
 
 def loading(x, a, b, offset):
     return a*(1-np.exp(-b*(x-offset)))
@@ -100,6 +108,19 @@ def job_doppler_free(T):
     np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
 
 
+def fit_osci_peak(x, y, xmin, xmax, basename=None):
+    sel = (xmin < x) & (x < xmax)
+    popt, pconv = op.curve_fit(gauss, x[sel], y[sel])
+    perr = np.sqrt(pconv.diagonal())
+    
+    if basename is not None:
+        interp_x = np.linspace(xmin, xmax, 100)
+        interp_y = gauss(interp_x, *popt)
+        np.savetxt('_build/xy/'+basename, np.column_stack([interp_x, interp_y]))
+
+    return popt[0], perr[0]
+
+
 def job_scan_cooling(T):
     osci19_x1, osci19_y1, osci19_x2, osci19_y2 = trek.load_dir('0019')
     osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
@@ -109,6 +130,37 @@ def job_scan_cooling(T):
     np.savetxt('_build/xy/scan-cooling-no_mot-input.tsv', np.column_stack([osci19_x1, osci19_y1]))
     np.savetxt('_build/xy/scan-cooling-no_mot-output.tsv', np.column_stack([osci19_x2, osci19_y2]))
     np.savetxt('_build/xy/scan-cooling-difference-output.tsv', np.column_stack([osci19_x2, osci19_y2 - osci20_y2]))
+
+    peaks_val = []
+    peaks_err = []
+
+    peak_val, peak_err = fit_osci_peak(osci20_x1, osci20_y1, -1.00, -0.65, 'scan-cooling-mot-input-fit1.tsv')
+    peaks_val.append(peak_val)
+    peaks_err.append(peak_err)
+    peak_val, peak_err = fit_osci_peak(osci20_x1, osci20_y1, -0.40, -0.10, 'scan-cooling-mot-input-fit2.tsv')
+    peaks_val.append(peak_val)
+    peaks_err.append(peak_err)
+    peak_val, peak_err = fit_osci_peak(osci20_x1, osci20_y1, 0.80, 1.07, 'scan-cooling-mot-input-fit3.tsv')
+    peaks_val.append(peak_val)
+    peaks_err.append(peak_err)
+
+    spacings = np.array([0, 31.7, 31.7 + 60.3])
+    spacings -= spacings[2]
+    popt, pconv = op.curve_fit(linear, spacings, peaks_val, sigma=peaks_err)
+
+    np.savetxt('_build/xy/scan-cooling-spacing-data.tsv',
+               np.column_stack([spacings, peaks_val, peaks_err]))
+
+    fit_x = np.linspace(min(spacings), max(spacings), 10)
+    fit_y = linear(fit_x, *popt)
+
+    np.savetxt('_build/xy/scan-cooling-spacing-data.tsv',
+               np.column_stack([spacings, peaks_val, peaks_err]))
+    np.savetxt('_build/xy/scan-cooling-spacing-fit.tsv',
+               np.column_stack([fit_x, fit_y]))
+
+    np.savetxt('_build/xy/scan-cooling-detuning.tsv',
+               np.column_stack([(osci19_x2 - popt[1]) / popt[0], osci19_y2 - osci20_y2]))
 
 
 def job_scan_pumping(T):

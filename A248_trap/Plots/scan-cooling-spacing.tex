@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth,
+        height=0.6\linewidth,
+        xlabel={Level spacing / \si{\mega\hertz}},
+        ylabel={Peak position / \si{\second}},    
+        grid=major,
+        ]
+
+        \addplot[
+            black,
+            mark=+,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/scan-cooling-spacing-data.tsv};
+
+        \addplot[red] table {../xy/scan-cooling-spacing-fit.tsv};
+
+    \end{axis}
+\end{tikzpicture}
