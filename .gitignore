@@ -1,3 +1,7 @@
 .vagrant
 __pycache__
 _build
+K225_positron_lifetime/Plots/beamer-taus.aux
+K225_positron_lifetime/Plots/beamer-taus.fdb_latexmk
+K225_positron_lifetime/Plots/beamer-taus.fls
+K225_positron_lifetime/Plots/beamer-taus.log
