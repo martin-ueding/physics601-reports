@@ -144,9 +144,7 @@ $(build)/page-lualatex/%.tex: Feynman/%.tex | $(build)/page-lualatex
 # Feynman diagrams must be compiled with LuaLaTeX.
 $(build)/page-lualatex/%.pdf: $(build)/page-lualatex/%.tex
 	@echo "$(on)Typesetting Feynman diagram $<$(off)"
-	cd $$(dirname $@) \
-	    && latexmk -pdflatex='lualatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
-	     2>&1 |$(tail)
+	cd $$(dirname $@) && ../$(latexrun) --latex-cmd lualatex $$(basename $<)
 
 # Figures and plots are typeset on an A4 page and therefore need to be cropped.
 $(build)/%.pdf: $(build)/page/%.pdf | $(build)/page
@@ -166,9 +164,7 @@ $(build)/%.pdf: $(build)/to_crop/%.pdf
 # Figures and plots (but not Feynman diagrams) can be compiled using pdflatex.
 %.pdf: %.tex
 	@echo "$(on)Typesetting figure $<$(off)"
-	cd $$(dirname $@) \
-	    && latexmk -pdflatex='pdflatex -halt-on-error $$O $$S' -pdf $$(basename $<) \
-	     2>&1 | $(tail)
+	cd $$(dirname $@) && ../$(latexrun) $$(basename $<)
 
 $(build)/%.pdf: Postscript/%.ps
 	@echo "$(on)Converting PS file $<$(off)"
