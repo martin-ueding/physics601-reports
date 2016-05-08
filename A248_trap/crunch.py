@@ -230,6 +230,11 @@ def job_diameter(T):
     # pl.show()
     # pl.clf()
 
+    np.savetxt('_build/xy/diameter-data.tsv',
+               np.column_stack([position, power]))
+    np.savetxt('_build/xy/diameter-fit.tsv',
+               np.column_stack([x, y]))
+
     T['beam_diameter_table'] = list(zip(
         siunitx(position),
         siunitx(power)

@@ -1,0 +1,13 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=.6\linewidth,
+            xlabel={Absolute position / \si{\centi\meter}},
+            ylabel={Beam power / \si{\nano\watt}},
+            grid=major,
+        ]
+
+        \addplot[only marks] table {../xy/diameter-data.tsv};
+        \addplot[black] table {../xy/diameter-fit.tsv};
+    \end{axis}
+\end{tikzpicture}
