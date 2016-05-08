@@ -475,10 +475,27 @@ Room temperature \SI{24}{\celsius}
 
 \subsection{Detuning of the laser frequencies}
 
-Unlock the cooling laser. Run a slow frequency of around \SI{100}{\milli\hertz}
+Unlock the cooling laser. Run a slow frequency of around
 and scan the MOT intensity with the photo diode. 
 
-\SI{3.9}{\milli\watt}
+So far we have tweaked the detuning of the cooling and repumping lasers in
+order to get the largest \mot. Now we want to investigate the \mot\ dependence
+on the detuning. First we unlock the cooling laser. Then we use the frequency
+generate to generate a \SI{100}{\milli\hertz} triangular signal which we use
+as detuning of the cooling laser.
+
+Using the photodiode, we can get fast feedback from the \mot. We attach the
+cooling laser rubidium spectrum signal and the photodiode to the oscilloscope.
+Then we set the trigger on the rising flank of the \mot\ signal. One spectrum
+with the magnetic field switched on is taken, another one without the field.
+This way we can subtract the background.
+
+The difference between the two \mot\ signals gives the intensity of the \mot\
+itself. We plot that signal together this the rubidium spectrum, that is shown
+in Figure~\ref{fig:scan-cooling}.
+
+% TODO What was this number for?
+% \SI{3.9}{\milli\watt}
 
 \begin{figure}
     \centering
@@ -493,6 +510,19 @@ and scan the MOT intensity with the photo diode.
     \label{fig:scan-cooling}
 \end{figure}
 
+The time scale in that diagram is given by the scanning frequency chosen via
+the function generator. It is not really meaningful for our experiment.
+Therefore we identify three peaks in the rubidium spectrum. We fit a Gaussian
+curve to obtain the center of the peak. Then using the level shifts given in
+the second oscillogram from the appendix of the manual, we can obtain a
+connection between the scanning time and the detuning from the cooling
+transition. The three values used are shown in
+Figure~\ref{fig:scan-cooling-spacing}. We perform a linear fit and use this to
+convert the time scale into a frequency scale.
+Figure~\ref{fig:scan-cooling-detuning} shows the dependence of the \mot\
+response (background already subtracted) with respect to the detuning
+frequency.
+
 \begin{figure}
     \centering
     \begin{subfigure}[c]{0.48\linewidth}
@@ -501,7 +531,7 @@ and scan the MOT intensity with the photo diode.
         \caption{%
             %
             }
-        \label{fig:/1}
+        \label{fig:scan-cooling-spacing}
     \end{subfigure}
     \hfill
     \begin{subfigure}[c]{0.48\linewidth}
@@ -510,13 +540,19 @@ and scan the MOT intensity with the photo diode.
         \caption{%
             %
             }
-        \label{fig:/2}
+        \label{fig:scan-cooling-detuning}
     \end{subfigure}
     \caption{%
         %
         }
     \label{fig:}
 \end{figure}
+
+This was the dependence on the cooling laser frequency. The whole time, we have
+kept the pumping laser locked. Now we will exchange the roles and lock the
+cooling laser. Then we unlock the pumping laser and let it scan with the same
+slow frequency from the generator. In Figure~\ref{fig:scan-pumping} we show the
+rubidium spectrum and the \mot\ signal without background.
 
 \begin{figure}
     \centering
@@ -528,6 +564,13 @@ and scan the MOT intensity with the photo diode.
     }
     \label{fig:scan-pumping}
 \end{figure}
+
+We would like to have done the same conversion of scanning time to detuning
+frequency. However, the peaks are too smeared out to perform a decent Gaussian
+fit. Therefore we cannot convert this into a detuning frequency.
+In the figure one can see that the greatest response in the \mot\ happens at
+the point where one would expect to see the repumping transition, that is
+between \SIrange{0.6}{1.0}{\second} on this scale.
 
 \end{document}
 
