@@ -1,15 +1,16 @@
 \begin{tikzpicture}
     \begin{axis}[
-        width=.5\linewidth,
-        height=.3\linewidth,
-        ymin=320,
-        ymax=610,
-        xlabel={angle},
-        ylabel={power/\si{\nano\watt}},
-        grid=major,
-        scaled x ticks=real:3.14159,
-        xtick scale label code/.code={$\cdot \pi$}
-    ]
+            width=.5\linewidth,
+            height=.3\linewidth,
+            ymin=320,
+            ymax=610,
+            xlabel={angle},
+            ylabel={power/\si{\nano\watt}},
+            grid=major,
+            scaled x ticks=real:3.14159,
+            xtick scale label code/.code={$\cdot \pi$},
+            yticklabel pos=right,
+        ]
         \addplot[only marks] table {../xy/lambda_behind.tsv};
         \addplot[no markers] table {../xy/lambda_behind_fit.tsv};
     \end{axis}
