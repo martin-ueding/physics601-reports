@@ -308,6 +308,15 @@ def job_mot_size(T):
     print(T)
 
 
+def job_magnetic_field(T):
+    data = np.loadtxt('Data/magnetic.tsv')
+    current = data[:, 0]
+    intensity_nw = data[:, 1]
+
+    np.savetxt('_build/xy/magnetic.tsv',
+               np.column_stack([current, intensity_nw]))
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -337,6 +346,7 @@ def main():
     # bad, therefore we fix the seed here.
     random.seed(0)
 
+    job_magnetic_field(T)
     job_mot_size(T)
     job_doppler_free(T)
     job_scan_cooling(T)

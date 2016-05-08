@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        width=\linewidth,
+        height=0.6\linewidth,
+        xlabel={Helmholtz current / \si{\ampere}},
+        ylabel={Intensity / \si{\nano\watt}},    
+        grid=major,
+        ]
+
+        \addplot[
+            black,
+            mark=*,
+            only marks,
+        ] table {../xy/magnetic.tsv};
+
+    \end{axis}
+\end{tikzpicture}
