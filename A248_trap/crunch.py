@@ -265,6 +265,49 @@ def job_lambda_4(T):
         np.savetxt('_build/xy/lambda_{}_fit.tsv'.format(name), np.column_stack([x, y]))
 
 
+def get_mm_per_pixel():
+    # Those points are 1 cm apart on the image
+    v1 = np.array([460, 186])
+    v2 = np.array([720, 182])
+    length_px = np.linalg.norm(v1 - v2)
+    return 10 / length_px
+
+
+def job_mot_size(T):
+    diff3 = subtract_images('03')
+    scipy.misc.imsave('_build/difference-3.png', diff3)
+    scipy.misc.imsave('_build/difference-3-inv.png', invert_image(diff3))
+    diff4 = subtract_images('04')
+    scipy.misc.imsave('_build/difference-4.png', diff4)
+
+    superposition = add_images('Figures/scale.bmp','_build/difference-3-inv.png')
+    scipy.misc.imsave('_build/motsize.png', superposition[147:147+308, 402:402+329])
+
+    mm_per_pixel = get_mm_per_pixel()
+
+    selection = diff3[221:221+167, 513:513+150]
+
+    scipy.misc.imsave('_build/mot-crop.png', selection)
+
+    s = selection.shape
+    total_pixels = s[0] * s[1]
+
+    white_pixels = np.sum(selection - np.min(selection)) / (np.max(selection) - np.min(selection))
+
+    radius_px = np.sqrt(white_pixels / np.pi)
+    radius_mm = radius_px * mm_per_pixel
+    volume_mm3 = 4/3 * np.pi * radius_mm**3
+
+    T['mot_mm_per_pixel'] = siunitx(mm_per_pixel)
+    T['mot_total_pixels'] = siunitx(total_pixels)
+    T['mot_white_pixels'] = siunitx(white_pixels)
+    T['mot_radius_px'] = siunitx(radius_px)
+    T['mot_radius_mm'] = siunitx(radius_mm)
+    T['mot_volume_mm3'] = siunitx(volume_mm3)
+
+    print(T)
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -294,6 +337,7 @@ def main():
     # bad, therefore we fix the seed here.
     random.seed(0)
 
+    job_mot_size(T)
     job_doppler_free(T)
     job_scan_cooling(T)
     job_scan_pumping(T)
@@ -302,13 +346,6 @@ def main():
     job_diameter(T)
     job_loading(T)
     job_lambda_4(T)
-
-    diff = subtract_images('03')
-    scipy.misc.imsave('_build/difference-3.png', diff)
-    scipy.misc.imsave('_build/difference-3-inv.png', invert_image(diff))
-    diff = subtract_images('04')
-    scipy.misc.imsave('_build/difference-4.png', diff)
-    scipy.misc.imsave('_build/motsize.png', add_images('Figures/scale.bmp','_build/difference-3-inv.png'))
 
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
