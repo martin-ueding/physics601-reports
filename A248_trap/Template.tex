@@ -264,10 +264,67 @@ Figure~\ref{fig:doppler-free-3-level}).
 
 \section{Apparatus}
 
-An annotated photo of the setup is shown in
+Our setup consists of two blocks: the laser setup and the \mot\ setup. In the
+laser setup (see Figure~\ref{fig:setup-laser}, we have two tunable lasers as
+described in the chapter about theory. One will serve as a pumping laser, the
+other one will be the cooling one. Both lasers are optically isolated using a
+Faraday isolator. This relieves us from making sure that no light feeds back
+into the laser system. Without the isolator, we would create a second laser
+cavity which we do not want.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.47\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup-laser}
+        \caption{%
+            Laser part
+        }
+        \label{fig:setup-laser}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.47\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup-mot}
+        \caption{%
+            \textsc{Mot} part
+        }
+        \label{fig:setup-mot}
+    \end{subfigure}
+    \caption{%
+        Setup of the experiment. Both images are taken from the supplementary
+        material.
+    }
+    \label{fig:setup}
+\end{figure}
+
+Each laser has an independent locking mechanism via polarization spectroscopy.
+Part of the laser beam is taken away with a polarizing beam splitter and
+analysed in a rubidium cell. The error signal from each laser is fed into a
+lock box (not shown) to lock the laser into the desired frequency.
+
+The light of the two lasers is combined into an optical fiber which leads the
+light to the \mot\ setup shown in Figure~\ref{fig:setup-mot}. There we split
+the light into three approximately equally powered beams using $\lambda/2$
+plates and polarizing beam splitters. Each of the those three linearly
+polarized beams is sent through a $\lambda/4$ plate to become circularly
+polarized. That is then led through the \mot\ chamber and back again with
+reversed polarization.
+
+An annotated photo of the \mot\ setup is shown in
 Figure~\ref{fig:setup_photo_annotated}. The colors of the beams are just to
 help the eye, the beam itself always had the same IR \enquote{color}. The
 individual elements are the following.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{setup_photo_annotated}
+    \caption{%
+        Setup of the \mot. The arrows show the path of the light rays. Ray
+        colors are for illustration only. Numbers are explained in the text.
+    }
+    \label{fig:setup_photo_annotated}
+\end{figure}
 
 \begin{enumerate}
     \item
@@ -327,15 +384,6 @@ individual elements are the following.
     \item
         Camera directed onto \mot. Needed for \mot\ size estimation.
 \end{enumerate}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{setup_photo_annotated}
-    \caption{%
-        Setup of the \mot. The arrows show the path of the light rays. 
-    }
-    \label{fig:setup_photo_annotated}
-\end{figure}
 
 \section{Setup and calibration}
 
