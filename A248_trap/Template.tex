@@ -777,6 +777,72 @@ In the figure one can see that the greatest response in the \mot\ happens at
 the point where one would expect to see the repumping transition, that is
 between \SIrange{0.6}{1.0}{\second} on this scale.
 
+\subsection{Number of atoms}
+
+Now we have everything we need to compute the number of atoms in the \mot. The
+number of quantities going into this number is rather high, therefore see
+Figure~\ref{fig:mot-population-flow} for a \enquote{flowchart} of the
+quantities used.
+
+\begin{figure}
+    \centering
+    \includegraphics{mot-population-flow}
+    \caption{%
+        Conversion of quantities to obtain the \mot\ population.
+    }
+    \label{fig:mot-population-flow}
+\end{figure}
+
+We know that the distance between the lens and the \mot\ is $l$. The diameter
+of the lens is $d$. Then we can work out the solid angle that is taken up by
+the lens. The solid angle is $4 \piup$ for the whole sphere. Therefore we need
+to take the ratio of the lens surface ($\piup d^2$) and divide it by the total
+surface of a sphere at distance $l$, $4 \piup l^2$. In total we will then
+obtain
+\[
+    \Omega = 4 \piup \frac{\piup d^2}{4 \piup l^2} = \frac{\piup d^2}{l^2} \,.
+\]
+
+With that solid angle we can convert the measured power $p$ into the actual
+emitted power of the whole \mot, $p_\text{tot}$. We do this by dividing through
+the solid angle:
+\[
+    p_\text{tot} = p \frac{4 \piup}{\Omega} \,.
+\]
+
+With a wavelength of the cooling laser $\lambda$ we can compute the
+angular frequency $\omega$ and the photon energy
+$\hbar\omega$. Dividing the total power by the energy of a single photon gives
+us the total scattering rate
+\[
+    NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
+\]
+
+The beam intensity $I$ is the total energy of the six beams divided by the cross
+sectional area of the beam, $\pi r^2$. We have
+\[
+    I = 2 \frac{P_x + P_y + P_z}{\pi r^2} \,,
+\]
+where the factor two stems from the backreflection of each beam back through
+the chamber. With the intensity $I$ we can build up give the scattering rate of
+an individual atom:
+\[
+    R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
+    (\Delta/\Gamma)^2} \,.
+\]
+The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
+$I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
+% TODO Cite (4) from the Wieman paper.
+
+Taking all those pieces together we arrive at the expression for the atom
+number depending only on observables that we have:
+\[
+    N = \frac{4 \piup p}{\Omega \hbar \omega} 
+    \frac{1 + (I/I_\mathrm s) + 4 (\Delta/\Gamma)^2}{(I/I_\mathrm s) \piup \Gamma}
+    \qquad\text{with}\qquad
+    I = 2 \frac{P_x + P_y + P_z}{\pi r^2} \,,
+\]
+
 % TODO Obtain the number of atoms in the MOT.
 
 \chapter{Conclusion}
