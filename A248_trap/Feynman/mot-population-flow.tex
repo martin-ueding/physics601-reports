@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+    \graph[%
+        layered layout,
+        grow=right,
+        nodes=draw,
+    ]
+    {
+        {
+            {
+                {
+                    "flourecense power $p$",
+                    "solid angle $\Omega$"
+                } -> "total power $p_\text{tot}$",
+                "photon energy $\hbar \omega_0$"
+            } -> "total scattering rate $NR$",
+            {
+                {
+                    "beam radius $r$",
+                    "$P_x$",
+                    "$P_y$",
+                    "$P_z$"
+                } -> "intensity $I$",
+                "saturation intensity $I_\mathrm s$",
+                "natural line width $\Gamma$",
+                "detuning $\Delta$"
+            } -> "scattering rate $R$"
+        } -> "atom number $N$";
+    };
+\end{tikzpicture}

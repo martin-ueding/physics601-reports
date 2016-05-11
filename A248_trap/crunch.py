@@ -207,7 +207,7 @@ def job_intensity(T):
     power_mean = np.mean(mot_w_o)
     power_err = np.std(mot_w_o)
 
-    T['power_mot'] = siunitx(power_mean)
+    T['power_mot'] = siunitx(power_mean, power_err)
     T['power_mot_table'] = list(zip(
         siunitx(mot_with),
         siunitx(und),

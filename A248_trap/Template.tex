@@ -264,15 +264,139 @@ Figure~\ref{fig:doppler-free-3-level}).
 
 \section{Apparatus}
 
+Our setup consists of two blocks: the laser setup and the \mot\ setup. In the
+laser setup (see Figure~\ref{fig:setup-laser}, we have two tunable lasers as
+described in the chapter about theory. One will serve as a pumping laser, the
+other one will be the cooling one. Both lasers are optically isolated using a
+Faraday isolator. This relieves us from making sure that no light feeds back
+into the laser system. Without the isolator, we would create a second laser
+cavity which we do not want.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.47\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup-laser}
+        \caption{%
+            Laser part
+        }
+        \label{fig:setup-laser}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.47\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{setup-mot}
+        \caption{%
+            \textsc{Mot} part
+        }
+        \label{fig:setup-mot}
+    \end{subfigure}
+    \caption{%
+        Setup of the experiment. Both images are taken from the supplementary
+        material.
+    }
+    \label{fig:setup}
+\end{figure}
+
+Each laser has an independent locking mechanism via polarization spectroscopy.
+Part of the laser beam is taken away with a polarizing beam splitter and
+analysed in a rubidium cell. The error signal from each laser is fed into a
+lock box (not shown) to lock the laser into the desired frequency.
+
+The light of the two lasers is combined into an optical fiber which leads the
+light to the \mot\ setup shown in Figure~\ref{fig:setup-mot}. There we split
+the light into three approximately equally powered beams using $\lambda/2$
+plates and polarizing beam splitters. Each of the those three linearly
+polarized beams is sent through a $\lambda/4$ plate to become circularly
+polarized. That is then led through the \mot\ chamber and back again with
+reversed polarization.
+
+An annotated photo of the \mot\ setup is shown in
+Figure~\ref{fig:setup_photo_annotated}. The colors of the beams are just to
+help the eye, the beam itself always had the same IR \enquote{color}. The
+individual elements are the following.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{setup_photo_annotated}
+    \caption{%
+        Setup of the \mot. The arrows show the path of the light rays. Ray
+        colors are for illustration only. Numbers are explained in the text.
+    }
+    \label{fig:setup_photo_annotated}
+\end{figure}
+
+\begin{enumerate}
+    \item
+        Exit of optical fiber. The combined light of cooling and pumping
+        laser enters the \mot\ part of the experiment here.
+    \item
+        $\lambda/2$ plate. Adjusts the polarization of the light onto the beam
+        splitter.
+    \item
+        Polarizing beam splitter. Splits the linearly polarized light in order
+        to use one beam in the $z$-direction and the remainder in the
+        transversal direction. By adjusting the $\lambda/2$ plate \textcircled
+        2 in front, one can adjust the beam power splitting.
+    \item
+        Mirror and $\lambda/4$ plate. Reflects the incoming light upwards
+        through the \mot\ chamber. The plate then makes the light circularly
+        polarized.
+    \item
+        $\lambda/4$ plate.
+    \item
+        Mirror. Reflects the light back down.
+    \item
+        Mirror. Reflects one beam from \textcircled 3 upwards.
+    \item
+        Mirror. Directs the light back into the horizontal. \textcircled 7 and
+        \textcircled 8 will be called \enquote{elevator} occasionally.
+    \item
+        $\lambda/2$ plate. Allows to adjust the splitting ratio with
+        \textcircled{10}.
+    \item
+        Polarizing beam splitter. Splits the incoming beam into $x$ (blue) and
+        $y$ (green) part.
+    \item
+        Mirror. Directs the $y$ beam into the \mot\ chamber.
+    \item
+        $\lambda/4$ plate. Makes the light (close to) circularly polarized.
+    \item
+        $\lambda/4$ plate.
+    \item
+        Mirror. Reflects the $y$ beam back through the chamber.
+    \item
+        Mirror. Moves the $x$ beam around the camera.
+    \item
+        Mirror. Directs the $x$ beam into the chamber.
+    \item
+        $\lambda/4$ plate. Same as \textcircled{12}.
+    \item
+        $\lambda/4$ plate. Same as \textcircled{13}.
+    \item
+        Mirror. Same as \textcircled{14}.
+    \item
+        Mount for photo diode or power meter.
+    \item
+        IR camera. Useful for setting up the lasers.
+    \item
+        Live screen for IR camera.
+    \item
+        Camera directed onto \mot. Needed for \mot\ size estimation.
+\end{enumerate}
+
+All the nine mirrors and three $\lambda/2$ have to be adjusted by us. The
+six $\lambda/4$ plates are set to a decent setting from the start.
+
 \section{Setup and calibration}
 
 First we have to lock the cooling laser to the right transition. For this we
 tune the laser roughly to the wanted frequency. The lock box gets a triangular
 signal from a function generator, changes its amplitude and offset and gives it
-to the piezo which controls the gratings position. The Doppler-free spectrum of
+to the piezo which controls the grating's position. The Doppler-free spectrum of
 the $F=3$ ground state of ${}^{85}\text{Ru}$ is shown in
 Figure~\ref{fig:doppler-free-cooling}. From there we choose the right line,
-zoom in and lock the laser to a frequency a bit below it. 
+zoom in and lock the laser to a frequency a bit below the chosen transition. 
 
 \begin{figure}
     \centering
@@ -289,7 +413,7 @@ For the pumping laser we repeat the last steps. The Doppler-free spectrum of the
 $F=2$ ground state of ${}^{85}\text{Ru}$ is shown in
 Figure~\ref{fig:doppler-free-pumping}. The lines are so close together, that we
 can not distinguish between them. Instead of trying to lock we quasi-lock by
-zooming in far to the place where we expect the right transition to be.
+zooming in far to the spot where we expect the right transition to be.
 
 \begin{figure}
     \centering
@@ -380,7 +504,7 @@ roughly estimated. Then we need the beam's power. We measure on each axis
 separately and get $P_x = \SI{3.57}{\milli\watt}$, $P_y =
 \SI{3.36}{\milli\watt}$ and $P_z = \SI{4.45}{\milli\watt}$.
 
-Another measure we have to know is the beam diameter. For this we put a razor
+Another quantity we have to know is the beam diameter. For this we put a razor
 blade on an optical rail in the $y$-beam and measure the remaining power
 depending on the razor's position. Our measurements are shown in
 Table~\ref{tab:beam_diameter}. At last we need the detuning of the cooling
@@ -426,7 +550,7 @@ matrix.
 Now we want an estimate of our \mot's size. For this we first take a picture of
 the chamber with the \mot\ and without it. Then we subtract those images in
 order to remove the background from the other laser beams. This is shown in
-Figure~\label{fig:difference-3-inv}.
+Figure~\ref{fig:difference-3-inv}.
 
 Then we turn the camera and take a picture of a scale at the same distance. The
 image of the centimeter scale is shown in Figure~\ref{fig:scale}. For a rough
@@ -470,17 +594,17 @@ hope that on average this works out. For comparison, the image used has \num{<<
 mot_total_pixels >>} pixels.
 
 We carefully choose two points on the millimeter scale which are
-\SI{10}{\milli\meter} apart and new the spot where the \mot\ is on our images.
+\SI{10}{\milli\meter} apart and near the spot where the \mot\ is on our images.
 This reduces the statistical error a bit while not becoming too sensitive to
 lens distortions. We conclude that in the focal plane of the camera, we can
 convert with the constant \SI{<< mot_mm_per_pixel >>}{\milli\meter\per\pixel}
 to physical sizes.\footnote{\si{\pixel} is the unit for pixels, at least in CSS
-(Cascading Style Sheets).} From the number of white pixels \num{<<
-mot_white_pixels >>} we conclude that we have a radius of \SI{<< mot_radius_px
->>}{\pixel} and \SI{<< mot_radius_mm >>}{\milli\meter}. Judging by
-Figure~\ref{fig:motsize}, this is a sensible result. Converting this radius to
-a volume, we obtain a \mot\ volume of \SI{<< mot_volume_mm3
->>}{\milli\meter\cubed}.
+(Cascading Style Sheets).} From the number of white pixels, \num{<<
+mot_white_pixels >>}, we conclude that we have a radius of \SI{<< mot_radius_px
+>>}{\pixel} and thus \SI{<< mot_radius_mm >>}{\milli\meter} assuming that a
+circle is a good approximation. Judging by Figure~\ref{fig:motsize}, this is a
+sensible result. Converting this radius to a volume, we obtain a spherical
+\mot\ volume of \SI{<< mot_volume_mm3 >>}{\milli\meter\cubed}.
 
 
 \begin{figure}
@@ -494,15 +618,14 @@ a volume, we obtain a \mot\ volume of \SI{<< mot_volume_mm3
 
 \subsection{Influence of quarter waveplates}
 
-The effect of the $\lambda/4$ plates in front of the \mot{} have a significant
-effect. This is shown in Figure~\ref{fig:lambda_front}. Depending on the
-orientation of the plates the beam behind the plate stays linear or becomes
-elliptic or circular polarized. This can suppress the formation of the
-trap completely. The effect of the plates in the
-backreflected beam can be seen in Figure~\ref{fig:lambda_behind}. It is not very
-large. Ideally there should be no change of the \mot's power, of course. The
-effect that we do see indicates that the light is not perfectly circularly
-polarized.
+The effect of the $\lambda/4$ plates in front of the \mot{} is significant.
+This is shown in Figure~\ref{fig:lambda_front}. Depending on the orientation of
+the plates the beam behind the plate stays linearly or becomes elliptically or
+circularly polarized. This can suppress the formation of the trap completely.
+The effect of the plates in the backreflected beam can be seen in
+Figure~\ref{fig:lambda_behind}. It is not very large. Ideally there should be
+no change of the \mot's power, of course. The effect that we do see indicates
+that the light is not perfectly circularly polarized.
 
 \begin{figure}
     \centering
@@ -525,6 +648,7 @@ polarized.
     \end{subfigure}
     \caption{%
         Effect of the $\lambda/4$ plates around the vacuum chamber.
+        % TODO What is the fit?
     }
     \label{fig:}
 \end{figure}
@@ -533,10 +657,10 @@ polarized.
 
 Go through the magnetic field current.
 
-% TODO Tablet with magnetic field.
+% TODO Table with magnetic field.
 
 The dependence of the \mot\ intensity on the external magnetic field current is
-shown in Figure~\ref{fig:magnetic}
+shown in Figure~\ref{fig:magnetic}.
 
 \begin{figure}
     \centering
@@ -652,6 +776,76 @@ fit. Therefore we cannot convert this into a detuning frequency.
 In the figure one can see that the greatest response in the \mot\ happens at
 the point where one would expect to see the repumping transition, that is
 between \SIrange{0.6}{1.0}{\second} on this scale.
+
+\subsection{Number of atoms}
+
+Now we have everything we need to compute the number of atoms in the \mot. The
+number of quantities going into this number is rather high, therefore see
+Figure~\ref{fig:mot-population-flow} for a \enquote{flowchart} of the
+quantities used.
+
+\begin{figure}
+    \centering
+    \includegraphics{mot-population-flow}
+    \caption{%
+        Conversion of quantities to obtain the \mot\ population.
+    }
+    \label{fig:mot-population-flow}
+\end{figure}
+
+We know that the distance between the lens and the \mot\ is $l$. The diameter
+of the lens is $d$. Then we can work out the solid angle that is taken up by
+the lens. The solid angle is $4 \piup$ for the whole sphere. Therefore we need
+to take the ratio of the lens surface ($\piup d^2$) and divide it by the total
+surface of a sphere at distance $l$, $4 \piup l^2$. In total we will then
+obtain
+\[
+    \Omega = 4 \piup \frac{\piup d^2}{4 \piup l^2} = \frac{\piup d^2}{l^2} \,.
+\]
+
+With that solid angle we can convert the measured power $p$ into the actual
+emitted power of the whole \mot, $p_\text{tot}$. We do this by dividing through
+the solid angle:
+\[
+    p_\text{tot} = p \frac{4 \piup}{\Omega} \,.
+\]
+
+With a wavelength of the cooling laser $\lambda$ we can compute the
+angular frequency $\omega$ and the photon energy
+$\hbar\omega$. Dividing the total power by the energy of a single photon gives
+us the total scattering rate
+\[
+    NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
+\]
+
+The beam intensity $I$ is the total energy of the six beams divided by the cross
+sectional area of the beam, $\pi r^2$. We have
+\[
+    I = 2 \frac{P_x + P_y + P_z}{\pi r^2} \,,
+\]
+where the factor two stems from the backreflection of each beam back through
+the chamber. With the intensity $I$ we can build up give the scattering rate of
+an individual atom:
+\[
+    R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
+    (\Delta/\Gamma)^2} \,.
+\]
+The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
+$I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
+% TODO Cite (4) from the Wieman paper.
+
+Taking all those pieces together we arrive at the expression for the atom
+number depending only on observables that we have:
+\[
+    N = \frac{4 \piup p}{\Omega \hbar \omega} 
+    \frac{1 + (I/I_\mathrm s) + 4 (\Delta/\Gamma)^2}{(I/I_\mathrm s) \piup \Gamma}
+    \qquad\text{with}\qquad
+    I = 2 \frac{P_x + P_y + P_z}{\pi r^2} \,,
+\]
+
+% TODO Obtain the number of atoms in the MOT.
+
+\chapter{Conclusion}
 
 \end{document}
 
