@@ -168,6 +168,7 @@ def job_scan_cooling(T):
 
     return popt[0], perr[0]
 
+
 def job_scan_pumping(T):
     osci17_x1, osci17_y1, osci17_x2, osci17_y2 = trek.load_dir('0017')
     osci18_x1, osci18_y1, osci18_x2, osci18_y2 = trek.load_dir('0018')
@@ -177,6 +178,7 @@ def job_scan_pumping(T):
     np.savetxt('_build/xy/scan-pumping-no_mot-input.tsv', np.column_stack([osci17_x1, osci17_y1]))
     np.savetxt('_build/xy/scan-pumping-no_mot-output.tsv', np.column_stack([osci17_x2, osci17_y2]))
     np.savetxt('_build/xy/scan-pumping-difference-output.tsv', np.column_stack([osci17_x2, osci17_y2 - osci18_y2]))
+
 
 def job_loading(T):
     res_max = []
