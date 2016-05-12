@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# Copyright © 2013-2014 Martin Ueding <dev@martin-ueding.de>
+# Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The GNU Public License Version 2 (or later)
 
 import argparse
 import json
+import pprint
 
 import jinja2
 
@@ -21,6 +22,9 @@ def render_template(template_fn, data_fn, output_fn):
 
     with open(data_fn) as handle:
         data = json.load(handle)
+
+    pp = pprint.PrettyPrinter()
+    pp.pprint(data)
 
     # Rendering LaTeX document with values.
     with open(output_fn, "w") as handle:
