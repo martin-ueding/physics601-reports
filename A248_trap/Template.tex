@@ -486,6 +486,8 @@ make the \mot{} even larger.
 
 \subsection{MOT population}
 
+% TODO Make this a better heading.
+
 The first attribute of our \mot{} is the number of caught atoms. For this we
 have to find the fluorescence power. After replacing the photo diode with the
 power meter, we see that out \mot{} is very bright, but not very constant in
@@ -654,6 +656,8 @@ Go through the magnetic field current.
 
 % TODO Table with magnetic field.
 
+% TODO Flesh out the paragraphs here.
+
 The dependence of the \mot\ intensity on the external magnetic field current is
 shown in Figure~\ref{fig:magnetic}.
 
@@ -673,7 +677,16 @@ Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
 
 Room temperature \SI{24}{\celsius}
 
-% TODO Analyze loading behavior.
+To model the loading of the trap, we use a rising exponential with steady-state
+load $N_0$, start time $t_0$ and the \enquote{lifetime} in the filling process,
+\[
+    N(t) = N_0 \sbr{1 - \exp\del{- \frac{t - t_0}{\tau}}} \,.
+\]
+% TODO Cite Wieman (1) here.
+
+Figure~\ref{fig:loading} shows four of six measurements that we did for the
+loading of the \mot. We have rescaled and shifted all signals from the
+photodiode such that one can easily compare the signals visually.
 
 \begin{figure}
     \centering
@@ -715,12 +728,20 @@ Room temperature \SI{24}{\celsius}
 
     \caption{%
         Repeated measurement of the \mot\ loading time. The signal of the
-        photodiode is voltage measured at the oscilloscope. We have rescaled by
-        a factor hundred as the absolute value is not meaningful anyway. The
-        red line is a rising exponential fit.
+        photodiode is voltage measured at the oscilloscope. We have rescaled
+        the signal such that no \mot\ is around zero and with \mot it is around
+        unity. We have also shifted it such that $t_0 = 0$ for better
+        comparison. In red the rising exponential fit is shown.
         }
     \label{fig:loading}
 \end{figure}
+
+Fitting the function to our data from the rise of the signal, we obtain an
+average loading time of $\tau = \SI{<< loading_lifetime >>}{\second}$. Judging
+from the plots, this is a reasonable result.
+
+% TODO Compute the rubidium cross section with either Equation (2) or (3) from
+% the paper.
 
 \subsection{Detuning of the laser frequencies}
 

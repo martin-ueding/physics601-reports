@@ -192,6 +192,13 @@ def job_scan_pumping(T):
     np.savetxt('_build/xy/scan-pumping-difference-output.tsv', np.column_stack([osci17_x2, osci17_y2 - osci18_y2]))
 
 
+def stretch(data, lower, new_lower, upper, new_upper):
+    factor = (new_upper - new_lower) / (upper - lower)
+    offset = new_lower - lower * factor
+
+    return data * factor + offset
+
+
 def job_loading(T):
     res_max = []
     res_slope = []
@@ -204,20 +211,28 @@ def job_loading(T):
         fit_x = np.linspace(data_x[lower-20], data_x[-1], 100)
         popt, pconv = op.curve_fit(loading, data_x[lower:], data_y[lower:])
         res_max.append(popt[0])
-        res_slope.append(popt[1])
+        res_slope.append(1/popt[1])
         fit_y = loading(fit_x, *popt)
         # pl.plot(data_x, data_y)
         # pl.plot(fit_x, fit_y)
         # pl.show()
         # pl.clf()
 
+        avg_before = np.mean(data_y[:lower])
+
+        stretched_data = stretch(data_y, avg_before, 0, popt[0], 1)
+        stretched_fit = stretch(fit_y, avg_before, 0, popt[0], 1)
+
         np.savetxt('_build/xy/loading-{}-data.tsv'.format(i),
-                   np.column_stack([data_x, data_y * 100]))
+                   np.column_stack([data_x - data_x[lower], stretched_data]))
         np.savetxt('_build/xy/loading-{}-fit.tsv'.format(i),
-                   np.column_stack([fit_x, fit_y * 100]))
+                   np.column_stack([fit_x - data_x[lower], stretched_fit]))
 
     maximum_val, maximum_err = np.mean(res_max), np.std(res_max)
     slope_val, slope_err = np.mean(res_slope), np.std(res_slope)
+
+    T['loading_maximum'] = siunitx(maximum_val, maximum_err)
+    T['loading_lifetime'] = siunitx(slope_val, slope_err)
 
 
 def get_mot_power_nw(T):
