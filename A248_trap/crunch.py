@@ -26,21 +26,27 @@ from unitprint2 import siunitx
 import bootstrap
 import trek
 
+
 def linear(x, a, b):
     return a * x + b
+
 
 def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
+
 def loading(x, a, b, offset):
     return a*(1-np.exp(-b*(x-offset)))
+
 
 def errorfunction(x, power, diam, x_offs):
     return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
 
+
 def cos_squared(x, ampl, x_offs, y_offs):
     return ampl * (np.cos(x - x_offs))**2 + y_offs
+
 
 def subtract_images(number_str):
     img_with = scipy.misc.imread('Figures/{}-mit.bmp'.format(number_str))
@@ -65,6 +71,7 @@ def subtract_images(number_str):
 
     return difference
 
+
 def add_images(image_1, image_2):
     img_1 = scipy.misc.imread(image_1)
     img_2 = scipy.misc.imread(image_2)
@@ -82,8 +89,10 @@ def add_images(image_1, image_2):
 
     return sum_
 
+
 def invert_image(image):
     return 255 - image
+
 
 def dandify_plot():
     pl.margins(0.05)
@@ -91,12 +100,14 @@ def dandify_plot():
     pl.grid(True)
     pl.legend(loc='best')
 
+
 def job_doppler_free(T):
     osci08_x1, osci08_y1, osci08_x2, osci08_y2 = trek.load_dir('0008') 
     osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
 
     np.savetxt('_build/xy/doppler-free-pumping.tsv', np.column_stack([osci08_x1, osci08_y1]))
     np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
+
 
 def fit_osci_peak(x, y, xmin, xmax, basename=None):
     sel = (xmin < x) & (x < xmax)
@@ -109,6 +120,7 @@ def fit_osci_peak(x, y, xmin, xmax, basename=None):
         np.savetxt('_build/xy/'+basename, np.column_stack([interp_x, interp_y]))
 
     return popt[0], perr[0]
+
 
 def job_scan_cooling(T):
     osci19_x1, osci19_y1, osci19_x2, osci19_y2 = trek.load_dir('0019')
@@ -183,7 +195,7 @@ def job_scan_pumping(T):
 def job_loading(T):
     res_max = []
     res_slope = []
-    for directory in ['0002', '0003', '0004', '0005', '0006', '0007']:
+    for i, directory in zip(itertools.count(), ['0002', '0003', '0004', '0005', '0006', '0007']):
         data_x, data_y = trek.load_dir(directory)
         data_x, data_y = data_x[120:-500], data_y[120:-500]
 
@@ -199,8 +211,14 @@ def job_loading(T):
         # pl.show()
         # pl.clf()
 
+        np.savetxt('_build/xy/loading-{}-data.tsv'.format(i),
+                   np.column_stack([data_x, data_y * 100]))
+        np.savetxt('_build/xy/loading-{}-fit.tsv'.format(i),
+                   np.column_stack([fit_x, fit_y * 100]))
+
     maximum_val, maximum_err = np.mean(res_max), np.std(res_max)
     slope_val, slope_err = np.mean(res_slope), np.std(res_slope)
+
 
 def get_mot_power_nw(T):
     data = np.loadtxt('Data/mot-intensity.tsv')
@@ -220,6 +238,7 @@ def get_mot_power_nw(T):
     ))
 
     return power_mean, power_err
+
 
 def job_diameter(T):
     data = np.loadtxt('Data/diameter.tsv')
@@ -251,6 +270,7 @@ def job_diameter(T):
 
     return popt[1], perr[1]
 
+
 def job_lambda_4(T):
     for name in ['front', 'behind']:
         data = np.loadtxt('Data/lambda-{}.tsv'.format(name))
@@ -276,12 +296,14 @@ def job_lambda_4(T):
         np.savetxt('_build/xy/lambda_{}.tsv'.format(name), np.column_stack([angle, power]))
         np.savetxt('_build/xy/lambda_{}_fit.tsv'.format(name), np.column_stack([x, y]))
 
+
 def get_mm_per_pixel():
     # Those points are 1 cm apart on the image
     v1 = np.array([460, 186])
     v2 = np.array([720, 182])
     length_px = np.linalg.norm(v1 - v2)
     return 10 / length_px
+
 
 def job_mot_size(T):
     diff3 = subtract_images('03')
@@ -315,6 +337,7 @@ def job_mot_size(T):
     T['mot_radius_mm'] = siunitx(radius_mm)
     T['mot_volume_mm3'] = siunitx(volume_mm3)
 
+
 def get_scattering_rate_MHz(T, intens_mw_cm2, detuning_mhz):
     intens_sat_mw_cm2 = 4.1
     natural_width_mhz = 6
@@ -327,6 +350,7 @@ def get_scattering_rate_MHz(T, intens_mw_cm2, detuning_mhz):
 
     return intens_ratio * np.pi * detuning_mhz / (1 + intens_ratio + 4 * detuning_ratio**2)
 
+
 def job_magnetic_field(T):
     data = np.loadtxt('Data/magnetic.tsv')
     current = data[:, 0]
@@ -334,6 +358,7 @@ def job_magnetic_field(T):
 
     np.savetxt('_build/xy/magnetic.tsv',
                np.column_stack([current, intensity_nw]))
+
 
 def job_atom_number(T):
     wavelength_nm = 780
@@ -365,6 +390,7 @@ def job_atom_number(T):
     T['atom_number'] = siunitx(atom_number_val)
     T['wavelength_nm'] = siunitx(wavelength_nm)
 
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -385,6 +411,7 @@ def test_keys(T):
             print('-', dash_key)
         print()
         sys.exit(100)
+
 
 def main():
     T = {}
@@ -411,6 +438,7 @@ def main():
 
     pp = pprint.PrettyPrinter()
     pp.pprint(T)
+
 
 if __name__ == "__main__":
     main()

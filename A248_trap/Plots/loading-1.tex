@@ -1,0 +1,14 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=.5\linewidth,
+            height=.3\linewidth,
+            xlabel={Time / \si{\second}},
+            ylabel={Photodiode signal},
+            grid=major,
+            %yticklabel pos=right,
+        ]
+
+        \addplot[black] table {../xy/loading-1-data.tsv};
+        \addplot[red] table {../xy/loading-1-fit.tsv};
+    \end{axis}
+\end{tikzpicture}
