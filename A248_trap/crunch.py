@@ -29,23 +29,18 @@ import trek
 def linear(x, a, b):
     return a * x + b
 
-
 def gauss(x, mean, sigma, a):
     return a / (np.sqrt(2 * np.pi) * sigma) \
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
-
 def loading(x, a, b, offset):
     return a*(1-np.exp(-b*(x-offset)))
-
 
 def errorfunction(x, power, diam, x_offs):
     return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
 
-
 def cos_squared(x, ampl, x_offs, y_offs):
     return ampl * (np.cos(x - x_offs))**2 + y_offs
-
 
 def subtract_images(number_str):
     img_with = scipy.misc.imread('Figures/{}-mit.bmp'.format(number_str))
@@ -70,7 +65,6 @@ def subtract_images(number_str):
 
     return difference
 
-
 def add_images(image_1, image_2):
     img_1 = scipy.misc.imread(image_1)
     img_2 = scipy.misc.imread(image_2)
@@ -88,10 +82,8 @@ def add_images(image_1, image_2):
 
     return sum_
 
-
 def invert_image(image):
     return 255 - image
-
 
 def dandify_plot():
     pl.margins(0.05)
@@ -99,14 +91,12 @@ def dandify_plot():
     pl.grid(True)
     pl.legend(loc='best')
 
-
 def job_doppler_free(T):
     osci08_x1, osci08_y1, osci08_x2, osci08_y2 = trek.load_dir('0008') 
     osci20_x1, osci20_y1, osci20_x2, osci20_y2 = trek.load_dir('0020')
 
     np.savetxt('_build/xy/doppler-free-pumping.tsv', np.column_stack([osci08_x1, osci08_y1]))
     np.savetxt('_build/xy/doppler-free-cooling.tsv', np.column_stack([osci20_x1, osci20_y1]))
-
 
 def fit_osci_peak(x, y, xmin, xmax, basename=None):
     sel = (xmin < x) & (x < xmax)
@@ -119,7 +109,6 @@ def fit_osci_peak(x, y, xmin, xmax, basename=None):
         np.savetxt('_build/xy/'+basename, np.column_stack([interp_x, interp_y]))
 
     return popt[0], perr[0]
-
 
 def job_scan_cooling(T):
     osci19_x1, osci19_y1, osci19_x2, osci19_y2 = trek.load_dir('0019')
@@ -179,7 +168,6 @@ def job_scan_cooling(T):
 
     return popt[0], perr[0]
 
-
 def job_scan_pumping(T):
     osci17_x1, osci17_y1, osci17_x2, osci17_y2 = trek.load_dir('0017')
     osci18_x1, osci18_y1, osci18_x2, osci18_y2 = trek.load_dir('0018')
@@ -189,7 +177,6 @@ def job_scan_pumping(T):
     np.savetxt('_build/xy/scan-pumping-no_mot-input.tsv', np.column_stack([osci17_x1, osci17_y1]))
     np.savetxt('_build/xy/scan-pumping-no_mot-output.tsv', np.column_stack([osci17_x2, osci17_y2]))
     np.savetxt('_build/xy/scan-pumping-difference-output.tsv', np.column_stack([osci17_x2, osci17_y2 - osci18_y2]))
-
 
 def job_loading(T):
     res_max = []
@@ -213,7 +200,6 @@ def job_loading(T):
     maximum_val, maximum_err = np.mean(res_max), np.std(res_max)
     slope_val, slope_err = np.mean(res_slope), np.std(res_slope)
 
-
 def get_mot_power_nw(T):
     data = np.loadtxt('Data/mot-intensity.tsv')
     mot_with = data[:,0]
@@ -232,7 +218,6 @@ def get_mot_power_nw(T):
     ))
 
     return power_mean, power_err
-
 
 def job_diameter(T):
     data = np.loadtxt('Data/diameter.tsv')
@@ -264,7 +249,6 @@ def job_diameter(T):
 
     return popt[1], perr[1]
 
-
 def job_lambda_4(T):
     for name in ['front', 'behind']:
         data = np.loadtxt('Data/lambda-{}.tsv'.format(name))
@@ -290,14 +274,12 @@ def job_lambda_4(T):
         np.savetxt('_build/xy/lambda_{}.tsv'.format(name), np.column_stack([angle, power]))
         np.savetxt('_build/xy/lambda_{}_fit.tsv'.format(name), np.column_stack([x, y]))
 
-
 def get_mm_per_pixel():
     # Those points are 1 cm apart on the image
     v1 = np.array([460, 186])
     v2 = np.array([720, 182])
     length_px = np.linalg.norm(v1 - v2)
     return 10 / length_px
-
 
 def job_mot_size(T):
     diff3 = subtract_images('03')
@@ -343,7 +325,6 @@ def get_scattering_rate_MHz(T, intens_mw_cm2, detuning_mhz):
 
     return intens_ratio * np.pi * detuning_mhz / (1 + intens_ratio + 4 * detuning_ratio**2)
 
-
 def job_magnetic_field(T):
     data = np.loadtxt('Data/magnetic.tsv')
     current = data[:, 0]
@@ -352,25 +333,22 @@ def job_magnetic_field(T):
     np.savetxt('_build/xy/magnetic.tsv',
                np.column_stack([current, intensity_nw]))
 
-
 def job_atom_number(T):
     wavelength_nm = 780
     beam_power_mW = 2 * (3.57 + 3.36 + 4.45)
     mot_power_nW_val, mot_power_nW_err = get_mot_power_nw(T)
     lens_distance_cm = 10
     lens_radius_cm = 2.54 / 2
-    omega_val = np.pi * lens_radius_cm **2 / (lens_distance_cm**2)
+    omega_val = np.pi * lens_radius_cm**2 / (lens_distance_cm**2)
     mot_power_tot_nW_val = mot_power_nW_val * 4 * np.pi / omega_val
     diameter_cm_val, diameter_cm_err = job_diameter(T)
     beam_area_cm_val = np.pi * diameter_cm_val**2 / 4
     intens_mW_cm2_val = beam_power_mW / beam_area_cm_val
-    hbar_omega_nW_MHz = 1e-15 * 2 * np.pi * 3e8 / (wavelength_nm * 1e-9)
+    hbar = 1.054571800e-34
+    hbar_omega_nW_MHz = hbar * 1e15 * 2 * np.pi * 3e8 / (wavelength_nm * 1e-9)
     detuning_MHz_val, detuning_MHz_err = map(abs, job_scan_cooling(T))
     scattering_rate_MHz = get_scattering_rate_MHz(T, intens_mW_cm2_val, detuning_MHz_val)
     atom_number_val = mot_power_tot_nW_val / hbar_omega_nW_MHz / scattering_rate_MHz
-
-
-
 
     T['beam_area_cm'] = siunitx(beam_area_cm_val)
     T['total_beam_power_mW'] = siunitx(beam_power_mW)
@@ -384,7 +362,6 @@ def job_atom_number(T):
     T['scattering_rate_MHz'] = siunitx(scattering_rate_MHz)
     T['atom_number'] = siunitx(atom_number_val)
     T['wavelength_nm'] = siunitx(wavelength_nm)
-
 
 def test_keys(T):
     '''
@@ -406,7 +383,6 @@ def test_keys(T):
             print('-', dash_key)
         print()
         sys.exit(100)
-
 
 def main():
     T = {}
@@ -433,7 +409,6 @@ def main():
 
     pp = pprint.PrettyPrinter()
     pp.pprint(T)
-
 
 if __name__ == "__main__":
     main()
