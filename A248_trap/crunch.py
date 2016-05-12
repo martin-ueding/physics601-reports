@@ -331,16 +331,17 @@ def job_mot_size(T):
     T['mot_radius_mm'] = siunitx(radius_mm)
     T['mot_volume_mm3'] = siunitx(volume_mm3)
 
-    print(T)
-
-
-def get_scattering_rate_MHz(intens_mw_cm2, detuning_mhz):
+def get_scattering_rate_MHz(T, intens_mw_cm2, detuning_mhz):
     intens_sat_mw_cm2 = 4.1
     natural_width_mhz = 6
 
     intens_ratio = intens_mw_cm2 / intens_sat_mw_cm2
+    detuning_ratio = detuning_mhz / natural_width_mhz
 
-    return intens_ratio * np.pi * detuning_mhz / (1 + intens_ratio + 4 * (detuning_mhz / natural_width_mhz)**2)
+    T['intens_ratio'] = siunitx(intens_ratio)
+    T['detuning_ratio'] = siunitx(detuning_ratio)
+
+    return intens_ratio * np.pi * detuning_mhz / (1 + intens_ratio + 4 * detuning_ratio**2)
 
 
 def job_magnetic_field(T):
@@ -358,15 +359,20 @@ def job_atom_number(T):
     mot_power_nW_val, mot_power_nW_err = get_mot_power_nw(T)
     lens_distance_cm = 10
     lens_radius_cm = 2.54 / 2
-    diameter_cm_val, diameter_cm_err = job_diameter(T)
-    omega_val = np.pi * diameter_cm_val **2 / (4 * lens_distance_cm**2)
+    omega_val = np.pi * lens_radius_cm **2 / (lens_distance_cm**2)
     mot_power_tot_nW_val = mot_power_nW_val * 4 * np.pi / omega_val
-    intens_mW_cm2_val = beam_power_mW / (np.pi * diameter_cm_val**2 / 4)
+    diameter_cm_val, diameter_cm_err = job_diameter(T)
+    beam_area_cm_val = np.pi * diameter_cm_val**2 / 4
+    intens_mW_cm2_val = beam_power_mW / beam_area_cm_val
     hbar_omega_nW_MHz = 1e-15 * 2 * np.pi * 3e8 / (wavelength_nm * 1e-9)
     detuning_MHz_val, detuning_MHz_err = map(abs, job_scan_cooling(T))
-    scattering_rate_MHz = get_scattering_rate_MHz(intens_mW_cm2_val, detuning_MHz_val)
+    scattering_rate_MHz = get_scattering_rate_MHz(T, intens_mW_cm2_val, detuning_MHz_val)
     atom_number_val = mot_power_tot_nW_val / hbar_omega_nW_MHz / scattering_rate_MHz
 
+
+
+
+    T['beam_area_cm'] = siunitx(beam_area_cm_val)
     T['total_beam_power_mW'] = siunitx(beam_power_mW)
     T['lens_distance_cm'] = siunitx(lens_distance_cm)
     T['lens_radius_cm'] = siunitx(lens_radius_cm)
@@ -424,6 +430,9 @@ def main():
     test_keys(T)
     with open('_build/template.js', 'w') as f:
         json.dump(dict(T), f, indent=4, sort_keys=True)
+
+    pp = pprint.PrettyPrinter()
+    pp.pprint(T)
 
 
 if __name__ == "__main__":

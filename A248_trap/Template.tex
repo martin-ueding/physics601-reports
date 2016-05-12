@@ -813,16 +813,16 @@ $p_\text{tot}$. We do this by dividing through the solid angle:
     = \SI{<< mot_power_tot_nW >>}{\nano\watt} \,.
 \]
 
-With a wavelength of the cooling laser $\lambda$ we can compute the
-angular frequency $\omega$ and the photon energy
-$\hbar\omega$. Dividing the total power by the energy of a single photon gives
-us the total scattering rate
+With a wavelength of the cooling laser $\lambda$ we can compute the angular
+frequency $\omega$ and the photon energy $\hbar\omega$. Dividing the total
+power by the energy of a single photon gives us the total scattering rate
 \[
     NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
 \]
 
-The beam intensity $I$ is the total energy of the six beams divided by the cross
-sectional area of the beam, $\pi r^2$. We have
+The beam intensity $I$ is the total energy of the six beams (\SI{<<
+total_beam_power_mW >>}{\milli\watt}) divided by the cross sectional area of
+the beam, $\pi r^2 = \SI{<< beam_area_cm >>}{\centi\meter\squared}$. We have
 \[
     I = 2 \frac{P_x + P_y + P_z}{\pi r^2}
     = \SI{<< intens_mW_cm2 >>}{\milli\watt\per\centi\meter\squared}
