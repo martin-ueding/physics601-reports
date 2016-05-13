@@ -1003,9 +1003,40 @@ Solving the above equation for the cross section $\sigma$, we obtain
     = \SI{<< cross_section >>}{\meter\squared} \,.
 \]
 
-
-
 \chapter{Conclusion}
+
+In this experiment we built up a \mot\ by adjusting the mirrors and
+$\lambda/2$ plates on the given setup. We were able to achieve a \mot\ power
+of around \SI{<< power_mot >>}{\nano\watt} with our configuration. This is much
+higher than needed, which is good.
+
+Then by measuring the cooling laser beam intensity and diameter we were able to
+compute the beam intensity and the cooling scattering rate. By measuring the
+detuning of the cooling laser we were able to estimate the number of atoms in
+our \mot\ to be \num{<< atom_number >>}.
+
+The volume of our \mot\ is \SI{<< mot_volume_mm3 >>}{\milli\meter\cubed},
+determined from a photo taken with a camera.
+
+The loading behavior has a time constant of $\tau = \SI{<< loading_lifetime
+>>}{\second}$. From that we were able to compute the cross section of
+scattering with background rubidium gas go be \SI{<< cross_section
+>>}{\meter\squared}. This is a sensible result as the diameter of the hydrogen
+atom is around \SI{e-10}{\meter}. Rubidium will be somewhat larger. Taking the
+square of this diameter will give a ballpark estimation of the cross section as
+we assume short-range scattering.
+
+The large errors on our measurements mostly stem on from the uncertainty of the
+distance between the \mot\ and the lens which projects the \mot\ onto the power
+meter. Also the pressure was not known precisely. All in all we only get one
+significant digit for most derived quantities. If there would be a way to get a
+better position measurement of the lens, all errors could be reduced
+significantly.
+
+It was nice to have an oscilloscope which would write the raw data to the USB
+thumbdrive. That way we could extract the loading time from the raw
+measurements and did not have to twiddle with an exported image of the
+oscillogram.
 
 \end{document}
 
