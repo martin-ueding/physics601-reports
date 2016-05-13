@@ -245,12 +245,6 @@ Figure~\ref{fig:doppler-free-3-level}).
 
 \section{Equipment}
 
-\subsection{Anti-Helmholtz coils}
-
-\subsection{Vacuum chamber}
-
-\subsection{Laser system}
-
 \subsection{Diode lasers}
 
 A diode laser is a semiconductor diode, which works quite similar to a
@@ -268,17 +262,25 @@ diode}, which consists of a thin layer of low band gap material, sandwiched
 between two high band gap layers. This type requires a lower current
 density, which allows continuous wave operation at room temperature. 
 
-The line width of laser diodes is typically some \si{\mega\hertz} as depends on
-temperature and on the current. To get a narrow line width and to stabilize the
-frequency one uses an external resonator. For this the (divergent) laser beam
-gets focused on a diffraction grating. For all wavelengths the reflected beam
-of 0th order points in the same direction, but the angle of all other orders
-are frequency dependent. One chooses the position of the grating so that the
--1st order of the wanted frequency is coupled back into the laser, the wanted
-frequency now gets amplified strongly.
+The frequency range of laser diodes is typically quite large. To get a narrow
+line width and to stabilize the frequency one uses an external resonator. For
+this the (divergent) laser beam gets focused on a diffraction grating. For all
+wavelengths the reflected beam of 0th order points in the same direction, but
+the angle of all other orders are frequency dependent. One chooses the position
+of the grating so that the -1st order of the wanted frequency is coupled back
+into the laser, the wanted frequency now gets amplified strongly. 
 
 In this experiment the position of the grating can be controlled with a Piezo
 element, which allows us to choose the frequency by the voltage on the Piezo.
+One can now scan trough frequencies by applying a triangular voltage to the
+Piezo.
+
+\subsection{Frequency stabilization}
+
+The diode laser setup is still sensitive to mechanical distortions. For a
+further frequency stabilization an error signal is fed back to the Piezo. This
+signal can be obtained using polarization spectroscopy.
+%TODO polarization spectroscopy
 
 \chapter{Conduction}
 
