@@ -353,17 +353,28 @@ def job_mot_size(T):
     T['mot_volume_mm3'] = siunitx(volume_mm3)
 
 
-def get_scattering_rate_MHz(T, intens_mw_cm2, detuning_mhz):
+def get_scattering_rate_MHz(T, intens_mw_cm2_val, intens_mw_cm2_err, detuning_MHz_val, detuning_MHz_err):
     intens_sat_mw_cm2 = 4.1
-    natural_width_mhz = 6
+    natural_width_MHz = 6
 
-    intens_ratio = intens_mw_cm2 / intens_sat_mw_cm2
-    detuning_ratio = detuning_mhz / natural_width_mhz
+    intens_ratio_val = intens_mw_cm2_val / intens_sat_mw_cm2
+    intens_ratio_err = intens_mw_cm2_err / intens_sat_mw_cm2
 
-    T['intens_ratio'] = siunitx(intens_ratio)
-    T['detuning_ratio'] = siunitx(detuning_ratio)
+    detuning_ratio_val = detuning_MHz_val / natural_width_MHz
+    detuning_ratio_err = detuning_MHz_err / natural_width_MHz
 
-    return intens_ratio * np.pi * detuning_mhz / (1 + intens_ratio + 4 * detuning_ratio**2)
+    T['intens_ratio'] = siunitx(intens_ratio_val, intens_ratio_err)
+    T['detuning_ratio'] = siunitx(detuning_ratio_val, detuning_ratio_err)
+
+    val = intens_ratio_val * np.pi * natural_width_MHz / (1 + intens_ratio_val + 4 * detuning_ratio_val**2)
+    derivative_intens = - intens_ratio_val * natural_width_MHz * np.pi / (1 + 4 *detuning_ratio_val**2 + intens_ratio_val)**2 + natural_width_MHz * np.pi / (1 + 4 * detuning_ratio_val**2 + intens_ratio_val)
+    derivative_detuning = - 8 * detuning_ratio_val * intens_ratio_val * natural_width_MHz * np.pi / (1 + 4 * detuning_ratio_val**2 + intens_ratio_val)**2
+    err = np.sqrt(
+        (derivative_intens * intens_ratio_err)**2
+        + (derivative_detuning * detuning_ratio_err)**2
+    )
+
+    return val, err
 
 
 def job_magnetic_field(T):
@@ -380,30 +391,50 @@ def job_atom_number(T):
     wavelength_nm = 780
     beam_power_mW = 2 * (3.57 + 3.36 + 4.45)
     mot_power_nW_val, mot_power_nW_err = get_mot_power_nw(T)
-    lens_distance_cm = 10
-    lens_radius_cm = 2.54 / 2
-    omega_val = np.pi * lens_radius_cm**2 / (lens_distance_cm**2)
+    lens_distance_cm_val = 10
+    lens_distance_cm_err = 1
+    lens_radius_cm_val = 2.54 / 2
+
+    omega_val = np.pi * lens_radius_cm_val**2 / (lens_distance_cm_val**2)
+    omega_err = 2 * np.pi * lens_radius_cm_val**2 / (lens_distance_cm_val**3) * lens_distance_cm_err
+
     mot_power_tot_nW_val = mot_power_nW_val * 4 * np.pi / omega_val
+    mot_power_tot_nW_err = np.sqrt(
+        (mot_power_nW_err * 4 * np.pi / omega_val)**2
+        + (mot_power_nW_val * 4 * np.pi / omega_val**2 * omega_err)**2
+    )
+
     diameter_cm_val, diameter_cm_err = job_diameter(T)
+
     beam_area_cm_val = np.pi * diameter_cm_val**2 / 4
+    beam_area_cm_err = np.pi * diameter_cm_val / 2 * diameter_cm_err
+
     intens_mW_cm2_val = beam_power_mW / beam_area_cm_val
+    intens_mW_cm2_err = beam_power_mW / beam_area_cm_val**2 * beam_area_cm_err
+
     hbar = 1.054571800e-34
     hbar_omega_nW_MHz = hbar * 1e15 * 2 * np.pi * 3e8 / (wavelength_nm * 1e-9)
-    detuning_MHz_val, detuning_MHz_err = map(abs, job_scan_cooling(T))
-    scattering_rate_MHz = get_scattering_rate_MHz(T, intens_mW_cm2_val, detuning_MHz_val)
-    atom_number_val = mot_power_tot_nW_val / hbar_omega_nW_MHz / scattering_rate_MHz
 
-    T['beam_area_cm'] = siunitx(beam_area_cm_val)
-    T['total_beam_power_mW'] = siunitx(beam_power_mW)
-    T['lens_distance_cm'] = siunitx(lens_distance_cm)
-    T['lens_radius_cm'] = siunitx(lens_radius_cm)
-    T['mot_omega'] = siunitx(omega_val)
-    T['mot_power_nW'] = siunitx(mot_power_nW_val)
-    T['mot_power_tot_nW'] = siunitx(mot_power_tot_nW_val)
-    T['intens_mW_cm2'] = siunitx(intens_mW_cm2_val)
+    detuning_MHz_val, detuning_MHz_err = map(abs, job_scan_cooling(T))
+    scattering_rate_MHz_val, scattering_rate_MHz_err = get_scattering_rate_MHz(T, intens_mW_cm2_val, intens_mW_cm2_err, detuning_MHz_val, detuning_MHz_err)
+
+    atom_number_val = mot_power_tot_nW_val / hbar_omega_nW_MHz / scattering_rate_MHz_val
+    atom_number_err = np.sqrt(
+        (mot_power_tot_nW_err / hbar_omega_nW_MHz / scattering_rate_MHz_val)**2
+        + (mot_power_tot_nW_val / hbar_omega_nW_MHz / scattering_rate_MHz_val**2 * scattering_rate_MHz_err)**2
+    )
+
+    T['atom_number'] = siunitx(atom_number_val, atom_number_err)
+    T['beam_area_cm'] = siunitx(beam_area_cm_val, beam_area_cm_err)
     T['hbar_omega_nW_MHz'] = siunitx(hbar_omega_nW_MHz)
-    T['scattering_rate_MHz'] = siunitx(scattering_rate_MHz)
-    T['atom_number'] = siunitx(atom_number_val)
+    T['intens_mW_cm2'] = siunitx(intens_mW_cm2_val, intens_mW_cm2_err)
+    T['lens_distance_cm'] = siunitx(lens_distance_cm_val, lens_distance_cm_err)
+    T['lens_radius_cm'] = siunitx(lens_radius_cm_val)
+    T['mot_omega'] = siunitx(omega_val, omega_err)
+    T['mot_power_nW'] = siunitx(mot_power_nW_val, mot_power_nW_err)
+    T['mot_power_tot_nW'] = siunitx(mot_power_tot_nW_val, mot_power_tot_nW_err)
+    T['scattering_rate_MHz'] = siunitx(scattering_rate_MHz_val, scattering_rate_MHz_err)
+    T['total_beam_power_mW'] = siunitx(beam_power_mW)
     T['wavelength_nm'] = siunitx(wavelength_nm)
 
 

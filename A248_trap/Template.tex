@@ -514,8 +514,9 @@ make the \mot{} even larger.
 \subsection{Lens configuration}
 
 We also need the diameter of the lens and its distance to the \mot. Since the
-lens is an \SI{1}{\inch} lens, its diameter is \SI{2.54}{\centi\meter}. Its
-distance to the \mot{} is \SI{10}{\centi\meter}, roughly estimated.
+lens is an \SI{1}{\inch} lens, its radius is \SI{<< lens_radius_cm
+>>}{\centi\meter}. Its distance to the \mot\ is \SI{<< lens_distance_cm
+>>}{\centi\meter}, roughly estimated.
 
 We know that the distance between the lens and the \mot\ is $l$. The diameter
 of the lens is $d$. Then we can work out the solid angle that is taken up by
@@ -613,76 +614,6 @@ $I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
 We also need the wavelength $\lambda = \SI{<< wavelength_nm >>}{\nano\meter}$.
 Using that we can compute $\hbar\omega = \SI{<< hbar_omega_nW_MHz
 >>}{\nano\watt\mega\hertz}$.
-
-\subsection{Size of MOT}
-
-Now we want an estimate of our \mot's size. For this we first take a picture of
-the chamber with the \mot\ and without it. Then we subtract those images in
-order to remove the background from the other laser beams. This is shown in
-Figure~\ref{fig:difference-3-inv}.
-
-Then we turn the camera and take a picture of a scale at the same distance. The
-image of the centimeter scale is shown in Figure~\ref{fig:scale}. For a rough
-estimation, the superposition of the \mot\ signal and the scale shown in
-Figure~\ref{fig:motsize} can used. The radius of the \mot\ should be in the
-neighborhood of say \SI{2}{\milli\meter}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=.7\linewidth]{difference-3-inv.png}
-    \caption{Substraction image showing the \mot.}
-    \label{fig:difference-3-inv}
-\end{figure}
-
-\begin{figure}
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{scale.png}
-        \caption{Whole image of scale.}
-        \label{fig:scale}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{.45\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{motsize}
-        \caption{Superposition of \mot\ and scale.}
-        \label{fig:motsize}
-    \end{subfigure}
-    \caption{Millimeter scale at the same distance as the \mot.}
-    \label{fig:mot_size}
-\end{figure}
-
-We want to have a more exact estimation of this area. We therefore let the
-computer sum the pixel values of a cropped version shown in
-Figure~\ref{fig:mot-crop}. Then we divide by the difference in maximum and
-minimum value. This should give an good estimation of the \mot\ size.
-
-Our algorithm counts \num{<< mot_white_pixels >>} white pixels. Some dark gray
-pixels contribute a bit, some light gray pixels do not contribute fully. We
-hope that on average this works out. For comparison, the image used has \num{<<
-mot_total_pixels >>} pixels.
-
-We carefully choose two points on the millimeter scale which are
-\SI{10}{\milli\meter} apart and near the spot where the \mot\ is on our images.
-This reduces the statistical error a bit while not becoming too sensitive to
-lens distortions. We conclude that in the focal plane of the camera, we can
-convert with the constant \SI{<< mot_mm_per_pixel >>}{\milli\meter\per\pixel}
-to physical sizes.\footnote{\si{\pixel} is the unit for pixels, at least in CSS
-(Cascading Style Sheets).} From the number of white pixels, \num{<<
-mot_white_pixels >>}, we conclude that we have a radius of \SI{<< mot_radius_px
->>}{\pixel} and thus \SI{<< mot_radius_mm >>}{\milli\meter} assuming that a
-circle is a good approximation. Judging by Figure~\ref{fig:motsize}, this is a
-sensible result. Converting this radius to a volume, we obtain a spherical
-\mot\ volume of \SI{<< mot_volume_mm3 >>}{\milli\meter\cubed}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=.3\linewidth]{mot-crop}
-    \caption{%
-        Selection used for area determination.
-    }
-    \label{fig:mot-crop}
-\end{figure}
 
 \subsection{Detuning of the laser frequencies}
 
@@ -822,6 +753,76 @@ number depending only on observables that we have:
 \]
 
 % TODO Perform error propagation here.
+
+\subsection{Size of MOT}
+
+Now we want an estimate of our \mot's size. For this we first take a picture of
+the chamber with the \mot\ and without it. Then we subtract those images in
+order to remove the background from the other laser beams. This is shown in
+Figure~\ref{fig:difference-3-inv}.
+
+Then we turn the camera and take a picture of a scale at the same distance. The
+image of the centimeter scale is shown in Figure~\ref{fig:scale}. For a rough
+estimation, the superposition of the \mot\ signal and the scale shown in
+Figure~\ref{fig:motsize} can used. The radius of the \mot\ should be in the
+neighborhood of say \SI{2}{\milli\meter}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.7\linewidth]{difference-3-inv.png}
+    \caption{Substraction image showing the \mot.}
+    \label{fig:difference-3-inv}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{scale.png}
+        \caption{Whole image of scale.}
+        \label{fig:scale}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{motsize}
+        \caption{Superposition of \mot\ and scale.}
+        \label{fig:motsize}
+    \end{subfigure}
+    \caption{Millimeter scale at the same distance as the \mot.}
+    \label{fig:mot_size}
+\end{figure}
+
+We want to have a more exact estimation of this area. We therefore let the
+computer sum the pixel values of a cropped version shown in
+Figure~\ref{fig:mot-crop}. Then we divide by the difference in maximum and
+minimum value. This should give an good estimation of the \mot\ size.
+
+Our algorithm counts \num{<< mot_white_pixels >>} white pixels. Some dark gray
+pixels contribute a bit, some light gray pixels do not contribute fully. We
+hope that on average this works out. For comparison, the image used has \num{<<
+mot_total_pixels >>} pixels.
+
+We carefully choose two points on the millimeter scale which are
+\SI{10}{\milli\meter} apart and near the spot where the \mot\ is on our images.
+This reduces the statistical error a bit while not becoming too sensitive to
+lens distortions. We conclude that in the focal plane of the camera, we can
+convert with the constant \SI{<< mot_mm_per_pixel >>}{\milli\meter\per\pixel}
+to physical sizes.\footnote{\si{\pixel} is the unit for pixels, at least in CSS
+(Cascading Style Sheets).} From the number of white pixels, \num{<<
+mot_white_pixels >>}, we conclude that we have a radius of \SI{<< mot_radius_px
+>>}{\pixel} and thus \SI{<< mot_radius_mm >>}{\milli\meter} assuming that a
+circle is a good approximation. Judging by Figure~\ref{fig:motsize}, this is a
+sensible result. Converting this radius to a volume, we obtain a spherical
+\mot\ volume of \SI{<< mot_volume_mm3 >>}{\milli\meter\cubed}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.3\linewidth]{mot-crop}
+    \caption{%
+        Selection used for area determination.
+    }
+    \label{fig:mot-crop}
+\end{figure}
 
 \subsection{Influence of quarter waveplates}
 
