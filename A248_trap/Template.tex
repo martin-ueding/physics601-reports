@@ -601,7 +601,7 @@ the beam, $\pi r^2 = \SI{<< beam_area_cm >>}{\centi\meter\squared}$. We have
 \]
 where the factor two stems from the backreflection of each beam back through
 the chamber. With the intensity $I$ we can build up give the scattering rate of
-an individual atom:
+an individual atom as given by \textcite[Equation~(4)]{wieman/inexpensive}:
 \[
     R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
     (\Delta/\Gamma)^2}
@@ -609,8 +609,8 @@ an individual atom:
     \,.
 \]
 The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
-$I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
-% TODO Cite (4) from the Wieman paper.
+$I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$
+\textcite[328]{wieman/inexpensive}.
 We also need the wavelength $\lambda = \SI{<< wavelength_nm >>}{\nano\meter}$.
 Using that we can compute $\hbar\omega = \SI{<< hbar_omega_nW_MHz
 >>}{\nano\watt\mega\hertz}$.
@@ -752,8 +752,6 @@ number depending only on observables that we have:
     \,.
 \]
 
-% TODO Perform error propagation here.
-
 \subsection{Size of MOT}
 
 Now we want an estimate of our \mot's size. For this we first take a picture of
@@ -880,8 +878,6 @@ observed.
 
 % TODO Table with magnetic field.
 
-% TODO Flesh out the paragraphs here.
-
 The dependence of the \mot\ intensity on the external magnetic field current is
 shown in Figure~\ref{fig:magnetic}. One can see some sigmoidal shape here.
 Given the large errors of our measurement, one could perhaps also succeed with
@@ -911,11 +907,11 @@ regimes connected by some smooth function. That will just be a sigmoidal shape.
 \subsection{Loading behavior}
 
 To model the loading of the trap, we use a rising exponential with steady-state
-load $N_0$, start time $t_0$ and the \enquote{lifetime} in the filling process,
+load $N_0$, start time $t_0$ and the \enquote{lifetime} in the filling process
+as given by \textcite[Equation~(1)]{wieman/inexpensive}:
 \[
     N(t) = N_0 \sbr{1 - \exp\del{- \frac{t - t_0}{\tau}}} \,.
 \]
-% TODO Cite Wieman (1) here.
 
 Figure~\ref{fig:loading} shows four of six measurements that we did for the
 loading of the \mot. We have rescaled and shifted all signals from the
@@ -1008,9 +1004,6 @@ Solving the above equation for the cross section $\sigma$, we obtain
 \]
 
 
-
-% TODO Compute the rubidium cross section with either Equation (2) or (3) from
-% the paper.
 
 \chapter{Conclusion}
 
