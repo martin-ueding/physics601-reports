@@ -511,6 +511,23 @@ make the \mot{} even larger.
 
 \section{MOT characterization}
 
+\subsection{Lens configuration}
+
+We also need the diameter of the lens and its distance to the \mot. Since the
+lens is an \SI{1}{\inch} lens, its diameter is \SI{2.54}{\centi\meter}. Its
+distance to the \mot{} is \SI{10}{\centi\meter}, roughly estimated.
+
+We know that the distance between the lens and the \mot\ is $l$. The diameter
+of the lens is $d$. Then we can work out the solid angle that is taken up by
+the lens. The solid angle is $4 \piup$ for the whole sphere. Therefore we need
+to take the ratio of the lens surface ($\piup d^2/4$) and divide it by the total
+surface of a sphere at distance $l$, $4 \piup l^2$. In total we will then
+obtain
+\[
+    \Omega = 4 \piup \frac{\piup d^2}{16 \piup l^2} = \frac{\piup d^2}{4 l^2}
+    = \SI{<< mot_omega >>}{\steradian} \,.
+\]
+
 \subsection{Fluorescence power}
 
 We first have to find the fluorescence power. After replacing the photo diode
@@ -520,19 +537,19 @@ Table~\ref{tab:mot_power}). Our \mot's power is hence \SI{<< power_mot
 >>}{\nano\watt} which is quite good, as the instruction states that about
 \SI{50}{\nano\watt} are needed.
 
-\subsection{Lens configuration}
+With that solid angle we can convert the measured power $p = \SI{<<
+mot_power_nW >>}{\nano\watt}$ into the actual emitted power of the whole \mot,
+$p_\text{tot}$. We do this by dividing through the solid angle:
+\[
+    p_\text{tot} = p \frac{4 \piup}{\Omega}
+    = \SI{<< mot_power_tot_nW >>}{\nano\watt} \,.
+\]
 
-We also need the diameter of the lens and its distance to the \mot. Since the
-lens is an \SI{1}{\inch} lens, its diameter is \SI{2.54}{\centi\meter}. Its
-distance to the \mot{} is \SI{10}{\centi\meter}, roughly estimated.
-
-\subsection{Beam power}
+\subsection{Beam intensity}
 
 Then we need the beam's power. We measure on each axis separately and get $P_x
 = \SI{3.57}{\milli\watt}$, $P_y = \SI{3.36}{\milli\watt}$ and $P_z =
 \SI{4.45}{\milli\watt}$.
-
-\subsection{Beam diameter}
 
 Another quantity we have to know is the beam diameter. For this we put a razor
 blade on an optical rail in the $y$-beam and measure the remaining power
@@ -573,6 +590,29 @@ estimated by the diagonal of the fit covariance matrix.
     \label{fig:diameter}
 \end{figure}
 
+The beam intensity $I$ is the total energy of the six beams (\SI{<<
+total_beam_power_mW >>}{\milli\watt}) divided by the cross sectional area of
+the beam, $\pi r^2 = \SI{<< beam_area_cm >>}{\centi\meter\squared}$. We have
+\[
+    I = 2 \frac{P_x + P_y + P_z}{\pi r^2}
+    = \SI{<< intens_mW_cm2 >>}{\milli\watt\per\centi\meter\squared}
+    \,,
+\]
+where the factor two stems from the backreflection of each beam back through
+the chamber. With the intensity $I$ we can build up give the scattering rate of
+an individual atom:
+\[
+    R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
+    (\Delta/\Gamma)^2}
+    = \SI{<< scattering_rate_MHz >>}{\mega\hertz}
+    \,.
+\]
+The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
+$I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
+% TODO Cite (4) from the Wieman paper.
+We also need the wavelength $\lambda = \SI{<< wavelength_nm >>}{\nano\meter}$.
+Using that we can compute $\hbar\omega = \SI{<< hbar_omega_nW_MHz
+>>}{\nano\watt\mega\hertz}$.
 
 \subsection{Size of MOT}
 
@@ -635,7 +675,6 @@ circle is a good approximation. Judging by Figure~\ref{fig:motsize}, this is a
 sensible result. Converting this radius to a volume, we obtain a spherical
 \mot\ volume of \SI{<< mot_volume_mm3 >>}{\milli\meter\cubed}.
 
-
 \begin{figure}
     \centering
     \includegraphics[width=.3\linewidth]{mot-crop}
@@ -644,6 +683,145 @@ sensible result. Converting this radius to a volume, we obtain a spherical
     }
     \label{fig:mot-crop}
 \end{figure}
+
+\subsection{Detuning of the laser frequencies}
+
+Unlock the cooling laser. Run a slow frequency of around
+and scan the MOT intensity with the photo diode. 
+
+So far we have tweaked the detuning of the cooling and repumping lasers in
+order to get the largest \mot. Now we want to investigate the \mot\ dependence
+on the detuning. First we unlock the cooling laser. Then we use the frequency
+generate to generate a \SI{100}{\milli\hertz} triangular signal which we use
+as detuning of the cooling laser.
+
+Using the photodiode, we can get fast feedback from the \mot. We attach the
+cooling laser rubidium spectrum signal and the photodiode to the oscilloscope.
+Then we set the trigger on the rising flank of the \mot\ signal. One spectrum
+with the magnetic field switched on is taken, another one without the field.
+This way we can subtract the background.
+
+The difference between the two \mot\ signals gives the intensity of the \mot\
+itself. We plot that signal together this the rubidium spectrum, that is shown
+in Figure~\ref{fig:scan-cooling}.
+
+% TODO What was this number for?
+% \SI{3.9}{\milli\watt}
+
+\begin{figure}
+    \centering
+    \includegraphics{scan-cooling}
+    \caption{%
+        Scanning of the cooling laser. The rubidium spectrum of the cooling
+        laser is shown in black. The red curve is the difference of photodiode
+        signals with and without the magnetic field. One can see that the \mot\
+        forms only at the cooling transition. The thick orange lines are
+        Gaussian fits to the peaks.
+    }
+    \label{fig:scan-cooling}
+\end{figure}
+
+The time scale in that diagram is given by the scanning frequency chosen via
+the function generator. It is not really meaningful for our experiment.
+Therefore we identify three peaks in the rubidium spectrum. We fit a Gaussian
+curve to obtain the center of the peak. Then using the level shifts given in
+the second oscillogram from the appendix of the manual, we can obtain a
+connection between the scanning time and the detuning from the cooling
+transition. The three values used are shown in
+Figure~\ref{fig:scan-cooling-spacing}. We perform a linear fit and use this to
+convert the time scale into a frequency scale.
+Figure~\ref{fig:scan-cooling-detuning} shows the dependence of the \mot\
+response (background already subtracted) with respect to the detuning
+frequency.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics{scan-cooling-spacing}
+        \caption{%
+            Conversion of scan time to actual detuning.
+            }
+        \label{fig:scan-cooling-spacing}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \centering
+        \includegraphics{scan-cooling-detuning}
+        \caption{%
+            \textsc{Mot} response with respect to the detuning from the cooling
+            transition frequency. Black is the data, red shows the Gaussian
+            fit.
+            }
+        \label{fig:scan-cooling-detuning}
+    \end{subfigure}
+    \caption{%
+        }
+    \label{fig:}
+\end{figure}
+
+Performing a Gaussian fit to the peak, we can get a good estimate of the
+central value of that peak. This should be the value that we have used then we
+optimized the \mot\ for brightness in the previous steps. The Gaussian fit
+gives us a central value of $\Delta = \SI{<< detuning >>}{\mega\hertz}$.
+
+This was the dependence on the cooling laser frequency. The whole time, we have
+kept the pumping laser locked. Now we will exchange the roles and lock the
+cooling laser. Then we unlock the pumping laser and let it scan with the same
+slow frequency from the generator. In Figure~\ref{fig:scan-pumping} we show the
+rubidium spectrum and the \mot\ signal without background.
+
+\begin{figure}
+    \centering
+    \includegraphics{scan-pumping}
+    \caption{%
+        Scanning of the pumping laser. The rubidium spectrum of the pumping
+        laser is shown in black. The red curve is the difference of photodiode
+        signals with and without the magnetic field, i.e.\ the \mot\ signal.
+    }
+    \label{fig:scan-pumping}
+\end{figure}
+
+We would like to have done the same conversion of scanning time to detuning
+frequency. However, the peaks are too smeared out to perform a decent Gaussian
+fit. Therefore we cannot convert this into a detuning frequency.
+In the figure one can see that the greatest response in the \mot\ happens at
+the point where one would expect to see the repumping transition, that is
+between \SIrange{0.6}{1.0}{\second} on this scale.
+
+\subsection{Number of atoms}
+
+Now we have everything we need to compute the number of atoms in the \mot. The
+number of quantities going into this number is rather high, therefore see
+Figure~\ref{fig:mot-population-flow} for a \enquote{flowchart} of the
+quantities used.
+
+\begin{figure}
+    \centering
+    \includegraphics{mot-population-flow}
+    \caption{%
+        Conversion of quantities to obtain the \mot\ population.
+    }
+    \label{fig:mot-population-flow}
+\end{figure}
+
+With a wavelength of the cooling laser $\lambda$ we can compute the angular
+frequency $\omega$ and the photon energy $\hbar\omega$. Dividing the total
+power by the energy of a single photon gives us the total scattering rate
+\[
+    NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
+\]
+
+Taking all those pieces together we arrive at the expression for the atom
+number depending only on observables that we have:
+\[
+    N = \frac{4 \piup p}{\Omega \hbar \omega} 
+    \frac{1 + (I/I_\mathrm s) + 4 (\Delta/\Gamma)^2}{(I/I_\mathrm s) \piup \Gamma}
+    = \num{<< atom_number >>}
+    \,.
+\]
+
+% TODO Perform error propagation here.
 
 \subsection{Influence of quarter waveplates}
 
@@ -802,188 +980,6 @@ from the plots, this is a reasonable result.
 Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
 
 Room temperature \SI{24}{\celsius}
-
-\subsection{Detuning of the laser frequencies}
-
-Unlock the cooling laser. Run a slow frequency of around
-and scan the MOT intensity with the photo diode. 
-
-So far we have tweaked the detuning of the cooling and repumping lasers in
-order to get the largest \mot. Now we want to investigate the \mot\ dependence
-on the detuning. First we unlock the cooling laser. Then we use the frequency
-generate to generate a \SI{100}{\milli\hertz} triangular signal which we use
-as detuning of the cooling laser.
-
-Using the photodiode, we can get fast feedback from the \mot. We attach the
-cooling laser rubidium spectrum signal and the photodiode to the oscilloscope.
-Then we set the trigger on the rising flank of the \mot\ signal. One spectrum
-with the magnetic field switched on is taken, another one without the field.
-This way we can subtract the background.
-
-The difference between the two \mot\ signals gives the intensity of the \mot\
-itself. We plot that signal together this the rubidium spectrum, that is shown
-in Figure~\ref{fig:scan-cooling}.
-
-% TODO What was this number for?
-% \SI{3.9}{\milli\watt}
-
-\begin{figure}
-    \centering
-    \includegraphics{scan-cooling}
-    \caption{%
-        Scanning of the cooling laser. The rubidium spectrum of the cooling
-        laser is shown in black. The red curve is the difference of photodiode
-        signals with and without the magnetic field. One can see that the \mot\
-        forms only at the cooling transition. The thick orange lines are
-        Gaussian fits to the peaks.
-    }
-    \label{fig:scan-cooling}
-\end{figure}
-
-The time scale in that diagram is given by the scanning frequency chosen via
-the function generator. It is not really meaningful for our experiment.
-Therefore we identify three peaks in the rubidium spectrum. We fit a Gaussian
-curve to obtain the center of the peak. Then using the level shifts given in
-the second oscillogram from the appendix of the manual, we can obtain a
-connection between the scanning time and the detuning from the cooling
-transition. The three values used are shown in
-Figure~\ref{fig:scan-cooling-spacing}. We perform a linear fit and use this to
-convert the time scale into a frequency scale.
-Figure~\ref{fig:scan-cooling-detuning} shows the dependence of the \mot\
-response (background already subtracted) with respect to the detuning
-frequency.
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics{scan-cooling-spacing}
-        \caption{%
-            Conversion of scan time to actual detuning.
-            }
-        \label{fig:scan-cooling-spacing}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.48\linewidth}
-        \centering
-        \includegraphics{scan-cooling-detuning}
-        \caption{%
-            \textsc{Mot} response with respect to the detuning from the cooling
-            transition frequency. Black is the data, red shows the Gaussian
-            fit.
-            }
-        \label{fig:scan-cooling-detuning}
-    \end{subfigure}
-    \caption{%
-        }
-    \label{fig:}
-\end{figure}
-
-Performing a Gaussian fit to the peak, we can get a good estimate of the
-central value of that peak. This should be the value that we have used then we
-optimized the \mot\ for brightness in the previous steps. The Gaussian fit
-gives us a central value of $\Delta = \SI{<< detuning >>}{\mega\hertz}$.
-
-This was the dependence on the cooling laser frequency. The whole time, we have
-kept the pumping laser locked. Now we will exchange the roles and lock the
-cooling laser. Then we unlock the pumping laser and let it scan with the same
-slow frequency from the generator. In Figure~\ref{fig:scan-pumping} we show the
-rubidium spectrum and the \mot\ signal without background.
-
-\begin{figure}
-    \centering
-    \includegraphics{scan-pumping}
-    \caption{%
-        Scanning of the pumping laser. The rubidium spectrum of the pumping
-        laser is shown in black. The red curve is the difference of photodiode
-        signals with and without the magnetic field, i.e.\ the \mot\ signal.
-    }
-    \label{fig:scan-pumping}
-\end{figure}
-
-We would like to have done the same conversion of scanning time to detuning
-frequency. However, the peaks are too smeared out to perform a decent Gaussian
-fit. Therefore we cannot convert this into a detuning frequency.
-In the figure one can see that the greatest response in the \mot\ happens at
-the point where one would expect to see the repumping transition, that is
-between \SIrange{0.6}{1.0}{\second} on this scale.
-
-\subsection{Number of atoms}
-
-Now we have everything we need to compute the number of atoms in the \mot. The
-number of quantities going into this number is rather high, therefore see
-Figure~\ref{fig:mot-population-flow} for a \enquote{flowchart} of the
-quantities used.
-
-\begin{figure}
-    \centering
-    \includegraphics{mot-population-flow}
-    \caption{%
-        Conversion of quantities to obtain the \mot\ population.
-    }
-    \label{fig:mot-population-flow}
-\end{figure}
-
-We know that the distance between the lens and the \mot\ is $l$. The diameter
-of the lens is $d$. Then we can work out the solid angle that is taken up by
-the lens. The solid angle is $4 \piup$ for the whole sphere. Therefore we need
-to take the ratio of the lens surface ($\piup d^2/4$) and divide it by the total
-surface of a sphere at distance $l$, $4 \piup l^2$. In total we will then
-obtain
-\[
-    \Omega = 4 \piup \frac{\piup d^2}{16 \piup l^2} = \frac{\piup d^2}{4 l^2}
-    = \SI{<< mot_omega >>}{\steradian} \,.
-\]
-
-With that solid angle we can convert the measured power $p = \SI{<<
-mot_power_nW >>}{\nano\watt}$ into the actual emitted power of the whole \mot,
-$p_\text{tot}$. We do this by dividing through the solid angle:
-\[
-    p_\text{tot} = p \frac{4 \piup}{\Omega}
-    = \SI{<< mot_power_tot_nW >>}{\nano\watt} \,.
-\]
-
-With a wavelength of the cooling laser $\lambda$ we can compute the angular
-frequency $\omega$ and the photon energy $\hbar\omega$. Dividing the total
-power by the energy of a single photon gives us the total scattering rate
-\[
-    NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
-\]
-
-The beam intensity $I$ is the total energy of the six beams (\SI{<<
-total_beam_power_mW >>}{\milli\watt}) divided by the cross sectional area of
-the beam, $\pi r^2 = \SI{<< beam_area_cm >>}{\centi\meter\squared}$. We have
-\[
-    I = 2 \frac{P_x + P_y + P_z}{\pi r^2}
-    = \SI{<< intens_mW_cm2 >>}{\milli\watt\per\centi\meter\squared}
-    \,,
-\]
-where the factor two stems from the backreflection of each beam back through
-the chamber. With the intensity $I$ we can build up give the scattering rate of
-an individual atom:
-\[
-    R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
-    (\Delta/\Gamma)^2}
-    = \SI{<< scattering_rate_MHz >>}{\mega\hertz}
-    \,.
-\]
-The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
-$I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
-% TODO Cite (4) from the Wieman paper.
-We also need the wavelength $\lambda = \SI{<< wavelength_nm >>}{\nano\meter}$.
-Using that we can compute $\hbar\omega = \SI{<< hbar_omega_nW_MHz
->>}{\nano\watt\mega\hertz}$.
-
-Taking all those pieces together we arrive at the expression for the atom
-number depending only on observables that we have:
-\[
-    N = \frac{4 \piup p}{\Omega \hbar \omega} 
-    \frac{1 + (I/I_\mathrm s) + 4 (\Delta/\Gamma)^2}{(I/I_\mathrm s) \piup \Gamma}
-    = \num{<< atom_number >>}
-    \,.
-\]
-
-% TODO Perform error propagation here.
 
 \chapter{Conclusion}
 
