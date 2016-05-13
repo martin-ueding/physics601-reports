@@ -369,10 +369,11 @@ def get_scattering_rate_MHz(T, intens_mw_cm2, detuning_mhz):
 def job_magnetic_field(T):
     data = np.loadtxt('Data/magnetic.tsv')
     current = data[:, 0]
-    intensity_nw = data[:, 1]
+    intensity_nw_val = data[:, 1]
+    intensity_nw_err = np.ones(intensity_nw_val.shape) * 20
 
     np.savetxt('_build/xy/magnetic.tsv',
-               np.column_stack([current, intensity_nw]))
+               np.column_stack([current, intensity_nw_val, intensity_nw_err]))
 
 
 def job_atom_number(T):

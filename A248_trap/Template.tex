@@ -511,14 +511,9 @@ make the \mot{} even larger.
 
 \section{MOT characterization}
 
-\subsection{MOT population}
-
-% TODO Make this a better heading.
-
-The first attribute of our \mot{} is the number of caught atoms. For this we
-have to find the fluorescence power. After replacing the photo diode with the
-power meter, we see that out \mot{} is very bright, but not very constant in
-power.  Therefor we measure a few times to find a mean value (see
+We first have to find the fluorescence power. After replacing the photo diode
+with the power meter, we see that out \mot{} is very bright, but not very
+constant in power.  Therefor we measure a few times to find a mean value (see
 Table~\ref{tab:mot_power}). Our \mot's power is hence \SI{<< power_mot
 >>}{\nano\watt} which is quite good, as the instruction states that about
 \SI{50}{\nano\watt} are needed. We also need the diameter of the lens and its
@@ -528,11 +523,12 @@ roughly estimated. Then we need the beam's power. We measure on each axis
 separately and get $P_x = \SI{3.57}{\milli\watt}$, $P_y =
 \SI{3.36}{\milli\watt}$ and $P_z = \SI{4.45}{\milli\watt}$.
 
+\subsection{Beam diameter}
+
 Another quantity we have to know is the beam diameter. For this we put a razor
 blade on an optical rail in the $y$-beam and measure the remaining power
 depending on the razor's position. Our measurements are shown in
-Table~\ref{tab:beam_diameter}. At last we need the detuning of the cooling
-laser. This will be estimated later on.
+Table~\ref{tab:beam_diameter}.
 
 \begin{table}
     \centering
@@ -553,10 +549,10 @@ laser. This will be estimated later on.
 \end{table}
 
 The collected data is also shown in Figure~\ref{fig:diameter} with a Gaussian
-CDF fit. From the fit we derive a total beam power of \SI{<< beam_power
->>}{\milli\watt} and an $\eup^{-2}$ beam diameter of \SI{<< beam_diameter
->>}{\centi\meter}. Errors are estimated by the diagonal of the fit covariance
-matrix.
+\textsc{cdf}\footnote{cummulative density function} fit. From the fit we derive
+a beam power of \SI{<< beam_power >>}{\milli\watt} for the $y$-branch and an
+$\eup^{-2}$ beam diameter of \SI{<< beam_diameter >>}{\centi\meter}. Errors are
+estimated by the diagonal of the fit covariance matrix.
 
 \begin{figure}
     \centering
@@ -646,10 +642,13 @@ The effect of the $\lambda/4$ plates in front of the \mot{} is significant.
 This is shown in Figure~\ref{fig:lambda_front}. Depending on the orientation of
 the plates the beam behind the plate stays linearly or becomes elliptically or
 circularly polarized. This can suppress the formation of the trap completely.
+We have fitted a $\cos(\phi - \phi_0)^2$ function to the data as we expect the
+amplitude to scale with the cosine and the intensity with the square of that.
+
 The effect of the plates in the backreflected beam can be seen in
 Figure~\ref{fig:lambda_behind}. It is not very large. Ideally there should be
 no change of the \mot's power, of course. The effect that we do see indicates
-that the light is not perfectly circularly polarized.
+that the light going through the \mot\ is not perfectly circularly polarized.
 
 \begin{figure}
     \centering
@@ -672,21 +671,44 @@ that the light is not perfectly circularly polarized.
     \end{subfigure}
     \caption{%
         Effect of the $\lambda/4$ plates around the vacuum chamber.
-        % TODO What is the fit?
+        A $\cos(\phi - \phi_0)^2$ profile is fitted to the data.
     }
     \label{fig:}
 \end{figure}
 
 \subsection{Influence of magnetic field}
 
-Go through the magnetic field current.
+With the power meter still attached, we can investigate the influence of the
+external magnetic field onto the \mot\ power. We just vary the current that
+goes through the magnetic coils. In steps of around \SI{0.5}{\ampere} we take
+measurements. We first started with the maximum current and then to no current.
+After that we measured a few more points in the middle. While doing this we
+noticed deviations from the previous measurements. This could be some mild
+hysteresis effect. In principle the copper coils should not have a strong
+ferromagnetism and therefore should not inhibit a significant hysteresis. We
+also observed large fluctuations of around \SI{40}{\nano\watt} while taking the
+measurement. Therefore this could also be just statistical jitter that we have
+observed.
 
 % TODO Table with magnetic field.
 
 % TODO Flesh out the paragraphs here.
 
 The dependence of the \mot\ intensity on the external magnetic field current is
-shown in Figure~\ref{fig:magnetic}.
+shown in Figure~\ref{fig:magnetic}. One can see some sigmoidal shape here.
+Given the large errors of our measurement, one could perhaps also succeed with
+a linear fit. Nevertheless, a sigmoidal shape does make sense: For vanishing
+magnetic field, we do not expect to see a \mot\ signal, only some background
+from the optical molasses trapped for a very short time. Reversing the magnetic
+field should not make the signal go below \SI{320}{\nano\watt}.
+Unfortunately, we did not test that.
+
+A small magnetic field would give a small force and we would expect to see a
+smooth onset of some rising curve. At some magnetic field density, we have a
+deep potential to catch the atoms in. We will become limited by other
+parameters of the setup, for instance the beam overlap. Therefore the growing
+trend will have to stop for some magnetic field. It is expected to see two flat
+regimes connected by some smooth function. That will just be a sigmoidal shape.
 
 \begin{figure}
     \centering
@@ -699,10 +721,6 @@ shown in Figure~\ref{fig:magnetic}.
 \end{figure}
 
 \subsection{Loading behavior}
-
-Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
-
-Room temperature \SI{24}{\celsius}
 
 To model the loading of the trap, we use a rising exponential with steady-state
 load $N_0$, start time $t_0$ and the \enquote{lifetime} in the filling process,
@@ -767,8 +785,14 @@ Fitting the function to our data from the rise of the signal, we obtain an
 average loading time of $\tau = \SI{<< loading_lifetime >>}{\second}$. Judging
 from the plots, this is a reasonable result.
 
+\subsection{Rubidium cross section}
+
 % TODO Compute the rubidium cross section with either Equation (2) or (3) from
 % the paper.
+
+Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
+
+Room temperature \SI{24}{\celsius}
 
 \subsection{Detuning of the laser frequencies}
 

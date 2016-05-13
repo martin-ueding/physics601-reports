@@ -11,7 +11,9 @@
             black,
             mark=*,
             only marks,
-        ] table {../xy/magnetic.tsv};
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/magnetic.tsv};
 
     \end{axis}
 \end{tikzpicture}
