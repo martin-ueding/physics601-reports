@@ -23,7 +23,7 @@ green := $(shell tput setaf 2)
 red := $(shell tput setaf 1)
 reset := $(shell tput sgr0)
 
-latexrun := ../../latexrun.py
+latexrun := ../../latexrun.py --bibtex-cmd biber
 
 # Main document.
 tex := "$(build)/physics601-$(number)-Ueding_Lemmer.tex"
