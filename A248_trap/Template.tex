@@ -279,8 +279,28 @@ Piezo.
 
 The diode laser setup is still sensitive to mechanical distortions. For a
 further frequency stabilization an error signal is fed back to the Piezo. This
-signal can be obtained using polarization spectroscopy.
-%TODO polarization spectroscopy
+signal can be obtained using polarization spectroscopy. As the name implies
+this kind of spectroscopy uses the probe beam's polarization rather than its
+intensity. The reason for this is, that one can detect small changes in
+polarization much better than small changes in intensity.
+
+Polarization spectroscopy uses a setup similar to the one of the Doppler free
+saturation spectroscopy. In contrast to the latter the pump beam is circular
+polarized. Additionally there are two linear polarizers, one at each
+and of the spectroscopy cell, which are crossed, so that the background
+signal is suppressed.
+
+Due to the circular polarized pumping beam ($\Deltaup m = \pm1$) the degenerate
+$m$ states of the transition's excited level get unequally occupied, which
+leads to an alignment different from the thermal equilibrium. The resulting
+anisotropy shifts the polarization axis of the linear probe beam, which hence
+can be detected. The precision is due to the crossed polarizers up to three
+orders of magnitude better than the precision of the saturation spectroscopy.
+If there is a small angle between the two beams and if the birefringence of the
+cell's windows is reduced one can obtain a signal with a dispersive profile
+which allows to detect small deviations of the wanted frequency. These can be
+used to correct the grating's angle so that the frequency lock remains stable.
+
 
 \chapter{Conduction}
 
