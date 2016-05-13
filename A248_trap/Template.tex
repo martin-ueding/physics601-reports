@@ -173,6 +173,39 @@ state $F=3$ again and with this get the atom back in the cooling cycle
     \label{fig:rubidium85}
 \end{figure}
 
+\section{Diode lasers}
+
+A diode laser is a semiconductor diode, which works quite similar to a
+\textsc{led}. Photons are produced in a highly doped p-n-junction by
+recombination of electrons and holes. Due to partial reflection at the border
+between diode material and the surrounding air the diode becomes a resonator,
+which works as laser if more atoms are excited rather than in their ground
+state. This can be reached by electrical pumping with a current in forward
+direction of the diode. The frequency of the laser depends on the size of the
+band gap.  Because of the large active region this so called \emph{homojunction
+laser diode} is very ineffective as it needs a high current density.
+
+For our case the better diode is a so called \emph{double-heterojunction laser
+diode}, which consists of a thin layer of low band gap material, sandwiched
+between two high band gap layers. This type requires a lower current
+density, which allows continuous wave operation at room temperature. 
+
+The frequency range of laser diodes is typically quite large. To get a narrow
+line width and to stabilize the frequency one uses an external resonator. For
+this the (divergent) laser beam gets focused on a diffraction grating. For all
+wavelengths the reflected beam of 0th order points in the same direction, but
+the angle of all other orders are frequency dependent. One chooses the position
+of the grating so that the -1st order of the wanted frequency is coupled back
+into the laser, the wanted frequency now gets amplified strongly. 
+
+In this experiment the position of the grating can be controlled with a Piezo
+element, which allows us to choose the frequency by the voltage on the Piezo.
+One can now scan trough frequencies by applying a triangular voltage to the
+Piezo.
+
+The diode laser setup is still sensitive to mechanical distortions. For a
+further frequency stabilization an error signal is fed back to the Piezo.
+
 \section{Doppler-free spectroscopy}
 
 Since the Doppler broadening of spectral lines at room temperature is orders of
@@ -231,58 +264,11 @@ Figure~\ref{fig:doppler-free-3-level}).
 
 \section{Polarization spectroscopy}
 
-\subsection{Circularly polarized light}
-
-\subsection{Anisotropic pumping}
-
-\subsection{Birefringence}
-
-\subsection{Detection of tilt}
-
-\subsection{Dispersion}
-
-\subsection{Kramers-Kronig relation}
-
-\section{Equipment}
-
-\subsection{Diode lasers}
-
-A diode laser is a semiconductor diode, which works quite similar to a
-\textsc{led}. Photons are produced in a highly doped p-n-junction by
-recombination of electrons and holes. Due to partial reflection at the border
-between diode material and the surrounding air the diode becomes a resonator,
-which works as laser if more atoms are excited rather than in their ground
-state. This can be reached by electrical pumping with a current in forward
-direction of the diode. The frequency of the laser depends on the size of the
-band gap.  Because of the large active region this so called \emph{homojunction
-laser diode} is very ineffective as it needs a high current density.
-
-For our case the better diode is a so called \emph{double-heterojunction laser
-diode}, which consists of a thin layer of low band gap material, sandwiched
-between two high band gap layers. This type requires a lower current
-density, which allows continuous wave operation at room temperature. 
-
-The frequency range of laser diodes is typically quite large. To get a narrow
-line width and to stabilize the frequency one uses an external resonator. For
-this the (divergent) laser beam gets focused on a diffraction grating. For all
-wavelengths the reflected beam of 0th order points in the same direction, but
-the angle of all other orders are frequency dependent. One chooses the position
-of the grating so that the -1st order of the wanted frequency is coupled back
-into the laser, the wanted frequency now gets amplified strongly. 
-
-In this experiment the position of the grating can be controlled with a Piezo
-element, which allows us to choose the frequency by the voltage on the Piezo.
-One can now scan trough frequencies by applying a triangular voltage to the
-Piezo.
-
-\subsection{Frequency stabilization}
-
-The diode laser setup is still sensitive to mechanical distortions. For a
-further frequency stabilization an error signal is fed back to the Piezo. This
-signal can be obtained using polarization spectroscopy. As the name implies
-this kind of spectroscopy uses the probe beam's polarization rather than its
-intensity. The reason for this is, that one can detect small changes in
-polarization much better than small changes in intensity.
+The error signal for frequency stabilization can be obtained using polarization
+spectroscopy. As the name implies this kind of spectroscopy uses the probe
+beam's polarization rather than its intensity. The reason for this is, that one
+can detect small changes in polarization much better than small changes in
+intensity.
 
 Polarization spectroscopy uses a setup similar to the one of the Doppler free
 saturation spectroscopy. In contrast to the latter the pump beam is circular
@@ -300,7 +286,6 @@ If there is a small angle between the two beams and if the birefringence of the
 cell's windows is reduced one can obtain a signal with a dispersive profile
 which allows to detect small deviations of the wanted frequency. These can be
 used to correct the grating's angle so that the frequency lock remains stable.
-
 
 \chapter{Conduction}
 
