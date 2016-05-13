@@ -229,8 +229,6 @@ Figure~\ref{fig:doppler-free-3-level}).
     }
 \end{figure}
 
-\subsection{Rubidium spectrum}
-
 \section{Polarization spectroscopy}
 
 \subsection{Circularly polarized light}
@@ -254,6 +252,33 @@ Figure~\ref{fig:doppler-free-3-level}).
 \subsection{Laser system}
 
 \subsection{Diode lasers}
+
+A diode laser is a semiconductor diode, which works quite similar to a
+\textsc{led}. Photons are produced in a highly doped p-n-junction by
+recombination of electrons and holes. Due to partial reflection at the border
+between diode material and the surrounding air the diode becomes a resonator,
+which works as laser if more atoms are excited rather than in their ground
+state. This can be reached by electrical pumping with a current in forward
+direction of the diode. The frequency of the laser depends on the size of the
+band gap.  Because of the large active region this so called \emph{homojunction
+laser diode} is very ineffective as it needs a high current density.
+
+For our case the better diode is a so called \emph{double-heterojunction laser
+diode}, which consists of a thin layer of low band gap material, sandwiched
+between two high band gap layers. This type requires a lower current
+density, which allows continuous wave operation at room temperature. 
+
+The line width of laser diodes is typically some \si{\mega\hertz} as depends on
+temperature and on the current. To get a narrow line width and to stabilize the
+frequency one uses an external resonator. For this the (divergent) laser beam
+gets focused on a diffraction grating. For all wavelengths the reflected beam
+of 0th order points in the same direction, but the angle of all other orders
+are frequency dependent. One chooses the position of the grating so that the
+-1st order of the wanted frequency is coupled back into the laser, the wanted
+frequency now gets amplified strongly.
+
+In this experiment the position of the grating can be controlled with a Piezo
+element, which allows us to choose the frequency by the voltage on the Piezo.
 
 \chapter{Conduction}
 
