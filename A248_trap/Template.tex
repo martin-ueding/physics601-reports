@@ -116,14 +116,14 @@ spontaneous emission. This leads to the so called \emph{Doppler limit}:
 \section{Magneto-optical trap}
 
 Since the forces in the optical molasses are independent of space, the atoms
-have the possibility to diffuse out of the cooling area. Due to collisions
+ diffuse out of the cooling area. Due to collisions
 those atoms get heated up again. We need an additional force that keeps the
 atoms inside that area. One possibility is to use a \emph{magneto optical trap}
 (\mot).
 
 To simplify the working principle we consider a two level system with one
 possible transition ($F=0 \to F=1$). Also we add a 1-dimensional linear
-increasing magnetic field (w.l.o.g.) along the $z$ axis, which is zero at
+increasing magnetic field without loss of generality along the $z$ axis, which is zero at
 $z=0$. Due to the Zeeman effect we get a space-dependent energy splitting of
 the three possible $F=1$ configurations, which causes a lowering of the $m=1$
 state's energy for $z<0$ and a lowering of the $m=-1$ level for $z>0$ (see
@@ -157,10 +157,10 @@ Part of its hyperfine level scheme is shown in Figure~\ref{fig:rubidium85}. To
 create a quasi two level system we use the closed $F=3 \to F'=4$ transition.
 Since this is not a real two level system there is a finite probability for the
 transition from $F'=4$ to $F=2$. In this state the atom can not be excited by
-the cooling laser. Therefor it is called \emph{dark state}. To solve this
+the cooling laser again. Therefor it is called \emph{dark state}. To solve this
 problem a second laser, the \emph{pumping laser} excites the atoms in the dark
 state to the $F'=3$ state, from where it can decay into the cooling ground
-state $F=3$ again and with this get the atom back in the cooling cycle
+state $F=3$ again and with this get the atom back in the cooling cycle.
 
 \begin{figure}
     \centering
@@ -196,12 +196,11 @@ this the (divergent) laser beam gets focused on a diffraction grating. For all
 wavelengths the reflected beam of 0th order points in the same direction, but
 the angle of all other orders are frequency dependent. One chooses the position
 of the grating so that the -1st order of the wanted frequency is coupled back
-into the laser, the wanted frequency now gets amplified strongly. 
+into the laser, which causes a strong amplification of that frequency. 
 
 In this experiment the position of the grating can be controlled with a Piezo
-element, which allows us to choose the frequency by the voltage on the Piezo.
-One can now scan trough frequencies by applying a triangular voltage to the
-Piezo.
+element. This allows us to choose the frequency by the voltage on the Piezo.
+One can now scan trough frequencies by applying a triangular voltage.
 
 The diode laser setup is still sensitive to mechanical distortions. For a
 further frequency stabilization an error signal is fed back to the Piezo.
@@ -225,7 +224,7 @@ low. If the lasers are detuned to the red from the resonance frequency the pump
 beam and the probe beam excite oncoming atoms with respect to their own
 propagation direction. Therefor the absorption of the probe beam is high.
 The same holds for blue detuned lasers. This leads to a transmission spectrum as
-in Figure~\ref{fig:doppler-free-2-level}. In the one takes an absorption
+in Figure~\ref{fig:doppler-free-2-level}. If one takes an absorption
 spectrum one gets dips instead of peaks, which are called \emph{Lamb dips}.
 
 In reality there will be more levels, which makes the absorption spectrum more
@@ -234,8 +233,7 @@ with excitation energy $\hbar\omega_1$ and $\hbar\omega_2$ respectively. When
 we apply the same method as above it can happen, that the pump beam is on
 resonance with one of the excited levels and the probe beam with the other.
 This leads to a so called \emph{cross over peak} at $\omega_\text{probe} =
-\frac{\omega_1+\omega_2}2$ (see
-Figure~\ref{fig:doppler-free-3-level}).
+\frac{\omega_1+\omega_2}2$ (see Figure~\ref{fig:doppler-free-3-level}).
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
