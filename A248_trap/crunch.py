@@ -234,6 +234,34 @@ def job_loading(T):
     T['loading_maximum'] = siunitx(maximum_val, maximum_err)
     T['loading_lifetime'] = siunitx(slope_val, slope_err)
 
+    mass = 85 * 1.66e-27
+
+    pressure_dist = [1.1e-5, 1.5e-5]
+    pressure_val = np.mean(pressure_dist)
+    pressure_err = np.std(pressure_dist)
+
+    temperature = 24 + 273
+
+    k_boltzmann = 1.3806e-23
+
+    velocity = np.sqrt(temperature * k_boltzmann / mass)
+
+    density_val = pressure_val / (k_boltzmann * temperature)
+    density_err = pressure_err / (k_boltzmann * temperature)
+
+    cross_section_val = 1 / (slope_val * density_val * velocity)
+    cross_section_err = np.sqrt(
+        (slope_err / (slope_val**2 * density_val * velocity))**2
+        + (density_err / (slope_val * density_val**2 * velocity))**2
+    )
+
+    T['cross_section'] = siunitx(cross_section_val, cross_section_err)
+    T['density'] = siunitx(density_val, density_err)
+    T['pressure'] = siunitx(pressure_val, pressure_err)
+    T['rubidium_mass'] = siunitx(mass)
+    T['velocity'] = siunitx(velocity)
+
+
 
 def get_mot_power_nw(T):
     data = np.loadtxt('Data/mot-intensity.tsv')

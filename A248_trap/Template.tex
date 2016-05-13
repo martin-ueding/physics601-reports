@@ -975,21 +975,42 @@ from the plots, this is a reasonable result.
 
 \subsection{Rubidium cross section}
 
+The pressure inside could not be measured during the experiment as the device
+was broken. Therefore we were given the pressure to lie in the range
+\SIrange{1.1e-7}{1.5e-7}{\milli\bar}. Therefore we will use $P = \SI{<<
+pressure >>}{\pascal}$ for our calculations. The error is just the standard
+deviation of both points. The room temperature has been \SI{24}{\celsius}.
+
 The time constant~$\tau$ is the inverse of the scattering rate.
 In our case we can ignore the background atoms and assume that the scattering
 only happens with the rubidium atoms. Therefore Equation~(2) in the paper of
 \textcite{wieman/inexpensive} reduces to
 \[
-    \tau\inv = n \sigma V \,.
+    \tau\inv = n \sigma v \,.
 \]
+We want to compute the cross section. Therefore we need the number density $n$
+and the velocity $v$. The average velocity of the thermal distribution will
+suit our needs here. It is given by
+\[
+    v = \sqrt{\frac{2 k_\mathrm B T}{m}}
+    = \SI{<< velocity >>}{\meter\per\second} \,,
+\]
+where $m = \SI{<< rubidium_mass >>}{\kilogram}$ is the mass of rubidium atoms
+\textcite[320]{wieman/inexpensive}. The density $n$ can be computed using
+\[
+    n = \frac{P}{k_\mathrm B T}
+    = \SI{<< density >>}{\per\meter\cubed} \,.
+\]
+Solving the above equation for the cross section $\sigma$, we obtain
+\[
+    \sigma = \frac{1}{\tau n v}
+    = \SI{<< cross_section >>}{\meter\squared} \,.
+\]
+
 
 
 % TODO Compute the rubidium cross section with either Equation (2) or (3) from
 % the paper.
-
-Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
-
-Room temperature \SI{24}{\celsius}
 
 \chapter{Conclusion}
 
