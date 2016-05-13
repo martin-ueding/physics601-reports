@@ -511,6 +511,8 @@ make the \mot{} even larger.
 
 \subsection{MOT population}
 
+% TODO Make this a better heading.
+
 The first attribute of our \mot{} is the number of caught atoms. For this we
 have to find the fluorescence power. After replacing the photo diode with the
 power meter, we see that out \mot{} is very bright, but not very constant in
@@ -679,6 +681,8 @@ Go through the magnetic field current.
 
 % TODO Table with magnetic field.
 
+% TODO Flesh out the paragraphs here.
+
 The dependence of the \mot\ intensity on the external magnetic field current is
 shown in Figure~\ref{fig:magnetic}.
 
@@ -697,6 +701,72 @@ shown in Figure~\ref{fig:magnetic}.
 Pressure is supposed to be \SIrange{1.1e-7}{1.5e-7}{\milli\bar}
 
 Room temperature \SI{24}{\celsius}
+
+To model the loading of the trap, we use a rising exponential with steady-state
+load $N_0$, start time $t_0$ and the \enquote{lifetime} in the filling process,
+\[
+    N(t) = N_0 \sbr{1 - \exp\del{- \frac{t - t_0}{\tau}}} \,.
+\]
+% TODO Cite Wieman (1) here.
+
+Figure~\ref{fig:loading} shows four of six measurements that we did for the
+loading of the \mot. We have rescaled and shifted all signals from the
+photodiode such that one can easily compare the signals visually.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics{loading-1}
+        \caption{%
+            %
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{loading-2}
+        \caption{%
+            %
+            }
+        \label{fig:/2}
+    \end{subfigure}
+
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics{loading-3}
+        \caption{%
+            %
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{loading-4}
+        \caption{%
+            %
+            }
+        \label{fig:/2}
+    \end{subfigure}
+
+    \caption{%
+        Repeated measurement of the \mot\ loading time. The signal of the
+        photodiode is voltage measured at the oscilloscope. We have rescaled
+        the signal such that no \mot\ is around zero and with \mot it is around
+        unity. We have also shifted it such that $t_0 = 0$ for better
+        comparison. In red the rising exponential fit is shown.
+        }
+    \label{fig:loading}
+\end{figure}
+
+Fitting the function to our data from the rise of the signal, we obtain an
+average loading time of $\tau = \SI{<< loading_lifetime >>}{\second}$. Judging
+from the plots, this is a reasonable result.
+
+% TODO Compute the rubidium cross section with either Equation (2) or (3) from
+% the paper.
 
 \subsection{Detuning of the laser frequencies}
 
@@ -750,28 +820,34 @@ frequency.
 
 \begin{figure}
     \centering
-    \begin{subfigure}[c]{0.48\linewidth}
+    \begin{subfigure}[t]{0.48\linewidth}
         \centering
         \includegraphics{scan-cooling-spacing}
         \caption{%
-            %
+            Conversion of scan time to actual detuning.
             }
         \label{fig:scan-cooling-spacing}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[c]{0.48\linewidth}
+    \begin{subfigure}[t]{0.48\linewidth}
         \centering
         \includegraphics{scan-cooling-detuning}
         \caption{%
-            %
+            \textsc{Mot} response with respect to the detuning from the cooling
+            transition frequency. Black is the data, red shows the Gaussian
+            fit.
             }
         \label{fig:scan-cooling-detuning}
     \end{subfigure}
     \caption{%
-        %
         }
     \label{fig:}
 \end{figure}
+
+Performing a Gaussian fit to the peak, we can get a good estimate of the
+central value of that peak. This should be the value that we have used then we
+optimized the \mot\ for brightness in the previous steps. The Gaussian fit
+gives us a central value of $\Delta = \SI{<< detuning >>}{\mega\hertz}$.
 
 This was the dependence on the cooling laser frequency. The whole time, we have
 kept the pumping laser locked. Now we will exchange the roles and lock the
@@ -816,51 +892,60 @@ quantities used.
 We know that the distance between the lens and the \mot\ is $l$. The diameter
 of the lens is $d$. Then we can work out the solid angle that is taken up by
 the lens. The solid angle is $4 \piup$ for the whole sphere. Therefore we need
-to take the ratio of the lens surface ($\piup d^2$) and divide it by the total
+to take the ratio of the lens surface ($\piup d^2/4$) and divide it by the total
 surface of a sphere at distance $l$, $4 \piup l^2$. In total we will then
 obtain
 \[
-    \Omega = 4 \piup \frac{\piup d^2}{4 \piup l^2} = \frac{\piup d^2}{l^2} \,.
+    \Omega = 4 \piup \frac{\piup d^2}{16 \piup l^2} = \frac{\piup d^2}{4 l^2}
+    = \SI{<< mot_omega >>}{\steradian} \,.
 \]
 
-With that solid angle we can convert the measured power $p$ into the actual
-emitted power of the whole \mot, $p_\text{tot}$. We do this by dividing through
-the solid angle:
+With that solid angle we can convert the measured power $p = \SI{<<
+mot_power_nW >>}{\nano\watt}$ into the actual emitted power of the whole \mot,
+$p_\text{tot}$. We do this by dividing through the solid angle:
 \[
-    p_\text{tot} = p \frac{4 \piup}{\Omega} \,.
+    p_\text{tot} = p \frac{4 \piup}{\Omega}
+    = \SI{<< mot_power_tot_nW >>}{\nano\watt} \,.
 \]
 
-With a wavelength of the cooling laser $\lambda$ we can compute the
-angular frequency $\omega$ and the photon energy
-$\hbar\omega$. Dividing the total power by the energy of a single photon gives
-us the total scattering rate
+With a wavelength of the cooling laser $\lambda$ we can compute the angular
+frequency $\omega$ and the photon energy $\hbar\omega$. Dividing the total
+power by the energy of a single photon gives us the total scattering rate
 \[
     NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
 \]
 
-The beam intensity $I$ is the total energy of the six beams divided by the cross
-sectional area of the beam, $\pi r^2$. We have
+The beam intensity $I$ is the total energy of the six beams (\SI{<<
+total_beam_power_mW >>}{\milli\watt}) divided by the cross sectional area of
+the beam, $\pi r^2 = \SI{<< beam_area_cm >>}{\centi\meter\squared}$. We have
 \[
-    I = 2 \frac{P_x + P_y + P_z}{\pi r^2} \,,
+    I = 2 \frac{P_x + P_y + P_z}{\pi r^2}
+    = \SI{<< intens_mW_cm2 >>}{\milli\watt\per\centi\meter\squared}
+    \,,
 \]
 where the factor two stems from the backreflection of each beam back through
 the chamber. With the intensity $I$ we can build up give the scattering rate of
 an individual atom:
 \[
     R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
-    (\Delta/\Gamma)^2} \,.
+    (\Delta/\Gamma)^2}
+    = \SI{<< scattering_rate_MHz >>}{\mega\hertz}
+    \,.
 \]
 The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
 $I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$.
 % TODO Cite (4) from the Wieman paper.
+We also need the wavelength $\lambda = \SI{<< wavelength_nm >>}{\nano\meter}$.
+Using that we can compute $\hbar\omega = \SI{<< hbar_omega_nW_MHz
+>>}{\nano\watt\mega\hertz}$.
 
 Taking all those pieces together we arrive at the expression for the atom
 number depending only on observables that we have:
 \[
     N = \frac{4 \piup p}{\Omega \hbar \omega} 
     \frac{1 + (I/I_\mathrm s) + 4 (\Delta/\Gamma)^2}{(I/I_\mathrm s) \piup \Gamma}
-    \qquad\text{with}\qquad
-    I = 2 \frac{P_x + P_y + P_z}{\pi r^2} \,,
+    = \num{<< atom_number >>}
+    \,.
 \]
 
 % TODO Obtain the number of atoms in the MOT.

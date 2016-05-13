@@ -1,0 +1,16 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=.5\linewidth,
+            height=.3\linewidth,
+            xmin=-0.5,
+            xmax=1,
+            xlabel={Time / \si{\second}},
+            ylabel={\textsc{Mot} fraction},
+            grid=major,
+            yticklabel pos=right,
+        ]
+
+        \addplot[black] table {../xy/loading-4-data.tsv};
+        \addplot[red] table {../xy/loading-4-fit.tsv};
+    \end{axis}
+\end{tikzpicture}

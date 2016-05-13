@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-# Copyright © 2013-2014 Martin Ueding <dev@martin-ueding.de>
+# Copyright © 2013-2014, 2016 Martin Ueding <dev@martin-ueding.de>
 # Licensed under The GNU Public License Version 2 (or later)
 
 import argparse
