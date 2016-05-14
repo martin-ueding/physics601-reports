@@ -78,7 +78,7 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \subsection{Radiation pressure}
 
-Light, being mediated by massless gauge bosons, has a quadratic dispersion
+Light, being mediated by massless gauge bosons, has a linear dispersion
 relation $E = cp$ with momentum $p = \hbar k$ and wave number $k$. An atom
 which absorbs a photon will obtain its energy and also its momentum. While in
 stimulated emission the momentum of the emitted photon points in the same
@@ -96,26 +96,26 @@ detune the laser to the red.
 
 \subsection{Optical molasses}
 
-The force of a laser with intensity $I$ and detuning $\delta =
+The force of a laser with intensity $I$ and detuning $\Delta =
 \omega_\text{laser}-\omega_\text{res}$ on an atom can be expressed as
 \[
-    F_\text{radiation} = \frac{\hbar k\Gamma}2\cdot\frac{I/I_\text{S}}{\del{2\frac{\delta -
+    F_\text{radiation} = \frac{\hbar k\Gamma}2\cdot\frac{I/I_\text{S}}{\del{2\frac{\Delta -
     kv}\Gamma}^2 + 1 + I/I_\text{S}}\, ,
 \]
 where $k$ denotes the wave vector of the photons, $\Gamma$ the decay rate of
 the excited state and $I_\text{S}$ the saturation intensity. If we want to cool
 the force at $v=0$ should be zero, which is clearly not the case. To solve this
 one uses two counterpropagating laser beams with the same detuning. For small
-velocities this gives a frictional force:
+velocities this gives a force depending force:
 \[
-    F_\text{count} = \frac{8\hbar k^2\delta}{\Gamma}
-    \frac{I/I_\text{S}}{\del{\del{2\delta/\Gamma}^2 + 1 + I/I_\text{S}}^2}
+    F_\text{count} = \frac{8\hbar k^2\Delta}{\Gamma}
+    \frac{I/I_\text{S}}{\del{\del{2\Delta/\Gamma}^2 + 1 + I/I_\text{S}}^2}
     \cdot v \underset{\delta<0}{=} -\alpha\cdot v \, .
 \]
-Applying three orthogonal pairs of lasers gives an effective deacceleration of
+Applying three orthogonal pairs of lasers gives an effective deceleration of
 atoms in every direction and with this a cooling. This setup is known as
 \emph{optical molasses}. This cooling process is limited by heating due to
-spontaneous emission. This leads to the so called \emph{Doppler limit}:
+spontaneous emission. This leads to the so called \emph{Doppler limit}
 \[
     T_\text{Doppler} = \frac{\hbar \Gamma}{2k_\text{B}} \, .
 \]
@@ -136,7 +136,7 @@ the three possible $F=1$ configurations, which causes a lowering of the $m=1$
 state's energy for $z<0$ and a lowering of the $m=-1$ level for $z>0$ (see
 Figure~\ref{fig:mot-principle}).
 
-Now we add two counterpropagating laser beams with detuning $\delta<0$. If now
+Now we add two counterpropagating laser beams with detuning $\Delta<0$. If now
 the laser beam propagating in positive $z$ direction has a $\sigma^+$ helicity
 and the counterpropagating beam has a $\sigma^-$ helicity, atoms which are
 located at $z<0$ have a higher possibility to absorb $\sigma^+$ photons and
@@ -159,14 +159,14 @@ remains the same.
 \section{Rubidium}
 
 Natural rubidium consists about \SI{72}{\percent} of ${}^{85}\text{Ru}$ and
-\SI{28}{\percent} of ${}^{87}\text{Ru}$. In our \mot{} we use the former.
-Part of its hyperfine level scheme is shown in Figure~\ref{fig:rubidium85}. To
+\SI{28}{\percent} of ${}^{87}\text{Ru}$. In our \mot{} we use the former. Part
+of its hyperfine level scheme is shown in Figure~\ref{fig:rubidium85}. To
 create a quasi two level system we use the closed $F=3 \to F'=4$ transition.
 Since this is not a real two level system there is a finite probability for the
-transition from $F'=4$ to $F=2$. In this state the atom can not be excited by
-the cooling laser again. Therefor it is called \emph{dark state}. To solve this
-problem a second laser, the \emph{pumping laser} excites the atoms in the dark
-state to the $F'=3$ state, from where it can decay into the cooling ground
+transition from $F'=4$ to $F=2$. In this state the atom cannot be excited by
+the cooling laser again. Therefore it is called \emph{dark state}. To solve
+this problem a second laser, the \emph{pumping laser}, excites the atoms in the
+dark state to the $F'=3$ state, from where it can decay into the cooling ground
 state $F=3$ again and with this get the atom back in the cooling cycle.
 
 \begin{figure}
@@ -200,47 +200,48 @@ density, which allows continuous wave operation at room temperature.
 The frequency range of laser diodes is typically quite large. To get a narrow
 line width and to stabilize the frequency one uses an external resonator. For
 this the (divergent) laser beam gets focused on a diffraction grating. For all
-wavelengths the reflected beam of 0th order points in the same direction, but
+wavelengths the reflected beam of 0-th order points in the same direction, but
 the angle of all other orders are frequency dependent. One chooses the position
-of the grating so that the -1st order of the wanted frequency is coupled back
-into the laser, which causes a strong amplification of that frequency. 
+of the grating so that the $-1$-st order of the wanted frequency is coupled
+back into the laser, which causes a strong amplification of that frequency. 
 
 In this experiment the position of the grating can be controlled with a Piezo
 element. This allows us to choose the frequency by the voltage on the Piezo.
 One can now scan trough frequencies by applying a triangular voltage.
 
 The diode laser setup is still sensitive to mechanical distortions. For a
-further frequency stabilization an error signal is fed back to the Piezo.
+further frequency stabilization an error signal is fed back to the Piezo. More
+about this error signal in the next sections.
 
 \section{Doppler-free spectroscopy}
 
 Since the Doppler broadening of spectral lines at room temperature is orders of
-magnitude bigger than the natural line width, lines which lie close together can
-not be resolved. To nevertheless investigate those lines one has to use
+magnitude bigger than the natural line width, lines which lie close together
+cannot be resolved. To nevertheless investigate those lines one has to use
 Doppler-free spectroscopy.
 
-For this two counterpropagating laser beams of same frequency are needed, a
+For this two counterpropagating laser beams of the same frequency are needed, a
 \emph{pump beam} and a \emph{probe beam} with lower intensity. The absorption
 of the probe beam gets recorded. For a simple understanding again consider a
-two level system with ground state $\ket{g}$, excited state $\ket{e}$ and
-energy difference of $\hbar\omega_0$. If the lasers both have the frequency
-$\omega_0$ atoms with $v\neq0$ along the laser's direction will be out of
-resonance due to the Doppler effect. Those atoms with $v\approx 0$ will be
-excited by the pump beam and hence the absorption of the probe beam is very
-low. If the lasers are detuned to the red from the resonance frequency the pump
-beam and the probe beam excite oncoming atoms with respect to their own
-propagation direction. Therefor the absorption of the probe beam is high.
-The same holds for blue detuned lasers. This leads to a transmission spectrum as
-in Figure~\ref{fig:doppler-free-2-level}. If one takes an absorption
+two level system with ground state $\ket{\mathrm g}$, excited state
+$\ket{\mathrm e}$ and energy difference of $\hbar\omega_0$. If the lasers both
+have the frequency $\omega_0$ atoms with $v\neq0$ along the laser's direction
+will be out of resonance due to the Doppler effect. Those atoms with $v\approx
+0$ will be excited by the pump beam and hence the absorption of the probe beam
+is very low. If the lasers are detuned to the red from the resonance frequency
+the pump beam and the probe beam excite oncoming atoms with respect to their
+own propagation direction. Therefor the absorption of the probe beam is high.
+The same holds for blue detuned lasers. This leads to a transmission spectrum
+as in Figure~\ref{fig:doppler-free-2-level}. If one takes an absorption
 spectrum one gets dips instead of peaks, which are called \emph{Lamb dips}.
 
 In reality there will be more levels, which makes the absorption spectrum more
 complex. Take for example a system with one ground level and two excited level
 with excitation energy $\hbar\omega_1$ and $\hbar\omega_2$ respectively. When
-we apply the same method as above it can happen, that the pump beam is on
+we apply the same method as above it can happen that the pump beam is on
 resonance with one of the excited levels and the probe beam with the other.
 This leads to a so called \emph{cross over peak} at $\omega_\text{probe} =
-\frac{\omega_1+\omega_2}2$ (see Figure~\ref{fig:doppler-free-3-level}).
+(\omega_1+\omega_2)/2$ (see Figure~\ref{fig:doppler-free-3-level}).
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
