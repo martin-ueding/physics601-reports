@@ -95,20 +95,20 @@ The force of a laser with intensity $I$ and detuning $\delta =
     F_\text{radiation} = \frac{\hbar k\Gamma}2\cdot\frac{I/I_\text{S}}{\del{2\frac{\delta -
     kv}\Gamma}^2 + 1 + I/I_\text{S}}\, ,
 \]
-where $k$ denotes the wave vector of the photons, $\Gamma$ the decay rate of the
-excited state and $I_\text{S}$ the saturation intensity. This force is non zero
-at $v=0$ as we would need to cool down. To solve this one uses two
-counterpropagating laser beams with the same detuning. For small velocities
-this gives a frictional force:
+where $k$ denotes the wave vector of the photons, $\Gamma$ the decay rate of
+the excited state and $I_\text{S}$ the saturation intensity. If we want to cool
+the force at $v=0$ should be zero, which is clearly not the case. To solve this
+one uses two counterpropagating laser beams with the same detuning. For small
+velocities this gives a frictional force:
 \[
     F_\text{count} = \frac{8\hbar k^2\delta}{\Gamma}
     \frac{I/I_\text{S}}{\del{\del{2\delta/\Gamma}^2 + 1 + I/I_\text{S}}^2}
     \cdot v \underset{\delta<0}{=} -\alpha\cdot v \, .
 \]
 Applying three orthogonal pairs of lasers gives an effective deacceleration of
-atoms and with this a cooling. This setup is known as \emph{optical molasses}.
-This process is limited by heating due to spontaneous emission. This leads to
-the so called \emph{Doppler limit}:
+atoms in every direction and with this a cooling. This setup is known as
+\emph{optical molasses}. This cooling process is limited by heating due to
+spontaneous emission. This leads to the so called \emph{Doppler limit}:
 \[
     T_\text{Doppler} = \frac{\hbar \Gamma}{2k_\text{B}} \, .
 \]
@@ -116,14 +116,14 @@ the so called \emph{Doppler limit}:
 \section{Magneto-optical trap}
 
 Since the forces in the optical molasses are independent of space, the atoms
-have the possibility to diffuse out of the cooling area. Due to collisions
+ diffuse out of the cooling area. Due to collisions
 those atoms get heated up again. We need an additional force that keeps the
 atoms inside that area. One possibility is to use a \emph{magneto optical trap}
 (\mot).
 
 To simplify the working principle we consider a two level system with one
 possible transition ($F=0 \to F=1$). Also we add a 1-dimensional linear
-increasing magnetic field (w.l.o.g.) along the $z$ axis, which is zero at
+increasing magnetic field without loss of generality along the $z$ axis, which is zero at
 $z=0$. Due to the Zeeman effect we get a space-dependent energy splitting of
 the three possible $F=1$ configurations, which causes a lowering of the $m=1$
 state's energy for $z<0$ and a lowering of the $m=-1$ level for $z>0$ (see
@@ -157,10 +157,10 @@ Part of its hyperfine level scheme is shown in Figure~\ref{fig:rubidium85}. To
 create a quasi two level system we use the closed $F=3 \to F'=4$ transition.
 Since this is not a real two level system there is a finite probability for the
 transition from $F'=4$ to $F=2$. In this state the atom can not be excited by
-the cooling laser. Therefor it is called \emph{dark state}. To solve this
+the cooling laser again. Therefor it is called \emph{dark state}. To solve this
 problem a second laser, the \emph{pumping laser} excites the atoms in the dark
 state to the $F'=3$ state, from where it can decay into the cooling ground
-state $F=3$ again and with this get the atom back in the cooling cycle
+state $F=3$ again and with this get the atom back in the cooling cycle.
 
 \begin{figure}
     \centering
@@ -173,14 +173,44 @@ state $F=3$ again and with this get the atom back in the cooling cycle
     \label{fig:rubidium85}
 \end{figure}
 
+\section{Diode lasers}
+
+A diode laser is a semiconductor diode, which works quite similar to a
+\textsc{led}. Photons are produced in a highly doped p-n-junction by
+recombination of electrons and holes. Due to partial reflection at the border
+between diode material and the surrounding air the diode becomes a resonator,
+which works as laser if more atoms are excited rather than in their ground
+state. This can be reached by electrical pumping with a current in forward
+direction of the diode. The frequency of the laser depends on the size of the
+band gap.  Because of the large active region this so called \emph{homojunction
+laser diode} is very ineffective as it needs a high current density.
+
+For our case the better diode is a so called \emph{double-heterojunction laser
+diode}, which consists of a thin layer of low band gap material, sandwiched
+between two high band gap layers. This type requires a lower current
+density, which allows continuous wave operation at room temperature. 
+
+The frequency range of laser diodes is typically quite large. To get a narrow
+line width and to stabilize the frequency one uses an external resonator. For
+this the (divergent) laser beam gets focused on a diffraction grating. For all
+wavelengths the reflected beam of 0th order points in the same direction, but
+the angle of all other orders are frequency dependent. One chooses the position
+of the grating so that the -1st order of the wanted frequency is coupled back
+into the laser, which causes a strong amplification of that frequency. 
+
+In this experiment the position of the grating can be controlled with a Piezo
+element. This allows us to choose the frequency by the voltage on the Piezo.
+One can now scan trough frequencies by applying a triangular voltage.
+
+The diode laser setup is still sensitive to mechanical distortions. For a
+further frequency stabilization an error signal is fed back to the Piezo.
+
 \section{Doppler-free spectroscopy}
 
 Since the Doppler broadening of spectral lines at room temperature is orders of
-magnitude bigger than the natural linewidth, lines which lie close together can
+magnitude bigger than the natural line width, lines which lie close together can
 not be resolved. To nevertheless investigate those lines one has to use
 Doppler-free spectroscopy.
-
-\subsection{Pump and probe beam}
 
 For this two counterpropagating laser beams of same frequency are needed, a
 \emph{pump beam} and a \emph{probe beam} with lower intensity. The absorption
@@ -194,7 +224,7 @@ low. If the lasers are detuned to the red from the resonance frequency the pump
 beam and the probe beam excite oncoming atoms with respect to their own
 propagation direction. Therefor the absorption of the probe beam is high.
 The same holds for blue detuned lasers. This leads to a transmission spectrum as
-in Figure~\ref{fig:doppler-free-2-level}. In the one takes an absorption
+in Figure~\ref{fig:doppler-free-2-level}. If one takes an absorption
 spectrum one gets dips instead of peaks, which are called \emph{Lamb dips}.
 
 In reality there will be more levels, which makes the absorption spectrum more
@@ -203,8 +233,7 @@ with excitation energy $\hbar\omega_1$ and $\hbar\omega_2$ respectively. When
 we apply the same method as above it can happen, that the pump beam is on
 resonance with one of the excited levels and the probe beam with the other.
 This leads to a so called \emph{cross over peak} at $\omega_\text{probe} =
-\frac{\omega_1+\omega_2}2$ (see
-Figure~\ref{fig:doppler-free-3-level}).
+\frac{\omega_1+\omega_2}2$ (see Figure~\ref{fig:doppler-free-3-level}).
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
@@ -231,56 +260,28 @@ Figure~\ref{fig:doppler-free-3-level}).
 
 \section{Polarization spectroscopy}
 
-\subsection{Circularly polarized light}
+The error signal for frequency stabilization can be obtained using polarization
+spectroscopy. As the name implies this kind of spectroscopy uses the probe
+beam's polarization rather than its intensity. The reason for this is, that one
+can detect small changes in polarization much better than small changes in
+intensity.
 
-\subsection{Anisotropic pumping}
+Polarization spectroscopy uses a setup similar to the one of the Doppler free
+saturation spectroscopy. In contrast to the latter the pump beam is circular
+polarized. Additionally there are two linear polarizers, one at each
+end of the spectroscopy cell, which are crossed, so that the background
+signal is suppressed.
 
-\subsection{Birefringence}
-
-\subsection{Detection of tilt}
-
-\subsection{Dispersion}
-
-\subsection{Kramers-Kronig relation}
-
-\section{Equipment}
-
-\subsection{Diode lasers}
-
-A diode laser is a semiconductor diode, which works quite similar to a
-\textsc{led}. Photons are produced in a highly doped p-n-junction by
-recombination of electrons and holes. Due to partial reflection at the border
-between diode material and the surrounding air the diode becomes a resonator,
-which works as laser if more atoms are excited rather than in their ground
-state. This can be reached by electrical pumping with a current in forward
-direction of the diode. The frequency of the laser depends on the size of the
-band gap.  Because of the large active region this so called \emph{homojunction
-laser diode} is very ineffective as it needs a high current density.
-
-For our case the better diode is a so called \emph{double-heterojunction laser
-diode}, which consists of a thin layer of low band gap material, sandwiched
-between two high band gap layers. This type requires a lower current
-density, which allows continuous wave operation at room temperature. 
-
-The frequency range of laser diodes is typically quite large. To get a narrow
-line width and to stabilize the frequency one uses an external resonator. For
-this the (divergent) laser beam gets focused on a diffraction grating. For all
-wavelengths the reflected beam of 0th order points in the same direction, but
-the angle of all other orders are frequency dependent. One chooses the position
-of the grating so that the -1st order of the wanted frequency is coupled back
-into the laser, the wanted frequency now gets amplified strongly. 
-
-In this experiment the position of the grating can be controlled with a Piezo
-element, which allows us to choose the frequency by the voltage on the Piezo.
-One can now scan trough frequencies by applying a triangular voltage to the
-Piezo.
-
-\subsection{Frequency stabilization}
-
-The diode laser setup is still sensitive to mechanical distortions. For a
-further frequency stabilization an error signal is fed back to the Piezo. This
-signal can be obtained using polarization spectroscopy.
-%TODO polarization spectroscopy
+Due to the circular polarized pumping beam ($\Deltaup m = \pm1$) the degenerate
+$m$ states of the transition's excited level get unequally occupied, which
+leads to an alignment different from the thermal equilibrium. The resulting
+anisotropy shifts the polarization axis of the linear probe beam, which hence
+can be detected. The precision is due to the crossed polarizers up to three
+orders of magnitude better than the precision of the saturation spectroscopy.
+If there is a small angle between the two beams and if the birefringence of the
+cell's windows is reduced one can obtain a signal with a dispersive profile
+which allows to detect small deviations of the wanted frequency. These can be
+used to correct the grating's angle so that the frequency lock remains stable.
 
 \chapter{Conduction}
 
