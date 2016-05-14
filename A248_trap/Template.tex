@@ -270,7 +270,7 @@ This leads to a so called \emph{cross over peak} at $\omega_\text{probe} =
 
 The error signal for frequency stabilization can be obtained using polarization
 spectroscopy. As the name implies this kind of spectroscopy uses the probe
-beam's polarization rather than its intensity. The reason for this is, that one
+beam's polarization rather than its intensity. The reason for this is that one
 can detect small changes in polarization much better than small changes in
 intensity.
 
@@ -296,7 +296,7 @@ used to correct the grating's angle so that the frequency lock remains stable.
 \section{Apparatus}
 
 Our setup consists of two blocks: the laser setup and the \mot\ setup. In the
-laser setup (see Figure~\ref{fig:setup-laser}, we have two tunable lasers as
+laser setup (see Figure~\ref{fig:setup-laser}) we have two tunable lasers as
 described in the chapter about theory. One will serve as a pumping laser, the
 other one will be the cooling one. Both lasers are optically isolated using a
 Faraday isolator. This relieves us from making sure that no light feeds back
@@ -424,10 +424,12 @@ six $\lambda/4$ plates are set to a decent setting from the start.
 First we have to lock the cooling laser to the right transition. For this we
 tune the laser roughly to the wanted frequency. The lock box gets a triangular
 signal from a function generator, changes its amplitude and offset and gives it
-to the piezo which controls the grating's position. The Doppler-free spectrum of
-the $F=3$ ground state of ${}^{85}\text{Ru}$ is shown in
-Figure~\ref{fig:doppler-free-cooling}. From there we choose the right line,
-zoom in and lock the laser to a frequency a bit below the chosen transition. 
+to the piezo which controls the grating's position. On the oscilloscope we
+display the signal from the polarization spectroscopy cell and see the
+spectrum. That Doppler-free spectrum of the $F=3$ ground state of
+${}^{85}\text{Ru}$ is shown in Figure~\ref{fig:doppler-free-cooling}. From
+there we choose the right line, zoom in (reduce scanning amplitude) and lock
+the laser to a frequency a bit below the chosen transition. 
 
 \begin{figure}
     \centering
@@ -442,7 +444,7 @@ zoom in and lock the laser to a frequency a bit below the chosen transition.
 
 For the pumping laser we repeat the last steps. The Doppler-free spectrum of the
 $F=2$ ground state of ${}^{85}\text{Ru}$ is shown in
-Figure~\ref{fig:doppler-free-pumping}. The lines are so close together, that we
+Figure~\ref{fig:doppler-free-pumping}. The lines are so close together that we
 can not distinguish between them. Instead of trying to lock we quasi-lock by
 zooming in far to the spot where we expect the right transition to be.
 
@@ -466,8 +468,8 @@ least \SI{5}{\milli\watt} and the pumping laser \SI{1}{\milli\watt}, which both
 is clearly the case for our setup.
 
 After that we have to adjust the polarizing beam splitter and the mirrors. For
-that we first check, if the first \textsc{pbs} and the bottom elevator mirrors
-are hit nicely by the beam. As this is the case we modify the bottom
+that we first check if the first \textsc{pbs} and the bottom elevator mirrors
+are hit nicely by the beam. After this is the case we modify the bottom
 $z$-mirror's orientation such that the beam passes through the center of the
 vacuum chamber. Then we adjust the top mirror such that the beams overlap
 perfectly. This can be checked with the help of a camera, which is still
@@ -492,11 +494,14 @@ We start to adjust the transversal mirrors. We calibrate the $y$ direction
 first. When the reflected beam coincides nicely with the incident beam we move
 on to the $x$ direction and repeat the procedure. 
 
-After checking the locking of the lasers we tweak again on all the mirrors to
+After checking the locking of the lasers again we tweak all the mirrors to
 optimize the overlap. Now when toggling the power supply of the magnetic field,
 we can see a little difference in the brightness which indicates a working
-\mot. With the help of a photo diode we then adjust the laser locks to
-make the \mot{} even larger.
+\mot. With the help of a photo diode we then adjust the laser locks to make the
+\mot{} even larger. We use every degree of freedom from the mirrors and
+slightly tune it to optimize the \mot\ signal. We repeat this twice for every
+little screw such that we should be very close at the maximum in the parameter
+space.
 
 \begin{table}
     \centering
@@ -520,19 +525,20 @@ make the \mot{} even larger.
 
 \section{MOT characterization}
 
+Now that the \mot\ is there, we want to characterize it. We are interested in
+the number of atoms caught, the volume and scattering cross section of the
+rubidium. One needs a few quantities in order to obtain the derived quantities.
+
 \subsection{Lens configuration}
 
-We also need the diameter of the lens and its distance to the \mot. Since the
-lens is an \SI{1}{\inch} lens, its radius is \SI{<< lens_radius_cm
->>}{\centi\meter}. Its distance to the \mot\ is \SI{<< lens_distance_cm
->>}{\centi\meter}, roughly estimated.
-
-We know that the distance between the lens and the \mot\ is $l$. The diameter
-of the lens is $d$. Then we can work out the solid angle that is taken up by
-the lens. The solid angle is $4 \piup$ for the whole sphere. Therefore we need
-to take the ratio of the lens surface ($\piup d^2/4$) and divide it by the total
-surface of a sphere at distance $l$, $4 \piup l^2$. In total we will then
-obtain
+We need the diameter of the lens and its distance to the \mot. Since the
+lens is an \SI{1}{\inch} lens, its radius is $d/2 = \SI{<< lens_radius_cm
+>>}{\centi\meter}$. Its distance to the \mot\ is $l = \SI{<< lens_distance_cm
+>>}{\centi\meter}$, roughly estimated. Then we can work out the solid angle
+that is taken up by the lens. The solid angle is $4 \piup$ for the whole
+sphere. Therefore we need to take the ratio of the lens surface ($\piup d^2/4$)
+and divide it by the total surface of a sphere at distance $l$, $4 \piup l^2$.
+In total we will then obtain
 \[
     \Omega = 4 \piup \frac{\piup d^2}{16 \piup l^2} = \frac{\piup d^2}{4 l^2}
     = \SI{<< mot_omega >>}{\steradian} \,.
@@ -540,16 +546,16 @@ obtain
 
 \subsection{Fluorescence power}
 
-We first have to find the fluorescence power. After replacing the photo diode
-with the power meter, we see that out \mot{} is very bright, but not very
-constant in power. Therefore we measure a few times to find a mean value (see
-Table~\ref{tab:mot_power}). Our \mot's power is hence \SI{<< power_mot
->>}{\nano\watt} which is quite good, as the instruction states that about
-\SI{50}{\nano\watt} are needed.
+We then have to find the fluorescence power of the \mot. After replacing the
+photo diode with the powermeter, we see that our \mot{} is very bright but
+not very constant in power. Therefore we measure a few times to find a mean
+value (see Table~\ref{tab:mot_power}). Our \mot's power is hence $p = \SI{<<
+power_mot >>}{\nano\watt}$ which is quite good, as the instruction states that
+about \SI{50}{\nano\watt} are needed.
 
-With that solid angle we can convert the measured power $p = \SI{<<
-mot_power_nW >>}{\nano\watt}$ into the actual emitted power of the whole \mot,
-$p_\text{tot}$. We do this by dividing through the solid angle:
+With the solid angle we can convert the measured power $p$ into the actual
+emitted power of the whole \mot, $p_\text{tot}$. We do this by dividing through
+the solid angle:
 \[
     p_\text{tot} = p \frac{4 \piup}{\Omega}
     = \SI{<< mot_power_tot_nW >>}{\nano\watt} \,.
@@ -585,7 +591,7 @@ Table~\ref{tab:beam_diameter}.
 \end{table}
 
 The collected data is also shown in Figure~\ref{fig:diameter} with a Gaussian
-\textsc{cdf}\footnote{cummulative density function} fit. From the fit we derive
+\textsc{cdf}\footnote{cumulative density function} fit. From the fit we derive
 a beam power of \SI{<< beam_power >>}{\milli\watt} for the $y$-branch and an
 $\eup^{-2}$ beam diameter of \SI{<< beam_diameter >>}{\centi\meter}. Errors are
 estimated by the diagonal of the fit covariance matrix.
@@ -610,24 +616,22 @@ the beam, $\pi r^2 = \SI{<< beam_area_cm >>}{\centi\meter\squared}$. We have
 \]
 where the factor two stems from the backreflection of each beam back through
 the chamber. With the intensity $I$ we can build up give the scattering rate of
-an individual atom as given by \textcite[Equation~(4)]{wieman/inexpensive}:
+an individual atom as given by \textcite[Equation~(4)]{wieman/inexpensive}
+and already used in our theory chapter:
 \[
     R = \frac{(I/I_\mathrm s) \piup \Gamma}{1 + (I/I_\mathrm s) + 4
     (\Delta/\Gamma)^2}
     = \SI{<< scattering_rate_MHz >>}{\mega\hertz}
     \,.
 \]
-The authors quote the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
+The authors state the natural line width $\Gamma = \SI{6}{\mega\hertz}$ and
 $I_\mathrm s = \SI{4.1}{\milli\watt\per\centi\meter\squared}$
 \textcite[328]{wieman/inexpensive}.
 We also need the wavelength $\lambda = \SI{<< wavelength_nm >>}{\nano\meter}$.
 Using that we can compute $\hbar\omega = \SI{<< hbar_omega_nW_MHz
->>}{\nano\watt\mega\hertz}$.
+>>}{\nano\watt\per\mega\hertz}$. The funny unit will become handy later on.
 
 \subsection{Detuning of the laser frequencies}
-
-Unlock the cooling laser. Run a slow frequency of around
-and scan the MOT intensity with the photo diode. 
 
 So far we have tweaked the detuning of the cooling and repumping lasers in
 order to get the largest \mot. Now we want to investigate the \mot\ dependence
@@ -639,11 +643,9 @@ Using the photodiode, we can get fast feedback from the \mot. We attach the
 cooling laser rubidium spectrum signal and the photodiode to the oscilloscope.
 Then we set the trigger on the rising flank of the \mot\ signal. One spectrum
 with the magnetic field switched on is taken, another one without the field.
-This way we can subtract the background.
-
-The difference between the two \mot\ signals gives the intensity of the \mot\
-itself. We plot that signal together this the rubidium spectrum, that is shown
-in Figure~\ref{fig:scan-cooling}.
+This way we can subtract the background. The difference between the two \mot\
+signals gives the intensity of the \mot\ itself. We plot that signal together
+this the rubidium spectrum, that is shown in Figure~\ref{fig:scan-cooling}.
 
 % TODO What was this number for?
 % \SI{3.9}{\milli\watt}
@@ -664,7 +666,7 @@ in Figure~\ref{fig:scan-cooling}.
 The time scale in that diagram is given by the scanning frequency chosen via
 the function generator. It is not really meaningful for our experiment.
 Therefore we identify three peaks in the rubidium spectrum. We fit a Gaussian
-curve to obtain the center of the peak. Then using the level shifts given in
+curve to obtain the center of each peak. Then using the level shifts given in
 the second oscillogram from the appendix of the manual, we can obtain a
 connection between the scanning time and the detuning from the cooling
 transition. The three values used are shown in
@@ -680,7 +682,8 @@ frequency.
         \centering
         \includegraphics{scan-cooling-spacing}
         \caption{%
-            Conversion of scan time to actual detuning.
+            Conversion of scan time to actual detuning. The errors are so small
+            that one cannot see them.
             }
         \label{fig:scan-cooling-spacing}
     \end{subfigure}
@@ -700,10 +703,11 @@ frequency.
     \label{fig:}
 \end{figure}
 
-Performing a Gaussian fit to the peak, we can get a good estimate of the
-central value of that peak. This should be the value that we have used then we
-optimized the \mot\ for brightness in the previous steps. The Gaussian fit
-gives us a central value of $\Delta = \SI{<< detuning >>}{\mega\hertz}$.
+Performing a Gaussian fit to the \mot\ response peak, we can get a good
+estimate of the central value of that peak. This should be the detuning that we
+have used then we optimized the \mot\ for brightness in the previous steps. The
+Gaussian fit gives us a central value of $\Delta = \SI{<< detuning
+>>}{\mega\hertz}$.
 
 This was the dependence on the cooling laser frequency. The whole time, we have
 kept the pumping laser locked. Now we will exchange the roles and lock the
@@ -751,9 +755,8 @@ power by the energy of a single photon gives us the total scattering rate
 \[
     NR = \frac{4 \piup p}{\Omega \hbar \omega} \,.
 \]
-
-Taking all those pieces together we arrive at the expression for the atom
-number depending only on observables that we have:
+Dividing by the scattering rate we arrive at the expression for the atom number
+depending only on observables that we have:
 \[
     N = \frac{4 \piup p}{\Omega \hbar \omega} 
     \frac{1 + (I/I_\mathrm s) + 4 (\Delta/\Gamma)^2}{(I/I_\mathrm s) \piup \Gamma}
@@ -763,10 +766,10 @@ number depending only on observables that we have:
 
 \subsection{Size of MOT}
 
-Now we want an estimate of our \mot's size. For this we first take a picture of
-the chamber with the \mot\ and without it. Then we subtract those images in
-order to remove the background from the other laser beams. This is shown in
-Figure~\ref{fig:difference-3-inv}.
+Now we want an estimate of our \mot's spatial size. For this we first take a
+picture of the chamber with the \mot\ and without it. Then we subtract those
+images in order to remove the background from the other laser beams. The
+subtracted image is shown in Figure~\ref{fig:difference-3-inv}.
 
 Then we turn the camera and take a picture of a scale at the same distance. The
 image of the centimeter scale is shown in Figure~\ref{fig:scale}. For a rough
@@ -802,12 +805,11 @@ neighborhood of say \SI{2}{\milli\meter}.
 We want to have a more exact estimation of this area. We therefore let the
 computer sum the pixel values of a cropped version shown in
 Figure~\ref{fig:mot-crop}. Then we divide by the difference in maximum and
-minimum value. This should give an good estimation of the \mot\ size.
-
-Our algorithm counts \num{<< mot_white_pixels >>} white pixels. Some dark gray
-pixels contribute a bit, some light gray pixels do not contribute fully. We
-hope that on average this works out. For comparison, the image used has \num{<<
-mot_total_pixels >>} pixels.
+minimum value. This should give an good estimation of the \mot\ size. Our
+algorithm counts \num{<< mot_white_pixels >>} white pixels belonging to the
+\mot. Some dark gray pixels contribute a bit, some light gray pixels do not
+contribute fully. We hope that on average this works out. For comparison, the
+image used has \num{<< mot_total_pixels >>} pixels.
 
 We carefully choose two points on the millimeter scale which are
 \SI{10}{\milli\meter} apart and near the spot where the \mot\ is on our images.
@@ -876,10 +878,10 @@ that the light going through the \mot\ is not perfectly circularly polarized.
 With the power meter still attached, we can investigate the influence of the
 external magnetic field onto the \mot\ power. We just vary the current that
 goes through the magnetic coils. In steps of around \SI{0.5}{\ampere} we take
-measurements. We first started with the maximum current and then to no current.
-After that we measured a few more points in the middle. While doing this we
-noticed deviations from the previous measurements. This could be some mild
-hysteresis effect. In principle the copper coils should not have a strong
+measurements. We first started with the maximum current and then go to no
+current. After that we measured a few more points in the middle. While doing
+this we noticed deviations from the previous measurements. This could be some
+mild hysteresis effect. In principle the copper coils should not have a strong
 ferromagnetism and therefore should not inhibit a significant hysteresis. We
 also observed large fluctuations of around \SI{40}{\nano\watt} while taking the
 measurement. Therefore this could also be just statistical jitter that we have
@@ -1001,7 +1003,7 @@ suit our needs here. It is given by
     = \SI{<< velocity >>}{\meter\per\second} \,,
 \]
 where $m = \SI{<< rubidium_mass >>}{\kilogram}$ is the mass of rubidium atoms
-\textcite[320]{wieman/inexpensive}. The density $n$ can be computed using
+\parencite[320]{wieman/inexpensive}. The density $n$ can be computed using
 \[
     n = \frac{P}{k_\mathrm B T}
     = \SI{<< density >>}{\per\meter\cubed} \,.
