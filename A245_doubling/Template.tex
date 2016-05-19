@@ -75,6 +75,8 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \section{Gaussian beams}
 
+\subsection{Rayleigh length}
+
 \section{Wavelength measurement}
 
 \subsection{Gratings}
@@ -115,7 +117,6 @@ the power meter become non-linear beyond \SI{20}{\milli\watt} we use an
 attenuator in front of it. This will take away a certain fraction of the beam
 and allow us to measure higher intensities. The attenuator has to be calibrated
 first with small beam powers to allow for a comparison.
-
 
 % TODO Measure up to 280 mA.
 % TODO Measure background.
@@ -164,7 +165,19 @@ plate.
 
 We expect to see a $\cos^2$ profile, perhaps with a constant offset.
 
+% TODO Fit data.
+
+\subsubsection{Extinction ratio}
+
+% TODO Determine extinction ratio.
+
 \section{Harmonic power}
+
+Now we have the power measurement calibrated. We can determine the power in the
+fundamental beam from the angle of the retarder plate. Our setup is extended
+with the non-linear crystal and a filter as shown in Figure~\ref{fig:fig-4}.
+The blue filter is needed to get rid of the fundamental wave, we only want to
+measure the power of the harmonic wave here.
 
 \begin{figure}
     \centering
@@ -175,7 +188,36 @@ We expect to see a $\cos^2$ profile, perhaps with a constant offset.
     \label{fig:fig-4}
 \end{figure}
 
+The crystal used here is a $\mathrm{KNbO_3}$ crystal. It has a cross section of
+\SI{2}{\milli\meter} times \SI{1.8}{\milli\meter}. It is cut along the b-axis
+and has a length of \SI{5}{\milli\meter}. The end faces are coating to avoid
+reflections at \SI{987}{\nano\meter} and \SI{494}{\nano\meter}.\footnote{This
+information is given on page~6 of the manual.}
+
+% TODO Write about adjustment.
+
 \subsection{Output power optimization}
+
+With the rough optical setup in place we can insert the crystal and optimize
+for maximum harmonic power. We slowly heat up the crystal to \SI{36}{\celsium}.
+Then we slide it into the focus of our setup.
+
+% TODO Check with paper behind the crystal that one can see something.
+
+The blue harmonic light is focused with an achromatic lens and filtered with an
+\SI{3}{\milli\meter} BG40 glass filter. From Figure~3 of the manual we estimate
+a total transmission coefficient of \num{0.9} at \SI{494}{\nano\meter}. For the
+unwanted fundamental wave we have a transmission coefficient of around
+$10^{-2.3} = 0.005$.
+
+% TODO Think about the effect of the fundamental wave in our measurement here.
+
+We slightly move the crystal to optimize the output power.
+
+% TODO Compute beam waist.
+% TODO Compute Rayleigh length.
+% TODO Determine the fulfillment of the Boyd-Kleinman condition.
+% TODO Determine optimal focal length.
 
 \subsection{Crystal temperature dependence}
 
