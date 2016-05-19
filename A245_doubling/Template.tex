@@ -136,6 +136,7 @@ first with small beam powers to allow for a comparison.
 % TODO Compute quantum efficiency from slope.
 
 \subsection{Variable attenuator}
+\label{sec:variable_attenuator}
 
 The laser might experience \emph{mode hops} when we adjust the current.
 Therefore we do not want to adjust laser power by the current during our
@@ -232,7 +233,22 @@ we want to measure the temperature dependence. First we cool down to
 % TODO Try to fit a sinc function.
 % TODO Explain why the curve could be asymmetric.
 
+Now that we know the optimal temperature for the crystal, we slowly tune the
+temperature to this optimal setting.
+
 \subsection{Input power dependence}
+
+The output power must depend on the input power. As we have calibrated in
+Section~\ref{sec:variable_attenuator}, we can choose an input power by rotating
+the retarder plate in front of the splitter. We measure the output power while
+adjusting the angle of the retarder plate.
+
+% TODO Table with measurements.
+
+% TODO Plot output power versus input power.
+% TODO Determine expected relationship.
+% TODO Fit model to data.
+% TODO Extract frequency doubling efficiency.
 
 \subsection{Input polarization dependence}
 
