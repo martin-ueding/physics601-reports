@@ -231,6 +231,16 @@ The \emph{Rayleigh length}~$z_0$ is the distance from the focus point where the
 beam cross sectional area has doubled. The \emph{confocal parameter} $b$ is
 just twice the Rayleigh length: $b = 2 z_0$.
 
+The diameter of a Gaussian beam given by \parencite{wikipedia/gaussian_beam} as
+\[
+    w(z) = w_0 \sqrt{1 + \frac{z^2}{z_0^2}} \,.
+\]
+Together with the relation
+\[
+    z_0 = \frac{n \piup \omega_0^2}{\lambda_0}
+\]
+from \parencite{wikipedia/rayleighleange} only one free parameter is left.
+
 Introducing the focusing into the expected harmonic power, one obtains
 \[
     P_\mathrm h
@@ -377,10 +387,25 @@ wave we have a transmission coefficient of around $10^{-2.3} = 0.005$.
 
 % TODO Think about the effect of the fundamental wave in our measurement here.
 
-We slightly move the crystal to optimize the output power.
+We slightly move and rotate the crystal to optimize the output power.
+
+One can let Mathematica solve the
+relations describing the beam waist to give an expression for the Rayleigh length
+$z_0$:
+\[
+    z_0 = \frac{n^2 \piup w(z)^2 - \sqrt{n^2 \piup^2 w(z)^4 - 4 \lambda_0^2 n^2
+    \piup^2}}{2 n \lambda_0} \,.
+\]
+We know that the focal length of the used lens is $f = \SI{60}{\milli\meter}$.
+Since the incoming laser beam is collimated, we know that the distance $z$
+between the focus and the lens is just this $f$. The diameter of the collimated
+beam is given by $\SI{3.5 +- 0.5}{\milli\meter}$
+\parencite[8]{lab-course/doubling/manual}.
+
 
 % TODO Compute beam waist.
 % TODO Compute Rayleigh length.
+
 % TODO Determine the fulfillment of the Boyd-Kleinman condition.
 % TODO Determine optimal focal length.
 
