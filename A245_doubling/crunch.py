@@ -72,24 +72,21 @@ def task_rayleigh_length(T):
         for beam_radius in beam_radius_dist
     ]))
     rayleigh_length_val, rayleigh_length_err = bootstrap.average_and_std_arrays(rayleigh_length_dist)
-    T['rayleigh_length'] = siunitx(rayleigh_length_val, rayleigh_length_err)
-    print(rayleigh_length_dist)
+    T['rayleigh_length_mm'] = siunitx(rayleigh_length_val / 1e-3, rayleigh_length_err / 1e-3, error_digits=2)
 
     waist_dist = list(itertools.filterfalse(np.isnan, [
         get_waist(rayleigh_length, wavelength, refractive_index)
         for rayleigh_length in rayleigh_length_dist
     ]))
     waist_val, waist_err = bootstrap.average_and_std_arrays(waist_dist)
-    T['waist'] = siunitx(waist_val, waist_err)
-    print(waist_dist)
+    T['waist_mum'] = siunitx(waist_val / 1e-6, waist_err / 1e-6)
 
     normalized_length_dist = list([
         length / (2 * rayleigh_length)
         for rayleigh_length in rayleigh_length_dist
     ])
     normalized_length_val, normalized_length_err = bootstrap.average_and_std_arrays(normalized_length_dist)
-    T['normalized_length'] = siunitx(normalized_length_val, normalized_length_err)
-    print(normalized_length_dist)
+    T['normalized_length'] = siunitx(normalized_length_val, normalized_length_err, error_digits=2)
 
 
 def test_keys(T):
