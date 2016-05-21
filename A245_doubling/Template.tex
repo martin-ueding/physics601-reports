@@ -130,17 +130,63 @@ means that the refractive index is lower for higher wavelength. In order to
 match the refractive indices of $\omega$ (large wavelength) and $2\omega$
 (small wavelength), one has to choose the larger refractive index for the
 fundamental wave and the smaller one for the harmonic. Depending on the crystal
-one might have $n_\mathrm o < n_\mathrm e$ (called \emph{positive}) or $n_\mathrm o >
-n_\mathrm e$ (called \emph{negative}).
+one might have $n_\mathrm o < n_\mathrm e$ (called \emph{positive}) or
+$n_\mathrm o > n_\mathrm e$ (called \emph{negative}).
 
 \subsection{Type 1 and 2}
 
+We will only describe the case of negative uniaxial crystals here. For a
+positive uniaxial crystal one just takes perpendicular polarizations. As we are
+in a negative crystal we have $n_\mathrm o > n_\mathrm e$. As the fundamental
+wave has to take the larger refractive index, which is the \emph{ordinary}
+direction. The harmonic wave must be---at least partially---in the
+extraordinary direction.
+
 We have two choices to choose the incoming polarization. Choosing the
-polarization of the fundamental wave to be 
+polarization of the fundamental wave to be purely ordinary we can only combine
+two photons of the ordinary direction into one photon of the extraordinary
+direction. This is called \emph{type 1 phase matching}. The other way is to
+choose a \SI{45}{\degree} angle of the fundamental wave. It will have equal
+parts which propagate in the ordinary and extraordinary direction. One photon
+of each direction can then be combined into one harmonic photon. That way is
+called \emph{type 2 phase matching}.
+
+In a real crystal it would be an unlikely coincidence that the refractive
+indices for ordinary and extraordinary transmission are exactly equal at
+$\omega$ and $2\omega$. Therefore one needs one degree of freedom to adjust.
 
 \subsection{Angle adjustment}
 
+Every crystal can be tilted such that the angle between the optical axis of the
+crystal and the incoming light is $\pi/2 + \theta$. A better way is to say that
+the surface normal of the optical table forms an angle $\theta$ with the
+optical axis of the crystal. By tilting the crystal one can can tune the
+effect refractive index of the extraordinary direction. We then have
+\[
+    \frac1{n_\mathrm e(\theta)}
+    = \frac{\cos(\theta^2)}{n_\mathrm o^2}
+    + \frac{\sin(\theta^2)}{n_\mathrm e^2} \,,
+\]
+as given by \textcite[Equation!(3.31)]{meschede/optik_licht_laser/2008}. Given
+the refractive indices one can then find the optimal angle for the crystal. One
+problem with this method is the \emph{walk-off} as the harmonic light now has
+the same phase velocity but not necessarily the same direction.
+
+We do not use this method in our experiment as we have something fancier.
+
 \subsection{90 degree adjustment}
+
+The \emph{\SI{90}{\degree} adjustment} or \emph{temperature adjustment} does
+not have the problem of walk-off. One uses $\theta = 0$ in order to have
+perfectly perpendicular propagation directions. In order to fine-tune the
+refractive indices one uses a temperature dependence. So instead of matching
+via tilt one does via temperature dependence. The material used in our
+experiment, $\mathrm{KNbO_3}$ has a sufficient temperature dependence to allow
+phase matching for frequency doubling in the range
+\SIrange{950}{1060}{\nano\meter} for a b-cut crystal. This \enquote b refers to
+the cut direction. This crystal material has different refractive indices in
+all three directions, therefore one can choose the frequency range to work
+with.
 
 \section{Gaussian beams}
 
