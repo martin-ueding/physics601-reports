@@ -217,7 +217,30 @@ choose the frequency range to work with.
 
 \section{Gaussian beams}
 
-\subsection{Rayleigh length}
+This section follows the work by
+\textcite[Section~12.4.4]{meschede/optik_licht_laser/2008}.
+
+A Gaussian light beam is a good approximation to the beams that we can create
+with a laser. It has a Gaussian electric field intensity distribution. When one
+focuses the beam it will have a smallest point, the waist. There the beam
+radius is $w_0$.
+\[
+    \mathcal E(r) = \mathcal E_0 \exp(-(r/w_0)^2) \,,
+\]
+The \emph{Rayleigh length}~$z_0$ is the distance from the focus point where the
+beam cross sectional area has doubled. The \emph{confocal parameter} $b$ is
+just twice the Rayleigh length: $b = 2 z_0$.
+
+Introducing the focusing into the expected harmonic power, one obtains
+\[
+    P_\mathrm h
+    = \frac{\Gamma^2 l^2 P_\mathrm f^2}{\piup w_\mathrm h^2} \frac1\xi h(0,
+    \xi) \,.
+\]
+Here $l$ is the crystal length, $\xi = l / b$ is the normalized crystal length
+and $h(0, \xi)$ is the Boyd-Kleinman reduction factor in the case of
+\SI{90}{\degree} phase matching. For $\xi = 2.84$ the function $h(0, \xi)$
+obtains its maximum value of \num{1.068}.
 
 \section{Wavelength measurement}
 
