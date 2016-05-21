@@ -393,13 +393,12 @@ One can let Mathematica solve the
 relations describing the beam waist to give an expression for the Rayleigh length
 $z_0$:
 \[
-    z_0 = \frac{n^2 \piup w(z)^2 - \sqrt{n^2 \piup^2 w(z)^4 - 4 \lambda_0^2 n^2
-    \piup^2}}{2 n \lambda_0} \,.
+    z_0 = \piup \frac{n w(z)^2 + \sqrt{w(z)^4 - 4 \lambda_0^2 z^2}}{2 \lambda_0} \,.
 \]
 We know that the focal length of the used lens is $f = \SI{60}{\milli\meter}$.
 Since the incoming laser beam is collimated, we know that the distance $z$
 between the focus and the lens is just this $f$. The diameter of the collimated
-beam is given by $\SI{3.5 +- 0.5}{\milli\meter}$
+beam is given by $w(z) = \SI{3.5 +- 0.5}{\milli\meter}$
 \parencite[8]{lab-course/doubling/manual}.
 
 
