@@ -66,8 +66,8 @@ Yes $\Box$ \hspace{2cm} No $\Box$
 
 \section{Generation of hamonics}
 
-This section follows the work by \textcite{meschede/optik_licht_laser/2008}.
-Verbatim copies of equations will be cited additionally.
+This section follows the work by
+\textcite[Chapter~12]{meschede/optik_licht_laser/2008}.
 
 A normal driven harmonic oscillator obeys the differential equation for the
 force,
@@ -78,15 +78,36 @@ where $x(t)$ is the position of the oscillating particle, $\omega_0^2$ the
 eigenfrequency of the system, $q/m$ the specific electric charge, $\mathcal E$
 the driving field amplitude and $\omega$ the external driving frequency. The
 solutions of this equation are harmonics with frequency!$\omega$ and a certain
-amplitude which depends on the distance of $\omega$ from $\omega_0$. The linear
-force is a good approximation until ones uses high intensity laser beams. Then
-one needs to include the next term in the force expansion, $\alpha x^2$.
+amplitude which depends on the distance of $\omega$ from $\omega_0$.
+
+The linear force is a good approximation until ones uses high intensity laser
+beams. Then one needs to include the next term in the force expansion, $\alpha
+x^2$. For $\alpha \ll 1$ we can neglect $\alpha^2$ terms. The solution~$x(t)$
+will then consist of two summands, the first is the already known harmonic with
+$\omega$: $x^{(1)}(t) = x_\text l \cos(\omega t)$ with $x_\text l$ the
+amplitude of the linear part. The second summand, suppressed by $\alpha$ will
+approximately obey the differential equation
+\[
+    \ddot x^{(2)} + \omega_0^2 x^{(2)} \simeq - \alpha x_\mathrm l^2
+    \cos(\omega t)^2 \,.
+\]
+Using the relation $\cos(\omega t)^2 = 1/2 + \cos(2 \omega t)/2$ we see that
+there will be a constant part and a part oscillating with $2 \omega$. The
+amplitude of that part has to be derived.
+
+% TODO Coupled amplitude equations.
+
+% TODO Weak conversion.
 
 \section{Birefringence}
 
 \subsection{Retarder plates}
 
 \section{Phase matching}
+
+% TODO Type 1 and 2.
+% TODO Angle adjustment
+% TODO 90 degree adjustment
 
 \section{Gaussian beams}
 
