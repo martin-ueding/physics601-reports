@@ -27,6 +27,8 @@
 
 \usepackage[all]{nowidow}
 
+\DeclareMathOperator\sinc{sinc}
+
 \subject{Lab report}
 \title{Optical frequency doubling}
 \subtitle{Experiment A245 -- Universität Bonn}
@@ -95,9 +97,22 @@ Using the relation $\cos(\omega t)^2 = 1/2 + \cos(2 \omega t)/2$ we see that
 there will be a constant part and a part oscillating with $2 \omega$. The
 amplitude of that part has to be derived.
 
-% TODO Coupled amplitude equations.
+By looking at the propagation of waves in the non-linear medium one can derive
+a differential equation for each polarization induced by the incoming and
+outgoing waves. With the assumption of nearly plane waves one can simplify to a
+one dimensional differential equation. Setting the incoming waves to the same
+frequency they boil down to two equations.
 
-% TODO Weak conversion.
+In our case the conversion will only be week. The light passes the crystal only
+once, we only have the length $l$ to generate the harmonic. Therefore the
+fundamental wave can be assumed to be constant. The important result is the
+intensity of the harmonic:
+\[
+    I_\text h = \underbrace{\frac{4 d_\text{eff}^2 \omega^2}{c^3 \varepsilon_0
+    n_\omega^2 n_{2\omega}}}_{\Gamma^2} l^2 I_\mathrm f^2 \sinc(\Deltaup k l /
+    2)^2 \,.
+\]
+We choose the non-normalized variant $\sinc(x) = \sin(x)/x$.
 
 \section{Birefringence}
 
