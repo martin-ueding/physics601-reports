@@ -389,6 +389,8 @@ wave we have a transmission coefficient of around $10^{-2.3} = 0.005$.
 
 We slightly move and rotate the crystal to optimize the output power.
 
+\subsubsection{Beam waist and Rayleigh length}
+
 One can let Mathematica solve the
 relations describing the beam waist to give an expression for the Rayleigh length
 $z_0$:
@@ -403,14 +405,40 @@ beam is given by $w(z) = \SI{3.5 +- 0.5}{\milli\meter}$
 equation we obtain a Rayleigh length of $z_0 = \SI{<< rayleigh_length_mm
 >>}{\milli\meter}$ and a waist of $w_0 = \SI{<< waist_mum >>}{\micro\meter}$.
 We obtain a normalized crystal length $\xi = l/b = \num{<< normalized_length
->>}$. Given the large error margin it could be anything. One could say that it
-is close to the optimal value of \num{2.84}.
+>>}$.
+
+For the optimal case we would need to have $\xi_0 = \num{2.84}$ Given the large
+error margin our result $\xi$ could be close enough to $\xi_0$. The more
+accurate approach is to perform a one-sample $t$-test. Our null hypothesis is
+$\xi = \xi_0$. Can we disprove the null hypothesis, i.e.\ is there no
+measurable deviation given the large error of the beam diameter? The test
+statistic is $T = \num{<< boyd_kleinman_ttest_t >>}$. Intuitively one can think
+of this as the distance of $\xi$ to $\xi_0$ in terms of the standard error
+(standard deviation reduced by $\sqrt N$, $N = 1$ is the sample count here).
+A look into a table with percentiles of the $t$-distribution tells us that for
+a two-sided test with a confidence level of $\alpha = 0.6$ the $|T|$ would have
+to be greater than 1.376 for us to reject the null hypothesis
+\parencite{wikipedia/student_t}. If we want a higher rejection power, we would
+set $\alpha = 0.05$ but would incur a quantile value of 12.71 which $|T|$ would
+have to exceed for us to reject the null hypotheses. Therefore we must accept
+the null hypothesis and say that the Boyd-Kleinman condition is fulfilled.
 
 % FIXME See whether those numbers actually make sense. Is the correct branch of
 % the equations given by Mathematica chosen?
 
-% TODO Determine the fulfillment of the Boyd-Kleinman condition.
-% TODO Determine optimal focal length.
+The optimal focal length can be derived as follows: We want $l/b = \xi_0 =
+2.84$. Therefore we need $z_0 = l/(2\xi_0)$ and
+\[
+    w_0^2 = \frac{l \lambda_0}{2n\piup\xi_0} \,.
+\]
+Using the relation for the beam radius we can derive
+\[
+    z^2 = \sbr{
+        \frac{2n \piup w(z)^2 \xi_0}{l \lambda_0} - 1
+    } \frac{l^2}{4 \xi_0^2} \,.
+\]
+Plugging in the numbers we obtain an optimal $f = z$ of \SI{<<
+optimal_focal_length_mm >>}{\milli\meter}.
 
 \subsection{Crystal temperature dependence}
 

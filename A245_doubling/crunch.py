@@ -52,6 +52,13 @@ def get_waist(rayleigh_length, wavelength, refractive_index):
     return np.sqrt(rayleigh_length * wavelength / (refractive_index * np.pi))
 
 
+def get_optimal_focal_length(beam_radius, refractive_index, wavelength, length):
+    optimal_normalized_length = 2.84
+    bracket = 2 * beam_radius**2 * refractive_index * np.pi * optimal_normalized_length / (length * wavelength) - 1
+    factor = (length / (2 * optimal_normalized_length))**2
+    return np.sqrt(bracket * factor)
+
+
 def task_rayleigh_length(T):
     beam_diameter_val = 3.5e-3
     beam_diameter_err = 0.5e-3
@@ -87,6 +94,16 @@ def task_rayleigh_length(T):
     ])
     normalized_length_val, normalized_length_err = bootstrap.average_and_std_arrays(normalized_length_dist)
     T['normalized_length'] = siunitx(normalized_length_val, normalized_length_err, error_digits=2)
+
+    t = (normalized_length_val - 2.84) / normalized_length_err
+    T['boyd_kleinman_ttest_t'] = siunitx(t)
+
+    optimal_focal_length_dist = list([
+        get_optimal_focal_length(beam_radius, refractive_index, wavelength, length)
+        for beam_radius in beam_radius_dist
+    ])
+    optimal_focal_length_val, optimal_focal_length_err = bootstrap.average_and_std_arrays(optimal_focal_length_dist)
+    T['optimal_focal_length_mm'] = siunitx(optimal_focal_length_val / 1e-3, optimal_focal_length_err / 1e-3, error_digits=2)
 
 
 def test_keys(T):
