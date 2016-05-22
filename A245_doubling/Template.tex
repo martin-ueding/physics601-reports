@@ -296,7 +296,38 @@ obtains its maximum value of \num{1.068}.
 
 \section{Wavelength measurement}
 
+In this experiment we want to double the frequency of light. In order to verify
+that it works we need a way to measure the frequency. Although that is in
+principle doable with the \emph{optical comb} we choose the easier route by
+measuring the wavelength and convert with the speed of light.
+
 \subsection{Gratings}
+
+A practical way to measure the wavelength are \emph{gratings} which are
+available for use in reflection and transmission. A CD or DVD is a readily
+available example of a reflection grating. We will use a regular grating which
+has parallel lines.
+
+The basic idea is that the light is only transmitted or reflected through a
+large number of thin slits. By the principle of Huygens each of the lines will
+create a cylindrical wave which interferes with the other ones. At an angle
+$\phi$ the different waves will interfere with a phase shift $\Deltaup k$ which
+depends on the different lengths traveled. For some $\phi$ it will give
+constructive interference. The $n$-th order of the wavelength~$\lambda$ is
+scattered into an angle~$\phi_n$ governed by
+\[
+    \sin(\phi_n) = \frac{n \lambda}{g} \,,
+\]
+with line distance $g$ \parencite{wikipedia/optisches_gitter}. This equation
+only holds for incoming light that is perpendicular to the grating.
+
+The resolution of the grating is given by
+\[
+    \frac{\lambda}{\Deltaup \lambda} = n N \,,
+\]
+with the number of illuminated lines~$N$
+\parencite{wikipedia/optisches_gitter}. The resolution of a grating is quite
+good but there are even better ways.
 
 \subsection{Michelson interferometer}
 
