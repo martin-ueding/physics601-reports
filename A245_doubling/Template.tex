@@ -391,6 +391,9 @@ We slightly move and rotate the crystal to optimize the output power.
 
 \subsubsection{Beam waist and Rayleigh length}
 
+% FIXME See whether those numbers actually make sense. Is the correct branch of
+% the equations given by Mathematica chosen?
+
 One can let Mathematica solve the
 relations describing the beam waist to give an expression for the Rayleigh length
 $z_0$:
@@ -407,7 +410,7 @@ equation we obtain a Rayleigh length of $z_0 = \SI{<< rayleigh_length_mm
 We obtain a normalized crystal length $\xi = l/b = \num{<< normalized_length
 >>}$.
 
-For the optimal case we would need to have $\xi_0 = \num{2.84}$ Given the large
+For the optimal case we would need to have $\xi_0 = \num{2.84}$. Given the large
 error margin our result $\xi$ could be close enough to $\xi_0$. The more
 accurate approach is to perform a one-sample $t$-test. Our null hypothesis is
 $\xi = \xi_0$. Can we disprove the null hypothesis, i.e.\ is there no
@@ -422,9 +425,6 @@ to be greater than 1.376 for us to reject the null hypothesis
 set $\alpha = 0.05$ but would incur a quantile value of 12.71 which $|T|$ would
 have to exceed for us to reject the null hypotheses. Therefore we must accept
 the null hypothesis and say that the Boyd-Kleinman condition is fulfilled.
-
-% FIXME See whether those numbers actually make sense. Is the correct branch of
-% the equations given by Mathematica chosen?
 
 The optimal focal length can be derived as follows: We want $l/b = \xi_0 =
 2.84$. Therefore we need $z_0 = l/(2\xi_0)$ and
