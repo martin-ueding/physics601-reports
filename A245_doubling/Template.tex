@@ -352,7 +352,129 @@ For the exact same arm lengths one does not see any difference between
 different wavelengths. We will use $d_1 \neq d_2$ and move one of the mirrors,
 say the first. Then by changing $d_1$ we will change $I(\lambda)$. For a
 constant $\dot d_1$ we will see a different $\dot I(\lambda)$ and $\dot
-I(\lambda/2)$.
+I(\lambda/2)$. The change in intensity then is
+\[
+    \dot I(\lambda) = - \frac12 I_0(\lambda) 
+        \sin\del{4 \piup \frac{d_1 - d_2}{\lambda}}
+        4 \piup \frac{\dot d_1}{\lambda} \,.
+\]
+Adding the contributions for $\lambda$ (fundamental) and $\lambda/2$ (harmonic)
+together we see that we have
+\[
+    \dot I_\text{sum}
+    =
+    - \frac{2 \piup \dot d_1}{\lambda}
+    \sbr{
+        I_0(\lambda) 
+        \sin\del{4 \piup \frac{d_1 - d_2}{\lambda}}
+        +
+        2 I_0(\lambda/2) 
+        \sin\del{8 \piup \frac{d_1 - d_2}{\lambda}}
+    } \,.
+\]
+We expect that the fundamental and harmonic parts in the output of the
+interferometer oscillate with different frequencies. Splitting the colors and
+displaying this in $x$-$y$-mode on the oscilloscope should give Lissajous
+figures with $1:2$ ratio.
+
+To get some intuition about the Lissajous figures we have shown a few in
+Figure~\ref{fig:lissajous-generated}. The ones that we would expect are in the
+first row. If there is some offset we would obtain figures like in the second
+row. On the oscilloscope it would actually be figure that seems to be rotating
+as the ratio is not exact. With a sufficient exposure time, the figures would
+look somewhat like the \enquote{frozen} one generated. In case there is some
+other ratio, figures like in the last row would be expected.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_2_0}
+        \caption{%
+            $r = 2$, $\phi_0 = 0$
+            }
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_2_02}
+        \caption{%
+            $r = 2$, $\phi_0 = 0.2$
+            }
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_2_1}
+        \caption{%
+            $r = 2$, $\phi_0 = 1$
+            }
+    \end{subfigure}
+
+    \vspace{2ex}
+
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_21_0}
+        \caption{%
+            $r = 2.1$, $\phi_0 = 0$
+            }
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_21_07}
+        \caption{%
+            $r = 2.7$, $\phi_0 = 0.7$
+            }
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_23_24}
+        \caption{%
+            $r = 2.3$, $\phi_0 = 2.4$
+            }
+    \end{subfigure}
+
+    \vspace{2ex}
+
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_1_0}
+        \caption{%
+            $r = 1$, $\phi_0 = 0$
+            }
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_1_1}
+        \caption{%
+            $r = 1$, $\phi_0 = 1$
+            }
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_3_0}
+        \caption{%
+            $r = 3$, $\phi_0 = 0$
+            }
+    \end{subfigure}
+    %
+    \caption{%
+        Lissajous figures generated with $x(t) = \sin(t)$ and $y(t) = \sin(rt +
+        \phi_0)$ and $t \in [0, 8 \piup]$.
+        }
+    \label{fig:lissajous-generated}
+\end{figure}
 
 % TODO What is the resolution of this thing?
 
@@ -644,34 +766,6 @@ in Figure~\ref{fig:fig-5}.
     \label{fig:fig-5}
 \end{figure}
 
-As mentioned in the theory part, the interference intensity $I(\lambda)$
-depends on the arm lengths $d_1$ and $d_2$, see
-Equation~\eqref{eq:I_of_lambda}. By choosing $d_2$ constant and changing $d_1$,
-we have
-\[
-    \dot I(\lambda) = - \frac12 I_0(\lambda) 
-        \sin\del{4 \piup \frac{d_1 - d_2}{\lambda}}
-        4 \piup \frac{\dot d_1}{\lambda} \,.
-\]
-Adding the contributions for $\lambda$ (fundamental) and $\lambda/2$ (harmonic)
-together we see that we have
-\[
-    \dot I_\text{sum}
-    =
-    - \frac{2 \piup \dot d_1}{\lambda}
-    \sbr{
-        I_0(\lambda) 
-        \sin\del{4 \piup \frac{d_1 - d_2}{\lambda}}
-        +
-        2 I_0(\lambda/2) 
-        \sin\del{8 \piup \frac{d_1 - d_2}{\lambda}}
-    } \,.
-\]
-We expect that the fundamental and harmonic parts in the output of the
-interferometer oscillate with different frequencies. Splitting the colors and
-displaying this in $x$-$y$-mode on the oscilloscope should give Lissajous
-figures with $1:2$ ratio.
-
 Behind the last BG40 filter we have two fast photo diodes. One will receive the
 light from the fundamental wave and a negligible part of the harmonic wave. The
 other one will receive the harmonic wave and a severely suppressed part of the
@@ -680,105 +774,6 @@ photo diodes to the oscillopscope, we obtain some Lissajous figures as shown in
 Figure~\ref{fig:lissajous-measured}.
 
 % TODO Take images of the x-y-mode on the oscilloscope.
-
-To get some intuition about the Lissajous figures we have shown a few in
-Figure~\ref{fig:lissajous-generated}. The ones that we would expect are in the
-first row. If there is some offset we would obtain figures as in the second
-row. On the oscilloscope it would actually be figure that seems to be rotating
-as the ratio is not exact. With a sufficient exposure time, the figures would
-look somewhat like the \enquote{frozen} one generated. In case there is some
-other ratio, figures like in the last row would be expected.
-
-\begin{figure}
-    \centering
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_2_0}
-        \caption{%
-            $r = 2$, $\phi_0 = 0$
-            }
-    \end{subfigure}
-    \hfill
-    %
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_2_02}
-        \caption{%
-            $r = 2$, $\phi_0 = 0.2$
-            }
-    \end{subfigure}
-    \hfill
-    %
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_2_1}
-        \caption{%
-            $r = 2$, $\phi_0 = 1$
-            }
-    \end{subfigure}
-
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_21_0}
-        \caption{%
-            $r = 2.1$, $\phi_0 = 0$
-            }
-    \end{subfigure}
-    \hfill
-    %
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_21_07}
-        \caption{%
-            $r = 2.7$, $\phi_0 = 0.7$
-            }
-    \end{subfigure}
-    \hfill
-    %
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_23_24}
-        \caption{%
-            $r = 2.3$, $\phi_0 = 2.4$
-            }
-    \end{subfigure}
-
-    \vspace{2ex}
-
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_1_0}
-        \caption{%
-            $r = 1$, $\phi_0 = 0$
-            }
-    \end{subfigure}
-    \hfill
-    %
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_1_1}
-        \caption{%
-            $r = 1$, $\phi_0 = 1$
-            }
-    \end{subfigure}
-    \hfill
-    %
-    \begin{subfigure}[c]{0.3\linewidth}
-        \centering
-        \includegraphics{lissajous_3_0}
-        \caption{%
-            $r = 3$, $\phi_0 = 0$
-            }
-    \end{subfigure}
-    %
-    \caption{%
-        Lissajous figures generated with $x(t) = \sin(t)$ and $y(t) = \sin(rt +
-        \phi_0)$ and $t \in [0, 8 \piup]$.
-        }
-    \label{fig:lissajous-generated}
-\end{figure}
 
 % TODO Explain the meaning of the oscillograms.
 % TODO Determine deviation from 1:2 ratio.
