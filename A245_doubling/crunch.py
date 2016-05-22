@@ -59,7 +59,7 @@ def get_optimal_focal_length(beam_radius, refractive_index, wavelength, length):
     return np.sqrt(bracket * factor)
 
 
-def task_rayleigh_length(T):
+def job_rayleigh_length(T):
     beam_diameter_val = 3.5e-3
     beam_diameter_err = 0.5e-3
     refractive_index = 2.2
@@ -106,6 +106,28 @@ def task_rayleigh_length(T):
     T['optimal_focal_length_mm'] = siunitx(optimal_focal_length_val / 1e-3, optimal_focal_length_err / 1e-3, error_digits=2)
 
 
+def make_lissajous(angle, ratio, offset, filename):
+    x = np.sin(angle)
+    y = np.sin(angle * ratio + offset)
+    np.savetxt(filename, np.column_stack([x, y]))
+
+
+def job_lissajous(T):
+    angle = np.linspace(0, 8 * np.pi, 1000)
+
+    make_lissajous(angle, 2, 0, '_build/xy/lissajous_2_0.tsv')
+    make_lissajous(angle, 2, 0.2, '_build/xy/lissajous_2_02.tsv')
+    make_lissajous(angle, 2, 1, '_build/xy/lissajous_2_1.tsv')
+
+    make_lissajous(angle, 2.1, 0, '_build/xy/lissajous_21_0.tsv')
+    make_lissajous(angle, 2.1, 0.7, '_build/xy/lissajous_21_07.tsv')
+    make_lissajous(angle, 2.3, 2.4, '_build/xy/lissajous_23_24.tsv')
+
+    make_lissajous(angle, 1, 0, '_build/xy/lissajous_1_0.tsv')
+    make_lissajous(angle, 1, 1, '_build/xy/lissajous_1_1.tsv')
+    make_lissajous(angle, 3, 0, '_build/xy/lissajous_3_0.tsv')
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -138,7 +160,8 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
-    task_rayleigh_length(T)
+    job_lissajous(T)
+    job_rayleigh_length(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:

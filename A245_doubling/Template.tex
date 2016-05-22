@@ -308,6 +308,8 @@ available for use in reflection and transmission. A CD or DVD is a readily
 available example of a reflection grating. We will use a regular grating which
 has parallel lines.
 
+% TODO Drawing of a grating?
+
 The basic idea is that the light is only transmitted or reflected through a
 large number of thin slits. By the principle of Huygens each of the lines will
 create a cylindrical wave which interferes with the other ones. At an angle
@@ -330,6 +332,29 @@ with the number of illuminated lines~$N$
 good but there are even better ways.
 
 \subsection{Michelson interferometer}
+
+% The \emph{Michelson interferometer} is a very precise measuring apparatus 
+
+% TODO Drawing of a Michelson interferometer?
+
+With the positions $d_1$ and $d_2$ of the end mirrors one obtains a phase
+difference between the arms of $\delta = 4 \piup [d_1 - d_2] / \lambda$
+\parencite[559]{meschede-gerthsen_24}. The intensity of the beam reaching the
+detector is given by \textcite[559]{meschede-gerthsen_24} as
+\begin{equation}
+    \label{eq:I_of_lambda}
+    I(\lambda) = \frac12 I_0(\lambda) \sbr{
+        1 +
+        \cos\del{4 \piup \frac{d_1 - d_2}{\lambda}}
+    } \,.
+\end{equation}
+For the exact same arm lengths one does not see any difference between
+different wavelengths. We will use $d_1 \neq d_2$ and move one of the mirrors,
+say the first. Then by changing $d_1$ we will change $I(\lambda)$. For a
+constant $\dot d_1$ we will see a different $\dot I(\lambda)$ and $\dot
+I(\lambda/2)$.
+
+% TODO What is the resolution of this thing?
 
 \section{Diode laser}
 \label{sec:diode_laser}
@@ -620,6 +645,133 @@ in Figure~\ref{fig:fig-5}.
 \end{figure}
 
 % TODO Take images of the x-y-mode on the oscilloscope.
+
+As mentioned in the theory part, the interference intensity $I(\lambda)$
+depends on the arm lengths $d_1$ and $d_2$, see
+Equation~\eqref{eq:I_of_lambda}. By choosing $d_2$ constant and changing $d_1$,
+we have
+\[
+    \dot I(\lambda) = - \frac12 I_0(\lambda) 
+        \sin\del{4 \piup \frac{d_1 - d_2}{\lambda}}
+        4 \piup \frac{\dot d_1}{\lambda} \,.
+\]
+Adding the contributions for $\lambda$ (fundamental) and $\lambda/2$ (harmonic)
+together we see that we have
+\[
+    \dot I_\text{sum}
+    =
+    - \frac{2 \piup \dot d_1}{\lambda}
+    \sbr{
+        I_0(\lambda) 
+        \sin\del{4 \piup \frac{d_1 - d_2}{\lambda}}
+        +
+        2 I_0(\lambda/2) 
+        \sin\del{8 \piup \frac{d_1 - d_2}{\lambda}}
+    } \,.
+\]
+We expect that the fundamental and harmonic parts in the output of the
+interferometer oscillate with different frequencies. Splitting the colors and
+displaying this in $x$-$y$-mode on the oscilloscope should give Lissajous
+figures with $1:2$ ratio.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_2_0}
+        \caption{%
+            $r = 2$, $\phi_0 = 0$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_2_02}
+        \caption{%
+            $r = 2$, $\phi_0 = 0.2$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_2_1}
+        \caption{%
+            $r = 2$, $\phi_0 = 1$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_21_0}
+        \caption{%
+            $r = 2.1$, $\phi_0 = 0$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_21_07}
+        \caption{%
+            $r = 2.7$, $\phi_0 = 0.7$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_23_24}
+        \caption{%
+            $r = 2.3$, $\phi_0 = 2.4$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_1_0}
+        \caption{%
+            $r = 1$, $\phi_0 = 0$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_1_1}
+        \caption{%
+            $r = 1$, $\phi_0 = 1$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics{lissajous_3_0}
+        \caption{%
+            $r = 3$, $\phi_0 = 0$
+            }
+        \label{fig:/1}
+    \end{subfigure}
+    \hfill
+    %
+    \caption{%
+        Lissajous figures generated with $x(t) = \sin(t)$ and $y(t) = \sin(rt +
+        \phi_0)$ and $t \in [0, 8 \piup]$.
+        }
+    \label{fig:lissajous}
+\end{figure}
 
 % TODO Explain the meaning of the oscillograms.
 % TODO Determine deviation from 1:2 ratio.
