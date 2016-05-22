@@ -644,8 +644,6 @@ in Figure~\ref{fig:fig-5}.
     \label{fig:fig-5}
 \end{figure}
 
-% TODO Take images of the x-y-mode on the oscilloscope.
-
 As mentioned in the theory part, the interference intensity $I(\lambda)$
 depends on the arm lengths $d_1$ and $d_2$, see
 Equation~\eqref{eq:I_of_lambda}. By choosing $d_2$ constant and changing $d_1$,
@@ -672,13 +670,24 @@ together we see that we have
 We expect that the fundamental and harmonic parts in the output of the
 interferometer oscillate with different frequencies. Splitting the colors and
 displaying this in $x$-$y$-mode on the oscilloscope should give Lissajous
-figures with $1:2$ ratio. To get some intuition about the Lissajous figures we
-have shown a few in Figure~\ref{fig:lissajous}. The ones that we would expect
-are in the first row. If there is some offset we would obtain figures as in the
-second row. On the oscilloscope it would actually be figure that seems to be
-rotating as the ratio is not exact. With a sufficient exposure time, the
-figures would look somewhat like the \enquote{frozen} one generated. In case
-there is some other ratio, figures like in the last row would be expected.
+figures with $1:2$ ratio.
+
+Behind the last BG40 filter we have two fast photo diodes. One will receive the
+light from the fundamental wave and a negligible part of the harmonic wave. The
+other one will receive the harmonic wave and a severely suppressed part of the
+fundamental wave. We should be able to take it as a perfect split. Hooking both
+photo diodes to the oscillopscope, we obtain some Lissajous figures as shown in
+Figure~\ref{fig:lissajous-measured}.
+
+% TODO Take images of the x-y-mode on the oscilloscope.
+
+To get some intuition about the Lissajous figures we have shown a few in
+Figure~\ref{fig:lissajous-generated}. The ones that we would expect are in the
+first row. If there is some offset we would obtain figures as in the second
+row. On the oscilloscope it would actually be figure that seems to be rotating
+as the ratio is not exact. With a sufficient exposure time, the figures would
+look somewhat like the \enquote{frozen} one generated. In case there is some
+other ratio, figures like in the last row would be expected.
 
 \begin{figure}
     \centering
@@ -776,7 +785,7 @@ there is some other ratio, figures like in the last row would be expected.
         Lissajous figures generated with $x(t) = \sin(t)$ and $y(t) = \sin(rt +
         \phi_0)$ and $t \in [0, 8 \piup]$.
         }
-    \label{fig:lissajous}
+    \label{fig:lissajous-generated}
 \end{figure}
 
 % TODO Explain the meaning of the oscillograms.
