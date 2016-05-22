@@ -11,6 +11,10 @@ import random
 
 import numpy as np
 
+def make_dist(val, err, n=50):
+    dist = [random.gauss(val, err) for i in range(n)]
+    return dist
+
 
 def redraw_count(a):
     '''

@@ -106,7 +106,7 @@ $(build)/to_crop:
 # TikZ graphics.
 $(out): $(tex) $(figures_pdf) $(plots_pdf) $(postscript_pdf)
 	@echo "$(on)Compiling main document$(off)"
-	cd $$(dirname $@) && $(latexrun) $$(basename $<)
+	cd $$(dirname $@) && $(latexrun) -O $$(basename $< .tex).out $$(basename $<)
 
 # The main LaTeX file is generated using the template engine.
 $(tex): Template.tex $(build)/template.js
@@ -144,7 +144,7 @@ $(build)/page-lualatex/%.tex: Feynman/%.tex | $(build)/page-lualatex
 # Feynman diagrams must be compiled with LuaLaTeX.
 $(build)/page-lualatex/%.pdf: $(build)/page-lualatex/%.tex
 	@echo "$(on)Typesetting Feynman diagram $<$(off)"
-	cd $$(dirname $@) && ../$(latexrun) --latex-cmd lualatex $$(basename $<)
+	cd $$(dirname $@) && ../$(latexrun) -O $$(basename $< .tex).out --latex-cmd lualatex $$(basename $<)
 
 # Figures and plots are typeset on an A4 page and therefore need to be cropped.
 $(build)/%.pdf: $(build)/page/%.pdf | $(build)/page
