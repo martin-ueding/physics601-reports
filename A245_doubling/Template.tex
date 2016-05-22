@@ -303,7 +303,32 @@ obtains its maximum value of \num{1.068}.
 \section{Diode laser}
 \label{sec:diode_laser}
 
-% TODO Describe elliptical beam shape.
+A laser is a light generation element which works with an occupation inversion
+in the laser states. Most atoms are in the excited state and will decay when a
+resonant photon hits them. This way coherent light is created which will get
+stronger the more atoms it passes. Various laser differ by the pumping
+mechanism and the manifestation of the resonator.
+
+The \emph{diode laser} is a junction of two differently (positively and
+negatively) doped semiconductors. The zone in between will become depleted on
+its own. By applying a voltage one can inject electrons and holes from either
+side of the junction. In the middle those annihilate and emit photons if the
+semiconductor has the proper transition possibilities. The semiconductor chip
+serves as a resonator to amplify the stimulated emission.
+
+Without any further adjustments, the laser spectrum will be quite broad. We
+want a single mode laser for our experiment, therefore we need to \emph{lock}
+the laser. In the \emph{Littrow configuration} one uses a reflection grating to
+reflect the $-1$-th order back onto the laser diode. The laser diode and the
+grating form an \emph{external resonator}. By adjusting the angle of the
+grating one can effectively choose the resonant frequency of the resonator. The
+light output is reflected away by the zeroth order of the grating. By driving
+the grating with Piezo crystals one can tune the laser at will. Feeding the
+output signal into a control circuit allows to lock the laser to a fixed
+frequency which is robust against temperature changes or vibrations.
+
+Due to the shape of the junction, the beam shape will have an elliptical shape.
+One has to adjust this in order to get a circular beam shape.
 
 \chapter{Conduction and analysis}
 
