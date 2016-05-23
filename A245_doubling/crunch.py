@@ -43,6 +43,43 @@ def cos_squared(x, ampl, x_offs, y_offs):
     return ampl * (np.cos(x - x_offs))**2 + y_offs
 
 
+def job_power(T):
+    data = np.loadtxt('Data/diode.tsv')
+    norm_current = data[:, 0] * 1e-3
+    norm_power_val = data[:, 1] * 1e-3
+    norm_power_err = np.ones(norm_power_val.shape) * 1e-6
+
+    data = np.loadtxt('Data/diode_damped.tsv')
+    damp_current = data[:, 0] * 1e-3
+    damp_power_val = data[:, 1] * 1e-3
+    damp_power_err = data[:, 2] * 1e-3
+
+    np.savetxt('_build/xy/diode_normal-data.tsv',
+               np.column_stack([norm_current, norm_power_val, norm_power_err]))
+    np.savetxt('_build/xy/diode_damped-data.tsv',
+               np.column_stack([damp_current, damp_power_val, damp_power_err]))
+
+    # Find the threshold current.
+    sel = norm_power_val > 1e-3
+    threshold_dist = []
+    threshold_fit_x = np.linspace(0.05, 0.09, 100)
+    threshold_fit_y_dist = []
+    # Jackknife fit to find root.
+    for i in range(len(norm_power_val[sel])):
+        x = np.delete(norm_current[sel], i)
+        y_val = np.delete(norm_power_val[sel], i)
+        y_err = np.delete(norm_power_err[sel], i)
+        popt, pconv = op.curve_fit(linear, x, y_val, sigma=y_err)
+        a, b = popt
+        root = -b / a
+        threshold_dist.append(root)
+        threshold_fit_y_dist = linear(threshold_fit_x, *popt)
+    threshold_val, threshold_err = bootstrap.average_and_std_arrays(threshold_dist)
+
+    T['threshold'] = siunitx(threshold_val, threshold_err)
+
+
+
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
     numerator = refractive_index * radius**2 - np.sqrt(refractive_index**2 * radius**4 - 4 * wavelength**2 * distance**2)
     return np.pi * numerator / (2 * wavelength)
@@ -160,6 +197,7 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
+    job_power(T)
     job_lissajous(T)
     job_rayleigh_length(T)
 
