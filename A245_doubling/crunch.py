@@ -48,6 +48,10 @@ def errorfunction(x, power, diam, x_offs):
 def cos_squared(x, ampl, x_offs, y_offs):
     return ampl * (np.cos(2*np.radians(x - x_offs)))**2 + y_offs
 
+def cos_quartic(x, ampl, x_offs, y_offs):
+    return ampl * (np.cos(2*np.radians(x - x_offs)))**4 + y_offs
+
+
 
 def job_power(T):
     data = np.loadtxt('Data/diode.tsv')
@@ -280,6 +284,43 @@ def job_temperature_dependence(T):
     T['temp_offset'] = siunitx(offset_val, offset_err)
 
 
+def job_harmonic_power(T, extinction_dist):
+    data = np.loadtxt('Data/harmonic_splitter.tsv')
+    angle = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = data[:, 2] * 1e-6
+
+    power_dist = bootstrap.make_dist(power_val, power_err)
+
+    fit_x = np.linspace(np.min(angle), np.max(angle), 200)
+    fit_y_dist = []
+    angle_offset_dist = []
+    a_dist = []
+    b_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(cos_quartic, angle, power, p0=[1.5e-5, 0, 0])
+        fit_y_dist.append(cos_quartic(fit_x, *popt))
+        angle_offset_dist.append(popt[1])
+        a = popt[0]
+        b = popt[2]
+        a_dist.append(a)
+        b_dist.append(b)
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+    angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
+    a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
+    b_val, b_err = bootstrap.average_and_std_arrays(b_dist)
+
+    np.savetxt('_build/xy/harmonic-splitter-data.tsv',
+               np.column_stack([angle, power_val, power_err]))
+    np.savetxt('_build/xy/harmonic-splitter-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/harmonic-splitter-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    T['splitter_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
+    T['splitter_a'] = siunitx(a_val, a_err)
+    T['splitter_b'] = siunitx(b_val, b_err)
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -315,6 +356,7 @@ def main():
     job_temperature_dependence(T)
     extinction_dist = job_power(T)
     job_variable_attenuator(T, extinction_dist)
+    job_harmonic_power(T, extinction_dist)
     job_lissajous(T)
     job_rayleigh_length(T)
 

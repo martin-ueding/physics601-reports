@@ -853,9 +853,40 @@ temperature to this optimal setting.
 \subsection{Input power dependence}
 
 The output power must depend on the input power. As we have calibrated in
-Section~\ref{sec:variable_attenuator}, we can choose an input power by rotating
-the retarder plate in front of the splitter. We measure the output power while
-adjusting the angle of the retarder plate.
+Section~\ref{sec:variable_attenuator}, we should be able to choose an input
+power by rotating the retarder plate in front of the splitter. As we have
+rotated the polarizing beam splitter without thinking about this step, we will
+need to adjust for the offset angle after this measurement. Then we can shift
+the first measurement and have the desired angle--power relation. We hope that
+there is no fundamental offset that we would miss this way. There is no
+physical reason to have such an offset, we should be just fine.
+
+We measure the output power while adjusting the angle of the retarder plate.
+Our data is shown in Figure~\ref{fig:harmonic-splitter}. As the harmonic
+intensity should scale with the square of the fundamental intensity we expect a 
+\[
+    P(\phi) = a \cos(2 [\phi - \phi_0])^4 + b
+\]
+relationship here. The fit parameters are
+\[
+    \phi_0 = \SI{<< splitter_angle_offset >>}{\degree}
+    \,,\quad
+    a = \SI{<< splitter_a >>}{\watt}
+    \,,\quad
+    b = \SI{<< splitter_b >>}{\watt}
+\]
+Error estimation is done via resampling.
+
+\begin{figure}
+    \centering
+    \includegraphics{harmonic-splitter}
+    \caption{%
+        Harmonic power depending on the $\lambda/2$-plate angle. Fitted is a
+        $\cos(2\phi)^4$ function. Error estimation via resampling.
+    }
+    \label{fig:harmonic-splitter}
+\end{figure}
+
 
 % TODO Table with measurements.
 
