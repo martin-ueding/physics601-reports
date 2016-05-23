@@ -25,6 +25,8 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 
+SAMPLES = 100
+
 
 def linear(x, a, b):
     return a * x + b
@@ -48,11 +50,13 @@ def job_power(T):
     norm_current = data[:, 0] * 1e-3
     norm_power_val = data[:, 1] * 1e-3
     norm_power_err = np.ones(norm_power_val.shape) * 1e-6
+    norm_power_dist = bootstrap.make_dist(norm_power_val, norm_power_err)
 
     data = np.loadtxt('Data/diode_damped.tsv')
     damp_current = data[:, 0] * 1e-3
     damp_power_val = data[:, 1] * 1e-3
     damp_power_err = data[:, 2] * 1e-3
+    damp_power_dist = bootstrap.make_dist(damp_power_val, damp_power_err)
 
     np.savetxt('_build/xy/diode_normal-data.tsv',
                np.column_stack([norm_current, norm_power_val, norm_power_err]))
@@ -82,6 +86,11 @@ def job_power(T):
     np.savetxt('_build/xy/diode_normal-band.tsv',
                bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
 
+    for norm_power, damp_power in zip(norm_power_dist, damp_power_dist):
+        norm_inter = scipy.interpolate(norm_current, norm_power)
+        damp_inter = scipy.interpolate(damp_current, damp_power)
+
+        print(norm_power)
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
