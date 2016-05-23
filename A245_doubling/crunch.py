@@ -42,7 +42,7 @@ def errorfunction(x, power, diam, x_offs):
 
 
 def cos_squared(x, ampl, x_offs, y_offs):
-    return ampl * (np.cos(np.radians(2*x - x_offs)))**2 + y_offs
+    return ampl * (np.cos(2*np.radians(x - x_offs)))**2 + y_offs
 
 
 def job_power(T):
