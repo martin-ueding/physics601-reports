@@ -87,10 +87,8 @@ def job_power(T):
                bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
 
     for norm_power, damp_power in zip(norm_power_dist, damp_power_dist):
-        norm_inter = scipy.interpolate(norm_current, norm_power)
-        damp_inter = scipy.interpolate(damp_current, damp_power)
-
-        print(norm_power)
+        norm_inter = scipy.interpolate.interp1d(norm_current, norm_power)
+        damp_inter = scipy.interpolate.interp1d(damp_current, damp_power)
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):

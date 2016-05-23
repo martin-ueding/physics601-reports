@@ -12,10 +12,10 @@ import random
 import numpy as np
 
 def make_dist(val, err, n=50):
-    print(type(val)
+    # TODO Make this work nicer with arrays.
     if isinstance(val, (float, int)):
         dist = [random.gauss(val, err) for i in range(n)]
-    elif isinstance(val, (type(np.array), list)):
+    elif isinstance(val, (np.ndarray, list)):
         dist = []
         for v, e in zip(val, err):
             dist.append([random.gauss(v, e) for i in range(n)])
