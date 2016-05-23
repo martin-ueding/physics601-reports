@@ -25,6 +25,8 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from unitprint2 import siunitx
 import bootstrap
 
+SAMPLES = 100
+
 
 def linear(x, a, b):
     return a * x + b
@@ -40,7 +42,74 @@ def errorfunction(x, power, diam, x_offs):
 
 
 def cos_squared(x, ampl, x_offs, y_offs):
-    return ampl * (np.cos(x - x_offs))**2 + y_offs
+    return ampl * (np.cos(np.radians(2*x - x_offs)))**2 + y_offs
+
+
+def job_power(T):
+    data = np.loadtxt('Data/diode.tsv')
+    norm_current = data[:, 0] * 1e-3
+    norm_power_val = data[:, 1] * 1e-3
+    norm_power_err = np.ones(norm_power_val.shape) * 1e-6
+    norm_power_dist = bootstrap.make_dist(norm_power_val, norm_power_err)
+
+    data = np.loadtxt('Data/diode_damped.tsv')
+    damp_current = data[:, 0] * 1e-3
+    damp_power_val = data[:, 1] * 1e-3
+    damp_power_err = data[:, 2] * 1e-3
+    damp_power_dist = bootstrap.make_dist(damp_power_val, damp_power_err)
+
+    np.savetxt('_build/xy/diode_normal-data.tsv',
+               np.column_stack([norm_current, norm_power_val, norm_power_err]))
+    np.savetxt('_build/xy/diode_damped-data.tsv',
+               np.column_stack([damp_current, damp_power_val, damp_power_err]))
+
+    # Find the threshold current.
+    sel = norm_power_val > 1e-3
+    threshold_dist = []
+    threshold_fit_x = np.linspace(0.05, 0.09, 100)
+    threshold_fit_y_dist = []
+    # Jackknife fit to find root.
+    for i in range(len(norm_power_val[sel])):
+        x = np.delete(norm_current[sel], i)
+        y_val = np.delete(norm_power_val[sel], i)
+        y_err = np.delete(norm_power_err[sel], i)
+        popt, pconv = op.curve_fit(linear, x, y_val, sigma=y_err)
+        a, b = popt
+        root = -b / a
+        threshold_dist.append(root)
+        threshold_fit_y_dist.append(linear(threshold_fit_x, *popt))
+    threshold_val, threshold_err = bootstrap.average_and_std_arrays(threshold_dist)
+    threshold_fit_y_val, threshold_fit_y_err = bootstrap.average_and_std_arrays(threshold_fit_y_dist)
+
+    T['threshold'] = siunitx(threshold_val, threshold_err)
+
+    np.savetxt('_build/xy/diode_normal-band.tsv',
+               bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
+
+    # Compare ratios of damped and normal power in the overlap range.
+    ratio_dist = []
+    x = np.linspace(70.1e-3, 86.9e-3, 20)
+    for norm_power, damp_power in zip(norm_power_dist, damp_power_dist):
+        norm_inter = scipy.interpolate.interp1d(norm_current, norm_power)
+        damp_inter = scipy.interpolate.interp1d(damp_current, damp_power)
+        a = norm_inter(x)
+        b = damp_inter(x)
+        ratio = a / b
+        ratio_dist.append(ratio)
+
+    ratio_val, ratio_err = bootstrap.average_and_std_arrays(ratio_dist)
+
+    extinction_dist = list(ratio_dist)
+    extinction_val, extinction_err = np.mean(ratio_dist), np.std(ratio_dist)
+    T['extinction'] = siunitx(extinction_val, extinction_err)
+
+    np.savetxt('_build/xy/diode-ratio-line.tsv',
+               np.column_stack([x, ratio_val]))
+    np.savetxt('_build/xy/diode-ratio-band.tsv',
+               bootstrap.pgfplots_error_band(x, ratio_val, ratio_err))
+
+    return extinction_dist
+
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
@@ -128,6 +197,49 @@ def job_lissajous(T):
     make_lissajous(angle, 3, 0, '_build/xy/lissajous_3_0.tsv')
 
 
+def job_variable_attenuator(T, extinction_dist):
+    data = np.loadtxt('Data/variable.tsv')
+    angle = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = np.ones(power_val.shape) * 1e-6
+
+    power_dist = bootstrap.make_dist(power_val, power_err, n=len(extinction_dist))
+
+    fit_x = np.linspace(np.min(angle), np.max(angle), 200)
+    fit_y_dist = []
+    angle_offset_dist = []
+    a_dist = []
+    b_dist = []
+    extinction_ratio_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(cos_squared, angle, power, p0=[1.5, 0, 0])
+        fit_y_dist.append(cos_squared(fit_x, *popt))
+        angle_offset_dist.append(popt[1])
+        a = popt[0]
+        b = popt[2]
+        a_dist.append(a)
+        b_dist.append(b)
+        extinction_ratio_dist.append((a + b) / b)
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+    angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
+    a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
+    b_val, b_err = bootstrap.average_and_std_arrays(b_dist)
+    extinction_ratio_val, extinction_ratio_err = bootstrap.average_and_std_arrays(extinction_ratio_dist)
+
+    np.savetxt('_build/xy/variable-data.tsv',
+               np.column_stack([angle, power_val, power_err]))
+    np.savetxt('_build/xy/variable-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/variable-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+
+    T['variable_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
+    T['variable_a'] = siunitx(a_val, a_err)
+    T['variable_b'] = siunitx(b_val, b_err)
+    T['extinction_ratio'] = siunitx(extinction_ratio_val, extinction_ratio_err)
+    
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -160,6 +272,8 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
+    extinction_dist = job_power(T)
+    job_variable_attenuator(T, extinction_dist)
     job_lissajous(T)
     job_rayleigh_length(T)
 
@@ -168,6 +282,8 @@ def main():
         json.dump(dict(T), f, indent=4, sort_keys=True)
 
     pp = pprint.PrettyPrinter()
+    print()
+    print('Content in T dict:')
     pp.pprint(T)
 
 
