@@ -217,6 +217,7 @@ def job_variable_attenuator(T, extinction_dist):
     angle_offset_dist = []
     a_dist = []
     b_dist = []
+    popt_dist = []
     extinction_ratio_dist = []
     for power in power_dist:
         popt, pconv = op.curve_fit(cos_squared, angle, power, p0=[1.5, 0, 0])
@@ -226,6 +227,7 @@ def job_variable_attenuator(T, extinction_dist):
         b = popt[2]
         a_dist.append(a)
         b_dist.append(b)
+        popt_dist.append(popt)
         extinction_ratio_dist.append((a + b) / b)
     fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
     angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
@@ -244,6 +246,8 @@ def job_variable_attenuator(T, extinction_dist):
     T['variable_a'] = siunitx(a_val, a_err)
     T['variable_b'] = siunitx(b_val, b_err)
     T['extinction_ratio'] = siunitx(extinction_ratio_val, extinction_ratio_err)
+
+    return popt_dist
     
 
 def job_temperature_dependence(T):
@@ -284,7 +288,7 @@ def job_temperature_dependence(T):
     T['temp_offset'] = siunitx(offset_val, offset_err)
 
 
-def job_harmonic_power(T, extinction_dist):
+def job_harmonic_power(T, extinction_dist, input_popt_dist):
     data = np.loadtxt('Data/harmonic_splitter.tsv')
     angle = data[:, 0]
     power_val = data[:, 1] * 1e-6
@@ -355,8 +359,8 @@ def main():
 
     job_temperature_dependence(T)
     extinction_dist = job_power(T)
-    job_variable_attenuator(T, extinction_dist)
-    job_harmonic_power(T, extinction_dist)
+    input_popt_dist = job_variable_attenuator(T, extinction_dist)
+    job_harmonic_power(T, extinction_dist, input_popt_dist)
     job_lissajous(T)
     job_rayleigh_length(T)
 
