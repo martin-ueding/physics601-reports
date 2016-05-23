@@ -550,7 +550,7 @@ One has to adjust this in order to get a circular beam shape.
 
 \section{Diode laser classification}
 
-First we want to classify the Laser diode at hand. We have a diode laser which
+First we want to classify the laser diode at hand. We have a diode laser which
 is mounted behind a safety shutter. One of the characteristics of a diode laser
 is the elliptical beam shape as described in Section~\ref{sec:diode_laser}
 already. Therefore our setup includes a pair of prisms in order to get a
@@ -567,19 +567,73 @@ in Figure~\ref{fig:fig-1}.
     \label{fig:fig-1}
 \end{figure}
 
-For measuring the power we just dump the whole beam into a power meter. Since
-the power meter become non-linear beyond \SI{20}{\milli\watt} we use an
-attenuator in front of it. This will take away a certain fraction of the beam
-and allow us to measure higher intensities. The attenuator has to be calibrated
-first with small beam powers to allow for a comparison.
+For measuring the power we just dump the whole beam into a power meter. We
+measure the power until we reach \SI{20}{\milli\watt}. 
+The data is shown in Figure~\ref{fig:diode-normal}.
 
-Measurement fluctuation in the power of \SI{1}{\micro\watt}.
+\begin{figure}
+    \centering
+    \includegraphics{diode-normal}
+    \caption{%
+        Laser power against injection current. The error bars are so small that
+        they hide behind the markers. Fitted line stems from a linear fit with
+        Jackknife error estimation.
+    }
+    \label{fig:diode-normal}
+\end{figure}
 
-% TODO Measure up to 280 mA.
-% TODO Measure background.
-% TODO Calibrate attenuator.
+Since the power meter become non-linear beyond \SI{20}{\milli\watt} we use an
+attenuator in front of it for larger powers. This will take away a certain
+fraction of the beam and allow us to measure higher intensities. The attenuator
+has to be calibrated first with small beam powers to allow for a comparison. We
+turn the current back down to the lasing threshold in order to get some overlap
+between normal and damped laser powers. Then we measure up to
+\SI{280}{\milli\ampere} injection current. Our data is shown in
+Figure~\ref{fig:diode-both}. In that scale one cannot really see anything
+useful, though.
 
-\subsection{Injection current}
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+    \centering
+    \includegraphics{diode-both}
+    \caption{%
+        Power measurement with and without attenuator.
+    }
+    \label{fig:diode-both}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+    \centering
+    \includegraphics{diode-ratio}
+    \caption{%
+        Power ratios with and without attenuator.
+    }
+    \label{fig:diode-ratio}
+    \end{subfigure}
+    \caption{%
+        Calibration of the screw-on attenuator.
+    }
+\end{figure}
+
+We have checked the background effects and they are negligible. Completely
+closing the window did not alter the power readings. Therefore we do not need
+to subtract a background value.
+
+The telling quantity is the ratio in the overlap region. As we have not
+measured at exactly the same injection currents we need to interpolate the
+values. For this we have chosen linear interpolation between the power values
+measured as the relation seems linear in Figure~\ref{fig:diode-normal}. Then we
+divide the interpolated power values for a given current and obtain a
+distinction ratio. Error estimation is performed by resampling our measured
+data. For each resampling step we perform the interpolation and build the
+ratios. Taking mean and standard deviation for each current value gives the
+extinction ratio and error.
+This is shown in
+Figure~\ref{fig:diode-ratio}. One can see that the extinction ratio is in the
+order of 1000. We will assume that it is constant for all currents---as the large
+error band should permit---and obtain an extinction ratio of \num{<< extinction
+>>}.
 
 % TODO Plot output versus current.
 

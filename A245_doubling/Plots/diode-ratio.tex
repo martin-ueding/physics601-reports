@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=.5\linewidth,
+            height=0.3\linewidth,
+            xlabel={$I / \si{\ampere}$},
+            ylabel={$P_\text{normal} / P_\text{damped} $},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.5,
+            },
+        ]
+
+        \addplot[band, fill=red] table {../xy/diode-ratio-band.tsv} \closedcycle;
+        \addplot[black] table {../xy/diode-ratio-line.tsv};
+
+    \end{axis}
+\end{tikzpicture}

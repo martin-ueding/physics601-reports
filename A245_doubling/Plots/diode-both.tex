@@ -18,8 +18,16 @@
             error bars/y dir=both,
             error bars/y explicit,
         ] table[y error index=2] {../xy/diode_normal-data.tsv};
+        \addlegendentry{normal}
 
-        \addplot[band, fill=red] table {../xy/diode_normal-band.tsv} \closedcycle;
+        \addplot[
+            black,
+            mark=o,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/diode_damped-data.tsv};
+        \addlegendentry{damped}
 
     \end{axis}
 \end{tikzpicture}

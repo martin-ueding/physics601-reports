@@ -86,17 +86,26 @@ def job_power(T):
     np.savetxt('_build/xy/diode_normal-band.tsv',
                bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
 
+    # Compare ratios of damped and normal power in the overlap range.
+    ratio_dist = []
+    x = np.linspace(70.1e-3, 86.9e-3, 50)
     for norm_power, damp_power in zip(norm_power_dist, damp_power_dist):
         norm_inter = scipy.interpolate.interp1d(norm_current, norm_power)
         damp_inter = scipy.interpolate.interp1d(damp_current, damp_power)
-
-        x = np.linspace(70.1e-3, 86.9e-3, 5)
-
         a = norm_inter(x)
         b = damp_inter(x)
         ratio = a / b
+        ratio_dist.append(ratio)
 
-        print(ratio)
+    ratio_val, ratio_err = bootstrap.average_and_std_arrays(ratio_dist)
+
+    extinction_val, extinction_err = np.mean(ratio_dist), np.std(ratio_dist)
+    T['extinction'] = siunitx(extinction_val, extinction_err)
+
+    np.savetxt('_build/xy/diode-ratio-line.tsv',
+               np.column_stack([x, ratio_val]))
+    np.savetxt('_build/xy/diode-ratio-band.tsv',
+               bootstrap.pgfplots_error_band(x, ratio_val, ratio_err))
 
 
 
