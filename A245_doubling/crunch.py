@@ -90,6 +90,15 @@ def job_power(T):
         norm_inter = scipy.interpolate.interp1d(norm_current, norm_power)
         damp_inter = scipy.interpolate.interp1d(damp_current, damp_power)
 
+        x = np.linspace(70.1e-3, 86.9e-3, 5)
+
+        a = norm_inter(x)
+        b = damp_inter(x)
+        ratio = a / b
+
+        print(ratio)
+
+
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
     numerator = refractive_index * radius**2 - np.sqrt(refractive_index**2 * radius**4 - 4 * wavelength**2 * distance**2)
