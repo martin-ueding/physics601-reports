@@ -958,8 +958,140 @@ diffraction. As the diffraction angle scales with diffraction order $n$ and
 wavelength $\lambda$ as a quotient we would expect to see an overlap of the
 $n$-th order fundamental wave and the $2n$-th order harmonic wave.
 
-% TODO Increase resolution by using achromatic lens with largest focal length.
+We take photographs of the of the laser spots on the wall. Starting with the
+zeroth order, we take a picture without the IR-card, our CCD-camera should only
+be pick up the harmonic wave. Then we hold the IR-card against the wall and see
+a bright green spot. We take a picture of that fundamental wave as well. In
+Figure~\ref{fig:grating-2} both pictures are shown together with the difference
+of the images. In the zeroth order the beams must coincide trivially and indeed
+we see a rotationally symmetric difference image. As far as we can tell the
+beams overlap.
 
+Then we advance to the next order. We expect to see only harmonic light there,
+no fundamental wave. When we hold the IR-card over the blue spot, no green
+light appears. Our images are shown in Figure~\ref{fig:grating-4}. This tells
+us that the harmonic frequency is larger than the fundamental one, just as we
+expect. Going to the next spot on the wall we do the same procedure again. Now
+we do see a bright green with the IR-card. See Figure~\ref{fig:grating-1} for
+the triplet of images.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-2-crop-blue}
+        \caption{%
+            harmonic
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-2-crop-red}
+        \caption{%
+            fundamental
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-2-crop-diff}
+        \caption{%
+            difference
+            }
+    \end{subfigure}
+    \caption{%
+        Zeroth order of both beams. As the difference is rotationally
+        symmetric, both beams coincide. Trivial for zeroth order.
+        }
+    \label{fig:grating-2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-4-crop-blue}
+        \caption{%
+            harmonic
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-4-crop-red}
+        \caption{%
+            fundamental
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-4-crop-diff}
+        \caption{%
+            difference
+            }
+    \end{subfigure}
+    \caption{%
+        First order harmonic. There is no fundamental wave scattered in this
+        angle.
+        }
+    \label{fig:grating-4}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-1-crop-blue}
+        \caption{%
+            harmonic
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-1-crop-red}
+        \caption{%
+            fundamental
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-1-crop-diff}
+        \caption{%
+            difference
+            }
+    \end{subfigure}
+    \caption{%
+        Second spot. This is the first fundamental and the second harmonic
+        maximum. As the difference is rotationally symmetric, both beams
+        coincide, frequencies must be simple multiples.
+        }
+    \label{fig:grating-1}
+\end{figure}
+
+As we see a fundamental wave scattered here we can conclude that the frequency
+is indeed doubled. Since all the spots coincide perfectly to the available
+precision we cannot rule out a perfect doubling of the frequency here.
+
+We should have exchanged the collimating lens to the one with
+\SI{125}{\milli\meter}. Unfortunately we just used the \SI{30}{\milli\meter}
+lens. Therefore the beam diameter is a factor \num{4.17} smaller than it
+should. The number of slits illuminated on the grating is therefore reduced by
+this number as well. This is not too bad as we will perform a way more accurate
+measurement next anyway.
+
+The beam coming from the laser has a diameter of \SI{3.5(5)}{\milli\meter}.
+Our lens configuration acts like a telescope and halves the diameter. The
+line count on the grating is \SI{600}{\per\milli\meter}. The number of lines
+illuminated is therefore \num{<< illuminated >>}. Using the equation $\Deltaup
+\lambda / \lambda = nN$ from the theory section we can conclude that we have a
+relative theoretical error of \num{<< relative_error >>}.
+
+% NOTE We cannot really do the following as we have only done this measurement
+% qualitatively.
 % TODO Show all used lengths in a drawing.
 % TODO How accurately is the measurement?
 % TODO Compare to theoretical resolution.

@@ -339,6 +339,16 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
     T['efficiency_sq'] = siunitx(efficiency_sq_val, efficiency_sq_err)
 
 
+def job_grating_resolution(T):
+    lines_per_m = 600e3
+    diameter = 3.5e-3 / 2
+    illuminated = diameter * lines_per_m
+    relative_error = 1 / illuminated
+
+    T['illuminated'] = siunitx(illuminated)
+    T['relative_error'] = siunitx(relative_error)
+
+
 def job_input_polarization(T):
     data = np.loadtxt('Data/harmonic_bare.tsv')
     angle = data[:, 0]
@@ -409,6 +419,7 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
+    job_grating_resolution(T)
     job_input_polarization(T)
     job_temperature_dependence(T)
     extinction_dist = job_power(T)
