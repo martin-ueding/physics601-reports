@@ -817,8 +817,7 @@ The fit parameters are
     \,,\quad
     d = \SI{<< temp_offset >>}{\watt} \,.
 \]
-Error estimation is done via resampling. The fit clearly has a very high
-$\chi^2$, the sinc-model does not describe the data well.
+Error estimation is done via resampling.
 
 \begin{figure}
     \centering
@@ -830,11 +829,15 @@ $\chi^2$, the sinc-model does not describe the data well.
     \label{fig:temperature}
 \end{figure}
 
-% TODO Take measurements of power and background at each temperature.
-
-% TODO Plot data such that sinc shape can be seen.
-% TODO Try to fit a sinc function.
-% TODO Explain why the curve could be asymmetric.
+The fit clearly has a very high $\chi^2$, the sinc-model does not describe the
+data well. Also the shape is not symmetric. This is actually not a surprise,
+a symmetric shape would be one. There should be a sinc-shape with respect to
+the phase difference $\Deltaup k$. By changing the temperature we change the
+refractive indices of the axes to get a better match for $n_\omega$ and
+$n_{2\omega}$. The dependence $n(T)$ must not be linear, it can have a more
+complicated structure. Also the dependence of $\Delta k$ on both refractive
+indices has to be taken into account. Therefore it is no surprise that the
+shape $P(T)$ is not symmetric.
 
 Now that we know the optimal temperature for the crystal, we slowly tune the
 temperature to this optimal setting.
