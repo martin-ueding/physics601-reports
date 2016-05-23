@@ -42,7 +42,7 @@ def errorfunction(x, power, diam, x_offs):
 
 
 def cos_squared(x, ampl, x_offs, y_offs):
-    return ampl * (np.cos(x - x_offs))**2 + y_offs
+    return ampl * (np.cos(np.radians(2*x - x_offs)))**2 + y_offs
 
 
 def job_power(T):
@@ -197,6 +197,49 @@ def job_lissajous(T):
     make_lissajous(angle, 3, 0, '_build/xy/lissajous_3_0.tsv')
 
 
+def job_variable_attenuator(T, extinction_dist):
+    data = np.loadtxt('Data/variable.tsv')
+    angle = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = np.ones(power_val.shape) * 1e-6
+
+    power_dist = bootstrap.make_dist(power_val, power_err, n=len(extinction_dist))
+
+    fit_x = np.linspace(np.min(angle), np.max(angle), 200)
+    fit_y_dist = []
+    angle_offset_dist = []
+    a_dist = []
+    b_dist = []
+    extinction_ratio_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(cos_squared, angle, power, p0=[1.5, 0, 0])
+        fit_y_dist.append(cos_squared(fit_x, *popt))
+        angle_offset_dist.append(popt[1])
+        a = popt[0]
+        b = popt[2]
+        a_dist.append(a)
+        b_dist.append(b)
+        extinction_ratio_dist.append((a + b) / b)
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+    angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
+    a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
+    b_val, b_err = bootstrap.average_and_std_arrays(b_dist)
+    extinction_ratio_val, extinction_ratio_err = bootstrap.average_and_std_arrays(extinction_ratio_dist)
+
+    np.savetxt('_build/xy/variable-data.tsv',
+               np.column_stack([angle, power_val, power_err]))
+    np.savetxt('_build/xy/variable-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/variable-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+
+    T['variable_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
+    T['variable_a'] = siunitx(a_val, a_err)
+    T['variable_b'] = siunitx(b_val, b_err)
+    T['extinction_ratio'] = siunitx(extinction_ratio_val, extinction_ratio_err)
+    
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -230,6 +273,7 @@ def main():
     options = parser.parse_args()
 
     extinction_dist = job_power(T)
+    job_variable_attenuator(T, extinction_dist)
     job_lissajous(T)
     job_rayleigh_length(T)
 

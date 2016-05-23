@@ -684,9 +684,23 @@ both the fundamental and harmonic beam at the same time. We take power
 measurements of the fundamental beam in \SI{2.5}{\degree} steps of the retarder
 plate.
 
-% TODO Measure power depending on the retarder plate angle.
+Our data is shown in Figure~\ref{fig:variable}.
+We expect to see a $a \cos(2\phi - \phi_0)^2 + b$ profile. Our fit parameters
+are $\phi_0 = \SI{<< variable_angle_offset >>}{\degree}$, $a = \SI{<<
+variable_a >>}{\watt}$ and $b = \SI{<< variable_b >>}{\watt}$. From this we
+obtain the extinction ratio $R = (a + b) / b = \num{<< extinction_ratio >>}$.
 
-We expect to see a $\cos^2$ profile, perhaps with a constant offset.
+
+\begin{figure}
+    \centering
+    \includegraphics{variable}
+    \caption{%
+        Measured power with the variable attenuator. Fit is a $a \cos(2 \phi -
+        \phi_0) + c$ function.
+    }
+    \label{fig:variable}
+\end{figure}
+
 
 % TODO Fit data.
 
