@@ -627,12 +627,10 @@ divide the interpolated power values for a given current and obtain a
 distinction ratio. Error estimation is performed by resampling our measured
 data. For each resampling step we perform the interpolation and build the
 ratios. Taking mean and standard deviation for each current value gives the
-extinction ratio and error.
-This is shown in
-Figure~\ref{fig:diode-ratio}. One can see that the extinction ratio is in the
-order of 1000. We will assume that it is constant for all currents---as the large
-error band should permit---and obtain an extinction ratio of \num{<< extinction
->>}.
+extinction ratio and error. This is shown in Figure~\ref{fig:diode-ratio}. One
+can see that the extinction ratio is in the order of 1000. We will assume that
+it is constant for all currents---as the large error band should permit---and
+obtain an extinction ratio of $F = \num{<< extinction >>}$.
 
 \subsection{Threshold current}
 
@@ -865,15 +863,15 @@ We measure the output power while adjusting the angle of the retarder plate.
 Our data is shown in Figure~\ref{fig:harmonic-splitter}. As the harmonic
 intensity should scale with the square of the fundamental intensity we expect a 
 \[
-    P(\phi) = a \cos(2 [\phi - \phi_0])^4 + b
+    P'(\phi) = a' \cos(2 [\phi - \phi_0'])^4 + b'
 \]
 relationship here. The fit parameters are
 \[
-    \phi_0 = \SI{<< splitter_angle_offset >>}{\degree}
+    \phi_0' = \SI{<< splitter_angle_offset >>}{\degree}
     \,,\quad
-    a = \SI{<< splitter_a >>}{\watt}
+    a' = \SI{<< splitter_a >>}{\watt}
     \,,\quad
-    b = \SI{<< splitter_b >>}{\watt}
+    b' = \SI{<< splitter_b >>}{\watt}
 \]
 Error estimation is done via resampling. We can see that the offset angle has
 changed just a little bit. Just what we have expected since we turned the
@@ -889,7 +887,22 @@ polarizing beam splitter a little bit.
     \label{fig:harmonic-splitter}
 \end{figure}
 
-% TODO Extract frequency doubling efficiency.
+Using the amplitudes $a$ and $a'$ of the fit functions to the angular power
+distribution of fundamental and harmonic wave, respectively, we can obtain the
+power ratio. The amplitude of the harmonic wave has to be corrected by the
+screw-on attenuator factor $F$. We therefore have the power ratio
+\[
+    \eta' = \frac{P_\text{har}}{P_\text{fun}} = \frac{a'}{a F}
+    = \num{<< efficiency >>} \,.
+\]
+In the manual the definition is
+\[
+    \eta = \frac{P_\text{har}}{P_\text{fun}^2}
+    = \frac{a'}{[a F]^2}
+    = \SI{<< efficiency_sq >>}{\per\watt} \,.
+\]
+This does not seem to make much sense as an efficiency due to the unit. An
+efficiency should be dimensionless.
 
 \subsection{Input polarization dependence}
 

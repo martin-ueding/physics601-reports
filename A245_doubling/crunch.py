@@ -107,7 +107,7 @@ def job_power(T):
 
     ratio_val, ratio_err = bootstrap.average_and_std_arrays(ratio_dist)
 
-    extinction_dist = list(ratio_dist)
+    extinction_dist = np.array(ratio_dist).flatten()
     extinction_val, extinction_err = np.mean(ratio_dist), np.std(ratio_dist)
     T['extinction'] = siunitx(extinction_val, extinction_err)
 
@@ -301,6 +301,7 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
     angle_offset_dist = []
     a_dist = []
     b_dist = []
+    popt_dist = []
     for power in power_dist:
         popt, pconv = op.curve_fit(cos_quartic, angle, power, p0=[1.5e-5, 0, 0])
         fit_y_dist.append(cos_quartic(fit_x, *popt))
@@ -309,6 +310,7 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
         b = popt[2]
         a_dist.append(a)
         b_dist.append(b)
+        popt_dist.append(popt)
     fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
     angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
     a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
@@ -323,6 +325,18 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
     T['splitter_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
     T['splitter_a'] = siunitx(a_val, a_err)
     T['splitter_b'] = siunitx(b_val, b_err)
+
+    efficiency_dist = []
+    efficiency_sq_dist = []
+    for extinction, input_popt, popt in zip(extinction_dist, input_popt_dist, popt_dist):
+        efficiency = popt[0] / (input_popt[0] * extinction)
+        efficiency_dist.append(efficiency)
+        efficiency_sq = popt[0] / (input_popt[0] * extinction)**2
+        efficiency_sq_dist.append(efficiency_sq)
+    efficiency_val, efficiency_err = bootstrap.average_and_std_arrays(efficiency_dist)
+    efficiency_sq_val, efficiency_sq_err = bootstrap.average_and_std_arrays(efficiency_sq_dist)
+    T['efficiency'] = siunitx(efficiency_val, efficiency_err)
+    T['efficiency_sq'] = siunitx(efficiency_sq_val, efficiency_sq_err)
 
 
 def test_keys(T):
