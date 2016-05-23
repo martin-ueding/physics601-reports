@@ -107,6 +107,8 @@ def job_power(T):
     np.savetxt('_build/xy/diode-ratio-band.tsv',
                bootstrap.pgfplots_error_band(x, ratio_val, ratio_err))
 
+    return extinction_val, extinction_err
+
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
@@ -226,7 +228,7 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
-    job_power(T)
+    extinction_val, extinction_err = job_power(T)
     job_lissajous(T)
     job_rayleigh_length(T)
 

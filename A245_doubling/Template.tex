@@ -635,11 +635,20 @@ order of 1000. We will assume that it is constant for all currents---as the larg
 error band should permit---and obtain an extinction ratio of \num{<< extinction
 >>}.
 
-% TODO Plot output versus current.
-
 \subsection{Threshold current}
 
-% TODO Extract threshold.
+In Figure~\ref{fig:diode-normal} we have already inserted the linear fit to the
+points behind the lasing threshold. We extend the fitted line to the $P = 0$
+axis and look for the threshold current~$I_\text{thr}$. We obtain $I_\text{thr}
+= \SI{<< threshold >>}{\ampere}$.
+
+Error estimation is performed with the Jackknife method. We perform the fit
+four times and leave one of the data points out each time. This way we get a
+good error estimate caused by the residuals of the data. From the parameters of
+the linear fit the $P = 0$ intersection is computed. Averaging and taking the
+standard deviation of the values gives the result. We decided against
+resampling as the error bars are way smaller than the residuals, the fit has a
+very large $\chi^2$ and renders resampling pointless.
 
 \subsection{Quantum efficiency}
 
