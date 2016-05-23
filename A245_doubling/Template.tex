@@ -239,7 +239,6 @@ crystals without intervention one finds $l_\text{coh} \simeq
 \parencite[Section~12.4.1]{meschede/optik_licht_laser/2008}. This means that we
 definitely have to match the phases in order to get significant light output.
 
-
 \subsection{Type 1 and 2}
 
 We will only describe the case of negative uniaxial crystals here. For a
@@ -685,28 +684,22 @@ measurements of the fundamental beam in \SI{2.5}{\degree} steps of the retarder
 plate.
 
 Our data is shown in Figure~\ref{fig:variable}.
-We expect to see a $a \cos(2(\phi - \phi_0))^2 + b$ profile. Our fit parameters
+We expect to see a $a \cos(2[\phi - \phi_0])^2 + b$ profile. Our fit parameters
 are $\phi_0 = \SI{<< variable_angle_offset >>}{\degree}$, $a = \SI{<<
-variable_a >>}{\watt}$ and $b = \SI{<< variable_b >>}{\watt}$. From this we
-obtain the extinction ratio $R = (a + b) / b = \num{<< extinction_ratio >>}$.
-
+variable_a >>}{\watt}$ and $b = \SI{<< variable_b >>}{\watt}$.
 
 \begin{figure}
     \centering
     \includegraphics{variable}
     \caption{%
-        Measured power with the variable attenuator. Fit is a $a \cos(2(\phi -
-        \phi_0))^2 + b$ function.
+        Measured power with the variable attenuator. Fit is a $a \cos(2[\phi -
+        \phi_0])^2 + b$ function.
     }
     \label{fig:variable}
 \end{figure}
 
-
-% TODO Fit data.
-
-\subsubsection{Extinction ratio}
-
-% TODO Determine extinction ratio.
+From this we obtain the extinction ratio $R = (a + b) / b = \num{<<
+extinction_ratio >>}$. The large error arises from the very small offset $b$.
 
 \section{Harmonic power}
 
@@ -732,15 +725,15 @@ and has a length of \SI{5}{\milli\meter}. The end faces are coated to avoid
 reflections at \SI{987}{\nano\meter} and \SI{494}{\nano\meter}.
 \parencite[6]{lab-course/doubling/manual}
 
-% TODO Write about adjustment.
-
 \subsection{Output power optimization}
 
 With the rough optical setup in place we can insert the crystal and optimize
 for maximum harmonic power. We slowly heat up the crystal to \SI{36}{\celsius}.
-Then we slide it into the focus of our setup.
-
-% TODO Check with paper behind the crystal that one can see something.
+Then we slide it into the focus of our setup. It took a bit to adjust this. One
+important thing to keep in mind is that the crystal is very small. Therefore
+one needs to move the crystal through the beam and identify the edges of the
+crystal in the beam. After doing this we were able to measure some
+\SI{40}{\micro\watt} of blue light.
 
 The blue harmonic light is focused with an achromatic lens and filtered with an
 \SI{3}{\milli\meter} BG40 glass filter. From Figure~3 from
@@ -749,8 +742,6 @@ coefficient of \num{0.9} at \SI{494}{\nano\meter}. For the unwanted fundamental
 wave we have a transmission coefficient of around $10^{-2.3} = 0.005$.
 
 % TODO Think about the effect of the fundamental wave in our measurement here.
-
-We slightly move and rotate the crystal to optimize the output power.
 
 \subsubsection{Beam waist and Rayleigh length}
 
@@ -807,8 +798,9 @@ optimal_focal_length_mm >>}{\milli\meter}.
 
 Since the index of refraction is temperature depending on our crystal material
 we want to measure the temperature dependence. First we cool down to
-\SI{27}{\celsius} in steps of \SI{0.5}{\celsius} and then heat up to
-\SI{40}{\celsius} in steps of \SI{0.2}{\celsius}.
+\SI{27}{\celsius} in steps of \SI{0.5}{\celsius} (to protect the crystal) and
+then heat up to \SI{40}{\celsius} in steps of \SI{0.2}{\celsius}. While heating
+up take measurements of the harmonic power.
 
 % TODO Take measurements of power and background at each temperature.
 
