@@ -1100,9 +1100,12 @@ relative theoretical error of \num{<< relative_error >>}.
 
 The rough confirmation of the frequency doubling can be made more precise with
 a Michelson interferometer. The setup which we are going to build now is shown
-in Figure~\ref{fig:fig-5}.
-
-% TODO Describe how we set this thing up.
+in Figure~\ref{fig:fig-5}. First we set up the top mirror to reflect the light
+onto the moving mirror. Once the blue dot on the moving mirror did not waver
+any more, the top mirror is set. Then we insert the glass plate such that
+the beams going to the left and right were parallel to the screw holes on the
+table. After that we add the right mirror and make sure that the beam coincides
+with the one reflected via the bottom mirror.
 
 \begin{figure}
     \centering
@@ -1117,12 +1120,15 @@ in Figure~\ref{fig:fig-5}.
     \label{fig:fig-5}
 \end{figure}
 
-Behind the last BG40 filter we have two fast photo diodes. One will receive the
-light from the fundamental wave and a negligible part of the harmonic wave. The
-other one will receive the harmonic wave and a severely suppressed part of the
-fundamental wave. We should be able to take it as a perfect split. Hooking both
-photo diodes to the oscillopscope in $x$-$y$-mode, we obtain some Lissajous
-figures as shown in Figure~\ref{fig:lissajous-measured}.
+Then we install the thick BG40 filter behind the glass plate. Behind the filter
+we have two fast photo diodes. One will receive the light from the fundamental
+wave and a negligible part of the harmonic wave. The other one will receive the
+harmonic wave and a severely suppressed part of the fundamental wave. We should
+be able to take it as a perfect split. Hooking both photo diodes to the
+oscilloscope in $x$-$y$-mode, we obtain some Lissajous figures as shown in
+Figure~\ref{fig:lissajous-measured} by slightly moving the movable mirror. It
+was sufficient to touch the slide, our bodies apparently cause enough vibration
+to move it by nanometers.
 
 \begin{figure}
     \centering
@@ -1142,16 +1148,31 @@ figures as shown in Figure~\ref{fig:lissajous-measured}.
             }
     \end{subfigure}
     \caption{%
-        Observed Lissajous figures.
+        Observed Lissajous figures. Desaturated, inverted.
         }
     \label{fig:lissajous-measured}
+\end{figure}
+
+We then switched off the $x$-$y$-mode and obtained images like shown in
+Figure~\ref{fig:two-waves-15}. There one can nicely see that the bottom
+wavelength is half of the top one. This is not a very precise measurement, it
+is more for the intuition.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{two-waves-15}
+    \caption{%
+        Fundamental and harmonic wave signal for comparison. Triggered.
+        Desaturated, inverted.
+    }
+    \label{fig:two-waves-15}
 \end{figure}
 
 % TODO Explain the meaning of the oscillograms.
 % TODO Determine deviation from 1:2 ratio.
 % TODO What causes the deviation?
 % TODO Compare with literature values.
-% TODO Compute spectral representation of the interferometer.
+% TODO Compute spectral resolution of the interferometer.
 
 \end{document}
 
