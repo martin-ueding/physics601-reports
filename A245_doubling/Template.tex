@@ -875,7 +875,11 @@ relationship here. The fit parameters are
 \]
 Error estimation is done via resampling. We can see that the offset angle has
 changed just a little bit. Just what we have expected since we turned the
-polarizing beam splitter a little bit.
+polarizing beam splitter a little bit. The model seems to fit the data rather
+well, there are slight deviations, especially at the left peak. Since the right
+peak does not show this behavior we are not quite sure what this is about.
+
+% FIXME Better interpretation.
 
 \begin{figure}
     \centering
@@ -902,7 +906,11 @@ In the manual the definition is
     = \SI{<< efficiency_sq >>}{\per\watt} \,.
 \]
 This does not seem to make much sense as an efficiency due to the unit. An
-efficiency should be dimensionless.
+efficiency should be dimensionless. By using the fit parameters $a$ and $a'$ we
+dodged the problem with the angle offset that we mentioned earlier. We
+basically assume that the angular distributions align perfectly and then we
+can just take the fit parameters. The offsets $b$ and $b'$ are neglected here
+as well as they are so small.
 
 \subsection{Input polarization dependence}
 
