@@ -217,6 +217,8 @@ def main():
         json.dump(dict(T), f, indent=4, sort_keys=True)
 
     pp = pprint.PrettyPrinter()
+    print()
+    print('Content in T dict:')
     pp.pprint(T)
 
 
