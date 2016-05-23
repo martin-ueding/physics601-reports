@@ -871,7 +871,7 @@ relationship here. The fit parameters are
     \,,\quad
     a' = \SI{<< splitter_a >>}{\watt}
     \,,\quad
-    b' = \SI{<< splitter_b >>}{\watt}
+    b' = \SI{<< splitter_b >>}{\watt} \,.
 \]
 Error estimation is done via resampling. We can see that the offset angle has
 changed just a little bit. Just what we have expected since we turned the
@@ -917,12 +917,31 @@ as they are so small.
 By taking out the polarizing beam splitter we can freely adjust the linear
 polarization of the light that goes into the crystal. We take a set of
 measurements of the output power with different angles of the retarder plate.
+Our data is shown in Figure~\ref{fig:harmonic-bare}.
 
-% TODO Table with measurements.
+\begin{figure}
+    \centering
+    \includegraphics{harmonic-bare}
+    \caption{%
+        %
+    }
+    \label{fig:harmonic-bare}
+\end{figure}
 
-% TODO Plot.
-% TODO What do we expect for type 1 and type 2?
-% TODO Fit the data.
+As we use temperature phase matching we expect to only have a type 1 phase
+matching there. Hence the output power should just depend on one component of
+the polarization. As the output power scales quadratically with the input
+power, we expect a quartic cosine again. We fit the same function as above and
+obtain
+\[
+    \phi_0' = \SI{<< bare_angle_offset >>}{\degree}
+    \,,\quad
+    a' = \SI{<< bare_a >>}{\watt}
+    \,,\quad
+    b' = \SI{<< bare_b >>}{\watt}
+\]
+this time.
+
 % TODO Are the fit parameters sensible?
 
 \section{Wavelength comparison}

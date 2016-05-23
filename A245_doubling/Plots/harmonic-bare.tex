@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+    \begin{axis}[
+            width=\linewidth,
+            height=0.5\linewidth,
+            xlabel={$\phi / \si{\degree}$},
+            ylabel={$P / \si{\watt}$},
+            grid=major,
+            band/.style={
+                draw=none,
+                opacity=0.5,
+            },
+        ]
+
+        \addplot[
+            black,
+            mark=*,
+            only marks,
+            error bars/y dir=both,
+            error bars/y explicit,
+        ] table[y error index=2] {../xy/harmonic-bare-data.tsv};
+
+        \addplot[band, fill=red] table {../xy/harmonic-bare-band.tsv} \closedcycle;
+        \addplot[red] table {../xy/harmonic-bare-fit.tsv};
+
+    \end{axis}
+\end{tikzpicture}

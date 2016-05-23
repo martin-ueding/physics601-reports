@@ -339,6 +339,44 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
     T['efficiency_sq'] = siunitx(efficiency_sq_val, efficiency_sq_err)
 
 
+def job_input_polarization(T):
+    data = np.loadtxt('Data/harmonic_bare.tsv')
+    angle = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = data[:, 2] * 1e-6
+    power_dist = bootstrap.make_dist(power_val, power_err)
+
+    fit_x = np.linspace(np.min(angle), np.max(angle), 200)
+    fit_y_dist = []
+    angle_offset_dist = []
+    a_dist = []
+    b_dist = []
+    popt_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(cos_quartic, angle, power, p0=[1.5e-5, 0, 0])
+        fit_y_dist.append(cos_quartic(fit_x, *popt))
+        angle_offset_dist.append(popt[1])
+        a = popt[0]
+        b = popt[2]
+        a_dist.append(a)
+        b_dist.append(b)
+        popt_dist.append(popt)
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+    angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
+    a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
+    b_val, b_err = bootstrap.average_and_std_arrays(b_dist)
+
+    np.savetxt('_build/xy/harmonic-bare-data.tsv',
+               np.column_stack([angle, power_val, power_err]))
+    np.savetxt('_build/xy/harmonic-bare-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/harmonic-bare-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    T['bare_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
+    T['bare_a'] = siunitx(a_val, a_err)
+    T['bare_b'] = siunitx(b_val, b_err)
+
+
 def test_keys(T):
     '''
     Testet das dict auf Schlüssel mit Bindestrichen.
@@ -371,6 +409,7 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
+    job_input_polarization(T)
     job_temperature_dependence(T)
     extinction_dist = job_power(T)
     input_popt_dist = job_variable_attenuator(T, extinction_dist)
