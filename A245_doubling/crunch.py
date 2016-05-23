@@ -37,6 +37,10 @@ def gauss(x, mean, sigma, a):
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
 
+def sinc(x, center, width, amplitude, offset):
+    return amplitude * np.sinc((x - center) / width) + offset
+
+
 def errorfunction(x, power, diam, x_offs):
     return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
 
@@ -109,7 +113,6 @@ def job_power(T):
                bootstrap.pgfplots_error_band(x, ratio_val, ratio_err))
 
     return extinction_dist
-
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
@@ -239,6 +242,43 @@ def job_variable_attenuator(T, extinction_dist):
     T['extinction_ratio'] = siunitx(extinction_ratio_val, extinction_ratio_err)
     
 
+def job_temperature_dependence(T):
+    data = np.loadtxt('Data/temperature.tsv')
+    temp = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = np.ones(power_val.shape) * 1e-6
+    power_dist = bootstrap.make_dist(power_val, power_err)
+
+    p0 = [36.5, 1, 36-6, 2e-6]
+    fit_x = np.linspace(np.min(temp), np.max(temp), 300)
+    popt_dist = []
+    fit_y_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(sinc, temp, power, p0=p0)
+        fit_y_dist.append(sinc(fit_x, *popt))
+        popt_dist.append(popt)
+
+    center_dist, width_dist, amplitude_dist, offset_dist = zip(*popt_dist)
+
+    center_val, center_err = bootstrap.average_and_std_arrays(center_dist)
+    width_val, width_err = bootstrap.average_and_std_arrays(width_dist)
+    amplitude_val, amplitude_err = bootstrap.average_and_std_arrays(amplitude_dist)
+    offset_val, offset_err = bootstrap.average_and_std_arrays(offset_dist)
+
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+
+    np.savetxt('_build/xy/temperature-data.tsv',
+               np.column_stack([temp, power_val, power_err]))
+    np.savetxt('_build/xy/temperature-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/temperature-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+
+    T['temp_center'] = siunitx(center_val, center_err)
+    T['temp_width'] = siunitx(width_val, width_err)
+    T['temp_amplitude'] = siunitx(amplitude_val, amplitude_err)
+    T['temp_offset'] = siunitx(offset_val, offset_err)
+
 
 def test_keys(T):
     '''
@@ -272,6 +312,7 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
+    job_temperature_dependence(T)
     extinction_dist = job_power(T)
     job_variable_attenuator(T, extinction_dist)
     job_lissajous(T)

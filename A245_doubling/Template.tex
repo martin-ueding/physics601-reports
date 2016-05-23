@@ -802,6 +802,34 @@ we want to measure the temperature dependence. First we cool down to
 then heat up to \SI{40}{\celsius} in steps of \SI{0.2}{\celsius}. While heating
 up take measurements of the harmonic power.
 
+Our measurements are shown in Figure~\ref{fig:temperature}. We fit a $\sinc$
+function with
+\[
+    P(T) = a \sinc\del{\frac{T - c}{b}} + d \,.
+\]
+The fit parameters are
+\[
+    a = \SI{<< temp_amplitude >>}{\watt}
+    \,,\quad
+    b = \SI{<< temp_width >>}{\celsius}
+    \,,\quad
+    c = \SI{<< temp_center >>}{\celsius}
+    \,,\quad
+    d = \SI{<< temp_offset >>}{\watt} \,.
+\]
+Error estimation is done via resampling. The fit clearly has a very high
+$\chi^2$, the sinc-model does not describe the data well.
+
+\begin{figure}
+    \centering
+    \includegraphics{temperature}
+    \caption{%
+        Temperature dependence of the harmonic power. Fitted is a $\sinc$
+        function. Error estimation is done via resampling.
+    }
+    \label{fig:temperature}
+\end{figure}
+
 % TODO Take measurements of power and background at each temperature.
 
 % TODO Plot data such that sinc shape can be seen.
