@@ -73,10 +73,14 @@ def job_power(T):
         a, b = popt
         root = -b / a
         threshold_dist.append(root)
-        threshold_fit_y_dist = linear(threshold_fit_x, *popt)
+        threshold_fit_y_dist.append(linear(threshold_fit_x, *popt))
     threshold_val, threshold_err = bootstrap.average_and_std_arrays(threshold_dist)
+    threshold_fit_y_val, threshold_fit_y_err = bootstrap.average_and_std_arrays(threshold_fit_y_dist)
 
     T['threshold'] = siunitx(threshold_val, threshold_err)
+
+    np.savetxt('_build/xy/diode_normal-band.tsv',
+               bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
 
 
 
