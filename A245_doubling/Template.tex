@@ -649,8 +649,20 @@ very large $\chi^2$ and renders resampling pointless.
 
 \subsection{Quantum efficiency}
 
-% TODO Compute differential slope efficiency.
-% TODO Compute quantum efficiency from slope.
+The differential efficiency of the laser is \SI{<< differential_efficiency
+>>}{\watt\per\ampere}. This is just the slope~$a$ of the linear fit shown in
+Figure~\ref{fig:diode-normal}.
+
+The differential quantum efficiency is the number of photons created per charge
+carrier passing the $p$-$n$-junction in the semiconductor
+\parencite{fonstad/laser_diodes_1}. In your case we have
+\[
+    \eta
+    = \frac{P/\hbar\omega}{I / e}
+    = \frac{P}{I} \frac{e}{\hbar\omega}
+    = a \frac{e}{\hbar\omega}
+    = \num{<< quantum_efficiency >>} \,.
+\]
 
 \subsection{Variable attenuator}
 \label{sec:variable_attenuator}
@@ -1155,8 +1167,8 @@ just vibrating it. If there was any violation from the $2:1$ ratio, the
 Lissajous figure would rotate on its own. We did not observe any of that,
 therefore we conclude that the ratio is exact in the realm of the resolution
 available. The other image shows the \enquote{U shape} that can only come from
-a $2:1$ ratio as well.
-
+a $2:1$ ratio as well. The broadening of the shapes comes from the nonzero
+$\ddot d_1$, we do not think that the frequency ratio is not exact.
 
 \begin{figure}
     \centering
@@ -1182,7 +1194,6 @@ a $2:1$ ratio as well.
     \label{fig:lissajous-measured}
 \end{figure}
 
-% TODO What causes the deviation?
 % TODO Compare with literature values.
 % TODO Compute spectral resolution of the interferometer.
 

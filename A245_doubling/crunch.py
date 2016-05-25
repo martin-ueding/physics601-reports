@@ -71,8 +71,13 @@ def job_power(T):
     np.savetxt('_build/xy/diode_damped-data.tsv',
                np.column_stack([damp_current, damp_power_val, damp_power_err]))
 
+    hbar_omega = 6.626e-34 * 3e8 / 987e-9
+    electron_charge = 1.609e-19
+
     # Find the threshold current.
     sel = norm_power_val > 1e-3
+    slope_dist = []
+    quantum_efficiency_dist = []
     threshold_dist = []
     threshold_fit_x = np.linspace(0.05, 0.09, 100)
     threshold_fit_y_dist = []
@@ -86,10 +91,16 @@ def job_power(T):
         root = -b / a
         threshold_dist.append(root)
         threshold_fit_y_dist.append(linear(threshold_fit_x, *popt))
+        slope_dist.append(a)
+        quantum_efficiency_dist.append(a * electron_charge / hbar_omega)
     threshold_val, threshold_err = bootstrap.average_and_std_arrays(threshold_dist)
     threshold_fit_y_val, threshold_fit_y_err = bootstrap.average_and_std_arrays(threshold_fit_y_dist)
+    differential_efficiency_val, differential_efficiency_err = bootstrap.average_and_std_arrays(slope_dist)
+    quantum_efficiency_val, quantum_efficiency_err = bootstrap.average_and_std_arrays(quantum_efficiency_dist)
 
     T['threshold'] = siunitx(threshold_val, threshold_err)
+    T['differential_efficiency'] = siunitx(differential_efficiency_val, differential_efficiency_err)
+    T['quantum_efficiency'] = siunitx(quantum_efficiency_val, quantum_efficiency_err)
 
     np.savetxt('_build/xy/diode_normal-band.tsv',
                bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
