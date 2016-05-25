@@ -1124,11 +1124,39 @@ Then we install the thick BG40 filter behind the glass plate. Behind the filter
 we have two fast photo diodes. One will receive the light from the fundamental
 wave and a negligible part of the harmonic wave. The other one will receive the
 harmonic wave and a severely suppressed part of the fundamental wave. We should
-be able to take it as a perfect split. Hooking both photo diodes to the
-oscilloscope in $x$-$y$-mode, we obtain some Lissajous figures as shown in
-Figure~\ref{fig:lissajous-measured} by slightly moving the movable mirror. It
-was sufficient to touch the slide, our bodies apparently cause enough vibration
-to move it by nanometers.
+be able to take it as a perfect split.
+
+By looking at the photo diode signal versus time we obtained images like the
+one shown in Figure~\ref{fig:two-waves-15}. There one can nicely see that the
+bottom wavelength is half of the top one. This is not a very precise
+measurement, it is more for the intuition. The smearing of the curves in the
+right part of the oscillogram stems from the non-constant $\dot d_1$ which
+drives this oscillation. Since we push the slide by hand we of course
+accelerate it. This smearing rises from $\ddot d_1$ induced. The left side is
+sharper since there the signal is freshly triggered.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{two-waves-15}
+    \caption{%
+        Fundamental and harmonic wave signal for comparison. Triggered.
+        Desaturated, inverted.
+    }
+    \label{fig:two-waves-15}
+\end{figure}
+
+Hooking both photo diodes to the oscilloscope in $x$-$y$-mode, we obtain some
+Lissajous figures as shown in Figure~\ref{fig:lissajous-measured} by slightly
+moving the movable mirror. It was sufficient to touch the slide, our bodies
+apparently cause enough vibration to move it by nanometers. In
+Figure~\ref{fig:lissajous-01} one can see a \enquote{figure 8} Lissajous
+figure. It has been rather stable when holding the slide at one position and
+just vibrating it. If there was any violation from the $2:1$ ratio, the
+Lissajous figure would rotate on its own. We did not observe any of that,
+therefore we conclude that the ratio is exact in the realm of the resolution
+available. The other image shows the \enquote{U shape} that can only come from
+a $2:1$ ratio as well.
+
 
 \begin{figure}
     \centering
@@ -1138,6 +1166,7 @@ to move it by nanometers.
         \caption{%
             %
             }
+        \label{fig:lissajous-01}
     \end{subfigure}
     \hfill
     \begin{subfigure}[c]{0.48\linewidth}
@@ -1153,23 +1182,6 @@ to move it by nanometers.
     \label{fig:lissajous-measured}
 \end{figure}
 
-We then switched off the $x$-$y$-mode and obtained images like shown in
-Figure~\ref{fig:two-waves-15}. There one can nicely see that the bottom
-wavelength is half of the top one. This is not a very precise measurement, it
-is more for the intuition.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.8\linewidth]{two-waves-15}
-    \caption{%
-        Fundamental and harmonic wave signal for comparison. Triggered.
-        Desaturated, inverted.
-    }
-    \label{fig:two-waves-15}
-\end{figure}
-
-% TODO Explain the meaning of the oscillograms.
-% TODO Determine deviation from 1:2 ratio.
 % TODO What causes the deviation?
 % TODO Compare with literature values.
 % TODO Compute spectral resolution of the interferometer.
