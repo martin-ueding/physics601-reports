@@ -49,6 +49,11 @@
 \maketitle
 
 \begin{abstract}
+    We classify a \SI{987}{\nano\meter} class 3B diode laser and then use it to
+    double the frequency within a $\mathrm{KNbO_3}$ crystal. Fundamental wave
+    power is measured depending on the crystal temperature, harmonic wave power
+    and polarization. The exactness of the doubling is confirmed with a grating
+    and a Michelson interferometer.
 \end{abstract}
 
 \tableofcontents
@@ -238,7 +243,6 @@ crystals without intervention one finds $l_\text{coh} \simeq
 \SI{10}{\micro\meter}$
 \parencite[Section~12.4.1]{meschede/optik_licht_laser/2008}. This means that we
 definitely have to match the phases in order to get significant light output.
-
 
 \subsection{Type 1 and 2}
 
@@ -628,12 +632,10 @@ divide the interpolated power values for a given current and obtain a
 distinction ratio. Error estimation is performed by resampling our measured
 data. For each resampling step we perform the interpolation and build the
 ratios. Taking mean and standard deviation for each current value gives the
-extinction ratio and error.
-This is shown in
-Figure~\ref{fig:diode-ratio}. One can see that the extinction ratio is in the
-order of 1000. We will assume that it is constant for all currents---as the large
-error band should permit---and obtain an extinction ratio of \num{<< extinction
->>}.
+extinction ratio and error. This is shown in Figure~\ref{fig:diode-ratio}. One
+can see that the extinction ratio is in the order of 1000. We will assume that
+it is constant for all currents---as the large error band should permit---and
+obtain an extinction ratio of $F = \num{<< extinction >>}$.
 
 \subsection{Threshold current}
 
@@ -652,8 +654,20 @@ very large $\chi^2$ and renders resampling pointless.
 
 \subsection{Quantum efficiency}
 
-% TODO Compute differential slope efficiency.
-% TODO Compute quantum efficiency from slope.
+The differential efficiency of the laser is \SI{<< differential_efficiency
+>>}{\watt\per\ampere}. This is just the slope~$a$ of the linear fit shown in
+Figure~\ref{fig:diode-normal}.
+
+The differential quantum efficiency is the number of photons created per charge
+carrier passing the $p$-$n$-junction in the semiconductor
+\parencite{fonstad/laser_diodes_1}. In your case we have
+\[
+    \eta
+    = \frac{P/\hbar\omega}{I / e}
+    = \frac{P}{I} \frac{e}{\hbar\omega}
+    = a \frac{e}{\hbar\omega}
+    = \num{<< quantum_efficiency >>} \,.
+\]
 
 \subsection{Variable attenuator}
 \label{sec:variable_attenuator}
@@ -685,28 +699,22 @@ measurements of the fundamental beam in \SI{2.5}{\degree} steps of the retarder
 plate.
 
 Our data is shown in Figure~\ref{fig:variable}.
-We expect to see a $a \cos(2\phi - \phi_0)^2 + b$ profile. Our fit parameters
+We expect to see a $a \cos(2[\phi - \phi_0])^2 + b$ profile. Our fit parameters
 are $\phi_0 = \SI{<< variable_angle_offset >>}{\degree}$, $a = \SI{<<
-variable_a >>}{\watt}$ and $b = \SI{<< variable_b >>}{\watt}$. From this we
-obtain the extinction ratio $R = (a + b) / b = \num{<< extinction_ratio >>}$.
-
+variable_a >>}{\watt}$ and $b = \SI{<< variable_b >>}{\watt}$.
 
 \begin{figure}
     \centering
     \includegraphics{variable}
     \caption{%
-        Measured power with the variable attenuator. Fit is a $a \cos(2 \phi -
-        \phi_0) + c$ function.
+        Measured power with the variable attenuator. Fit is a $a \cos(2[\phi -
+        \phi_0])^2 + b$ function.
     }
     \label{fig:variable}
 \end{figure}
 
-
-% TODO Fit data.
-
-\subsubsection{Extinction ratio}
-
-% TODO Determine extinction ratio.
+From this we obtain the extinction ratio $R = (a + b) / b = \num{<<
+extinction_ratio >>}$. The large error arises from the very small offset $b$.
 
 \section{Harmonic power}
 
@@ -732,15 +740,14 @@ and has a length of \SI{5}{\milli\meter}. The end faces are coated to avoid
 reflections at \SI{987}{\nano\meter} and \SI{494}{\nano\meter}.
 \parencite[6]{lab-course/doubling/manual}
 
-% TODO Write about adjustment.
-
 \subsection{Output power optimization}
 
 With the rough optical setup in place we can insert the crystal and optimize
 for maximum harmonic power. We slowly heat up the crystal to \SI{36}{\celsius}.
-Then we slide it into the focus of our setup.
-
-% TODO Check with paper behind the crystal that one can see something.
+Then we slide it into the focus of our setup. It took a bit to adjust this. One
+important thing to keep in mind is that the crystal is very small. Therefore
+one needs to move the crystal through the beam and identify the edges of the
+crystal in the beam.
 
 The blue harmonic light is focused with an achromatic lens and filtered with an
 \SI{3}{\milli\meter} BG40 glass filter. From Figure~3 from
@@ -748,14 +755,21 @@ The blue harmonic light is focused with an achromatic lens and filtered with an
 coefficient of \num{0.9} at \SI{494}{\nano\meter}. For the unwanted fundamental
 wave we have a transmission coefficient of around $10^{-2.3} = 0.005$.
 
-% TODO Think about the effect of the fundamental wave in our measurement here.
+After doing this we were able to measure some \SI{40}{\micro\watt} of blue
+light. Once the power meter is set up again we tune all the parameters a bit to
+optimize this power. This also includes the rotation of the polarizing beam
+splitter. Unfortunately we did not record the original position from the
+calibration measurement and now have an offset angle in the relation between
+the $\lambda/2$-plate angle and the laser power from the variable attenuator.
+This is something that we can recover from later on, though.
 
-We slightly move and rotate the crystal to optimize the output power.
+% TODO Think about the effect of the fundamental wave in our measurement here.
 
 \subsubsection{Beam waist and Rayleigh length}
 
 % FIXME See whether those numbers actually make sense. Is the correct branch of
-% the equations given by Mathematica chosen?
+% the equations given by Mathematica chosen? Perhaps it is easier to tackle
+% this problem from the asymptotic angle?
 
 One can let Mathematica solve the
 relations describing the beam waist to give an expression for the Rayleigh length
@@ -807,14 +821,46 @@ optimal_focal_length_mm >>}{\milli\meter}.
 
 Since the index of refraction is temperature depending on our crystal material
 we want to measure the temperature dependence. First we cool down to
-\SI{27}{\celsius} in steps of \SI{0.5}{\celsius} and then heat up to
-\SI{40}{\celsius} in steps of \SI{0.2}{\celsius}.
+\SI{27}{\celsius} in steps of \SI{0.5}{\celsius} (to protect the crystal) and
+then heat up to \SI{40}{\celsius} in steps of \SI{0.2}{\celsius}. While heating
+up take measurements of the harmonic power.
 
-% TODO Take measurements of power and background at each temperature.
+Our measurements are shown in Figure~\ref{fig:temperature}. We fit a $\sinc$
+function with
+\[
+    P(T) = a \sinc\del{\frac{T - c}{b}} + d \,.
+\]
+The fit parameters are
+\[
+    a = \SI{<< temp_amplitude >>}{\watt}
+    \,,\quad
+    b = \SI{<< temp_width >>}{\celsius}
+    \,,\quad
+    c = \SI{<< temp_center >>}{\celsius}
+    \,,\quad
+    d = \SI{<< temp_offset >>}{\watt} \,.
+\]
+Error estimation is done via resampling.
 
-% TODO Plot data such that sinc shape can be seen.
-% TODO Try to fit a sinc function.
-% TODO Explain why the curve could be asymmetric.
+\begin{figure}
+    \centering
+    \includegraphics{temperature}
+    \caption{%
+        Temperature dependence of the harmonic power. Fitted is a $\sinc$
+        function. Error estimation is done via resampling.
+    }
+    \label{fig:temperature}
+\end{figure}
+
+The fit clearly has a very high $\chi^2$, the sinc-model does not describe the
+data well. Also the shape is not symmetric. This is actually not a surprise,
+a symmetric shape would be one. There should be a sinc-shape with respect to
+the phase difference $\Deltaup k$. By changing the temperature we change the
+refractive indices of the axes to get a better match for $n_\omega$ and
+$n_{2\omega}$. The dependence $n(T)$ must not be linear, it can have a more
+complicated structure. Also the dependence of $\Delta k$ on both refractive
+indices has to be taken into account. Therefore it is no surprise that the
+shape $P(T)$ is not symmetric.
 
 Now that we know the optimal temperature for the crystal, we slowly tune the
 temperature to this optimal setting.
@@ -822,28 +868,97 @@ temperature to this optimal setting.
 \subsection{Input power dependence}
 
 The output power must depend on the input power. As we have calibrated in
-Section~\ref{sec:variable_attenuator}, we can choose an input power by rotating
-the retarder plate in front of the splitter. We measure the output power while
-adjusting the angle of the retarder plate.
+Section~\ref{sec:variable_attenuator}, we should be able to choose an input
+power by rotating the retarder plate in front of the splitter. As we have
+rotated the polarizing beam splitter without thinking about this step, we will
+need to adjust for the offset angle after this measurement. Then we can shift
+the first measurement and have the desired angle--power relation. We hope that
+there is no fundamental offset that we would miss this way. There is no
+physical reason to have such an offset, we should be just fine.
 
-% TODO Table with measurements.
+We measure the output power while adjusting the angle of the retarder plate.
+Our data is shown in Figure~\ref{fig:harmonic-splitter}. As the harmonic
+intensity should scale with the square of the fundamental intensity we expect a 
+\[
+    P'(\phi) = a' \cos(2 [\phi - \phi_0'])^4 + b'
+\]
+relationship here. The fit parameters are
+\[
+    \phi_0' = \SI{<< splitter_angle_offset >>}{\degree}
+    \,,\quad
+    a' = \SI{<< splitter_a >>}{\watt}
+    \,,\quad
+    b' = \SI{<< splitter_b >>}{\watt} \,.
+\]
+Error estimation is done via resampling. We can see that the offset angle has
+changed just a little bit. Just what we have expected since we turned the
+polarizing beam splitter a little bit. The model seems to fit the data rather
+well, there are slight deviations, especially at the left peak. Since the right
+peak does not show this behavior we are not quite sure what this is about.
 
-% TODO Plot output power versus input power.
-% TODO Determine expected relationship.
-% TODO Fit model to data.
-% TODO Extract frequency doubling efficiency.
+% FIXME Better interpretation.
+
+\begin{figure}
+    \centering
+    \includegraphics{harmonic-splitter}
+    \caption{%
+        Harmonic power depending on the $\lambda/2$-plate angle. Fitted is a
+        $\cos(2\phi)^4$ function. Error estimation via resampling.
+    }
+    \label{fig:harmonic-splitter}
+\end{figure}
+
+Using the amplitudes $a$ and $a'$ of the fit functions to the angular power
+distribution of fundamental and harmonic wave, respectively, we can obtain the
+power ratio. The amplitude of the harmonic wave has to be corrected by the
+screw-on attenuator factor $F$. We therefore have the power ratio
+\[
+    \eta' = \frac{P_\text{har}}{P_\text{fun}} = \frac{a'}{a F}
+    = \num{<< efficiency >>} \,.
+\]
+In the manual the definition is
+\[
+    \eta = \frac{P_\text{har}}{P_\text{fun}^2}
+    = \frac{a'}{[a F]^2}
+    = \SI{<< efficiency_sq >>}{\per\watt} \,.
+\]
+This does not seem to make much sense as an efficiency due to the unit. An
+efficiency should be dimensionless. By using the fit parameters $a$ and $a'$ we
+dodged the problem with the angle offset that we mentioned earlier. We
+basically assume that the angular distributions align perfectly and then we
+can just take the fit parameters. The offsets $b$ and $b'$ are neglected here
+as they are so small.
 
 \subsection{Input polarization dependence}
 
 By taking out the polarizing beam splitter we can freely adjust the linear
 polarization of the light that goes into the crystal. We take a set of
 measurements of the output power with different angles of the retarder plate.
+Our data is shown in Figure~\ref{fig:harmonic-bare}.
 
-% TODO Table with measurements.
+\begin{figure}
+    \centering
+    \includegraphics{harmonic-bare}
+    \caption{%
+        %
+    }
+    \label{fig:harmonic-bare}
+\end{figure}
 
-% TODO Plot.
-% TODO What do we expect for type 1 and type 2?
-% TODO Fit the data.
+As we use temperature phase matching we expect to only have a type 1 phase
+matching there. Hence the output power should just depend on one component of
+the polarization. As the output power scales quadratically with the input
+power, we expect a quartic cosine again. We fit the same function as above and
+obtain
+\[
+    \phi_0' = \SI{<< bare_angle_offset >>}{\degree}
+    \,,\quad
+    a' = \SI{<< bare_a >>}{\watt}
+    \,,\quad
+    b' = \SI{<< bare_b >>}{\watt}
+\]
+this time.
+
 % TODO Are the fit parameters sensible?
 
 \section{Wavelength comparison}
@@ -860,8 +975,140 @@ diffraction. As the diffraction angle scales with diffraction order $n$ and
 wavelength $\lambda$ as a quotient we would expect to see an overlap of the
 $n$-th order fundamental wave and the $2n$-th order harmonic wave.
 
-% TODO Increase resolution by using achromatic lens with largest focal length.
+We take photographs of the of the laser spots on the wall. Starting with the
+zeroth order, we take a picture without the IR-card, our CCD-camera should only
+be pick up the harmonic wave. Then we hold the IR-card against the wall and see
+a bright green spot. We take a picture of that fundamental wave as well. In
+Figure~\ref{fig:grating-2} both pictures are shown together with the difference
+of the images. In the zeroth order the beams must coincide trivially and indeed
+we see a rotationally symmetric difference image. As far as we can tell the
+beams overlap.
 
+Then we advance to the next order. We expect to see only harmonic light there,
+no fundamental wave. When we hold the IR-card over the blue spot, no green
+light appears. Our images are shown in Figure~\ref{fig:grating-4}. This tells
+us that the harmonic frequency is larger than the fundamental one, just as we
+expect. Going to the next spot on the wall we do the same procedure again. Now
+we do see a bright green with the IR-card. See Figure~\ref{fig:grating-1} for
+the triplet of images.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-2-crop-blue}
+        \caption{%
+            harmonic
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-2-crop-red}
+        \caption{%
+            fundamental
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-2-crop-diff}
+        \caption{%
+            difference
+            }
+    \end{subfigure}
+    \caption{%
+        Zeroth order of both beams. As the difference is rotationally
+        symmetric, both beams coincide. Trivial for zeroth order.
+        }
+    \label{fig:grating-2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-4-crop-blue}
+        \caption{%
+            harmonic
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-4-crop-red}
+        \caption{%
+            fundamental
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-4-crop-diff}
+        \caption{%
+            difference
+            }
+    \end{subfigure}
+    \caption{%
+        First order harmonic. There is no fundamental wave scattered in this
+        angle.
+        }
+    \label{fig:grating-4}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-1-crop-blue}
+        \caption{%
+            harmonic
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-1-crop-red}
+        \caption{%
+            fundamental
+            }
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.3\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{grating-1-crop-diff}
+        \caption{%
+            difference
+            }
+    \end{subfigure}
+    \caption{%
+        Second spot. This is the first fundamental and the second harmonic
+        maximum. As the difference is rotationally symmetric, both beams
+        coincide, frequencies must be simple multiples.
+        }
+    \label{fig:grating-1}
+\end{figure}
+
+As we see a fundamental wave scattered here we can conclude that the frequency
+is indeed doubled. Since all the spots coincide perfectly to the available
+precision we cannot rule out a perfect doubling of the frequency here.
+
+We should have exchanged the collimating lens to the one with
+\SI{125}{\milli\meter}. Unfortunately we just used the \SI{30}{\milli\meter}
+lens. Therefore the beam diameter is a factor \num{4.17} smaller than it
+should. The number of slits illuminated on the grating is therefore reduced by
+this number as well. This is not too bad as we will perform a way more accurate
+measurement next anyway.
+
+The beam coming from the laser has a diameter of \SI{3.5(5)}{\milli\meter}.
+Our lens configuration acts like a telescope and halves the diameter. The
+line count on the grating is \SI{600}{\per\milli\meter}. The number of lines
+illuminated is therefore \num{<< illuminated >>}. Using the equation $\Deltaup
+\lambda / \lambda = nN$ from the theory section we can conclude that we have a
+relative theoretical error of \num{<< relative_error >>}.
+
+% NOTE We cannot really do the following as we have only done this measurement
+% qualitatively.
 % TODO Show all used lengths in a drawing.
 % TODO How accurately is the measurement?
 % TODO Compare to theoretical resolution.
@@ -870,9 +1117,12 @@ $n$-th order fundamental wave and the $2n$-th order harmonic wave.
 
 The rough confirmation of the frequency doubling can be made more precise with
 a Michelson interferometer. The setup which we are going to build now is shown
-in Figure~\ref{fig:fig-5}.
-
-% TODO Describe how we set this thing up.
+in Figure~\ref{fig:fig-5}. First we set up the top mirror to reflect the light
+onto the moving mirror. Once the blue dot on the moving mirror did not waver
+any more, the top mirror is set. Then we insert the glass plate such that
+the beams going to the left and right were parallel to the screw holes on the
+table. After that we add the right mirror and make sure that the beam coincides
+with the one reflected via the bottom mirror.
 
 \begin{figure}
     \centering
@@ -887,20 +1137,70 @@ in Figure~\ref{fig:fig-5}.
     \label{fig:fig-5}
 \end{figure}
 
-Behind the last BG40 filter we have two fast photo diodes. One will receive the
-light from the fundamental wave and a negligible part of the harmonic wave. The
-other one will receive the harmonic wave and a severely suppressed part of the
-fundamental wave. We should be able to take it as a perfect split. Hooking both
-photo diodes to the oscillopscope, we obtain some Lissajous figures as shown in
-Figure~\ref{fig:lissajous-measured}.
+Then we install the thick BG40 filter behind the glass plate. Behind the filter
+we have two fast photo diodes. One will receive the light from the fundamental
+wave and a negligible part of the harmonic wave. The other one will receive the
+harmonic wave and a severely suppressed part of the fundamental wave. We should
+be able to take it as a perfect split.
 
-% TODO Take images of the x-y-mode on the oscilloscope.
+By looking at the photo diode signal versus time we obtained images like the
+one shown in Figure~\ref{fig:two-waves-15}. There one can nicely see that the
+bottom wavelength is half of the top one. This is not a very precise
+measurement, it is more for the intuition. The smearing of the curves in the
+right part of the oscillogram stems from the non-constant $\dot d_1$ which
+drives this oscillation. Since we push the slide by hand we of course
+accelerate it. This smearing rises from $\ddot d_1$ induced. The left side is
+sharper since there the signal is freshly triggered.
 
-% TODO Explain the meaning of the oscillograms.
-% TODO Determine deviation from 1:2 ratio.
-% TODO What causes the deviation?
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{two-waves-15}
+    \caption{%
+        Fundamental and harmonic wave signal for comparison. Triggered.
+        Desaturated, inverted.
+    }
+    \label{fig:two-waves-15}
+\end{figure}
+
+Hooking both photo diodes to the oscilloscope in $x$-$y$-mode, we obtain some
+Lissajous figures as shown in Figure~\ref{fig:lissajous-measured} by slightly
+moving the movable mirror. It was sufficient to touch the slide, our bodies
+apparently cause enough vibration to move it by nanometers. In
+Figure~\ref{fig:lissajous-01} one can see a \enquote{figure 8} Lissajous
+figure. It has been rather stable when holding the slide at one position and
+just vibrating it. If there was any violation from the $2:1$ ratio, the
+Lissajous figure would rotate on its own. We did not observe any of that,
+therefore we conclude that the ratio is exact in the realm of the resolution
+available. The other image shows the \enquote{U shape} that can only come from
+a $2:1$ ratio as well. The broadening of the shapes comes from the nonzero
+$\ddot d_1$, we do not think that the frequency ratio is not exact.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{lissajous-01}
+        \caption{%
+            %
+            }
+        \label{fig:lissajous-01}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[c]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{lissajous-08}
+        \caption{%
+            %
+            }
+    \end{subfigure}
+    \caption{%
+        Observed Lissajous figures. Desaturated, inverted.
+        }
+    \label{fig:lissajous-measured}
+\end{figure}
+
 % TODO Compare with literature values.
-% TODO Compute spectral representation of the interferometer.
+% TODO Compute spectral resolution of the interferometer.
 
 \end{document}
 

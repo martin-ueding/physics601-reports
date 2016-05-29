@@ -2,7 +2,7 @@
     \begin{axis}[
             width=\linewidth,
             height=0.5\linewidth,
-            xlabel={$I / \si{\ampere}$},
+            xlabel={$\phi / \si{\degree}$},
             ylabel={$P / \si{\watt}$},
             grid=major,
             band/.style={
@@ -17,9 +17,10 @@
             only marks,
             error bars/y dir=both,
             error bars/y explicit,
-        ] table[y error index=2] {../xy/diode_normal-data.tsv};
+        ] table[y error index=2] {../xy/harmonic-splitter-data.tsv};
 
-        \addplot[band, fill=red] table {../xy/diode_normal-band.tsv} \closedcycle;
+        \addplot[band, fill=red] table {../xy/harmonic-splitter-band.tsv} \closedcycle;
+        \addplot[red] table {../xy/harmonic-splitter-fit.tsv};
 
     \end{axis}
 \end{tikzpicture}

@@ -37,12 +37,20 @@ def gauss(x, mean, sigma, a):
             * np.exp(- (x - mean)**2 / (2 * sigma**2)) 
 
 
+def sinc(x, center, width, amplitude, offset):
+    return amplitude * np.sinc((x - center) / width) + offset
+
+
 def errorfunction(x, power, diam, x_offs):
     return power / 2 * sp.erfc(np.sqrt(8) / diam * (x - x_offs))
 
 
 def cos_squared(x, ampl, x_offs, y_offs):
-    return ampl * (np.cos(np.radians(2*x - x_offs)))**2 + y_offs
+    return ampl * (np.cos(2*np.radians(x - x_offs)))**2 + y_offs
+
+def cos_quartic(x, ampl, x_offs, y_offs):
+    return ampl * (np.cos(2*np.radians(x - x_offs)))**4 + y_offs
+
 
 
 def job_power(T):
@@ -63,8 +71,13 @@ def job_power(T):
     np.savetxt('_build/xy/diode_damped-data.tsv',
                np.column_stack([damp_current, damp_power_val, damp_power_err]))
 
+    hbar_omega = 6.626e-34 * 3e8 / 987e-9
+    electron_charge = 1.609e-19
+
     # Find the threshold current.
     sel = norm_power_val > 1e-3
+    slope_dist = []
+    quantum_efficiency_dist = []
     threshold_dist = []
     threshold_fit_x = np.linspace(0.05, 0.09, 100)
     threshold_fit_y_dist = []
@@ -78,10 +91,16 @@ def job_power(T):
         root = -b / a
         threshold_dist.append(root)
         threshold_fit_y_dist.append(linear(threshold_fit_x, *popt))
+        slope_dist.append(a)
+        quantum_efficiency_dist.append(a * electron_charge / hbar_omega)
     threshold_val, threshold_err = bootstrap.average_and_std_arrays(threshold_dist)
     threshold_fit_y_val, threshold_fit_y_err = bootstrap.average_and_std_arrays(threshold_fit_y_dist)
+    differential_efficiency_val, differential_efficiency_err = bootstrap.average_and_std_arrays(slope_dist)
+    quantum_efficiency_val, quantum_efficiency_err = bootstrap.average_and_std_arrays(quantum_efficiency_dist)
 
     T['threshold'] = siunitx(threshold_val, threshold_err)
+    T['differential_efficiency'] = siunitx(differential_efficiency_val, differential_efficiency_err)
+    T['quantum_efficiency'] = siunitx(quantum_efficiency_val, quantum_efficiency_err)
 
     np.savetxt('_build/xy/diode_normal-band.tsv',
                bootstrap.pgfplots_error_band(threshold_fit_x, threshold_fit_y_val, threshold_fit_y_err))
@@ -99,7 +118,7 @@ def job_power(T):
 
     ratio_val, ratio_err = bootstrap.average_and_std_arrays(ratio_dist)
 
-    extinction_dist = list(ratio_dist)
+    extinction_dist = np.array(ratio_dist).flatten()
     extinction_val, extinction_err = np.mean(ratio_dist), np.std(ratio_dist)
     T['extinction'] = siunitx(extinction_val, extinction_err)
 
@@ -109,7 +128,6 @@ def job_power(T):
                bootstrap.pgfplots_error_band(x, ratio_val, ratio_err))
 
     return extinction_dist
-
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
@@ -210,6 +228,7 @@ def job_variable_attenuator(T, extinction_dist):
     angle_offset_dist = []
     a_dist = []
     b_dist = []
+    popt_dist = []
     extinction_ratio_dist = []
     for power in power_dist:
         popt, pconv = op.curve_fit(cos_squared, angle, power, p0=[1.5, 0, 0])
@@ -219,6 +238,7 @@ def job_variable_attenuator(T, extinction_dist):
         b = popt[2]
         a_dist.append(a)
         b_dist.append(b)
+        popt_dist.append(popt)
         extinction_ratio_dist.append((a + b) / b)
     fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
     angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
@@ -237,7 +257,145 @@ def job_variable_attenuator(T, extinction_dist):
     T['variable_a'] = siunitx(a_val, a_err)
     T['variable_b'] = siunitx(b_val, b_err)
     T['extinction_ratio'] = siunitx(extinction_ratio_val, extinction_ratio_err)
+
+    return popt_dist
     
+
+def job_temperature_dependence(T):
+    data = np.loadtxt('Data/temperature.tsv')
+    temp = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = np.ones(power_val.shape) * 1e-6
+    power_dist = bootstrap.make_dist(power_val, power_err)
+
+    p0 = [36.5, 1, 36-6, 2e-6]
+    fit_x = np.linspace(np.min(temp), np.max(temp), 300)
+    popt_dist = []
+    fit_y_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(sinc, temp, power, p0=p0)
+        fit_y_dist.append(sinc(fit_x, *popt))
+        popt_dist.append(popt)
+
+    center_dist, width_dist, amplitude_dist, offset_dist = zip(*popt_dist)
+
+    center_val, center_err = bootstrap.average_and_std_arrays(center_dist)
+    width_val, width_err = bootstrap.average_and_std_arrays(width_dist)
+    amplitude_val, amplitude_err = bootstrap.average_and_std_arrays(amplitude_dist)
+    offset_val, offset_err = bootstrap.average_and_std_arrays(offset_dist)
+
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+
+    np.savetxt('_build/xy/temperature-data.tsv',
+               np.column_stack([temp, power_val, power_err]))
+    np.savetxt('_build/xy/temperature-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/temperature-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+
+    T['temp_center'] = siunitx(center_val, center_err)
+    T['temp_width'] = siunitx(width_val, width_err)
+    T['temp_amplitude'] = siunitx(amplitude_val, amplitude_err)
+    T['temp_offset'] = siunitx(offset_val, offset_err)
+
+
+def job_harmonic_power(T, extinction_dist, input_popt_dist):
+    data = np.loadtxt('Data/harmonic_splitter.tsv')
+    angle = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = data[:, 2] * 1e-6
+
+    power_dist = bootstrap.make_dist(power_val, power_err)
+
+    fit_x = np.linspace(np.min(angle), np.max(angle), 200)
+    fit_y_dist = []
+    angle_offset_dist = []
+    a_dist = []
+    b_dist = []
+    popt_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(cos_quartic, angle, power, p0=[1.5e-5, 0, 0])
+        fit_y_dist.append(cos_quartic(fit_x, *popt))
+        angle_offset_dist.append(popt[1])
+        a = popt[0]
+        b = popt[2]
+        a_dist.append(a)
+        b_dist.append(b)
+        popt_dist.append(popt)
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+    angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
+    a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
+    b_val, b_err = bootstrap.average_and_std_arrays(b_dist)
+
+    np.savetxt('_build/xy/harmonic-splitter-data.tsv',
+               np.column_stack([angle, power_val, power_err]))
+    np.savetxt('_build/xy/harmonic-splitter-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/harmonic-splitter-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    T['splitter_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
+    T['splitter_a'] = siunitx(a_val, a_err)
+    T['splitter_b'] = siunitx(b_val, b_err)
+
+    efficiency_dist = []
+    efficiency_sq_dist = []
+    for extinction, input_popt, popt in zip(extinction_dist, input_popt_dist, popt_dist):
+        efficiency = popt[0] / (input_popt[0] * extinction)
+        efficiency_dist.append(efficiency)
+        efficiency_sq = popt[0] / (input_popt[0] * extinction)**2
+        efficiency_sq_dist.append(efficiency_sq)
+    efficiency_val, efficiency_err = bootstrap.average_and_std_arrays(efficiency_dist)
+    efficiency_sq_val, efficiency_sq_err = bootstrap.average_and_std_arrays(efficiency_sq_dist)
+    T['efficiency'] = siunitx(efficiency_val, efficiency_err)
+    T['efficiency_sq'] = siunitx(efficiency_sq_val, efficiency_sq_err)
+
+
+def job_grating_resolution(T):
+    lines_per_m = 600e3
+    diameter = 3.5e-3 / 2
+    illuminated = diameter * lines_per_m
+    relative_error = 1 / illuminated
+
+    T['illuminated'] = siunitx(illuminated)
+    T['relative_error'] = siunitx(relative_error)
+
+
+def job_input_polarization(T):
+    data = np.loadtxt('Data/harmonic_bare.tsv')
+    angle = data[:, 0]
+    power_val = data[:, 1] * 1e-6
+    power_err = data[:, 2] * 1e-6
+    power_dist = bootstrap.make_dist(power_val, power_err)
+
+    fit_x = np.linspace(np.min(angle), np.max(angle), 200)
+    fit_y_dist = []
+    angle_offset_dist = []
+    a_dist = []
+    b_dist = []
+    popt_dist = []
+    for power in power_dist:
+        popt, pconv = op.curve_fit(cos_quartic, angle, power, p0=[1.5e-5, 0, 0])
+        fit_y_dist.append(cos_quartic(fit_x, *popt))
+        angle_offset_dist.append(popt[1])
+        a = popt[0]
+        b = popt[2]
+        a_dist.append(a)
+        b_dist.append(b)
+        popt_dist.append(popt)
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+    angle_offset_val, angle_offset_err = bootstrap.average_and_std_arrays(angle_offset_dist)
+    a_val, a_err = bootstrap.average_and_std_arrays(a_dist)
+    b_val, b_err = bootstrap.average_and_std_arrays(b_dist)
+
+    np.savetxt('_build/xy/harmonic-bare-data.tsv',
+               np.column_stack([angle, power_val, power_err]))
+    np.savetxt('_build/xy/harmonic-bare-fit.tsv',
+               np.column_stack([fit_x, fit_y_val]))
+    np.savetxt('_build/xy/harmonic-bare-band.tsv',
+               bootstrap.pgfplots_error_band(fit_x, fit_y_val, fit_y_err))
+    T['bare_angle_offset'] = siunitx(angle_offset_val, angle_offset_err)
+    T['bare_a'] = siunitx(a_val, a_err)
+    T['bare_b'] = siunitx(b_val, b_err)
 
 
 def test_keys(T):
@@ -272,8 +430,12 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.parse_args()
 
+    job_grating_resolution(T)
+    job_input_polarization(T)
+    job_temperature_dependence(T)
     extinction_dist = job_power(T)
-    job_variable_attenuator(T, extinction_dist)
+    input_popt_dist = job_variable_attenuator(T, extinction_dist)
+    job_harmonic_power(T, extinction_dist, input_popt_dist)
     job_lissajous(T)
     job_rayleigh_length(T)
 
