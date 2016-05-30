@@ -48,9 +48,9 @@ def errorfunction(x, power, diam, x_offs):
 def cos_squared(x, ampl, x_offs, y_offs):
     return ampl * (np.cos(2*np.radians(x - x_offs)))**2 + y_offs
 
+
 def cos_quartic(x, ampl, x_offs, y_offs):
     return ampl * (np.cos(2*np.radians(x - x_offs)))**4 + y_offs
-
 
 
 def job_power(T):
@@ -131,8 +131,8 @@ def job_power(T):
 
 
 def get_rayleigh_length(radius, wavelength, refractive_index, distance):
-    numerator = refractive_index * radius**2 - np.sqrt(refractive_index**2 * radius**4 - 4 * wavelength**2 * distance**2)
-    return np.pi * numerator / (2 * wavelength)
+    numerator = np.pi * refractive_index * radius**2 - np.sqrt(np.pi**2 * refractive_index**2 * radius**4 - 4 * wavelength**2 * distance**2)
+    return numerator / (2 * wavelength)
 
 
 def get_waist(rayleigh_length, wavelength, refractive_index):
@@ -149,7 +149,7 @@ def get_optimal_focal_length(beam_radius, refractive_index, wavelength, length):
 def job_rayleigh_length(T):
     beam_diameter_val = 3.5e-3
     beam_diameter_err = 0.5e-3
-    refractive_index = 2.2
+    refractive_index = 1 # 2.2
     wavelength = 987e-9
     length = 5e-3
     distance = 60e-3
