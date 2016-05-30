@@ -161,19 +161,26 @@ def job_rayleigh_length(T):
 
     beam_radius_dist = bootstrap.make_dist(beam_radius_val, beam_diameter_err)
 
-    rayleigh_length_dist = list(itertools.filterfalse(np.isnan, [
-        get_rayleigh_length(beam_radius, wavelength, refractive_index, distance)
+    theta_dist = [
+        np.arctan(beam_radius / distance)
         for beam_radius in beam_radius_dist
+    ]
+    theta_val, theta_err = bootstrap.average_and_std_arrays(theta_dist)
+    T['theta'] = siunitx(theta_val, theta_err)
+
+    waist_dist = [
+        wavelength / (np.pi * theta)
+        for theta in theta_dist
+    ]
+    waist_val, waist_err = bootstrap.average_and_std_arrays(waist_dist)
+    T['waist_mum'] = siunitx(waist_val / 1e-6, waist_err / 1e-6)
+
+    rayleigh_length_dist = list(itertools.filterfalse(np.isnan, [
+        np.pi * waist**2 / wavelength
+        for waist in waist_dist
     ]))
     rayleigh_length_val, rayleigh_length_err = bootstrap.average_and_std_arrays(rayleigh_length_dist)
     T['rayleigh_length_mm'] = siunitx(rayleigh_length_val / 1e-3, rayleigh_length_err / 1e-3, error_digits=2)
-
-    waist_dist = list(itertools.filterfalse(np.isnan, [
-        get_waist(rayleigh_length, wavelength, refractive_index)
-        for rayleigh_length in rayleigh_length_dist
-    ]))
-    waist_val, waist_err = bootstrap.average_and_std_arrays(waist_dist)
-    T['waist_mum'] = siunitx(waist_val / 1e-6, waist_err / 1e-6)
 
     normalized_length_dist = list([
         length / (2 * rayleigh_length)
