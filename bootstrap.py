@@ -9,7 +9,17 @@ from __future__ import division, absolute_import, print_function, \
 
 import random
 
+import matplotlib.pyplot as pl
 import numpy as np
+
+
+def save_hist(dist, filename):
+    fig = pl.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.hist(dist)
+    fig.tight_layout()
+    fig.savefig(filename)
+
 
 def make_dist(val, err, n=50):
     # TODO Make this work nicer with arrays.

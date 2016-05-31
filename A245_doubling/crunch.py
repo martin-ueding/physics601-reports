@@ -167,6 +167,7 @@ def job_rayleigh_length(T):
     ]
     theta_val, theta_err = bootstrap.average_and_std_arrays(theta_dist)
     T['theta'] = siunitx(theta_val, theta_err)
+    bootstrap.save_hist(theta_dist, '_build/dist-theta.pdf')
 
     waist_dist = [
         wavelength / (np.pi * theta)
@@ -174,6 +175,7 @@ def job_rayleigh_length(T):
     ]
     waist_val, waist_err = bootstrap.average_and_std_arrays(waist_dist)
     T['waist_mum'] = siunitx(waist_val / 1e-6, waist_err / 1e-6)
+    bootstrap.save_hist(waist_dist, '_build/dist-waist.pdf')
 
     rayleigh_length_dist = list(itertools.filterfalse(np.isnan, [
         refractive_index * np.pi * waist**2 / wavelength
@@ -181,6 +183,7 @@ def job_rayleigh_length(T):
     ]))
     rayleigh_length_val, rayleigh_length_err = bootstrap.average_and_std_arrays(rayleigh_length_dist)
     T['rayleigh_length_mm'] = siunitx(rayleigh_length_val / 1e-3, rayleigh_length_err / 1e-3, error_digits=2)
+    bootstrap.save_hist(rayleigh_length_dist, '_build/dist-rayleigh_length.pdf')
 
     normalized_length_dist = list([
         length / (2 * rayleigh_length)
@@ -188,6 +191,7 @@ def job_rayleigh_length(T):
     ])
     normalized_length_val, normalized_length_err = bootstrap.average_and_std_arrays(normalized_length_dist)
     T['normalized_length'] = siunitx(normalized_length_val, normalized_length_err, error_digits=2)
+    bootstrap.save_hist(normalized_length_dist, '_build/dist-normalized_length.pdf')
 
     t = (normalized_length_val - 2.84) / normalized_length_err
     T['boyd_kleinman_ttest_t'] = siunitx(t)

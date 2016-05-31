@@ -770,22 +770,37 @@ This is something that we can recover from later on, though.
 
 % FIXME (Martin) Add new equations used.
 
-One can let Mathematica solve the
-relations describing the beam waist to give an expression for the Rayleigh length
-$z_0$:
-\[
-    z_0 = \piup \frac{n w(z)^2 + \sqrt{n^2 w(z)^4 - 4 \lambda_0^2 z^2}}{2 \lambda_0} \,.
-\]
 We know that the focal length of the used lens is $f = \SI{60}{\milli\meter}$.
 Since the incoming laser beam is collimated, we know that the distance $z$
 between the focus and the lens is just this $f$. The diameter of the collimated
 beam is given by $w(z) = \SI{3.5 +- 0.5}{\milli\meter}$
-\parencite[8]{lab-course/doubling/manual}. Inserting the numbers into the
-equation we obtain a Rayleigh length of $z_0 = \SI{<< rayleigh_length_mm
->>}{\milli\meter}$ and a waist of $w_0 = \SI{<< waist_mum >>}{\micro\meter}$.
-We obtain a normalized crystal length $\xi = l/b = \num{<< normalized_length
->>}$.
+\parencite[8]{lab-course/doubling/manual}.
 
+One can let Mathematica solve the relations describing the beam waist to give
+an expression for the Rayleigh length $z_0$:
+\[
+    z_0 = \piup \frac{n w(z)^2 \pm \sqrt{n^2 w(z)^4 - 4 \lambda_0^2 z^2}}{2 \lambda_0} \,.
+\]
+The problem here is that we do know which branch of the solution to take. One
+will give a very small Rayleigh length, the other one tens of meters. There is
+another way to go about this. We first compute the asymptotic beam angle
+\[
+    \theta = \arctan\del{\frac{w(z)}{z}} = \SI{<< theta >>}{\radian} \,.
+\]
+Then we compute the waist
+\[
+    w_0 = \frac{\lambda}{\piup \theta} = \SI{<< waist_mum >>}{\micro\meter} \,.
+\]
+From here we obtain the Rayleigh length
+\[
+    z_0 = \frac{n \piup w_0^2}{\lambda}
+    = \SI{<< rayleigh_length_mm >>}{\milli\meter} \,.
+\]
+The errors are so large because the uncertainty in the beam diameter is very
+large.
+
+The normalized crystal length is $\xi = l/b = \num{<< normalized_length
+>>}$.
 For the optimal case we would need to have $\xi_0 = \num{2.84}$. Given the large
 error margin our result $\xi$ could be close enough to $\xi_0$. The more
 accurate approach is to perform a one-sample $t$-test. Our null hypothesis is
