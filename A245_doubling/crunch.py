@@ -73,7 +73,7 @@ def job_power(T):
     
     T['diode_normal_table'] = list(zip(
         siunitx(norm_current),
-        siunitx(norm_power_val*1e6, norm_power_err*1e6),
+        siunitx(norm_power_val*1e6, norm_power_err*1e6, allowed_hang=6),
     ))
     T['diode_damped_table'] = list(zip(
         siunitx(damp_current),
