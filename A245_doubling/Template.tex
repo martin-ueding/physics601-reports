@@ -9,7 +9,7 @@
 
 \usepackage{needspace}
 
-\usepackage{mathtools}
+\usepackage{mathtool}
 \usepackage{listings}
 
 \lstset{
@@ -24,6 +24,7 @@
 
 \usepackage{longtable}
 \usepackage{subcaption}
+\usepackage{multicols}
 
 \usepackage[all]{nowidow}
 
@@ -1201,6 +1202,95 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
 
 % TODO (Lino) Compare with literature values.
 % TODO (Lino) Compute spectral resolution of the interferometer.
+
+\begin{appendix}
+    \chapter{Tables}
+
+    \begin{multicols}{2}
+
+    \section{Diode laser power without attenuator}
+
+    \begin{tabular}{SS}
+        \toprule
+        {$I/\si{\ampere}$}
+        & {$P/\si{\nano\watt}$} \\
+        \midrule
+        %< for row in diode_normal_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+
+    \section{Diode laser power with attenuator}
+
+    \begin{tabular}{SS}
+        \toprule
+        {$I/\si{\ampere}$}
+        & {$P/\si{\nano\watt}$} \\
+        \midrule
+        %< for row in diode_damped_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+
+    \section{Angle dependence of variable attenuator}
+
+    \begin{longtable}[l]{SS}
+        \toprule
+        {$\phi/\si{\degree}$}
+        & {$P/\si{\nano\watt}$} \\
+        \midrule
+        \endhead
+        %< for row in variable_attenuator_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{longtable}
+
+    \section{Temperature dependence of harmonic power}
+
+    \begin{longtable}[l]{SS}
+        \toprule
+        {$T/\si{\celsius}$}
+        & {$P/\si{\nano\watt}$} \\
+        \midrule
+        \endhead
+        %< for row in temperature_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{longtable}
+
+    \section{Angle dependence with splitter}
+
+    \begin{tabular}{SS}
+        \toprule
+        {$\phi/\si{\degree}$}
+        & {$P/\si{\nano\watt}$} \\
+        \midrule
+        %< for row in harmonic_splitter_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+
+    \section{Angle dependence without splitter}
+
+    \begin{tabular}{SS}
+        \toprule
+        {$\phi/\si{\degree}$}
+        & {$P/\si{\nano\watt}$} \\
+        \midrule
+        %< for row in harmonic_bare_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{tabular}
+
+    \end{multicols}
+
+\end{appendix}
 
 \end{document}
 

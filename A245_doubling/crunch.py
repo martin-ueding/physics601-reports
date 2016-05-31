@@ -70,6 +70,15 @@ def job_power(T):
                np.column_stack([norm_current, norm_power_val, norm_power_err]))
     np.savetxt('_build/xy/diode_damped-data.tsv',
                np.column_stack([damp_current, damp_power_val, damp_power_err]))
+    
+    T['diode_normal_table'] = list(zip(
+        siunitx(norm_current),
+        siunitx(norm_power_val*1e6, norm_power_err*1e6),
+    ))
+    T['diode_damped_table'] = list(zip(
+        siunitx(damp_current),
+        siunitx(damp_power_val*1e6, damp_power_err*1e6),
+    ))
 
     hbar_omega = 6.626e-34 * 3e8 / 987e-9
     electron_charge = 1.609e-19
@@ -219,6 +228,11 @@ def job_variable_attenuator(T, extinction_dist):
     power_val = data[:, 1] * 1e-6
     power_err = np.ones(power_val.shape) * 1e-6
 
+    T['variable_attenuator_table'] = list(zip(
+        siunitx(angle),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
+
     power_dist = bootstrap.make_dist(power_val, power_err, n=len(extinction_dist))
 
     fit_x = np.linspace(np.min(angle), np.max(angle), 200)
@@ -266,6 +280,11 @@ def job_temperature_dependence(T):
     power_err = np.ones(power_val.shape) * 1e-6
     power_dist = bootstrap.make_dist(power_val, power_err)
 
+    T['temperature_table'] = list(zip(
+        siunitx(temp),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
+
     p0 = [36.5, 1, 36-6, 2e-6]
     fit_x = np.linspace(np.min(temp), np.max(temp), 300)
     popt_dist = []
@@ -302,6 +321,11 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
     angle = data[:, 0]
     power_val = data[:, 1] * 1e-6
     power_err = data[:, 2] * 1e-6
+
+    T['harmonic_splitter_table'] = list(zip(
+        siunitx(angle),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
 
     power_dist = bootstrap.make_dist(power_val, power_err)
 
@@ -364,6 +388,11 @@ def job_input_polarization(T):
     power_val = data[:, 1] * 1e-6
     power_err = data[:, 2] * 1e-6
     power_dist = bootstrap.make_dist(power_val, power_err)
+
+    T['harmonic_bare_table'] = list(zip(
+        siunitx(angle),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
 
     fit_x = np.linspace(np.min(angle), np.max(angle), 200)
     fit_y_dist = []
