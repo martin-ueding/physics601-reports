@@ -72,11 +72,11 @@ def job_power(T):
                np.column_stack([damp_current, damp_power_val, damp_power_err]))
     
     T['diode_normal_table'] = list(zip(
-        siunitx(norm_current),
+        siunitx(norm_current*1e3),
         siunitx(norm_power_val*1e6, norm_power_err*1e6, allowed_hang=6),
     ))
     T['diode_damped_table'] = list(zip(
-        siunitx(damp_current),
+        siunitx(damp_current*1e3),
         siunitx(damp_power_val*1e6, damp_power_err*1e6),
     ))
 

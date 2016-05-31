@@ -748,6 +748,14 @@ The blue harmonic light is focused with an achromatic lens and filtered with an
 coefficient of \num{0.9} at \SI{494}{\nano\meter}. For the unwanted fundamental
 wave we have a transmission coefficient of around $10^{-2.3} = 0.005$.
 
+The maximum laser power is in the order of magnitude \SI{150}{\milli\watt}. We
+know this from the measurement with the attenuator (data in
+Section~\ref{sec:variable_attenuator_table}) and the suppression ratio of
+around a thousand. The BG40 filter will only let $1/200$ of that through,
+therefore we have less than one milliwatt of fundamental wave behind the filter
+plate. This is still more than the fundamental power. Therefore we hope that
+the power meter has a sufficient filtering on its own.
+
 After doing this we were able to measure some \SI{40}{\micro\watt} of blue
 light. Once the power meter is set up again we tune all the parameters a bit to
 optimize this power. This also includes the rotation of the polarizing beam
@@ -1202,7 +1210,7 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
 
     \begin{tabular}{SS}
         \toprule
-        {$I/\si{\ampere}$}
+        {$I/\si{\milli\ampere}$}
         & {$P/\si{\nano\watt}$} \\
         \midrule
         %< for row in diode_normal_table >%
@@ -1215,7 +1223,7 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
 
     \begin{tabular}{SS}
         \toprule
-        {$I/\si{\ampere}$}
+        {$I/\si{\milli\ampere}$}
         & {$P/\si{\nano\watt}$} \\
         \midrule
         %< for row in diode_damped_table >%
@@ -1225,6 +1233,7 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
     \end{tabular}
 
     \section{Angle dependence of variable attenuator}
+    \label{sec:variable_attenuator_table}
 
     \begin{longtable}[l]{SS}
         \toprule
