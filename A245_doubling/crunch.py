@@ -70,6 +70,15 @@ def job_power(T):
                np.column_stack([norm_current, norm_power_val, norm_power_err]))
     np.savetxt('_build/xy/diode_damped-data.tsv',
                np.column_stack([damp_current, damp_power_val, damp_power_err]))
+    
+    T['diode_normal_table'] = list(zip(
+        siunitx(norm_current*1e3),
+        siunitx(norm_power_val*1e6, norm_power_err*1e6, allowed_hang=6),
+    ))
+    T['diode_damped_table'] = list(zip(
+        siunitx(damp_current*1e3),
+        siunitx(damp_power_val*1e6, damp_power_err*1e6),
+    ))
 
     hbar_omega = 6.626e-34 * 3e8 / 987e-9
     electron_charge = 1.609e-19
@@ -158,6 +167,7 @@ def job_rayleigh_length(T):
     ]
     theta_val, theta_err = bootstrap.average_and_std_arrays(theta_dist)
     T['theta'] = siunitx(theta_val, theta_err)
+    bootstrap.save_hist(theta_dist, '_build/dist-theta.pdf')
 
     waist_dist = [
         wavelength / (np.pi * theta)
@@ -165,6 +175,7 @@ def job_rayleigh_length(T):
     ]
     waist_val, waist_err = bootstrap.average_and_std_arrays(waist_dist)
     T['waist_mum'] = siunitx(waist_val / 1e-6, waist_err / 1e-6)
+    bootstrap.save_hist(waist_dist, '_build/dist-waist.pdf')
 
     rayleigh_length_dist = list(itertools.filterfalse(np.isnan, [
         refractive_index * np.pi * waist**2 / wavelength
@@ -172,6 +183,7 @@ def job_rayleigh_length(T):
     ]))
     rayleigh_length_val, rayleigh_length_err = bootstrap.average_and_std_arrays(rayleigh_length_dist)
     T['rayleigh_length_mm'] = siunitx(rayleigh_length_val / 1e-3, rayleigh_length_err / 1e-3, error_digits=2)
+    bootstrap.save_hist(rayleigh_length_dist, '_build/dist-rayleigh_length.pdf')
 
     normalized_length_dist = list([
         length / (2 * rayleigh_length)
@@ -179,6 +191,7 @@ def job_rayleigh_length(T):
     ])
     normalized_length_val, normalized_length_err = bootstrap.average_and_std_arrays(normalized_length_dist)
     T['normalized_length'] = siunitx(normalized_length_val, normalized_length_err, error_digits=2)
+    bootstrap.save_hist(normalized_length_dist, '_build/dist-normalized_length.pdf')
 
     t = (normalized_length_val - 2.84) / normalized_length_err
     T['boyd_kleinman_ttest_t'] = siunitx(t)
@@ -218,6 +231,11 @@ def job_variable_attenuator(T, extinction_dist):
     angle = data[:, 0]
     power_val = data[:, 1] * 1e-6
     power_err = np.ones(power_val.shape) * 1e-6
+
+    T['variable_attenuator_table'] = list(zip(
+        siunitx(angle),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
 
     power_dist = bootstrap.make_dist(power_val, power_err, n=len(extinction_dist))
 
@@ -266,6 +284,11 @@ def job_temperature_dependence(T):
     power_err = np.ones(power_val.shape) * 1e-6
     power_dist = bootstrap.make_dist(power_val, power_err)
 
+    T['temperature_table'] = list(zip(
+        siunitx(temp),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
+
     p0 = [36.5, 1, 36-6, 2e-6]
     fit_x = np.linspace(np.min(temp), np.max(temp), 300)
     popt_dist = []
@@ -302,6 +325,11 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
     angle = data[:, 0]
     power_val = data[:, 1] * 1e-6
     power_err = data[:, 2] * 1e-6
+
+    T['harmonic_splitter_table'] = list(zip(
+        siunitx(angle),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
 
     power_dist = bootstrap.make_dist(power_val, power_err)
 
@@ -350,12 +378,23 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
 
 def job_grating_resolution(T):
     lines_per_m = 600e3
-    diameter = 3.5e-3 / 2
-    illuminated = diameter * lines_per_m
-    relative_error = 1 / illuminated
+    diameter_val = 3.5e-3 / 2
+    diameter_err = 0.5e-3 / 2
+    diameter_dist = bootstrap.make_dist(diameter_val, diameter_err)
 
-    T['illuminated'] = siunitx(illuminated)
-    T['relative_error'] = siunitx(relative_error)
+    illuminated_dist = [
+        diameter * lines_per_m
+        for diameter in diameter_dist
+    ]
+    illuminated_val, illuminated_err = bootstrap.average_and_std_arrays(illuminated_dist)
+    T['illuminated'] = siunitx(illuminated_val, illuminated_err)
+
+    rel_error_dist = [
+        1 / illuminated
+        for illuminated in illuminated_dist
+    ]
+    rel_error_val, rel_error_err = bootstrap.average_and_std_arrays(rel_error_dist)
+    T['rel_error'] = siunitx(rel_error_val, rel_error_err)
 
 
 def job_input_polarization(T):
@@ -364,6 +403,11 @@ def job_input_polarization(T):
     power_val = data[:, 1] * 1e-6
     power_err = data[:, 2] * 1e-6
     power_dist = bootstrap.make_dist(power_val, power_err)
+
+    T['harmonic_bare_table'] = list(zip(
+        siunitx(angle),
+        siunitx(power_val*1e6, power_err*1e6),
+    ))
 
     fit_x = np.linspace(np.min(angle), np.max(angle), 200)
     fit_y_dist = []

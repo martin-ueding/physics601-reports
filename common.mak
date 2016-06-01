@@ -164,7 +164,7 @@ $(build)/%.pdf: $(build)/to_crop/%.pdf
 # Figures and plots (but not Feynman diagrams) can be compiled using pdflatex.
 %.pdf: %.tex
 	@echo "$(on)Typesetting figure $<$(off)"
-	cd $$(dirname $@) && ../$(latexrun) $$(basename $<)
+	cd $$(dirname $@) && ../$(latexrun) -O $$(basename $< .tex).out $$(basename $<)
 
 $(build)/%.pdf: Postscript/%.ps
 	@echo "$(on)Converting PS file $<$(off)"
