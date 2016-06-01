@@ -1257,31 +1257,33 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
 
     Raw power from the laser.
 
-    \begin{tabular}{SS}
+    \begin{longtable}[l]{SS}
         \toprule
         {$I/\si{\milli\ampere}$}
         & {$P/\si{\nano\watt}$} \\
         \midrule
+        \endhead
         %< for row in diode_normal_table >%
         << ' & '.join(row) >> \\
         %< endfor >%
         \bottomrule
-    \end{tabular}
+    \end{longtable}
 
     \section{Diode laser power with attenuator}
 
     Raw power from laser, measured with the screw-on attenuator.
 
-    \begin{tabular}{SS}
+    \begin{longtable}[l]{SS}
         \toprule
         {$I/\si{\milli\ampere}$}
         & {$P/\si{\nano\watt}$} \\
         \midrule
+        \endhead
         %< for row in diode_damped_table >%
         << ' & '.join(row) >> \\
         %< endfor >%
         \bottomrule
-    \end{tabular}
+    \end{longtable}
 
     \section{Angle dependence of variable attenuator}
     \label{sec:variable_attenuator_table}
@@ -1321,32 +1323,34 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
 
     Rotating the $\lambda/2$ plate in front of the polarizing beam splitter.
 
-    \begin{tabular}{SS}
+    \begin{longtable}[l]{SS}
         \toprule
         {$\phi/\si{\degree}$}
         & {$P/\si{\nano\watt}$} \\
         \midrule
+        \endhead
         %< for row in harmonic_splitter_table >%
         << ' & '.join(row) >> \\
         %< endfor >%
         \bottomrule
-    \end{tabular}
+    \end{longtable}
 
     \section{Angle dependence without splitter}
 
     Rotating the $\lambda/2$ plate in front of the crystal, no polarizing beam
     splitter in between.
 
-    \begin{tabular}{SS}
+    \begin{longtable}[l]{SS}
         \toprule
         {$\phi/\si{\degree}$}
         & {$P/\si{\nano\watt}$} \\
         \midrule
+        \endhead
         %< for row in harmonic_bare_table >%
         << ' & '.join(row) >> \\
         %< endfor >%
         \bottomrule
-    \end{tabular}
+    \end{longtable}
 
 \end{appendix}
 
