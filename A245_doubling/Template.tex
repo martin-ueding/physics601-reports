@@ -352,9 +352,10 @@ $\phi$ the different waves will interfere with a phase shift $\Deltaup k$ which
 depends on the different lengths traveled. For some $\phi$ it will give
 constructive interference. The $n$-th order of the wavelength~$\lambda$ is
 scattered into an angle~$\phi_n$ governed by
-\[
+\begin{equation}
+    \label{eq:phi_grating}
     \sin(\phi_n) = \frac{n \lambda}{g} \,,
-\]
+\end{equation}
 with line distance $g$ \parencite{wikipedia/optisches_gitter}. This equation
 only holds for incoming light that is perpendicular to the grating.
 
@@ -764,11 +765,7 @@ calibration measurement and now have an offset angle in the relation between
 the $\lambda/2$-plate angle and the laser power from the variable attenuator.
 This is something that we can recover from later on, though.
 
-% TODO (Martin) Think about the effect of the fundamental wave in our measurement here.
-
 \subsubsection{Beam waist and Rayleigh length}
-
-% FIXME (Martin) Add new equations used.
 
 We know that the focal length of the used lens is $f = \SI{60}{\milli\meter}$.
 Since the incoming laser beam is collimated, we know that the distance $z$
@@ -907,10 +904,15 @@ relationship here. The fit parameters are
 Error estimation is done via resampling. We can see that the offset angle has
 changed just a little bit. Just what we have expected since we turned the
 polarizing beam splitter a little bit. The model seems to fit the data rather
-well, there are slight deviations, especially at the left peak. Since the right
-peak does not show this behavior we are not quite sure what this is about.
+well, there are slight deviations, especially at the left peak.
 
-% FIXME (Martin) Better interpretation.
+We have measured from large angles to small angles. At \SI{75}{\degree} we
+encountered large deviations, the data points prior (larger angle) also show
+larger fluctuations than the previous points. Perhaps we have noticed the
+fluctuations too late and should have increased the error estimation for the
+points around \SI{90}{\degree} as well. The right peak does not show this
+pattern of deviation. Therefore we do not think that there is saturation in any
+of the components.
 
 \begin{figure}
     \centering
@@ -971,9 +973,16 @@ obtain
     \,,\quad
     b' = \SI{<< bare_b >>}{\watt}
 \]
-this time.
-
-% TODO (Martin) Are the fit parameters sensible?
+this time. The offset angle has changed a little bit. This would be explained
+if the polarizing beam splitter has not been perfectly aligned previously.
+Since only type 1 phase matching works with this crystal, the incident light
+should be polarized parallel to one of the crystal axes. The polarizing beam
+splitter has been close to parallel to the crystal but apparently still off by
+say \SI{1.5}{\degree}. The maximum power has gone up slightly, this is probably
+due to the losses in the beam splitter. Then the background has tripled but is
+still rather small. This could be slightly changed light conditions (window
+opened a little bit more) and lack of extinction from the beam splitter at
+crossed polarization.
 
 \section{Wavelength comparison}
 
@@ -1114,20 +1123,35 @@ should. The number of slits illuminated on the grating is therefore reduced by
 this number as well. This is not too bad as we will perform a way more accurate
 measurement next anyway.
 
-% FIXME (Martin) Error estimation on quantities.
-
 The beam coming from the laser has a diameter of \SI{3.5(5)}{\milli\meter}.
 Our lens configuration acts like a telescope and halves the diameter. The
 line count on the grating is \SI{600}{\per\milli\meter}. The number of lines
 illuminated is therefore \num{<< illuminated >>}. Using the equation $\Deltaup
 \lambda / \lambda = nN$ from the theory section we can conclude that we have a
-relative theoretical error of \num{<< relative_error >>}.
+relative theoretical error of \num{<< rel_error >>}.
 
-% NOTE We cannot really do the following as we have only done this measurement
-% qualitatively.
-% TODO Show all used lengths in a drawing.
-% TODO (Martin) How accurately is the measurement?
-% TODO Compare to theoretical resolution.
+We did not measure the distances used carefully, therefore we cannot produce a
+sketch here. However, we can give an order of magnitude estimation for the
+resolution obtained. We used the grating to project the beams onto the wall of
+the room. The distance was around \SI{1.5}{\meter}. Let's assume we could see
+if the fundamental and harmonic beams had a separation of \SI{1}{\milli\meter}.
+Using the CCD camera subtraction images we might achieve higher resolutions but
+the camera was not part of the official setup. Then by the relation between
+angle $\phi_n$ and wavelength $\lambda$, Equation~\eqref{eq:phi_grating}, we
+can infer with Gaussian error propagation that $\Deltaup \lambda / \lambda =
+\cos(\phi_n) \Deltaup \phi / \phi$. Since we do not know the angle we just
+assume $\cos(\phi_n) = 1$ and potentially undererstimate the resolution. Using
+those numbers we obtain
+\[
+    \frac{\Deltaup \lambda}{\lambda} = \num{6.7e-4} \,.
+\]
+This is better than the theoretical resolution. We have assumed that we can
+distinguish \SI{1}{\milli\meter} of separation by looking at it. We can do this
+in our case as we can toggle both peaks individually by using the IR-card. If
+that was not the case and they would have the same color to the eye, then one
+would need a clear separation of the peaks. The closest that we could separate
+two intense green beams would be larger then \SI{4}{\milli\meter}. Then we
+would be clearly worse than the theoretical resolution.
 
 \subsection{Michelson interferometer}
 

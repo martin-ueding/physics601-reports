@@ -378,12 +378,23 @@ def job_harmonic_power(T, extinction_dist, input_popt_dist):
 
 def job_grating_resolution(T):
     lines_per_m = 600e3
-    diameter = 3.5e-3 / 2
-    illuminated = diameter * lines_per_m
-    relative_error = 1 / illuminated
+    diameter_val = 3.5e-3 / 2
+    diameter_err = 0.5e-3 / 2
+    diameter_dist = bootstrap.make_dist(diameter_val, diameter_err)
 
-    T['illuminated'] = siunitx(illuminated)
-    T['relative_error'] = siunitx(relative_error)
+    illuminated_dist = [
+        diameter * lines_per_m
+        for diameter in diameter_dist
+    ]
+    illuminated_val, illuminated_err = bootstrap.average_and_std_arrays(illuminated_dist)
+    T['illuminated'] = siunitx(illuminated_val, illuminated_err)
+
+    rel_error_dist = [
+        1 / illuminated
+        for illuminated in illuminated_dist
+    ]
+    rel_error_val, rel_error_err = bootstrap.average_and_std_arrays(rel_error_dist)
+    T['rel_error'] = siunitx(rel_error_val, rel_error_err)
 
 
 def job_input_polarization(T):
