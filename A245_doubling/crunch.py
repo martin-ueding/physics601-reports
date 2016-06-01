@@ -395,6 +395,83 @@ def job_input_polarization(T):
     T['bare_a'] = siunitx(a_val, a_err)
     T['bare_b'] = siunitx(b_val, b_err)
 
+def michelson_resolution(T):
+
+    d_cm = np.sort(np.loadtxt('Data/lissajous_X.tsv'))
+    order = np.arange(0,len(d_cm))
+
+    wavelength = 987e-9
+
+    # get theoretical values
+    n_ground_theor = 1 + 1e-8 * (8342.13 + 2406030/(130-1/(wavelength*1e6)**2) + 15997/(38.9-1/(wavelength*1e6)**2))
+    T['n_ground_theor'] = n_ground_theor
+
+    n_harm_theor = 1 + 1e-8 * (8342.13 + 2406030/(130-1/(wavelength*.5e6)**2) + 15997/(38.9-1/(wavelength*.5e6)**2)) 
+    T['n_harm_theor'] = n_harm_theor
+
+    delta_n_theor = n_harm_theor - n_ground_theor
+    T['delta_n_theor'] = delta_n_theor
+
+    # prepare arrays
+    slope_dist_cm = []
+    offset_dist_cm = []
+    delta_n_dist = []
+    dev_ratio_dist = []
+    res_michelson_dist = []
+
+    fit_y_dist = []
+
+    # perform Jackknife
+    for i in range(len(d_cm)):
+        x = np.delete(order, i)
+        y = np.delete(d_cm, i)
+
+        popt, pconv = op.curve_fit(linear, x, y)
+
+        slope_dist_cm.append(popt[0])
+        offset_dist_cm.append(popt[1])
+
+        fit_y_dist.append(linear(x, *popt))
+
+        # experimental value for difference in refractive index
+        delta_n = wavelength/(8*popt[0]*1e-2)
+        delta_n_dist.append(delta_n)
+
+        # deviation from optimal 1/2 ratio
+        dev_ratio_dist.append(.5*delta_n/n_ground_theor)
+
+        # resolution of michelson interferometer
+        delta_wavelength = wavelength * (delta_n/n_ground_theor**2)
+        res_michelson_dist.append(wavelength/delta_wavelength)
+
+    # get averages and std
+    slope_val_cm, slope_err_cm = bootstrap.average_and_std_arrays(slope_dist_cm)
+    offset_val_cm, offset_err_cm = bootstrap.average_and_std_arrays(offset_dist_cm)
+
+    fit_y_val, fit_y_err = bootstrap.average_and_std_arrays(fit_y_dist)
+
+    delta_n_val, delta_n_err = bootstrap.average_and_std_arrays(delta_n_dist)
+
+    dev_ratio_val, dev_ratio_err = bootstrap.average_and_std_arrays(dev_ratio_dist)
+    dev_ratio_theor = .5*(delta_n_theor/n_ground_theor)
+
+    res_michelson_val, res_michelson_err = bootstrap.average_and_std_arrays(res_michelson_dist)
+
+    # write into T
+    T['distance_lissajous_X'] = siunitx(slope_val_cm, slope_err_cm)
+    T['delta_n'] = siunitx(delta_n_val, delta_n_err)
+    T['dev_ratio'] = siunitx(dev_ratio_val, dev_ratio_err)
+    T['dev_ratio_theor'] = siunitx(dev_ratio_theor)
+    T['res_michelson'] = siunitx(res_michelson_val, res_michelson_err)
+
+    # write data for plot
+
+    np.savetxt('_build/xy/michelson-band.tsv', bootstrap.pgfplots_error_band(x, fit_y_val, fit_y_err))
+
+    print(siunitx(dev_ratio_val, dev_ratio_err))
+    print(siunitx(dev_ratio_theor))
+    print(siunitx(res_michelson_val, res_michelson_err))
+    
 
 def test_keys(T):
     '''
@@ -436,6 +513,7 @@ def main():
     job_harmonic_power(T, extinction_dist, input_popt_dist)
     job_lissajous(T)
     job_rayleigh_length(T)
+    michelson_resolution(T)
 
     test_keys(T)
     with open('_build/template.js', 'w') as f:
