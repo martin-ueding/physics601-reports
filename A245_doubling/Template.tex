@@ -239,8 +239,6 @@ definitely have to match the phases in order to get significant light output.
 
 \subsection{Type 1 and 2}
 
-% TODO (Lino) Make this section easier to understand.
-
 We will only describe the case of negative uniaxial crystals here. For a
 positive uniaxial crystal one just takes perpendicular polarizations. As we are
 in a negative crystal we have $n_\mathrm o > n_\mathrm e$. As the fundamental
@@ -372,6 +370,15 @@ good but there are even better ways.
 % The \emph{Michelson interferometer} is a very precise measuring apparatus 
 
 % TODO (Lino) Drawing of a Michelson interferometer?
+
+\begin{figure}
+    \centering
+    \includegraphics{michelson_setup}
+    \caption{%
+        Schematic setup of a Michelson interferometer.
+    }
+    \label{fig:michelson-setup}
+\end{figure}
 
 With the positions $d_1$ and $d_2$ of the end mirrors one obtains a phase
 difference between the arms of $\delta = 4 \piup [d_1 - d_2] / \lambda$
@@ -1218,10 +1225,11 @@ Figure~\ref{fig:lissajous-01} one can see a \enquote{figure 8} Lissajous
 figure. It has been rather stable when holding the slide at one position and
 just vibrating it. If there was any violation from the $2:1$ ratio, the
 Lissajous figure would rotate on its own. We did not observe any of that,
-therefore we conclude that the ratio is exact in the realm of the resolution
-available. The other image shows the \enquote{U shape} that can only come from
-a $2:1$ ratio as well. The broadening of the shapes comes from the nonzero
-$\ddot d_1$, we do not think that the frequency ratio is not exact.
+therefore we conclude that the ratio is quite exact, but probably we did not
+see any rotation because of the small timescale. The other image shows the
+\enquote{U shape} that can only come from a nearly exact $2:1$ ratio as well.
+The broadening of the shapes comes from the nonzero $\ddot d_1$, we do not
+think that the frequency ratio is not exact.
 
 \begin{figure}
     \centering
@@ -1247,8 +1255,98 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
     \label{fig:lissajous-measured}
 \end{figure}
 
-% TODO (Lino) Compare with literature values.
-% TODO (Lino) Compute spectral resolution of the interferometer.
+To get a better estimate for a possible deviation from the $1/2$ ratio, we
+measure the distances between the mirror positions at which the \enquote{X
+shape} Lissajous figure from Figure~\ref{fig:lissajous-01} occurs. This
+happens, when the phase difference between the two waves is exactly zero or a
+multiple of $\piup$, or in other terms the difference in path length is a
+multiple of the half wave length. While the geometrical path length of the
+fundamental wave and the harmonic is always the same, the optical path length
+differs due to a different index of refraction of air at different wave
+lengths. The theoretical values at atmospheric pressure and
+\SI{15}{\celsius} can be approximated by the formula given in
+the manual:
+\[
+    n\del{\lambda_\text{vac}} - 1 = 10^{-8} \del{8342.13 +
+        \frac{2406030}{130 -
+        \frac{1}{\del{\lambda_\text{vac}[\si{\micro\meter}]}^2}} +
+        \frac{15997}{38.9 -
+    \frac{1}{\del{\lambda_\text{vac}[\si{\micro\meter}]}^2}}} \, .
+\]
+From this we get $n(\SI{987}{\nano\meter}) - 1 = \num{<< n_ground_theor >>}$
+and $n(\SI{493.5}{\nano\meter}) - 1 = \num{<< n_harm_theor >>}$ and a
+theoretical difference of $\Deltaup n = \num{<< delta_n_theor >>}$.
+
+Our measurement, together with a linear fit is shown in
+Figure~\ref{fig:lissajous-plot}. From the fit we get the distance between two
+occurrences: $d = \SI{<< distance_lissajous_X >>}{\centi\meter}$. The
+difference in optical path length for the two waves then is
+\begin{align*}
+    \frac{\lambda_\text{vac}^\text{harm}}2 &=
+    2d n(\lambda_\text{vac}^\text{harm}) -
+    2d n(\lambda_\text{vac}^\text{fund})
+    \, .
+    \intertext{%
+        From this we can get an expression for the difference in
+        refractive index:
+    }
+    \Deltaup n &= \frac{\lambda_\text{vac}^\text{harm}}{4d} \approx
+    \frac{\lambda_\text{vac}^\text{fund}}{8d}.
+\end{align*}
+With our values we get a difference of $\Deltaup n = \num{<< delta_n >>}$,
+which is a bit smaller than the theoretical value, which possibly originates
+in the higher temperature (not measured, but approximately \SI{20}{\celsius}).
+
+\begin{figure}
+    \centering
+    \includegraphics{michelson-plot}
+    \caption{%
+        Absolute position of the mirror at different occurrences of the
+        \enquote{X shape} Lissajous figure.
+    }
+    \label{fig:lissajous-plot}
+\end{figure}
+
+The deviation of the perfect ratio can be expressed as
+\begin{align*}
+    \frac{\lambda^\text{harm}}{\lambda^\text{fund}} -
+    \frac{\lambda_\text{vac}^\text{harm}}{\lambda_\text{vac}^\text{fund}} &=
+    \frac{\lambda_\text{vac}^\text{harm}}{\lambda_\text{vac}^\text{fund}} 
+    \del{\frac{n(\lambda_\text{vac}^\text{fund})}{n(\lambda_\text{vac}^\text{harm})}
+    - 1 } \\
+    &= \frac12 \frac{\Deltaup n}{n(\lambda_\text{vac}^\text{fund})} \, .
+\end{align*}
+This with the experimental values for the difference in refractive index we
+get an deviation of \num{<< dev_ratio >>}, with the theoretical value we get
+\num{<< dev_ratio_theor >>}. The possible origin of this is explained above.
+
+Now we want to estimate the resolution $A = \lambda/\Deltaup \lambda$ of our
+interferometer. Since we are able to resolve the fundamental wave from
+the double of the harmonic can take
+\begin{align*}
+    \Deltaup \lambda &= \lambda^\text{fund} - 2 \lambda^\text{harm} \\
+                     &=
+\frac{\lambda_\text{vac}^\text{fund}} {n(\lambda_\text{vac}^\text{fund})} - 
+\frac{2\lambda_\text{vac}^\text{harm}} {n(\lambda_\text{vac}^\text{harm})} \\
+    &= \lambda_\text{vac}^\text{fund}
+    \del{\frac1{n(\lambda_\text{vac}^\text{fund})}
+    - \frac{1}{n(\lambda_\text{vac}^\text{harm})}} \\
+    &\approx \lambda_\text{vac}^\text{fund}
+    \frac{\Deltaup n}{n^2(\lambda_\text{vac}^\text{harm})}
+\end{align*}
+as upper limit for the distance in wave length. With this we get a
+lower limit for the resolution of
+\[
+    A = \frac{\lambda}{\Deltaup \lambda} =
+    \frac{n^2(\lambda_\text{vac}^\text{harm})}{\Deltaup n} = \num{<<
+    res_michelson >>} \, .
+\]
+
+We would expect a higher resolution, but since our calculation is only a lower
+limit, it is consistent with our expectation. The interferometer's resolution
+surely is bigger than the resolution of the grating. 
+
+%TODO result
 
 \begin{appendix}
     \chapter{Tables}
@@ -1347,6 +1445,22 @@ $\ddot d_1$, we do not think that the frequency ratio is not exact.
         \midrule
         \endhead
         %< for row in harmonic_bare_table >%
+        << ' & '.join(row) >> \\
+        %< endfor >%
+        \bottomrule
+    \end{longtable}
+
+    \section{Mirror positions for X shape Lissajous figures}
+
+    Absolute mirror positions at which \enquote{X shape} Lissajous figures
+    show.
+
+    \begin{longtable}[l]{S}
+        \toprule
+        {Absolute position/\si{\centi\meter}} \\
+        \midrule
+        \endhead
+        %< for row in mirror_position_table >%
         << ' & '.join(row) >> \\
         %< endfor >%
         \bottomrule

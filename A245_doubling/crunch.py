@@ -448,13 +448,13 @@ def michelson_resolution(T):
 
     # get theoretical values
     n_ground_theor = 1 + 1e-8 * (8342.13 + 2406030/(130-1/(wavelength*1e6)**2) + 15997/(38.9-1/(wavelength*1e6)**2))
-    T['n_ground_theor'] = n_ground_theor
+    T['n_ground_theor'] = siunitx(n_ground_theor - 1)
 
     n_harm_theor = 1 + 1e-8 * (8342.13 + 2406030/(130-1/(wavelength*.5e6)**2) + 15997/(38.9-1/(wavelength*.5e6)**2)) 
-    T['n_harm_theor'] = n_harm_theor
+    T['n_harm_theor'] = siunitx(n_harm_theor - 1)
 
     delta_n_theor = n_harm_theor - n_ground_theor
-    T['delta_n_theor'] = delta_n_theor
+    T['delta_n_theor'] = siunitx(delta_n_theor)
 
     # prepare arrays
     slope_dist_cm = []
@@ -475,14 +475,14 @@ def michelson_resolution(T):
         slope_dist_cm.append(popt[0])
         offset_dist_cm.append(popt[1])
 
-        fit_y_dist.append(linear(x, *popt))
+        fit_y_dist.append(linear(order, *popt))
 
         # experimental value for difference in refractive index
         delta_n = wavelength/(8*popt[0]*1e-2)
         delta_n_dist.append(delta_n)
 
         # deviation from optimal 1/2 ratio
-        dev_ratio_dist.append(.5*delta_n/n_ground_theor)
+        dev_ratio_dist.append(.5*delta_n/n_harm_theor)
 
         # resolution of michelson interferometer
         delta_wavelength = wavelength * (delta_n/n_ground_theor**2)
@@ -497,7 +497,7 @@ def michelson_resolution(T):
     delta_n_val, delta_n_err = bootstrap.average_and_std_arrays(delta_n_dist)
 
     dev_ratio_val, dev_ratio_err = bootstrap.average_and_std_arrays(dev_ratio_dist)
-    dev_ratio_theor = .5*(delta_n_theor/n_ground_theor)
+    dev_ratio_theor = .5*(delta_n_theor/n_harm_theor)
 
     res_michelson_val, res_michelson_err = bootstrap.average_and_std_arrays(res_michelson_dist)
 
@@ -510,8 +510,12 @@ def michelson_resolution(T):
 
     # write data for plot
 
-    np.savetxt('_build/xy/michelson-band.tsv', bootstrap.pgfplots_error_band(x, fit_y_val, fit_y_err))
+    np.savetxt('_build/xy/michelson-line.tsv', np.column_stack([order, d_cm])) 
+    np.savetxt('_build/xy/michelson-band.tsv', bootstrap.pgfplots_error_band(order, fit_y_val, fit_y_err))
 
+    T['mirror_position_table'] = list(zip(
+        siunitx(d_cm)
+    ))
     print(siunitx(dev_ratio_val, dev_ratio_err))
     print(siunitx(dev_ratio_theor))
     print(siunitx(res_michelson_val, res_michelson_err))
