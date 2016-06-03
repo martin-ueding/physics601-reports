@@ -42,11 +42,24 @@
 \maketitle
 
 \begin{abstract}
-    We classify a \SI{987}{\nano\meter} class 3B diode laser and then use it to
-    double the frequency within a $\mathrm{KNbO_3}$ crystal. Fundamental wave
-    power is measured depending on the crystal temperature, harmonic wave power
-    and polarization. The exactness of the doubling is confirmed with a grating
-    and a Michelson interferometer.
+
+    We classify a \SI{987}{\nano\meter} class 3B diode laser to have threshold
+    current \SI{<< threshold >>}{\ampere} differential efficiency \SI{<<
+    differential_efficiency >>}{\watt\per\ampere}. and quantum efficiency
+    \num{<< quantum_efficiency >>} and then use it to double the frequency
+    within a $\mathrm{KNbO_3}$ crystal. Fundamental wave power is measured
+    depending on the crystal temperature, harmonic wave power and polarization,
+    last two follow a quartic cosine model.
+
+
+    The Guassian beams are focused to give a waist of \SI{<< waist_mum
+    >>}{\micro\meter} and Rayleigh length \SI{<< rayleigh_length_mm
+    >>}{\milli\meter}. Normalized length is \num{<< normalized_length >>}.
+
+    The exactness of the doubling is confirmed with a grating
+    and a Michelson interferometer with resolutions of \num{1562.5} and \num{<<
+    res_michelson >>} respectively.
+
 \end{abstract}
 
 \tableofcontents
@@ -1254,11 +1267,11 @@ think that the frequency ratio is not exact.
     \label{fig:lissajous-measured}
 \end{figure}
 
-To get a better estimate for a possible deviation from the $1/2$ ratio, we
+To get a better estimate for a possible deviation from the $2:1$ ratio, we
 measure the distances between the mirror positions at which the \enquote{X
 shape} Lissajous figure from Figure~\ref{fig:lissajous-01} occurs. This
-happens, when the phase difference between the two waves is exactly zero or a
-multiple of $\piup$, or in other terms the difference in path length is a
+happens when the phase difference between the two waves is exactly zero or a
+multiple of $\piup$. In other terms the difference in path length is a
 multiple of the half wave length. While the geometrical path length of the
 fundamental wave and the harmonic is always the same, the optical path length
 differs due to a different index of refraction of air at different wave
@@ -1280,18 +1293,18 @@ Our measurement, together with a linear fit is shown in
 Figure~\ref{fig:lissajous-plot}. From the fit we get the distance between two
 occurrences: $d = \SI{<< distance_lissajous_X >>}{\centi\meter}$. The
 difference in optical path length for the two waves then is
-\begin{align*}
-    \frac{\lambda_\text{vac}^\text{harm}}2 &=
+\[
+    \frac{\lambda_\text{vac}^\text{harm}}2=
     2d n(\lambda_\text{vac}^\text{harm}) -
     2d n(\lambda_\text{vac}^\text{fund})
     \, .
-    \intertext{%
-        From this we can get an expression for the difference in
-        refractive index:
-    }
-    \Deltaup n &= \frac{\lambda_\text{vac}^\text{harm}}{4d} \approx
-    \frac{\lambda_\text{vac}^\text{fund}}{8d}.
-\end{align*}
+\]
+From this we can get an expression for the difference in
+refractive index:
+\[
+    \Deltaup n = \frac{\lambda_\text{vac}^\text{harm}}{4d} \approx
+    \frac{\lambda_\text{vac}^\text{fund}}{8d} \,.
+\]
 With our values we get a difference of $\Deltaup n = \num{<< delta_n >>}$,
 which is a bit smaller than the theoretical value, which possibly originates
 in the higher temperature (not measured, but approximately \SI{20}{\celsius}).
@@ -1345,7 +1358,28 @@ We would expect a higher resolution, but since our calculation is only a lower
 limit, it is consistent with our expectation. The interferometer's resolution
 surely is bigger than the resolution of the grating. 
 
-%TODO result
+\subsubsection{Conclusion}
+
+We determined the extinction ratio of the screw-on attenuator to be $F = \num{<< extinction >>}$.
+The threshold current of our laser diode is
+\SI{<< threshold >>}{\ampere}.
+
+The differential efficiency of the laser is \SI{<< differential_efficiency
+>>}{\watt\per\ampere}.
+The quantum efficiency~$\eta$ is \num{<< quantum_efficiency >>}.
+
+We were able to focus the Gaussian beam to have a waist of \SI{<< waist_mum
+>>}{\micro\meter} and Rayleigh length \SI{<< rayleigh_length_mm
+>>}{\milli\meter}. The normalized length of the crystal therefore is \num{<<
+normalized_length >>}.
+
+The power dependencies of the polarization angles follow a quartic cosine
+model.
+
+The relative uncertainty in the grating should be around \num{6.7e-4}.
+We determined the lower bound for the resolution of the Michelson
+interferometer to $\lambda/\Deltaup \lambda$ to \num{<< res_michelson >>}. The
+interferometer is more accurate than the grating, as expected.
 
 \begin{appendix}
     \chapter{Tables}
